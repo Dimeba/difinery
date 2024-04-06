@@ -1,0 +1,49 @@
+@use '@/app/base';
+
+.button {
+	width: 15rem;
+	padding: 0.6rem 1rem;
+	border-radius: 5px;
+	transition: 0.3s;
+
+	p {
+		font-size: 0.8rem;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+	}
+}
+
+.buttonWhite {
+	background-color: white;
+	border: 1px solid white;
+
+	p {
+		color: base.$black;
+	}
+}
+
+.buttonBlack {
+	background-color: base.$black;
+	border: 1px solid base.$black;
+
+	p {
+		color: white;
+	}
+}
+
+.buttonWhite:hover {
+	background-color: transparent;
+
+	p {
+		color: white;
+	}
+}
+
+.buttonBlack:hover {
+	background-color: transparent;
+
+	p {
+		color: base.$black;
+	}
+}

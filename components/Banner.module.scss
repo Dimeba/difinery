@@ -1,0 +1,59 @@
+@use '@/app/base';
+
+.banner {
+	height: 800px;
+	overflow: hidden;
+	position: relative;
+	background-color: rgba($color: black, $alpha: 0.25);
+
+	video {
+		object-fit: cover;
+		min-width: 100%;
+		min-height: 100%;
+		object-position: center;
+		position: absolute;
+		z-index: -1;
+	}
+
+	img {
+		z-index: -1;
+		object-fit: cover;
+		object-position: center;
+	}
+
+	* {
+		color: white;
+		text-align: center;
+	}
+
+	h2,
+	p {
+		max-width: 800px;
+	}
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.center {
+	align-items: center;
+	justify-content: center;
+}
+
+.buttons {
+	margin-top: 0.5rem;
+	display: flex;
+	gap: 1rem;
+}
+
+@media screen and (max-width: 1024px) {
+}
+
+@media screen and (max-width: 768px) {
+	.buttons {
+		flex-direction: column;
+	}
+}
