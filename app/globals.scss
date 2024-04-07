@@ -10,7 +10,7 @@
 }
 
 .container {
-	width: 90%;
+	width: 90vw;
 	max-width: 1440px;
 	margin: 0 auto;
 	height: 100%;
@@ -27,6 +27,13 @@
 h2 {
 	@extend .title;
 	font-size: 2rem;
+}
+
+h4 {
+	font-size: 1rem;
+	font-weight: 500;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
 }
 
 p {
