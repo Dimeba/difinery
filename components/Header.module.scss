@@ -1,10 +1,18 @@
 @use '@/app/base';
 
+.header {
+	position: fixed;
+	width: 100%;
+	background-color: white;
+	z-index: 2;
+}
+
 .headerTop {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 3rem 0;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
 	position: relative;
 
 	p {
@@ -26,12 +34,26 @@
 	align-items: center;
 }
 
+.hamburger {
+	width: 20px;
+	height: 20px;
+	overflow: hidden;
+
+	> div {
+		transform: translateX(-14px) translateY(-14px);
+
+		> div > div {
+			height: 1px !important;
+		}
+	}
+}
+
 .headerBot {
 	display: flex;
 	gap: 2rem;
 	align-items: center;
 	justify-content: space-between;
-	padding-bottom: 2rem;
+	padding-bottom: 1.5rem;
 
 	p {
 		font-size: 0.8rem;
@@ -56,4 +78,27 @@
 		width: 100%;
 		left: 0;
 	}
+}
+
+@media screen and (max-width: 1024px) {
+	.headerTop {
+		flex-direction: row-reverse;
+	}
+
+	.logo {
+		position: relative;
+		left: auto;
+		transform: none;
+	}
+
+	.icons {
+		display: none;
+	}
+
+	.headerBot {
+		flex-direction: column;
+	}
+}
+
+@media screen and (max-width: 768px) {
 }
