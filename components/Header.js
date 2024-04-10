@@ -74,7 +74,7 @@ const Header = () => {
 					</div>
 				</div>
 
-				{(isIntersecting || openMenu) && (
+				{((isIntersecting && isScreenWide) || openMenu) && (
 					<nav className={`container ${styles.headerBot}`}>
 						{mainMenu.map(link => (
 							<Link

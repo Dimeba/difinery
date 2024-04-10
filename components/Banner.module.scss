@@ -10,8 +10,9 @@
 		object-fit: cover;
 		min-width: 100%;
 		min-height: 100%;
-		object-position: center;
 		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
 		z-index: -1;
 	}
 
