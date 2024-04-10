@@ -6,18 +6,19 @@ import styles from './Header.module.scss'
 // components
 import Link from 'next/link'
 import Image from 'next/image'
-import { FiShoppingBag, FiUser } from 'react-icons/fi'
+import { FiShoppingBag, FiUser, FiArrowRight } from 'react-icons/fi'
 import { Spin as Hamburger } from 'hamburger-react'
 
 // hooks
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { useIsScreenWide } from '@/hooks/useIsScreenWide'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const Header = () => {
 	const [targetRef, isIntersecting] = useIntersectionObserver()
 	const isScreenWide = useIsScreenWide(1440)
 	const [openMenu, setOpenMenu] = useState(false)
+	const [showSubmenu, setShowSubmenu] = useState(false)
 
 	// Menu Items
 	const mainMenu = [
@@ -32,16 +33,53 @@ const Header = () => {
 		'Education'
 	]
 
+	// Submenu Items
+	const tempList = [
+		'Rings',
+		'Earrings',
+		'Bracelets',
+		'Pendants',
+		'Diamonds',
+		'All'
+	]
+
+	const qucikLinks = ['Order Status', 'Returns', 'Gift Card']
+
+	const occasion = ['Wedding', 'Engagement', 'Anniversary', 'Birthday']
+
+	// Reseting open menu
+	useEffect(() => {
+		isIntersecting && setOpenMenu(false)
+	}, [isIntersecting])
+
+	// Show Submenu
+	const loadSubmenu = () => {
+		setShowSubmenu(true)
+	}
+
 	return (
 		<header ref={targetRef}>
-			<div className={styles.header}>
+			<div
+				className={styles.header}
+				onMouseLeave={() => setShowSubmenu(false)}
+				onWheel={() => {
+					setShowSubmenu(false)
+					setOpenMenu(false)
+				}}
+			>
 				<div className={`container ${styles.headerTop}`}>
 					{isIntersecting && isScreenWide ? (
-						<Link href='#' aria-label='#'>
+						<Link
+							href='/customer-support'
+							aria-label={`Link to Customer Support page.`}
+						>
 							<p>Customer Support</p>
 						</Link>
 					) : (
-						<div className={styles.hamburger}>
+						<div
+							className={styles.hamburger}
+							onClick={() => setShowSubmenu(false)}
+						>
 							<div>
 								<Hamburger
 									color='black'
@@ -79,13 +117,90 @@ const Header = () => {
 						{mainMenu.map(link => (
 							<Link
 								key={link}
-								href={link.replace(/ /g, '-').toLowerCase()}
+								href={'/' + link.replace(/ /g, '-').toLowerCase()}
 								aria-label={`Link to ${link} page.`}
+								className={styles.mainMenuLink}
+								onMouseEnter={() => loadSubmenu()}
 							>
-								<p>{link}</p>
+								<p>{link}</p>{' '}
+								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
 							</Link>
 						))}
+
+						<Link
+							href='/customer-support'
+							aria-label={`Link to Customer Support page.`}
+							className={`${styles.mainMenuLink} ${styles.mobileLink}`}
+						>
+							<p>Customer Support</p>
+							<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
+						</Link>
 					</nav>
+				)}
+
+				{showSubmenu && (
+					<div className={`container ${styles.subMenu}`}>
+						<div className={styles.column2}>
+							{tempList.map(link => (
+								<Link
+									key={link}
+									href={'/' + link.replace(/ /g, '-').toLowerCase()}
+									aria-label={`Link to ${link} page.`}
+									className={styles.subMenuLink}
+								>
+									<p>{link}</p>{' '}
+								</Link>
+							))}
+						</div>
+
+						<div className={styles.column2}>
+							<p>Quick Links</p>
+							{qucikLinks.map(link => (
+								<Link
+									key={link}
+									href={'/' + link.replace(/ /g, '-').toLowerCase()}
+									aria-label={`Link to ${link} page.`}
+									className={styles.subMenuLink}
+								>
+									<p>{link}</p>{' '}
+								</Link>
+							))}
+						</div>
+
+						<div className={styles.column2}>
+							<p>Shop by Occassion</p>
+							{occasion.map(link => (
+								<Link
+									key={link}
+									href={'/' + link.replace(/ /g, '-').toLowerCase()}
+									aria-label={`Link to ${link} page.`}
+									className={styles.subMenuLink}
+								>
+									<p>{link}</p>{' '}
+								</Link>
+							))}
+						</div>
+
+						<div className={styles.column3}>
+							<Link href='#' alt='test'>
+								<div className={styles.subMenuImg}>
+									<Image src='/sample-image.jpg' alt='test' fill />
+								</div>
+							</Link>
+
+							<p>Gift Card</p>
+						</div>
+
+						<div className={styles.column3}>
+							<Link href='#' alt='test'>
+								<div className={styles.subMenuImg}>
+									<Image src='/sample-image.jpg' alt='test' fill />
+								</div>
+							</Link>
+
+							<p>Gift Card</p>
+						</div>
+					</div>
 				)}
 			</div>
 		</header>

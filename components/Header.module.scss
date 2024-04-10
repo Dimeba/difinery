@@ -54,6 +54,7 @@
 	align-items: center;
 	justify-content: space-between;
 	padding-bottom: 1.5rem;
+	animation: scrollDown 0.3s ease-in-out;
 
 	p {
 		font-size: 0.8rem;
@@ -69,7 +70,7 @@
 		height: 1px;
 		right: 0;
 		display: block;
-		background: #d6d6d6;
+		background: base.$gray;
 		transition: width 0.2s ease;
 		-webkit-transition: width 0.2s ease;
 	}
@@ -80,25 +81,111 @@
 	}
 }
 
-@media screen and (max-width: 1024px) {
-	.headerTop {
-		flex-direction: row-reverse;
+.mobileIcon,
+.mobileLink {
+	display: none;
+}
+
+.subMenu {
+	padding-bottom: 2rem;
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-gap: 2rem;
+}
+
+.column2 {
+	grid-column: span 2;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+
+	p {
+		font-size: 0.8rem;
 	}
 
-	.logo {
+	.subMenuLink {
 		position: relative;
-		left: auto;
-		transform: none;
+		width: fit-content;
 	}
 
-	.icons {
-		display: none;
+	.subMenuLink:after {
+		content: '';
+		position: absolute;
+		width: 0;
+		height: 1px;
+		right: 0;
+		display: block;
+		background: base.$gray;
+		transition: width 0.2s ease;
+		-webkit-transition: width 0.2s ease;
 	}
 
+	.subMenuLink:hover:after {
+		width: 100%;
+		left: 0;
+	}
+}
+
+.column3 {
+	grid-column: span 3;
+
+	p {
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+	}
+}
+
+.subMenuImg {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 10;
+	margin-bottom: 0.5rem;
+}
+
+// Animation
+@keyframes scrollDown {
+	0% {
+		transform: translateY(-50%);
+		opacity: 0;
+	}
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@media screen and (max-width: 1200px) {
 	.headerBot {
 		flex-direction: column;
+		align-items: flex-start;
+		padding: 1rem 0 3rem 0;
+		gap: 1rem;
+
+		.mainMenuLink {
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+			padding-bottom: 1rem;
+			border-bottom: 1px solid base.$gray;
+		}
+
+		.mainMenuLink:last-of-type {
+			border-bottom: none;
+		}
+
+		.mobileLink {
+			display: block;
+		}
+	}
+
+	.mobileIcon {
+		display: block;
 	}
 }
 
 @media screen and (max-width: 768px) {
+	.subMenu {
+		display: none;
+	}
 }
