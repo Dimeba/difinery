@@ -36,6 +36,14 @@
 	width: 100%;
 	aspect-ratio: 1 / 1;
 	position: relative;
+	overflow: hidden;
+}
+
+.image:hover {
+	img {
+		transform: scale(120%);
+		transition: 0.3s ease-in;
+	}
 }
 
 @media screen and (max-width: 1024px) {

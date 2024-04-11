@@ -60,7 +60,9 @@ const Header = () => {
 	return (
 		<header ref={targetRef}>
 			<div
-				className={styles.header}
+				className={`${styles.header} ${
+					!isIntersecting ? styles.dropShadow : ''
+				}`}
 				onMouseLeave={() => setShowSubmenu(false)}
 				onWheel={() => {
 					setShowSubmenu(false)
