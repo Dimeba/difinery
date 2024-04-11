@@ -4,6 +4,13 @@ import styles from './Footer.module.scss'
 // components
 import Link from 'next/link'
 import Image from 'next/image'
+import {
+	FaInstagram,
+	FaTiktok,
+	FaPinterest,
+	FaYoutube,
+	FaEtsy
+} from 'react-icons/fa'
 
 // links
 const help = [
@@ -147,36 +154,19 @@ const Footer = () => {
 					<h4>Follow Us</h4>
 					<div className={styles.logos}>
 						<Link href='#' aria-label='#'>
-							<Image
-								src='/instagram-logo.svg'
-								width={16}
-								height={16}
-								alt='GIA logo'
-							/>
+							<FaInstagram size={20} />
 						</Link>
 						<Link href='#' aria-label='#'>
-							<Image
-								src='/instagram-logo.svg'
-								width={16}
-								height={16}
-								alt='GIA logo'
-							/>
+							<FaTiktok size={20} />
 						</Link>
 						<Link href='#' aria-label='#'>
-							<Image
-								src='/instagram-logo.svg'
-								width={16}
-								height={16}
-								alt='GIA logo'
-							/>
+							<FaPinterest size={20} />
 						</Link>
 						<Link href='#' aria-label='#'>
-							<Image
-								src='/instagram-logo.svg'
-								width={16}
-								height={16}
-								alt='GIA logo'
-							/>
+							<FaYoutube size={20} />
+						</Link>
+						<Link href='#' aria-label='#'>
+							<FaEtsy size={20} />
 						</Link>
 					</div>
 				</div>

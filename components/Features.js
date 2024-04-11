@@ -42,8 +42,8 @@ const Features = () => {
 							<Image
 								src={item.icon}
 								alt='Icon'
-								width={48}
-								height={48}
+								width={64}
+								height={64}
 								style={{ objectFit: 'contain', objectPosition: 'center' }}
 							/>
 							<p>{item.description}</p>
