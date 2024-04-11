@@ -72,10 +72,10 @@ const Header = () => {
 				<div className={`container ${styles.headerTop}`}>
 					{isIntersecting && isScreenWide ? (
 						<Link
-							href='/customer-support'
-							aria-label={`Link to Customer Support page.`}
+							href='/customer-service'
+							aria-label={`Link to Customer Service page.`}
 						>
-							<p>Customer Support</p>
+							<p>Customer Service</p>
 						</Link>
 					) : (
 						<div
@@ -130,11 +130,11 @@ const Header = () => {
 						))}
 
 						<Link
-							href='/customer-support'
-							aria-label={`Link to Customer Support page.`}
+							href='/customer-service'
+							aria-label={`Link to Customer Service page.`}
 							className={`${styles.mainMenuLink} ${styles.mobileLink}`}
 						>
-							<p>Customer Support</p>
+							<p>Customer Service</p>
 							<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
 						</Link>
 					</nav>

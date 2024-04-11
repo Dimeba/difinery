@@ -1,0 +1,40 @@
+@use '@/app/base';
+
+.hero {
+	margin: 0;
+	height: 100vh;
+	background-color: rgba($color: black, $alpha: 0.5);
+	padding-bottom: 6rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	position: relative;
+}
+
+.content {
+	height: fit-content;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+
+	> * {
+		max-width: 50%;
+		color: white;
+	}
+
+	> p {
+		margin-bottom: 0.5rem;
+	}
+}
+
+@media screen and (max-width: 1024px) {
+}
+
+@media screen and (max-width: 768px) {
+	.content {
+		> * {
+			max-width: 100%;
+			color: white;
+		}
+	}
+}
