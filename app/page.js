@@ -5,6 +5,8 @@ import Features from '@/components/Features'
 import Categories from '@/components/Categories'
 
 export default function Home() {
+	console.log('Testing dev branch.')
+
 	return (
 		<main>
 			<Hero />
