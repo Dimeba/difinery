@@ -89,7 +89,11 @@ const Header = () => {
 						>
 							<div>
 								<Hamburger
-									color='black'
+									color={
+										isHomepage && isIntersecting && !showSubmenu
+											? 'white'
+											: 'black'
+									}
 									size={20}
 									toggled={openMenu}
 									toggle={setOpenMenu}
