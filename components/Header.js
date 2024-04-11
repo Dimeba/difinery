@@ -13,12 +13,15 @@ import { Spin as Hamburger } from 'hamburger-react'
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { useIsScreenWide } from '@/hooks/useIsScreenWide'
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 const Header = () => {
 	const [targetRef, isIntersecting] = useIntersectionObserver()
 	const isScreenWide = useIsScreenWide(1440)
 	const [openMenu, setOpenMenu] = useState(false)
 	const [showSubmenu, setShowSubmenu] = useState(false)
+	const pathName = usePathname()
+	const isHomepage = pathName == '/' ? true : false
 
 	// Menu Items
 	const mainMenu = [
@@ -62,6 +65,8 @@ const Header = () => {
 			<div
 				className={`${styles.header} ${
 					!isIntersecting ? styles.dropShadow : ''
+				} ${
+					isHomepage && isIntersecting && !showSubmenu ? styles.transparent : ''
 				}`}
 				onMouseLeave={() => setShowSubmenu(false)}
 				onWheel={() => {
@@ -95,7 +100,11 @@ const Header = () => {
 
 					<Link href='/' aria-label='Link to homepage.' className={styles.logo}>
 						<Image
-							src='/logo-black.svg'
+							src={
+								isHomepage && isIntersecting && !showSubmenu
+									? '/logo-white.svg'
+									: '/logo-black.svg'
+							}
 							alt='Logo'
 							width={120}
 							height={160 / 8.6}
@@ -105,11 +114,27 @@ const Header = () => {
 
 					<div className={styles.icons}>
 						<Link href='/' aria-label='Link to homepage.'>
-							<FiUser size={'1.2rem'} stroke='black' strokeWidth={1} />
+							<FiUser
+								size={'1.2rem'}
+								stroke={
+									isHomepage && isIntersecting && !showSubmenu
+										? 'white'
+										: 'black'
+								}
+								strokeWidth={1}
+							/>
 						</Link>
 
 						<Link href='/' aria-label='Link to homepage.'>
-							<FiShoppingBag size={'1.2rem'} stroke='black' strokeWidth={1} />
+							<FiShoppingBag
+								size={'1.2rem'}
+								stroke={
+									isHomepage && isIntersecting && !showSubmenu
+										? 'white'
+										: 'black'
+								}
+								strokeWidth={1}
+							/>
 						</Link>
 					</div>
 				</div>
