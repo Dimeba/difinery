@@ -22,6 +22,8 @@ const Header = () => {
 	const [showSubmenu, setShowSubmenu] = useState(false)
 	const pathName = usePathname()
 	const isHomepage = pathName == '/' ? true : false
+	const transparentMenu =
+		isHomepage && isIntersecting && !showSubmenu && !openMenu
 
 	// Menu Items
 	const mainMenu = [
@@ -65,9 +67,7 @@ const Header = () => {
 			<div
 				className={`${styles.header} ${
 					!isIntersecting ? styles.dropShadow : ''
-				} ${
-					isHomepage && isIntersecting && !showSubmenu ? styles.transparent : ''
-				}`}
+				} ${transparentMenu ? styles.transparent : ''}`}
 				onMouseLeave={() => setShowSubmenu(false)}
 				onWheel={() => {
 					setShowSubmenu(false)
@@ -89,11 +89,7 @@ const Header = () => {
 						>
 							<div>
 								<Hamburger
-									color={
-										isHomepage && isIntersecting && !showSubmenu
-											? 'white'
-											: 'black'
-									}
+									color={transparentMenu ? 'white' : 'black'}
 									size={20}
 									toggled={openMenu}
 									toggle={setOpenMenu}
@@ -104,11 +100,7 @@ const Header = () => {
 
 					<Link href='/' aria-label='Link to homepage.' className={styles.logo}>
 						<Image
-							src={
-								isHomepage && isIntersecting && !showSubmenu
-									? '/logo-white.svg'
-									: '/logo-black.svg'
-							}
+							src={transparentMenu ? '/logo-white.svg' : '/logo-black.svg'}
 							alt='Logo'
 							width={120}
 							height={160 / 8.6}
@@ -120,11 +112,7 @@ const Header = () => {
 						<Link href='/' aria-label='Link to homepage.'>
 							<FiUser
 								size={'1.2rem'}
-								stroke={
-									isHomepage && isIntersecting && !showSubmenu
-										? 'white'
-										: 'black'
-								}
+								stroke={transparentMenu ? 'white' : 'black'}
 								strokeWidth={1}
 							/>
 						</Link>
@@ -132,11 +120,7 @@ const Header = () => {
 						<Link href='/' aria-label='Link to homepage.'>
 							<FiShoppingBag
 								size={'1.2rem'}
-								stroke={
-									isHomepage && isIntersecting && !showSubmenu
-										? 'white'
-										: 'black'
-								}
+								stroke={transparentMenu ? 'white' : 'black'}
 								strokeWidth={1}
 							/>
 						</Link>
