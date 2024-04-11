@@ -37,8 +37,8 @@ const Features = () => {
 				</h3>
 
 				<div className={styles.columns}>
-					{features.map(item => (
-						<div className={styles.column}>
+					{features.map((item, index) => (
+						<div key={index} className={styles.column}>
 							<Image
 								src={item.icon}
 								alt='Icon'
