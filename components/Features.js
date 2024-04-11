@@ -29,7 +29,7 @@ const Features = () => {
 	]
 
 	return (
-		<section className={styles.features}>
+		<section>
 			<div className={`container ${styles.content}`}>
 				<h3>
 					Handcrafted in the Diamond District with 100% recycled gold and
