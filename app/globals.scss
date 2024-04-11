@@ -26,7 +26,13 @@
 
 h2 {
 	@extend .title;
+	font-size: 3rem;
+}
+
+h3 {
+	@extend .title;
 	font-size: 2rem;
+	line-height: 1.5;
 }
 
 h4 {
@@ -49,6 +55,10 @@ a {
 
 @media screen and (max-width: 768px) {
 	h2 {
+		font-size: 1.5rem;
+	}
+
+	h3 {
 		font-size: 1.5rem;
 	}
 }
