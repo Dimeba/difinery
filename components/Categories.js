@@ -6,8 +6,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const Categories = ({ categories }) => {
-	console.log(categories[0].assets[0].url)
-
 	return (
 		<section>
 			<div className={`container ${styles.content}`}>
