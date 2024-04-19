@@ -4,7 +4,10 @@ import Banner from '@/components/Banner'
 import Features from '@/components/Features'
 import Categories from '@/components/Categories'
 
-export default function Home() {
+// lib
+import { categories } from '@/lib/commerce'
+
+export default async function Home() {
 	return (
 		<main>
 			<Hero />
@@ -12,7 +15,7 @@ export default function Home() {
 			<Banner image center url='/sample-image.jpg' />
 			<Banner video center url='/sample-video.mp4' />
 			<Features />
-			<Categories />
+			<Categories categories={categories} />
 		</main>
 	)
 }

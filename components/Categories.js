@@ -5,8 +5,8 @@ import styles from './Categories.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
 
-const Categories = () => {
-	const categories = ['bracellets', 'earrings', 'rings', 'pendants']
+const Categories = ({ categories }) => {
+	console.log(categories[0].assets[0].url)
 
 	return (
 		<section>
@@ -14,19 +14,19 @@ const Categories = () => {
 				<h3>Shop by Category</h3>
 
 				<div className={styles.categories}>
-					{categories.map((item, index) => (
-						<div key={index} className={styles.categorie}>
-							<Link href='#' aria-label={`Link to ${item} page.`}>
+					{categories.map(item => (
+						<div key={item.id} className={styles.categorie}>
+							<Link href='#' aria-label={`Link to ${item.name} page.`}>
 								<div className={styles.image}>
 									<Image
-										src={`/${item}.jpg`}
+										src={item.assets[0].url}
 										fill
 										alt='Category Image.'
 										style={{ objectFit: 'cover' }}
 									/>
 								</div>
 							</Link>
-							<h4>{item}</h4>
+							<h4>{item.name}</h4>
 						</div>
 					))}
 				</div>
