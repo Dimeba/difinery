@@ -10,7 +10,16 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import Button from './Button'
 import Image from 'next/image'
 
-const Banner = ({ center, video, image, url }) => {
+const Banner = ({
+	center,
+	video,
+	image,
+	url,
+	button1Text,
+	button1Url,
+	button2Text,
+	button2Url
+}) => {
 	const options = {
 		root: null,
 		rootMargin: '0%',
@@ -40,8 +49,8 @@ const Banner = ({ center, video, image, url }) => {
 					forever future for our planet, and its people.
 				</p>
 				<div className={styles.buttons}>
-					<Button text='Learn More' link='#' white />
-					<Button text='Shop Now' link='#' white />
+					{button1Text && <Button text={button1Text} link={button1Url} white />}
+					{button2Text && <Button text={button2Text} link={button2Url} white />}
 				</div>
 			</div>
 		</section>

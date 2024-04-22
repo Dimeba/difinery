@@ -16,33 +16,7 @@ export default async function Home() {
 
 	return (
 		<main>
-			<Hero />
-			<Banner
-				button1Text='Learn More'
-				button1Url='#'
-				button2Text='Shop Now'
-				button2Url='#'
-				video
-				center
-				url='/sample-video.mp4'
-			/>
-			<Banner
-				button1Text='Learn More'
-				button1Url='#'
-				image
-				center
-				url='/sample-image.jpg'
-			/>
-			<Banner
-				button1Text='Learn More'
-				button1Url='#'
-				button2Text='Shop Now'
-				button2Url='#'
-				video
-				center
-				url='/sample-video.mp4'
-			/>
-			<Features />
+			<Banner image center url='/sample-image1.jpg' />
 			<Categories categories={categories} />
 		</main>
 	)
