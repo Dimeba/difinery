@@ -10,14 +10,14 @@
 	}
 }
 
-.categories {
+.products {
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	grid-gap: 2rem;
 	width: 100%;
 }
 
-.categorie {
+.product {
 	grid-column: span 3;
 	display: flex;
 	flex-direction: column;
@@ -39,10 +39,18 @@
 	overflow: hidden;
 }
 
+.hoverImage {
+	opacity: 0;
+}
+
 .image:hover {
 	img {
-		transform: scale(120%);
+		transform: scale(110%);
 		transition: 0.3s ease-in;
+	}
+
+	.hoverImage {
+		opacity: 1;
 	}
 }
 

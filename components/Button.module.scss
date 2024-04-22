@@ -1,7 +1,9 @@
 @use '@/app/base';
 
 .button {
-	width: 15rem;
+	min-width: 15rem;
+	width: fit-content;
+	max-width: 90vw;
 	padding: 0.6rem 1rem;
 	border-radius: 5px;
 	transition: 0.3s;

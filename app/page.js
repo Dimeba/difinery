@@ -2,7 +2,7 @@
 import Hero from '@/components/Hero'
 import Banner from '@/components/Banner'
 import Features from '@/components/Features'
-import Categories from '@/components/Categories'
+import Products from '@/components/Products'
 
 // lib
 import { categories, products, getProductsInCategory } from '@/lib/commerce'
@@ -43,7 +43,7 @@ export default async function Home() {
 				url='/sample-video.mp4'
 			/>
 			<Features />
-			<Categories categories={categories} />
+			<Products title='Shop by Category' categories={categories} />
 		</main>
 	)
 }
