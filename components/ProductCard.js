@@ -17,7 +17,7 @@ const ProductCard = async ({ permalink }) => {
 	return (
 		<div className={styles.product}>
 			<Link
-				href={`/products/${permalink}`}
+				href={`/shop/${permalink}`}
 				aria-label={`Link to ${product.name} page.`}
 			>
 				<div className={styles.image}>

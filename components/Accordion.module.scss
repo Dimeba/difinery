@@ -1,0 +1,29 @@
+@use '@/app/base';
+
+.accordion {
+	border-bottom: 1px solid rgba($color: base.$gray, $alpha: 1);
+	padding: 1.5rem 0;
+}
+
+.titleRow {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.open {
+	.icon {
+		transform: rotate(180deg);
+	}
+}
+
+.content {
+	margin-top: 1rem;
+	display: flex;
+	flex-direction: column;
+
+	div {
+		display: flex;
+		gap: 1rem;
+	}
+}

@@ -1,5 +1,4 @@
 // components
-import Hero from '@/components/Hero'
 import Banner from '@/components/Banner'
 import Features from '@/components/Features'
 import Products from '@/components/Products'
@@ -7,7 +6,7 @@ import Products from '@/components/Products'
 // lib
 import { getProducts } from '@/lib/commerce'
 
-export default async function Home() {
+export default async function Shop() {
 	const products = await getProducts()
 
 	return (
