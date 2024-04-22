@@ -48,6 +48,11 @@ h4 {
 	text-transform: uppercase;
 }
 
+h5 {
+	@extend .title;
+	font-size: 1rem;
+}
+
 p {
 	line-height: 1.5;
 }

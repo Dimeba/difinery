@@ -8,10 +8,11 @@ import Link from 'next/link'
 // lib
 import { getProduct } from '@/lib/commerce'
 
-// hooks
-
 const ProductCard = async ({ permalink }) => {
 	const product = await getProduct(permalink)
+
+	const metalTypeGroup =
+		product.variant_groups.find(group => group.name === 'Metal Type') || null
 
 	return (
 		<div className={styles.product}>
@@ -35,9 +36,25 @@ const ProductCard = async ({ permalink }) => {
 							className={styles.hoverImage}
 						/>
 					)}
+
+					<p className={styles.price}>${product.price.formatted}</p>
 				</div>
 			</Link>
-			<h4>{product.name}</h4>
+			<h5>{product.name}</h5>
+
+			{metalTypeGroup && (
+				<div className={styles.typeIcons}>
+					{metalTypeGroup.options.map(option => (
+						<div key={option.name} className={styles.typeIcon}>
+							<Image
+								src={`/${option.name.toLowerCase()}.png`}
+								fill
+								alt={`${option.name} material icon.`}
+							/>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	)
 }

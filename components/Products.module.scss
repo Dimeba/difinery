@@ -27,7 +27,8 @@
 		width: 100%;
 	}
 
-	h4 {
+	h4,
+	h5 {
 		text-align: center;
 	}
 }
@@ -52,6 +53,26 @@
 	.hoverImage {
 		opacity: 1;
 	}
+}
+
+.price {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background-color: white;
+	padding: 0.2rem 0.5rem;
+}
+
+.typeIcons {
+	display: flex;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+.typeIcon {
+	position: relative;
+	width: 1.5rem;
+	aspect-ratio: 1 /1;
 }
 
 @media screen and (max-width: 1024px) {

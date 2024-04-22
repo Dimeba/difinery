@@ -5,14 +5,10 @@ import Features from '@/components/Features'
 import Products from '@/components/Products'
 
 // lib
-import { categories, products, getProductsInCategory } from '@/lib/commerce'
+import { getCategories } from '@/lib/commerce'
 
 export default async function Home() {
-	// console.log(products[0].categories[0].name)
-
-	const selectedProducts = await getProductsInCategory(categories[3].slug)
-
-	// console.log(selectedProducts)
+	const categories = await getCategories()
 
 	return (
 		<main>

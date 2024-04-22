@@ -5,9 +5,11 @@ import Features from '@/components/Features'
 import Products from '@/components/Products'
 
 // lib
-import { categories, products, getProductsInCategory } from '@/lib/commerce'
+import { getProducts } from '@/lib/commerce'
 
 export default async function Home() {
+	const products = await getProducts()
+
 	return (
 		<main>
 			<Banner image center url='/sample-image1.jpg' />
