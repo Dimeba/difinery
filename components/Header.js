@@ -136,6 +136,7 @@ const Header = () => {
 								aria-label={`Link to ${link} page.`}
 								className={styles.mainMenuLink}
 								onMouseEnter={() => loadSubmenu()}
+								onClick={() => setOpenMenu(false)}
 							>
 								<p>{link}</p>{' '}
 								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
@@ -146,6 +147,7 @@ const Header = () => {
 							href='/customer-service'
 							aria-label={`Link to Customer Service page.`}
 							className={`${styles.mainMenuLink} ${styles.mobileLink}`}
+							onClick={() => setOpenMenu(false)}
 						>
 							<p>Customer Service</p>
 							<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />

@@ -19,8 +19,6 @@ export default async function Product({ params }) {
 
 	const product = await getProduct(slug)
 
-	console.log('test')
-
 	return (
 		<main>
 			<ProductInfo product={product} />
