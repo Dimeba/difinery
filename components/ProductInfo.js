@@ -25,7 +25,7 @@ const ProductInfo = ({ product }) => {
 
 				<div className={styles.content}>
 					<h3>{product.name}</h3>
-					<p>${product.price.formatted}</p>
+					<p className={styles.price}>${product.price.formatted}</p>
 
 					<div dangerouslySetInnerHTML={{ __html: product.description }} />
 
