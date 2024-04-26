@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import ProductCard from './ProductCard'
 
-const Products = ({ title, categories, products }) => {
+const Products = ({ title, categories, products, threeColumn, showPrice }) => {
 	return (
 		<section>
 			<div className={`container ${styles.content}`}>
@@ -34,7 +34,12 @@ const Products = ({ title, categories, products }) => {
 					{/* Products */}
 					{products &&
 						products.map(item => (
-							<ProductCard key={item.id} permalink={item.permalink} />
+							<ProductCard
+								key={item.id}
+								permalink={item.permalink}
+								threeColumn={threeColumn ? true : false}
+								showPrice={showPrice ? true : false}
+							/>
 						))}
 				</div>
 			</div>

@@ -2,8 +2,14 @@
 import Banner from '@/components/Banner'
 import Features from '@/components/Features'
 import ColumnsContent from '@/components/ColumnsContent'
+import Products from '@/components/Products'
+
+// lib
+import { getProducts } from '@/lib/commerce'
 
 export default async function Personalize() {
+	const products = await getProducts()
+
 	return (
 		<main>
 			<Banner
@@ -35,6 +41,23 @@ export default async function Personalize() {
 				buttonUrl='#'
 				image='/sample-image2.jpg'
 			/>
+
+			<Banner
+				image
+				center
+				url='/sample-image2.jpg'
+				title='Elevate your journey to forever.'
+				text='Select up to three exquisite rings, delivered to your doorstep. Try them on, share the excitement, and choose the one that captures your heart. No pressure, just pure elegance.'
+				button1Text='Elevate your journey to forever'
+				button1Url='#'
+			/>
+
+			<Products
+				title='Some of our Best-Sellers'
+				products={products.slice(0, 3)}
+				threeColumn
+			/>
+
 			<Features />
 		</main>
 	)

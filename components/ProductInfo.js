@@ -55,7 +55,7 @@ const ProductInfo = ({ product }) => {
 						</Accordion>
 
 						<Accordion small title='Ring Size' />
-						<Accordion small title='Diamon Shape' />
+						<Accordion small title='Diamond Shape' />
 						<Accordion small title='Clarity' />
 						<Accordion small title='Engraving' />
 					</div>

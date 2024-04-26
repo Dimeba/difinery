@@ -8,14 +8,18 @@ import Link from 'next/link'
 // lib
 import { getProduct } from '@/lib/commerce'
 
-const ProductCard = async ({ permalink }) => {
+const ProductCard = async ({ permalink, threeColumn, showPrice }) => {
 	const product = await getProduct(permalink)
 
 	const metalTypeGroup =
 		product.variant_groups.find(group => group.name === 'Metal Type') || null
 
 	return (
-		<div className={styles.product}>
+		<div
+			className={`${styles.product} ${
+				threeColumn ? styles.threeColumn : styles.fourColumn
+			}`}
+		>
 			<Link
 				href={`/shop/${permalink}`}
 				aria-label={`Link to ${product.name} page.`}
@@ -37,7 +41,9 @@ const ProductCard = async ({ permalink }) => {
 						/>
 					)}
 
-					<p className={styles.price}>${product.price.formatted}</p>
+					{showPrice && (
+						<p className={styles.price}>${product.price.formatted}</p>
+					)}
 				</div>
 			</Link>
 			<h5>{product.name}</h5>

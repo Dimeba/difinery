@@ -17,8 +17,23 @@
 	width: 100%;
 }
 
-.product {
+.threeColumn {
+	grid-column: span 4;
+
+	.image {
+		aspect-ratio: 2 / 3;
+	}
+}
+
+.fourColumn {
 	grid-column: span 3;
+
+	.image {
+		aspect-ratio: 1 / 1;
+	}
+}
+
+.product {
 	display: flex;
 	flex-direction: column;
 	gap: 1.5rem;
@@ -35,7 +50,6 @@
 
 .image {
 	width: 100%;
-	aspect-ratio: 1 / 1;
 	position: relative;
 	overflow: hidden;
 }
@@ -76,14 +90,20 @@
 }
 
 @media screen and (max-width: 1024px) {
-	.product {
+	.fourColumn {
 		grid-column: span 6;
+		max-width: 90vw;
 	}
 }
 
 @media screen and (max-width: 768px) {
-	.product {
+	.threeColumn,
+	.fourColumn {
 		grid-column: span 12;
 		max-width: 90vw;
+
+		.image {
+			aspect-ratio: 1 / 1;
+		}
 	}
 }

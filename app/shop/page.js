@@ -20,7 +20,7 @@ export default async function Shop() {
 				To us, forever is not just about every piece of jewelry lasting forever, 
 				but contributing to a forever future for our planet, and its people.'
 			/>
-			<Products products={products} />
+			<Products products={products} showPrice />
 			<Banner
 				button1Text='Elevate your journey to forever'
 				button1Url='#'
