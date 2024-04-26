@@ -20,7 +20,8 @@ const Banner = ({
 	button1Text,
 	button1Url,
 	button2Text,
-	button2Url
+	button2Url,
+	top
 }) => {
 	const options = {
 		root: null,
@@ -31,7 +32,7 @@ const Banner = ({
 	const [targetRef, isIntersecting] = useIntersectionObserver(options)
 
 	return (
-		<section className={styles.banner}>
+		<section className={`${styles.banner} ${top ? styles.top : ''}`}>
 			{video && (
 				<video ref={targetRef} autoPlay loop muted playsInline preload='auto'>
 					{isIntersecting && <source src={url} type='video/mp4' />}

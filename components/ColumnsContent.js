@@ -33,7 +33,7 @@ const ColumnsContent = ({
 				<div>
 					<h3>{title}</h3>
 					<p>{text}</p>
-					<Button link={buttonUrl} text={buttonText} />
+					{buttonText && <Button link={buttonUrl} text={buttonText} />}
 				</div>
 			</div>
 		</section>
