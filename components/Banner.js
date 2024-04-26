@@ -14,6 +14,8 @@ const Banner = ({
 	center,
 	video,
 	image,
+	title,
+	text,
 	url,
 	button1Text,
 	button1Url,
@@ -41,13 +43,8 @@ const Banner = ({
 			<div
 				className={`container ${styles.content} ${center ? styles.center : ''}`}
 			>
-				<h2>Find timeless elegance in every piece.</h2>
-				<p>
-					Sustainable and ethically-crafted fine jewelry is our essence. We are
-					committed to fair value and a fair future. To us, forever is not just
-					about every piece of jewelry lasting forever, but contributing to a
-					forever future for our planet, and its people.
-				</p>
+				<h2>{title}</h2>
+				{text && <p>{text}</p>}
 				<div className={styles.buttons}>
 					{button1Text && <Button text={button1Text} link={button1Url} white />}
 					{button2Text && <Button text={button2Text} link={button2Url} white />}

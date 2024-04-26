@@ -190,6 +190,10 @@
 		.mobileLink {
 			display: flex;
 		}
+
+		p:after {
+			display: none;
+		}
 	}
 
 	.mobileIcon {

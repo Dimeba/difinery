@@ -23,7 +23,13 @@ export default async function Product({ params }) {
 		<main>
 			<ProductInfo product={product} />
 			<FAQ />
-			<Banner image center url='/sample-image1.jpg' />
+			<Banner
+				image
+				center
+				url='/sample-image1.jpg'
+				title='Elevate your journey to forever.'
+				text='Select up to three exquisite rings, delivered to your doorstep. Try them on, share the excitement, and choose the one that captures your heart. No pressure, just pure elegance.'
+			/>
 		</main>
 	)
 }
