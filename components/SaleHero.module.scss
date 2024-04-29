@@ -1,0 +1,46 @@
+@use '@/app/base';
+
+.saleHero {
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-gap: 2rem;
+}
+
+.collection {
+	grid-column: span 6;
+	max-width: 90vw;
+
+	h5,
+	p {
+		text-align: center;
+	}
+
+	p {
+		color: base.$red;
+		text-transform: uppercase;
+	}
+}
+
+.image {
+	width: 100%;
+	height: calc(100% - 1.5rem - 20px);
+	position: relative;
+	margin-bottom: 1.5rem;
+}
+
+@media screen and (max-width: 1024px) {
+	.collection {
+		grid-column: span 12;
+	}
+
+	.image {
+		aspect-ratio: 2 / 1;
+		height: auto;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.image {
+		aspect-ratio: 1 / 1;
+	}
+}

@@ -6,7 +6,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import ProductCard from './ProductCard'
 
-const Products = ({ title, categories, products, threeColumn, showPrice }) => {
+const Products = ({
+	title,
+	categories,
+	products,
+	threeColumn,
+	showPrice,
+	discount
+}) => {
 	return (
 		<section>
 			<div className={`container ${styles.content}`}>
@@ -37,8 +44,9 @@ const Products = ({ title, categories, products, threeColumn, showPrice }) => {
 							<ProductCard
 								key={item.id}
 								permalink={item.permalink}
-								threeColumn={threeColumn ? true : false}
-								showPrice={showPrice ? true : false}
+								threeColumn={threeColumn}
+								showPrice={showPrice}
+								discount={discount}
 							/>
 						))}
 				</div>

@@ -8,7 +8,13 @@ import Link from 'next/link'
 // lib
 import { getProduct } from '@/lib/commerce'
 
-const ProductCard = async ({ permalink, threeColumn, showPrice }) => {
+const ProductCard = async ({
+	permalink,
+	threeColumn,
+	showPrice,
+	discount,
+	hideMaterials
+}) => {
 	const product = await getProduct(permalink)
 
 	const metalTypeGroup =
@@ -42,13 +48,28 @@ const ProductCard = async ({ permalink, threeColumn, showPrice }) => {
 					)}
 
 					{showPrice && (
-						<p className={styles.price}>${product.price.formatted}</p>
+						<p className={styles.price}>
+							<span
+								style={{
+									textDecoration: discount ? 'line-through' : '',
+									color: discount ? '#AEAEAD' : '#1a1b18'
+								}}
+							>
+								${product.price.formatted}
+							</span>
+							{discount && (
+								<>
+									{' '}
+									<span className={styles.discount}>$200</span>
+								</>
+							)}
+						</p>
 					)}
 				</div>
 			</Link>
 			<h5>{product.name}</h5>
 
-			{metalTypeGroup && (
+			{metalTypeGroup && !hideMaterials && (
 				<div className={styles.typeIcons}>
 					{metalTypeGroup.options.map(option => (
 						<div key={option.name} className={styles.typeIcon}>

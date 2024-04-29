@@ -1,0 +1,57 @@
+@use '@/app/base';
+
+.collectionsContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 4rem;
+	align-items: center;
+}
+
+.collections {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-gap: 2rem;
+}
+
+.collection {
+	grid-column: span 4;
+	max-width: 90vw;
+
+	h5,
+	p {
+		text-align: center;
+	}
+
+	p {
+		margin-top: 0.5rem;
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+}
+
+.image {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	position: relative;
+	margin-bottom: 1.5rem;
+	overflow: hidden;
+	img {
+		transition: 0.3s ease-in;
+	}
+}
+
+.image:hover {
+	img {
+		transform: scale(110%);
+	}
+}
+
+@media screen and (max-width: 1024px) {
+}
+
+@media screen and (max-width: 768px) {
+	.collection {
+		grid-column: span 12;
+	}
+}
