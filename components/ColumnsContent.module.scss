@@ -30,12 +30,12 @@
 		> p {
 			margin-bottom: 0.5rem;
 			text-align: center;
-			text-wrap: balance;
 		}
 
 		> h3,
 		> p {
 			max-width: 50%;
+			text-wrap: balance;
 		}
 	}
 }

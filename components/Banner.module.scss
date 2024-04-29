@@ -40,6 +40,7 @@
 }
 
 .content {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: 1.5rem;
@@ -56,11 +57,26 @@
 	gap: 1rem;
 }
 
+.playIcon {
+	position: absolute;
+	bottom: 2rem;
+	left: 0;
+	cursor: pointer;
+}
+
+.muteIcon {
+	position: absolute;
+	bottom: 2rem;
+	right: 0;
+	cursor: pointer;
+}
+
 @media screen and (max-width: 1024px) {
 }
 
 @media screen and (max-width: 768px) {
 	.buttons {
 		flex-direction: column;
+		align-items: center;
 	}
 }
