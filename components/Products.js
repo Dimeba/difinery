@@ -23,8 +23,11 @@ const Products = ({
 					{/* Categories */}
 					{categories &&
 						categories.map(item => (
-							<div key={item.id} className={styles.product}>
-								<Link href='#' aria-label={`Link to ${item.name} page.`}>
+							<div
+								key={item.id}
+								className={`${styles.product} ${styles.fourColumn}`}
+							>
+								<Link href='/shop' aria-label={`Link to ${item.name} page.`}>
 									<div className={styles.image}>
 										<Image
 											src={item.assets[0].url}
