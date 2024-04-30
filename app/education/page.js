@@ -7,7 +7,6 @@ export default async function Education() {
 	return (
 		<main>
 			<Banner
-				top
 				button1Text='Discover Our Collection'
 				button1Url='#'
 				button2Text='Shop Now'

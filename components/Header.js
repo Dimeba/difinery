@@ -17,7 +17,7 @@ import { usePathname } from 'next/navigation'
 
 const Header = () => {
 	const [targetRef, isIntersecting] = useIntersectionObserver()
-	const isScreenWide = useIsScreenWide(1440)
+	const isScreenWide = useIsScreenWide(1024)
 	const [openMenu, setOpenMenu] = useState(false)
 	const [showSubmenu, setShowSubmenu] = useState(false)
 	const pathName = usePathname()

@@ -11,7 +11,7 @@ export default async function Shop() {
 
 	return (
 		<main>
-			<Banner
+			{/* <Banner
 				image
 				center
 				url='/sample-image1.jpg'
@@ -19,7 +19,7 @@ export default async function Shop() {
 				text='We are committed to fair value and a fair future.
 				To us, forever is not just about every piece of jewelry lasting forever, 
 				but contributing to a forever future for our planet, and its people.'
-			/>
+			/> */}
 			<Products products={products} showPrice />
 			<Banner
 				button1Text='Elevate your journey to forever'
