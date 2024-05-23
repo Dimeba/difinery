@@ -103,8 +103,8 @@ const Header = () => {
 							src={transparentMenu ? '/logo-white.svg' : '/logo-black.svg'}
 							alt='Logo'
 							width={120}
-							height={160 / 8.6}
-							style={{ objectFit: 'contain' }}
+							height={120 / 7.5}
+							style={{ objectFit: 'contain', objectPosition: 'center' }}
 						/>
 					</Link>
 
