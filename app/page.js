@@ -6,9 +6,15 @@ import Products from '@/components/Products'
 
 // lib
 import { getCategories } from '@/lib/commerce'
+import { getProducts, getCollections } from '@/lib/shopify'
 
 export default async function Home() {
 	const categories = await getCategories()
+
+	const collections = await getCollections()
+	const products = await getProducts()
+
+	console.log(collections[0].title)
 
 	return (
 		<main>
