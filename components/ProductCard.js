@@ -6,19 +6,37 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 // lib
-import { getProduct } from '@/lib/commerce'
+import { getProduct } from '@/lib/shopify'
 
 const ProductCard = async ({
 	permalink,
+	id,
 	threeColumn,
 	showPrice,
 	discount,
 	hideMaterials
 }) => {
-	const product = await getProduct(permalink)
+	const product = await getProduct(id)
 
-	const metalTypeGroup =
-		product.variant_groups.find(group => group.name === 'Metal Type') || null
+	// const metalTypeGroup =
+	// 	product.variant_groups.find(group => group.name === 'Metal Type') || null
+
+	console.log(product.options[1].values[0].value)
+
+	const returnMetalType = option => {
+		switch (true) {
+			case option.includes('rose'):
+				return 'rose.png'
+			case option.includes('yellow'):
+				return 'yellow.png'
+			case option.includes('white'):
+				return 'white.png'
+			case option.includes('platinum'):
+				return 'platinum.png'
+			default:
+				return ''
+		}
+	}
 
 	return (
 		<div
@@ -28,18 +46,18 @@ const ProductCard = async ({
 		>
 			<Link
 				href={`/shop/${permalink}`}
-				aria-label={`Link to ${product.name} page.`}
+				aria-label={`Link to ${product.title} page.`}
 			>
 				<div className={styles.image}>
 					<Image
-						src={product.assets[0].url}
+						src={product.images[0].src}
 						fill
 						alt='Category Image.'
 						style={{ objectFit: 'cover' }}
 					/>
-					{product.assets[1] && (
+					{product.images[1] && (
 						<Image
-							src={product.assets[1].url}
+							src={product.images[1].src}
 							fill
 							alt='Category Image.'
 							style={{ objectFit: 'cover' }}
@@ -55,7 +73,7 @@ const ProductCard = async ({
 									color: discount ? '#AEAEAD' : '#1a1b18'
 								}}
 							>
-								${product.price.formatted}
+								${product.variants[0].price.amount.toString().slice(0, -2)}
 							</span>
 							{discount && (
 								<>
@@ -67,16 +85,16 @@ const ProductCard = async ({
 					)}
 				</div>
 			</Link>
-			<h5>{product.name}</h5>
+			<h5>{product.title}</h5>
 
-			{metalTypeGroup && !hideMaterials && (
+			{!hideMaterials && (
 				<div className={styles.typeIcons}>
-					{metalTypeGroup.options.map(option => (
-						<div key={option.name} className={styles.typeIcon}>
+					{product.options[1].values.map(option => (
+						<div key={option.value} className={styles.typeIcon}>
 							<Image
-								src={`/${option.name.toLowerCase()}.png`}
+								src={`/${returnMetalType(option.value.toLowerCase())}`}
 								fill
-								alt={`${option.name} material icon.`}
+								alt={`${option.value} material icon.`}
 							/>
 						</div>
 					))}

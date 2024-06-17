@@ -43,10 +43,11 @@ const Products = ({
 
 					{/* Products */}
 					{products &&
-						products.map(item => (
+						products.map(product => (
 							<ProductCard
-								key={item.id}
-								permalink={item.permalink}
+								key={product.id}
+								id={product.id}
+								permalink={product.handle}
 								threeColumn={threeColumn}
 								showPrice={showPrice}
 								discount={discount}

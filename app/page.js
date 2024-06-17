@@ -14,7 +14,7 @@ export default async function Home() {
 	const collections = await getCollections()
 	const products = await getProducts()
 
-	console.log(collections[0].title)
+	console.log(collections[1].products[0].title)
 
 	return (
 		<main>

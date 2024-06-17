@@ -1,5 +1,3 @@
-'use client'
-
 // styles
 import styles from './ProductInfo.module.scss'
 
@@ -7,27 +5,21 @@ import styles from './ProductInfo.module.scss'
 import Image from 'next/image'
 import Accordion from './Accordion'
 
-// lib
-import { client } from '@/lib/commerce'
-
 const ProductInfo = ({ product }) => {
-	const addToCart = () => {
-		client.cart.add(product.id, 1)
-		client.cart.contents().then(items => console.log(items))
-	}
-
 	return (
 		<section>
 			<div className={`container ${styles.productInfo}`}>
 				<div className={styles.image}>
-					<Image src={product.assets[0].url} fill alt='Image of the product.' />
+					<Image src={product.images[0].src} fill alt='Image of the product.' />
 				</div>
 
 				<div className={styles.content}>
-					<h3>{product.name}</h3>
-					<p className={styles.price}>${product.price.formatted}</p>
+					<h3>{product.title}</h3>
+					<p className={styles.price}>
+						${product.variants[0].price.amount.toString().slice(0, -2)}
+					</p>
 
-					<div dangerouslySetInnerHTML={{ __html: product.description }} />
+					<p>{product.description}</p>
 
 					{/* Options */}
 					<div className={styles.accordion}>
@@ -65,9 +57,7 @@ const ProductInfo = ({ product }) => {
 							Made to Order: Between 06.04-13.04 with you.
 						</p>
 
-						<button className={styles.cartButton} onClick={addToCart}>
-							ADD TO CART
-						</button>
+						<button className={styles.cartButton}>ADD TO CART</button>
 
 						<p className={styles.tax}>
 							Tax included

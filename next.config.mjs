@@ -11,6 +11,11 @@ const nextConfig = {
 				protocol: 'https',
 				hostname: 'cdn.chec.io',
 				pathname: '**'
+			},
+			{
+				protocol: 'https',
+				hostname: 'cdn.shopify.com',
+				pathname: '/s/files/**'
 			}
 		],
 		formats: ['image/avif', 'image/webp'],

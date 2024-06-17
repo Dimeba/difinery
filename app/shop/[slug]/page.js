@@ -5,21 +5,23 @@ import FAQ from '@/components/FAQ'
 import Products from '@/components/Products'
 
 // lib
-import { getProducts, getProduct } from '@/lib/commerce'
+import { getProducts, getProduct } from '@/lib/shopify'
 
 const products = await getProducts()
 
 export async function generateStaticParams() {
 	return products.map(item => ({
-		slug: item.permalink
+		slug: item.handle
 	}))
 }
 
 export default async function Product({ params }) {
 	const { slug } = params
 
-	const product = await getProduct(slug)
 	const products = await getProducts()
+
+	const id = products.find(product => product.handle === slug).id
+	const product = await getProduct(id)
 
 	return (
 		<main>
