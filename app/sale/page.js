@@ -7,7 +7,7 @@ import Products from '@/components/Products'
 import Features from '@/components/Features'
 
 // lib
-import { getProducts } from '@/lib/commerce'
+import { getProducts } from '@/lib/shopify'
 
 export default async function Sale() {
 	const products = await getProducts()

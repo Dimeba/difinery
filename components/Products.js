@@ -30,14 +30,14 @@ const Products = ({
 								<Link href='/shop' aria-label={`Link to ${item.name} page.`}>
 									<div className={styles.image}>
 										<Image
-											src={item.assets[0].url}
+											src={item.products[0].images[0].src}
 											fill
 											alt='Category Image.'
 											style={{ objectFit: 'cover' }}
 										/>
 									</div>
 								</Link>
-								<h4>{item.name}</h4>
+								<h4>{item.title}</h4>
 							</div>
 						))}
 

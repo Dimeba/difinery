@@ -12,9 +12,8 @@ export default async function Home() {
 	const categories = await getCategories()
 
 	const collections = await getCollections()
-	const products = await getProducts()
 
-	console.log(collections[1].products[0].title)
+	console.log(collections[1].title)
 
 	return (
 		<main>
@@ -50,7 +49,7 @@ export default async function Home() {
 				text='Sustainable and ethically-crafted fine jewelry is our essence. We are committed to fair value and a fair future. To us, forever is not just about every piece of jewelry lasting forever, but contributing to a forever future for our  planet, and its people.'
 			/>
 			<Features />
-			<Products title='Shop by Category' categories={categories} />
+			<Products title='Shop by Category' categories={collections} />
 		</main>
 	)
 }

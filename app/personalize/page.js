@@ -5,7 +5,7 @@ import ColumnsContent from '@/components/ColumnsContent'
 import Products from '@/components/Products'
 
 // lib
-import { getProducts } from '@/lib/commerce'
+import { getProducts } from '@/lib/shopify'
 
 export default async function Personalize() {
 	const products = await getProducts()
