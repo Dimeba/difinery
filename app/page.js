@@ -5,19 +5,34 @@ import Features from '@/components/Features'
 import Products from '@/components/Products'
 
 // lib
-import { getCategories } from '@/lib/commerce'
-import { getProducts, getCollections } from '@/lib/shopify'
+import { getCollections } from '@/lib/shopify'
+
+// contentful
+import { createClient } from 'contentful'
 
 export default async function Home() {
-	const categories = await getCategories()
-
+	// Shopify
 	const collections = await getCollections()
 
-	console.log(collections[1].title)
+	// Contentful
+	const client = createClient({
+		space: process.env.space,
+		accessToken: process.env.accessToken
+	})
+
+	const homepage = await client.getEntries({
+		content_type: 'homepage'
+	})
+
+	const content = homepage.items[0].fields
 
 	return (
 		<main>
-			<Hero />
+			<Hero
+				title={content.heroTitle}
+				text={content.heroText}
+				image={content.heroImage.fields.file.url}
+			/>
 			<Banner
 				button1Text='Learn More'
 				button1Url='#'

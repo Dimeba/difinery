@@ -18,11 +18,6 @@ const ProductCard = async ({
 }) => {
 	const product = await getProduct(id)
 
-	// const metalTypeGroup =
-	// 	product.variant_groups.find(group => group.name === 'Metal Type') || null
-
-	console.log(product.options[1].values[0].value)
-
 	const returnMetalType = option => {
 		switch (true) {
 			case option.includes('rose'):
