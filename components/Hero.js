@@ -5,7 +5,12 @@ import styles from './Hero.module.scss'
 import Button from './Button'
 import Image from 'next/image'
 
-const Hero = ({ title, text, image }) => {
+// lib
+import { getEntry } from '@/lib/contentful'
+
+const Hero = async ({ title, text, image, link }) => {
+	const button = await getEntry(link.sys.id)
+
 	return (
 		<section className={styles.hero}>
 			<Image
@@ -18,7 +23,7 @@ const Hero = ({ title, text, image }) => {
 			<div className={`container ${styles.content}`}>
 				<h2>{title}</h2>
 				<p>{text}</p>
-				<Button text='Shop Now' link='/shop' white />
+				<Button text={button.fields.text} link={button.fields.url} white />
 			</div>
 		</section>
 	)

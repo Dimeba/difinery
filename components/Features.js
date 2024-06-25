@@ -4,29 +4,18 @@ import styles from './Features.module.scss'
 // components
 import Image from 'next/image'
 
-const Features = () => {
-	const features = [
-		{
-			icon: '/sustainability-icon.svg',
-			description: `Sustainably created diamonds with transparent provenance`
-		},
-		{
-			icon: '/recycle-icon.svg',
-			description: `100% recycled 14k & 18k solid gold`
-		},
-		{
-			icon: '/quality-icon.svg',
-			description: `Excellent quality, handcrafted in the Diamond District`
-		},
-		{
-			icon: '/guarantee-icon.svg',
-			description: `Lifetime guarantee on our diamonds & gemstones`
-		},
-		{
-			icon: '/price-icon.svg',
-			description: `Price transparency on every model and every purchase`
+// lib
+import { getEntry } from '@/lib/contentful'
+
+const Features = async ({ features }) => {
+	const content = []
+
+	if (features) {
+		for (let i = 0; i < features.length; i++) {
+			const feature = await getEntry(features[i].sys.id)
+			content.push(feature)
 		}
-	]
+	}
 
 	return (
 		<section>
@@ -37,16 +26,16 @@ const Features = () => {
 				</h3>
 
 				<div className={styles.columns}>
-					{features.map((item, index) => (
-						<div key={index} className={styles.column}>
+					{content.map(item => (
+						<div key={item.sys.id} className={styles.column}>
 							<Image
-								src={item.icon}
+								src={'https:' + item.fields.image.fields.file.url}
 								alt='Icon'
 								width={64}
 								height={64}
 								style={{ objectFit: 'contain', objectPosition: 'center' }}
 							/>
-							<p>{item.description}</p>
+							<p>{item.fields.text}</p>
 						</div>
 					))}
 				</div>

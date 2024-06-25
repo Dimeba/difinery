@@ -18,16 +18,11 @@ const Banner = async ({
 	top,
 	showControls
 }) => {
-	const getLink = async id => {
-		const link = await getEntry(id)
-		return link
-	}
-
 	const buttons = []
 
 	if (links) {
 		for (let i = 0; i < links.length; i++) {
-			const link = await getLink(links[i].sys.id)
+			const link = await getEntry(links[i].sys.id)
 			buttons.push(link)
 		}
 	}
@@ -45,9 +40,9 @@ const Banner = async ({
 				{text && <p>{text}</p>}
 				{links && (
 					<div className={styles.buttons}>
-						{buttons.map((button, index) => (
+						{buttons.map(button => (
 							<Button
-								key={index}
+								key={button.sys.id}
 								text={button.fields.text}
 								link={button.fields.url}
 								white

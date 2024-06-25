@@ -29,6 +29,7 @@ export default async function Home() {
 								title={section.fields.title}
 								text={section.fields.text}
 								image={section.fields.image.fields.file.url}
+								link={section.fields.link}
 							/>
 						)
 					case 'banner':
@@ -43,13 +44,14 @@ export default async function Home() {
 								showControls={section.fields.showVideoControls}
 							/>
 						)
+					case 'features':
+						return <Features key={index} features={section.fields.features} />
 
 					default:
 						return null
 				}
 			})}
 
-			<Features />
 			<Products title='Shop by Category' categories={collections} />
 		</main>
 	)
