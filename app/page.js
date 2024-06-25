@@ -13,18 +13,24 @@ export default async function Home() {
 	const collections = await getCollections()
 
 	// Contentful
-	const homepage = await getEntries('homepage')
-	const content = homepage.items[0].fields
+	const pages = await getEntries('page')
+	const content = pages.items.find(
+		page => page.fields.title == 'Homepage'
+	).fields
 
 	return (
 		<main>
-			<Hero
-				title={content.heroTitle}
-				text={content.heroText}
-				image={content.heroImage.fields.file.url}
-			/>
 			{content.sections.map((section, index) => {
 				switch (section.sys.contentType.sys.id) {
+					case 'hero':
+						return (
+							<Hero
+								key={index}
+								title={section.fields.title}
+								text={section.fields.text}
+								image={section.fields.image.fields.file.url}
+							/>
+						)
 					case 'banner':
 						return (
 							<Banner
