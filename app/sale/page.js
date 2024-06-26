@@ -8,9 +8,15 @@ import Features from '@/components/Features'
 
 // lib
 import { getProducts } from '@/lib/shopify'
+import { getEntries } from '@/lib/contentful'
 
 export default async function Sale() {
+	// Shopify
 	const products = await getProducts()
+
+	// Contentful
+	const pages = await getEntries('page')
+	const content = pages.items.find(page => page.fields.title == 'Sale').fields
 
 	return (
 		<main>
@@ -25,27 +31,50 @@ export default async function Sale() {
 				discount
 			/>
 
-			<ColumnsContent
-				title='Complimentary Engraving Service'
-				text='Unlock a personal touch with our complimentary engraving service. Elevate your jewelry with a unique inscription, on us.'
-				image='/sample-image.jpg'
-				buttonText='Shop Gifts'
-				buttonUrl='#'
-			/>
+			{content.sections.map((section, index) => {
+				switch (section.sys.contentType.sys.id) {
+					case 'hero':
+						return (
+							<Hero
+								key={index}
+								title={section.fields.title}
+								text={section.fields.text}
+								image={section.fields.image.fields.file.url}
+								link={section.fields.link}
+							/>
+						)
+					case 'banner':
+						if (section.fields.layout == 'Full Width') {
+							return (
+								<Banner
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									links={section.fields.links}
+									image={section.fields.image}
+									video={section.fields.video}
+									showControls={section.fields.showVideoControls}
+								/>
+							)
+						} else if (section.fields.layout == 'Two Columns') {
+							return (
+								<ColumnsContent
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									image={section.fields.image}
+									links={section.fields.links}
+								/>
+							)
+						}
 
-			<Features />
+					case 'features':
+						return <Features key={index} features={section.fields.features} />
 
-			<Banner
-				image
-				center
-				url='/sample-image2.jpg'
-				title='Empowered Impact'
-				text='We believe in reciprocal giving - as our brand grows, so does our ability to create real positive change in communities.'
-				button1Text='Discover Our Collection'
-				button1Url='#'
-				button2Text='Shop Now'
-				button2Url='/shop'
-			/>
+					default:
+						return null
+				}
+			})}
 		</main>
 	)
 }

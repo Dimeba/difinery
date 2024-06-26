@@ -5,41 +5,62 @@ import Products from '@/components/Products'
 
 // lib
 import { getProducts } from '@/lib/shopify'
+import { getEntries } from '@/lib/contentful'
 
 export default async function Shop() {
+	// Shopify
 	const products = await getProducts()
+
+	// Contentful
+	const pages = await getEntries('page')
+	const content = pages.items.find(page => page.fields.title == 'Shop').fields
 
 	return (
 		<main>
-			{/* <Banner
-				image
-				center
-				url='/sample-image1.jpg'
-				title='Sustainable and ethically-crafted fine jewelry is our essence.'
-				text='We are committed to fair value and a fair future.
-				To us, forever is not just about every piece of jewelry lasting forever, 
-				but contributing to a forever future for our planet, and its people.'
-			/> */}
 			<Products products={products} showPrice />
-			<Banner
-				button1Text='Elevate your journey to forever'
-				button1Url='#'
-				image
-				center
-				url='/sample-image1.jpg'
-				title='Elevate your journey to forever.'
-				text='Select up to three exquisite rings, delivered to your doorstep. Try them on, share the excitement, and choose the one that captures your heart. No pressure, just pure elegance.'
-			/>
-			<Features />
-			<Banner
-				button1Text='Shop Now'
-				button1Url='#'
-				image
-				center
-				url='/sample-image1.jpg'
-				title='We guide you to your perfect gift.'
-				text='Ethical. Sustainable. Forever gift.'
-			/>
+			{content.sections.map((section, index) => {
+				switch (section.sys.contentType.sys.id) {
+					case 'hero':
+						return (
+							<Hero
+								key={index}
+								title={section.fields.title}
+								text={section.fields.text}
+								image={section.fields.image.fields.file.url}
+								link={section.fields.link}
+							/>
+						)
+					case 'banner':
+						if (section.fields.layout == 'Full Width') {
+							return (
+								<Banner
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									links={section.fields.links}
+									image={section.fields.image}
+									video={section.fields.video}
+									showControls={section.fields.showVideoControls}
+								/>
+							)
+						} else if (section.fields.layout == 'Two Columns') {
+							return (
+								<ColumnsContent
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									image={section.fields.image}
+									links={section.fields.links}
+								/>
+							)
+						}
+					case 'features':
+						return <Features key={index} features={section.fields.features} />
+
+					default:
+						return null
+				}
+			})}
 		</main>
 	)
 }

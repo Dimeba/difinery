@@ -33,17 +33,29 @@ export default async function Home() {
 							/>
 						)
 					case 'banner':
-						return (
-							<Banner
-								key={index}
-								title={section.fields.title}
-								text={section.fields.text}
-								links={section.fields.links}
-								image={section.fields.image}
-								video={section.fields.video}
-								showControls={section.fields.showVideoControls}
-							/>
-						)
+						if (section.fields.layout == 'Full Width') {
+							return (
+								<Banner
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									links={section.fields.links}
+									image={section.fields.image}
+									video={section.fields.video}
+									showControls={section.fields.showVideoControls}
+								/>
+							)
+						} else if (section.fields.layout == 'Two Columns') {
+							return (
+								<ColumnsContent
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									image={section.fields.image}
+									links={section.fields.links}
+								/>
+							)
+						}
 					case 'features':
 						return <Features key={index} features={section.fields.features} />
 
