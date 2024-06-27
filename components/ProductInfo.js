@@ -26,19 +26,19 @@ const ProductInfo = ({ product }) => {
 						<Accordion title='Metal Type' state={true}>
 							<div>
 								<Image
-									src='/gold.png'
+									src='/yellow.png'
 									alt='Material type icon'
 									width={32}
 									height={32}
 								/>
 								<Image
-									src='/silver.png'
+									src='/white.png'
 									alt='Material type icon'
 									width={32}
 									height={32}
 								/>
 								<Image
-									src='/bronze.png'
+									src='/rose.png'
 									alt='Material type icon'
 									width={32}
 									height={32}

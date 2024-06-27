@@ -55,9 +55,34 @@ export default async function Home() {
 									links={section.fields.links}
 								/>
 							)
+						} else if (section.fields.layout == 'Two Columns Reverse') {
+							return (
+								<ColumnsContent
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									image={section.fields.image}
+									links={section.fields.links}
+									reverse
+								/>
+							)
+						} else if (section.fields.layout == 'Simple') {
+							return (
+								<SimpleRow
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+								/>
+							)
 						}
 					case 'features':
-						return <Features key={index} features={section.fields.features} />
+						return (
+							<Features
+								key={index}
+								features={section.fields.features}
+								title={section.fields.title}
+							/>
+						)
 
 					default:
 						return null

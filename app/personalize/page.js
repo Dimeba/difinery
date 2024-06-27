@@ -6,59 +6,93 @@ import Products from '@/components/Products'
 
 // lib
 import { getProducts } from '@/lib/shopify'
+import { getEntries } from '@/lib/contentful'
 
 export default async function Personalize() {
+	// Shopify
 	const products = await getProducts()
+
+	// Contentful
+	const pages = await getEntries('page')
+	const content = pages.items.find(
+		page => page.fields.title == 'Personalize'
+	).fields
 
 	return (
 		<main>
-			<Banner
-				image
-				center
-				url='/sample-image1.jpg'
-				title='Effortless Sophistication'
-				text='We obsess over intuitive, customer-centered design, to provide a seamless customer experience across every brand touchpoint, from exploration to unboxing.'
-			/>
-			<ColumnsContent
-				title='Engraving'
-				text="Add a personal touch with our free engraving service. Whether it's initials, a date, or a special message, we meticulously engrave your wishes to give your jewelry unique meaning and significance."
-				buttonText='Personalize Now'
-				buttonUrl='#'
-				image='/sample-image.jpg'
-			/>
-			<ColumnsContent
-				reverse
-				title='Craft your story '
-				text='Personalize your jewelry with names, dates, or words that matter most to you. Elevate your style - create a charm that speaks your unique language.'
-				buttonText='Learn More'
-				buttonUrl='#'
-				image='/sample-image1.jpg'
-			/>
-			<ColumnsContent
-				title='Sketch Craft'
-				text='Seamlessly upload your sketches, and watch as our cutting-edge technology transforms your ideas into meticulously crafted, one-of-a-kind pieces. Your design, our precision - redefine personalized jewelry with the click of a button.'
-				buttonText='EXPLORE CUSTOM MADE JEWELRY'
-				buttonUrl='#'
-				image='/sample-image2.jpg'
-			/>
+			{content.sections.map((section, index) => {
+				switch (section.sys.contentType.sys.id) {
+					case 'hero':
+						return (
+							<Hero
+								key={index}
+								title={section.fields.title}
+								text={section.fields.text}
+								image={section.fields.image.fields.file.url}
+								link={section.fields.link}
+							/>
+						)
+					case 'banner':
+						if (section.fields.layout == 'Full Width') {
+							return (
+								<Banner
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									links={section.fields.links}
+									image={section.fields.image}
+									video={section.fields.video}
+									showControls={section.fields.showVideoControls}
+								/>
+							)
+						} else if (section.fields.layout == 'Two Columns') {
+							return (
+								<ColumnsContent
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									image={section.fields.image}
+									links={section.fields.links}
+								/>
+							)
+						} else if (section.fields.layout == 'Two Columns Reverse') {
+							return (
+								<ColumnsContent
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									image={section.fields.image}
+									links={section.fields.links}
+									reverse
+								/>
+							)
+						} else if (section.fields.layout == 'Simple') {
+							return (
+								<SimpleRow
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+								/>
+							)
+						}
+					case 'features':
+						return (
+							<Features
+								key={index}
+								features={section.fields.features}
+								title={section.fields.title}
+							/>
+						)
 
-			<Banner
-				image
-				center
-				url='/sample-image2.jpg'
-				title='Elevate your journey to forever.'
-				text='Select up to three exquisite rings, delivered to your doorstep. Try them on, share the excitement, and choose the one that captures your heart. No pressure, just pure elegance.'
-				button1Text='Elevate your journey to forever'
-				button1Url='#'
-			/>
-
+					default:
+						return null
+				}
+			})}
 			<Products
 				title='Some of our Best-Sellers'
 				products={products.slice(0, 3)}
 				threeColumn
 			/>
-
-			<Features />
 		</main>
 	)
 }

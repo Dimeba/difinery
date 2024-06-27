@@ -11,15 +11,21 @@
 	display: flex;
 	gap: 2rem;
 	width: 100%;
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
 .column {
 	flex-grow: 1;
+	// flex-shrink: 1;
+	flex-basis: 0;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 2rem;
+	max-width: calc(20% - 2rem);
 
+	h2,
 	p {
 		text-align: center;
 		text-wrap: balance;
@@ -39,5 +45,6 @@
 	}
 
 	.column {
+		max-width: 100%;
 	}
 }
