@@ -102,8 +102,8 @@ const Header = () => {
 						<Image
 							src={transparentMenu ? '/logo-white.svg' : '/logo-black.svg'}
 							alt='Logo'
-							width={120}
-							height={120 / 7.5}
+							width={150}
+							height={150 / 7.5}
 							style={{ objectFit: 'contain', objectPosition: 'center' }}
 						/>
 					</Link>

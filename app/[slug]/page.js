@@ -1,21 +1,26 @@
 // components
+import Hero from '@/components/Hero'
 import Banner from '@/components/Banner'
 import Features from '@/components/Features'
-import ColumnsContent from '@/components/ColumnsContent'
 import Products from '@/components/Products'
+import ColumnsContent from '@/components/ColumnsContent'
 
 // lib
-import { getProducts } from '@/lib/shopify'
 import { getEntries } from '@/lib/contentful'
 
-export default async function Personalize() {
-	// Shopify
-	const products = await getProducts()
+const pages = await getEntries('page')
 
-	// Contentful
-	const pages = await getEntries('page')
+export async function generateStaticParams() {
+	return pages.items.map(page => ({
+		slug: page.fields.title.toLowerCase().replace(/ /g, '-')
+	}))
+}
+
+export default async function Product({ params }) {
+	const { slug } = params
+
 	const content = pages.items.find(
-		page => page.fields.title == 'Personalize'
+		page => page.fields.title.toLowerCase().replace(/ /g, '-') == slug
 	).fields
 
 	return (
@@ -101,11 +106,6 @@ export default async function Personalize() {
 						return null
 				}
 			})}
-			<Products
-				title='Some of our Best-Sellers'
-				products={products.slice(0, 3)}
-				threeColumn
-			/>
 		</main>
 	)
 }

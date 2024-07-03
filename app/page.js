@@ -3,6 +3,7 @@ import Hero from '@/components/Hero'
 import Banner from '@/components/Banner'
 import Features from '@/components/Features'
 import Products from '@/components/Products'
+import ColumnsContent from '@/components/ColumnsContent'
 
 // lib
 import { getCollections } from '@/lib/shopify'
@@ -72,6 +73,19 @@ export default async function Home() {
 									key={section.sys.id}
 									title={section.fields.title}
 									text={section.fields.text}
+								/>
+							)
+						} else if (section.fields.layout == 'Top') {
+							return (
+								<Banner
+									key={section.sys.id}
+									title={section.fields.title}
+									text={section.fields.text}
+									links={section.fields.links}
+									image={section.fields.image}
+									video={section.fields.video}
+									showControls={section.fields.showVideoControls}
+									top
 								/>
 							)
 						}
