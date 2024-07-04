@@ -6,13 +6,9 @@ import Products from '@/components/Products'
 import ColumnsContent from '@/components/ColumnsContent'
 
 // lib
-import { getCollections } from '@/lib/shopify'
 import { getEntries } from '@/lib/contentful'
 
 export default async function Home() {
-	// Shopify
-	const collections = await getCollections()
-
 	// Contentful
 	const pages = await getEntries('page')
 	const content = pages.items.find(
@@ -21,12 +17,12 @@ export default async function Home() {
 
 	return (
 		<main>
-			{content.sections.map((section, index) => {
+			{content.sections.map(section => {
 				switch (section.sys.contentType.sys.id) {
 					case 'hero':
 						return (
 							<Hero
-								key={index}
+								key={section.sys.id}
 								title={section.fields.title}
 								text={section.fields.text}
 								image={section.fields.image.fields.file.url}
@@ -92,9 +88,17 @@ export default async function Home() {
 					case 'features':
 						return (
 							<Features
-								key={index}
+								key={section.sys.id}
 								features={section.fields.features}
 								title={section.fields.title}
+							/>
+						)
+					case 'products':
+						return (
+							<Products
+								key={section.sys.id}
+								title={section.fields.title}
+								categories={section.fields.collections}
 							/>
 						)
 
@@ -102,8 +106,6 @@ export default async function Home() {
 						return null
 				}
 			})}
-
-			<Products title='Shop by Category' categories={collections} />
 		</main>
 	)
 }

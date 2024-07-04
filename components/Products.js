@@ -6,7 +6,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import ProductCard from './ProductCard'
 
-const Products = ({
+// lib
+import { getCollections } from '@/lib/shopify'
+
+const Products = async ({
 	title,
 	categories,
 	products,
@@ -14,6 +17,27 @@ const Products = ({
 	showPrice,
 	discount
 }) => {
+	// Shopify
+	const collections = await getCollections()
+	const decodedIDs = []
+
+	// Extract Shopify Collection ID from base64
+	const extractShopifyCollectionId = base64 => {
+		const buffer = Buffer.from(base64, 'base64')
+		const shopifyId = buffer.toString('utf-8')
+		return shopifyId
+	}
+
+	// Decode categories
+	categories.forEach(category => {
+		decodedIDs.push(extractShopifyCollectionId(category))
+	})
+
+	// Filter collections
+	const content = collections
+		.filter(collection => decodedIDs.includes(collection.id))
+		.reverse()
+
 	return (
 		<section>
 			<div className={`container ${styles.content}`}>
@@ -21,8 +45,8 @@ const Products = ({
 
 				<div className={styles.products}>
 					{/* Categories */}
-					{categories &&
-						categories.map(item => (
+					{content &&
+						content.map(item => (
 							<div
 								key={item.id}
 								className={`${styles.product} ${styles.fourColumn}`}
