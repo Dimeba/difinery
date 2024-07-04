@@ -4,6 +4,8 @@ import Banner from '@/components/Banner'
 import Features from '@/components/Features'
 import Products from '@/components/Products'
 import ColumnsContent from '@/components/ColumnsContent'
+import SimpleRow from '@/components/SimpleRow'
+import SaleHero from '@/components/SaleHero'
 
 // lib
 import { getEntries } from '@/lib/contentful'
@@ -16,7 +18,7 @@ export async function generateStaticParams() {
 	}))
 }
 
-export default async function Product({ params }) {
+export default async function Page({ params }) {
 	const { slug } = params
 
 	const content = pages.items.find(
@@ -101,6 +103,40 @@ export default async function Product({ params }) {
 								title={section.fields.title}
 							/>
 						)
+					case 'products':
+						switch (section.fields.type) {
+							case 'sale':
+								return (
+									<SaleHero
+										key={section.sys.id}
+										products={
+											section.fields.products &&
+											section.fields.products.slice(0, 2)
+										}
+										variants={
+											section.fields.variants &&
+											section.fields.variants.slice(0, 2)
+										}
+										image={section.fields.saleImage.fields.file.url}
+										title={section.fields.title}
+										text={section.fields.saleText}
+									/>
+								)
+							default:
+								return (
+									<Products
+										key={section.sys.id}
+										title={section.fields.title}
+										showTitle={section.fields.showTitle}
+										type={section.fields.type}
+										categories={section.fields.collections}
+										products={section.fields.products}
+										variants={section.fields.variants}
+										showPrice={section.fields.showPrice}
+										threeColumn={section.fields.columns == '3' ? true : false}
+									/>
+								)
+						}
 
 					default:
 						return null

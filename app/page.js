@@ -98,7 +98,10 @@ export default async function Home() {
 							<Products
 								key={section.sys.id}
 								title={section.fields.title}
+								showTitle={section.fields.showTitle}
+								type={section.fields.type}
 								categories={section.fields.collections}
+								showPrice={section.fields.showPrice}
 							/>
 						)
 

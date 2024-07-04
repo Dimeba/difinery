@@ -5,26 +5,62 @@ import styles from './SaleHero.module.scss'
 import Image from 'next/image'
 import ProductCard from './ProductCard'
 
-const SaleHero = ({ products }) => {
+// lib
+import { getProducts } from '@/lib/shopify'
+
+const SaleHero = async ({ products, image, title, text }) => {
+	const decodedIDs = []
+	const items = []
+	let content
+
+	// Extract Shopify ID from base64
+	const extractShopifyId = base64 => {
+		const buffer = Buffer.from(base64, 'base64')
+		const shopifyId = buffer.toString('utf-8')
+		return shopifyId
+	}
+
+	if (products) {
+		// Shopify
+		const shopifyProducts = await getProducts()
+
+		// Decode products
+		products.forEach(product => {
+			decodedIDs.push(extractShopifyId(product))
+		})
+
+		// Filter products
+		content = shopifyProducts
+			.filter(product => decodedIDs.includes(product.id))
+			.reverse()
+
+		// Extract products
+		for (const item of content) {
+			items.push(item)
+		}
+	} else if (variants) {
+		// Add code here
+	}
+
 	return (
 		<section>
 			<div className={`container ${styles.saleHero}`}>
 				<div className={styles.collection}>
 					<div className={styles.image}>
 						<Image
-							src='/sample-image1.jpg'
+							src={image ? 'https:' + image : '/sample-image1.jpg'}
 							fill
 							alt='Collection Preview'
 							style={{ objectFit: 'cover' }}
 						/>
 					</div>
 
-					<h5>Mother's Day Collection</h5>
-					<p>UP TO 50% OFF</p>
+					<h5>{title}</h5>
+					<p>{text}</p>
 				</div>
 
 				{products &&
-					products.map(product => (
+					items.map(product => (
 						<ProductCard
 							key={product.id}
 							id={product.id}
