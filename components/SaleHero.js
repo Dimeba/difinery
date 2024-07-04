@@ -15,8 +15,9 @@ const SaleHero = async ({ products, image, title, text }) => {
 
 	// Extract Shopify ID from base64
 	const extractShopifyId = base64 => {
-		const buffer = Buffer.from(base64, 'base64')
+		const buffer = Buffer.from(base64.toString(), 'base64')
 		const shopifyId = buffer.toString('utf-8')
+
 		return shopifyId
 	}
 
