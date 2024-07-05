@@ -12,60 +12,34 @@ import {
 	FaEtsy
 } from 'react-icons/fa'
 
-// links
-const help = [
-	'Customer Service',
-	'Book an Appointment',
-	'Shipping',
-	'Refund Policy'
-]
-const service = [
-	'FAQs',
-	'Data Protection',
-	'Payment & Shipping',
-	'Terms of Service',
-	'Cancellation',
-	'Imprint'
-]
-const collections = [
-	'Engagement Rings',
-	'Bracelets',
-	'Necklaces',
-	'Earrings',
-	'Rings'
-]
-const difinery = ['About Us', 'Press', 'Sustainability', 'Production', 'Career']
-const toKnow = [
-	'Journal',
-	'How do diamonds grow in a lab?',
-	`The 4C's of Diamonds`,
-	'30 Days of Free Returns',
-	'Free Insured Express Shipping'
-]
+const Footer = ({ content }) => {
+	const returnCorrecticon = (url, size) => {
+		if (url.includes('instagram')) {
+			return <FaInstagram size={size} />
+		} else if (url.includes('tiktok')) {
+			return <FaTiktok size={size} />
+		} else if (url.includes('pinterest')) {
+			return <FaPinterest size={size} />
+		} else if (url.includes('youtube')) {
+			return <FaYoutube size={size} />
+		} else if (url.includes('etsy')) {
+			return <FaEtsy size={size} />
+		}
+	}
 
-const creditLinks = [
-	'FAQs',
-	'Data Protection',
-	'Payment & Shipping',
-	'Terms of Service',
-	'Cancelation',
-	'Imprint'
-]
-
-const Footer = () => {
 	return (
 		<footer className={styles.footer}>
 			<div className={`container ${styles.content}`}>
 				<div className={styles.column2}>
 					<h4>Help</h4>
 					<div className={styles.links}>
-						{help.map(link => (
+						{content.help.map(link => (
 							<Link
-								key={link}
-								href={'/' + link.replace(/ /g, '-').toLowerCase()}
-								aria-label={`Link to ${link} page.`}
+								key={link.sys.id}
+								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								aria-label={`Link to ${link.fields.title} page.`}
 							>
-								<p>{link}</p>
+								<p>{link.fields.title}</p>
 							</Link>
 						))}
 					</div>
@@ -74,13 +48,13 @@ const Footer = () => {
 				<div className={styles.column2}>
 					<h4>Service</h4>
 					<div className={styles.links}>
-						{service.map(link => (
+						{content.service.map(link => (
 							<Link
-								key={link}
-								href={'/' + link.replace(/ /g, '-').toLowerCase()}
-								aria-label={`Link to ${link} page.`}
+								key={link.sys.id}
+								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								aria-label={`Link to ${link.fields.title} page.`}
 							>
-								<p>{link}</p>
+								<p>{link.fields.title}</p>
 							</Link>
 						))}
 					</div>
@@ -89,13 +63,13 @@ const Footer = () => {
 				<div className={styles.column2}>
 					<h4>Collections</h4>
 					<div className={styles.links}>
-						{collections.map(link => (
+						{content.collections.map(link => (
 							<Link
-								key={link}
-								href={'/' + link.replace(/ /g, '-').toLowerCase()}
-								aria-label={`Link to ${link} page.`}
+								key={link.sys.id}
+								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								aria-label={`Link to ${link.fields.title} page.`}
 							>
-								<p>{link}</p>
+								<p>{link.fields.title}</p>
 							</Link>
 						))}
 					</div>
@@ -104,13 +78,13 @@ const Footer = () => {
 				<div className={styles.column2}>
 					<h4>Difinery</h4>
 					<div className={styles.links}>
-						{difinery.map(link => (
+						{content.difinery.map(link => (
 							<Link
-								key={link}
-								href={'/' + link.replace(/ /g, '-').toLowerCase()}
-								aria-label={`Link to ${link} page.`}
+								key={link.sys.id}
+								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								aria-label={`Link to ${link.fields.title} page.`}
 							>
-								<p>{link}</p>
+								<p>{link.fields.title}</p>
 							</Link>
 						))}
 					</div>
@@ -119,17 +93,20 @@ const Footer = () => {
 				<div className={styles.column4}>
 					<h4>Certified Diamonds</h4>
 					<div className={styles.logos}>
-						<div className={styles.logo1}>
-							<Image src='/gia-logo.png' fill alt='GIA logo' />
-						</div>
-
-						<div className={styles.logo1}>
-							<Image src='/igi-logo.png' fill alt='IGI Logo' />
-						</div>
-
-						<div className={styles.logo2}>
-							<Image src='/hrd-logo.png' fill alt='HRD Logo' />
-						</div>
+						{content.certifications.map(certification => (
+							<div className={styles.logo} key={certification.sys.id}>
+								<Image
+									src={'https:' + certification.fields.file.url}
+									height={60}
+									width={
+										certification.fields.file.details.image.width /
+										(certification.fields.file.details.image.height / 60)
+									}
+									// fill
+									alt='Certification Logo'
+								/>
+							</div>
+						))}
 					</div>
 				</div>
 
@@ -138,13 +115,13 @@ const Footer = () => {
 				<div className={styles.column8}>
 					<h4>To Know</h4>
 					<div className={styles.links}>
-						{toKnow.map(link => (
+						{content.toKnow.map(link => (
 							<Link
-								key={link}
-								href={'/' + link.replace(/ /g, '-').toLowerCase()}
-								aria-label={`Link to ${link} page.`}
+								key={link.sys.id}
+								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								aria-label={`Link to ${link.fields.title} page.`}
 							>
-								<p>{link}</p>
+								<p>{link.fields.title}</p>
 							</Link>
 						))}
 					</div>
@@ -153,21 +130,15 @@ const Footer = () => {
 				<div className={styles.column4}>
 					<h4>Follow Us</h4>
 					<div className={styles.logos}>
-						<Link href='#' aria-label='#'>
-							<FaInstagram size={20} />
-						</Link>
-						<Link href='#' aria-label='#'>
-							<FaTiktok size={20} />
-						</Link>
-						<Link href='#' aria-label='#'>
-							<FaPinterest size={20} />
-						</Link>
-						<Link href='#' aria-label='#'>
-							<FaYoutube size={20} />
-						</Link>
-						<Link href='#' aria-label='#'>
-							<FaEtsy size={20} />
-						</Link>
+						{content.social.map((link, index) => (
+							<Link
+								key={index}
+								href={link}
+								aria-label='Link to social media profile'
+							>
+								{returnCorrecticon(link, 20)}
+							</Link>
+						))}
 					</div>
 				</div>
 			</div>
@@ -176,13 +147,13 @@ const Footer = () => {
 				<div className='container'>
 					<p>© Difinery</p>
 
-					{creditLinks.map(link => (
+					{content.bottomMenu.map(link => (
 						<Link
-							key={link}
-							href={link.replace(/ /g, '-').toLowerCase()}
-							aria-label={`Link to ${link} page.`}
+							key={link.sys.id}
+							href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+							aria-label={`Link to ${link.fields.title} page.`}
 						>
-							<p>{link}</p>
+							<p>{link.fields.title}</p>
 						</Link>
 					))}
 				</div>

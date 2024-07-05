@@ -11,6 +11,7 @@ import Footer from '@/components/Footer'
 import { getEntries } from '@/lib/contentful'
 
 const header = await getEntries('header')
+const footer = await getEntries('footer')
 
 export const metadata = {
 	title: 'Difinery',
@@ -23,6 +24,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
 	// Header
 	const headerContent = header.items[0].fields
+	const footerContent = footer.items[0].fields
 
 	return (
 		<html lang='en'>
@@ -35,7 +37,7 @@ export default function RootLayout({ children }) {
 					supportPage={headerContent.supportPage}
 				/>
 				{children}
-				<Footer />
+				<Footer content={footerContent} />
 			</body>
 		</html>
 	)

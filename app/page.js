@@ -17,12 +17,12 @@ export default async function Home() {
 
 	return (
 		<main>
-			{content.sections.map(section => {
+			{content.sections.map((section, index) => {
 				switch (section.sys.contentType.sys.id) {
 					case 'hero':
 						return (
 							<Hero
-								key={section.sys.id}
+								key={index}
 								title={section.fields.title}
 								text={section.fields.text}
 								image={section.fields.image.fields.file.url}
@@ -88,20 +88,52 @@ export default async function Home() {
 					case 'features':
 						return (
 							<Features
-								key={section.sys.id}
+								key={index}
 								features={section.fields.features}
 								title={section.fields.title}
 							/>
 						)
 					case 'products':
+						switch (section.fields.type) {
+							case 'sale':
+								return (
+									<SaleHero
+										key={section.sys.id}
+										products={
+											section.fields.products &&
+											section.fields.products.slice(0, 2)
+										}
+										variants={
+											section.fields.variants &&
+											section.fields.variants.slice(0, 2)
+										}
+										image={section.fields.saleImage.fields.file.url}
+										title={section.fields.title}
+										text={section.fields.saleText}
+									/>
+								)
+							default:
+								return (
+									<Products
+										key={section.sys.id}
+										title={section.fields.title}
+										showTitle={section.fields.showTitle}
+										type={section.fields.type}
+										categories={section.fields.collections}
+										products={section.fields.products}
+										variants={section.fields.variants}
+										showPrice={section.fields.showPrice}
+										threeColumn={section.fields.columns == '3' ? true : false}
+									/>
+								)
+						}
+
+					case 'richText':
 						return (
-							<Products
+							<RichText
 								key={section.sys.id}
 								title={section.fields.title}
-								showTitle={section.fields.showTitle}
-								type={section.fields.type}
-								categories={section.fields.collections}
-								showPrice={section.fields.showPrice}
+								content={section.fields.content}
 							/>
 						)
 
