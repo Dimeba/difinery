@@ -6,6 +6,7 @@ import Products from '@/components/Products'
 import ColumnsContent from '@/components/ColumnsContent'
 import SimpleRow from '@/components/SimpleRow'
 import SaleHero from '@/components/SaleHero'
+import RichText from '@/components/RichText'
 
 // lib
 import { getEntries } from '@/lib/contentful'
@@ -137,6 +138,15 @@ export default async function Page({ params }) {
 									/>
 								)
 						}
+
+					case 'richText':
+						return (
+							<RichText
+								key={section.sys.id}
+								title={section.fields.title}
+								content={section.fields.content}
+							/>
+						)
 
 					default:
 						return null

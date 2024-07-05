@@ -7,7 +7,7 @@ import Link from 'next/link'
 import ProductCard from './ProductCard'
 
 // lib
-import { getCollections, getProducts } from '@/lib/shopify'
+import { getCollections, getProducts, extractShopifyId } from '@/lib/shopify'
 
 const Products = async ({
 	title,
@@ -23,14 +23,6 @@ const Products = async ({
 	const decodedIDs = []
 	const items = []
 	let content
-
-	// Extract Shopify ID from base64
-	const extractShopifyId = base64 => {
-		const buffer = Buffer.from(base64.toString(), 'base64')
-		const shopifyId = buffer.toString('utf-8')
-
-		return shopifyId
-	}
 
 	// Handling Categories, Products and Variants
 	if (categories) {

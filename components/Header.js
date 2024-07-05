@@ -15,7 +15,7 @@ import { useIsScreenWide } from '@/hooks/useIsScreenWide'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
-const Header = () => {
+const Header = ({ mainMenu, supportPage }) => {
 	const [targetRef, isIntersecting] = useIntersectionObserver()
 	const isScreenWide = useIsScreenWide(1024)
 	const [openMenu, setOpenMenu] = useState(false)
@@ -24,19 +24,6 @@ const Header = () => {
 	const isHomepage = pathName == '/' ? true : false
 	const transparentMenu =
 		isHomepage && isIntersecting && !showSubmenu && !openMenu
-
-	// Menu Items
-	const mainMenu = [
-		'Shop',
-		'Rings',
-		'Earrings',
-		'Bracelets',
-		'Pendants',
-		'Personalize',
-		'Our Story',
-		'Sale',
-		'Education'
-	]
 
 	// Submenu Items
 	const tempList = [
@@ -77,10 +64,12 @@ const Header = () => {
 				<div className={`container ${styles.headerTop}`}>
 					{isIntersecting && isScreenWide ? (
 						<Link
-							href='/customer-service'
+							href={
+								'/' + supportPage.fields.title.replace(/ /g, '-').toLowerCase()
+							}
 							aria-label={`Link to Customer Service page.`}
 						>
-							<p>Customer Service</p>
+							<p>{supportPage.fields.title}</p>
 						</Link>
 					) : (
 						<div
@@ -131,14 +120,14 @@ const Header = () => {
 					<nav className={`container ${styles.headerBot}`}>
 						{mainMenu.map(link => (
 							<Link
-								key={link}
-								href={'/' + link.replace(/ /g, '-').toLowerCase()}
-								aria-label={`Link to ${link} page.`}
+								key={link.sys.id}
+								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								aria-label={`Link to ${link.fields.title} page.`}
 								className={styles.mainMenuLink}
 								onMouseEnter={() => loadSubmenu()}
 								onClick={() => setOpenMenu(false)}
 							>
-								<p>{link}</p>{' '}
+								<p>{link.fields.title}</p>{' '}
 								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
 							</Link>
 						))}

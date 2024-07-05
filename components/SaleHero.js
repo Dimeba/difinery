@@ -6,7 +6,7 @@ import Image from 'next/image'
 import ProductCard from './ProductCard'
 
 // lib
-import { getProducts } from '@/lib/shopify'
+import { getProducts, extractShopifyId } from '@/lib/shopify'
 
 const SaleHero = async ({ products, image, title, text }) => {
 	const decodedIDs = []
@@ -14,12 +14,6 @@ const SaleHero = async ({ products, image, title, text }) => {
 	let content
 
 	// Extract Shopify ID from base64
-	const extractShopifyId = base64 => {
-		const buffer = Buffer.from(base64.toString(), 'base64')
-		const shopifyId = buffer.toString('utf-8')
-
-		return shopifyId
-	}
 
 	if (products) {
 		// Shopify

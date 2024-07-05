@@ -1,0 +1,28 @@
+@use '@/app/base';
+
+.content {
+	* {
+		text-align: left;
+	}
+
+	h2 {
+		margin-bottom: 2rem;
+	}
+
+	h3,
+	h4 {
+		margin-bottom: 1rem;
+		margin-top: 1rem;
+	}
+
+	p {
+		text-wrap: wrap !important;
+		margin-bottom: 0.5rem;
+	}
+
+	ul {
+		li {
+			margin-left: 2rem;
+		}
+	}
+}
