@@ -36,7 +36,13 @@ const Footer = ({ content }) => {
 						{content.help.map(link => (
 							<Link
 								key={link.sys.id}
-								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								href={
+									'/' +
+									link.fields.title
+										.replace(/ /g, '-')
+										.replace(/&/g, '')
+										.toLowerCase()
+								}
 								aria-label={`Link to ${link.fields.title} page.`}
 							>
 								<p>{link.fields.title}</p>
@@ -51,7 +57,13 @@ const Footer = ({ content }) => {
 						{content.service.map(link => (
 							<Link
 								key={link.sys.id}
-								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								href={
+									'/' +
+									link.fields.title
+										.replace(/ /g, '-')
+										.replace(/&/g, '')
+										.toLowerCase()
+								}
 								aria-label={`Link to ${link.fields.title} page.`}
 							>
 								<p>{link.fields.title}</p>
@@ -66,7 +78,13 @@ const Footer = ({ content }) => {
 						{content.collections.map(link => (
 							<Link
 								key={link.sys.id}
-								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								href={
+									'/' +
+									link.fields.title
+										.replace(/ /g, '-')
+										.replace(/&/g, '')
+										.toLowerCase()
+								}
 								aria-label={`Link to ${link.fields.title} page.`}
 							>
 								<p>{link.fields.title}</p>
@@ -81,7 +99,13 @@ const Footer = ({ content }) => {
 						{content.difinery.map(link => (
 							<Link
 								key={link.sys.id}
-								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								href={
+									'/' +
+									link.fields.title
+										.replace(/ /g, '-')
+										.replace(/&/g, '')
+										.toLowerCase()
+								}
 								aria-label={`Link to ${link.fields.title} page.`}
 							>
 								<p>{link.fields.title}</p>
@@ -118,7 +142,13 @@ const Footer = ({ content }) => {
 						{content.toKnow.map(link => (
 							<Link
 								key={link.sys.id}
-								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+								href={
+									'/' +
+									link.fields.title
+										.replace(/ /g, '-')
+										.replace(/&/g, '')
+										.toLowerCase()
+								}
 								aria-label={`Link to ${link.fields.title} page.`}
 							>
 								<p>{link.fields.title}</p>
@@ -150,7 +180,13 @@ const Footer = ({ content }) => {
 					{content.bottomMenu.map(link => (
 						<Link
 							key={link.sys.id}
-							href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
+							href={
+								'/' +
+								link.fields.title
+									.replace(/ /g, '-')
+									.replace(/&/g, '')
+									.toLowerCase()
+							}
 							aria-label={`Link to ${link.fields.title} page.`}
 						>
 							<p>{link.fields.title}</p>
