@@ -14,9 +14,20 @@ const ProductCard = async ({
 	threeColumn,
 	showPrice,
 	discount,
-	hideMaterials
+	hideMaterials,
+	variantId
 }) => {
-	const product = await getProduct(id)
+	let product
+
+	// Switching between product and variant
+	if (!variantId) {
+		product = await getProduct(id)
+	} else {
+		const productWithVariant = await getProduct(id)
+		product = productWithVariant.variants.find(
+			variant => variant.id === variantId
+		)
+	}
 
 	const returnMetalType = option => {
 		switch (true) {
@@ -45,12 +56,12 @@ const ProductCard = async ({
 			>
 				<div className={styles.image}>
 					<Image
-						src={product.images[0].src}
+						src={!variantId ? product.images[0].src : product.image.src}
 						fill
 						alt='Category Image.'
 						style={{ objectFit: 'cover' }}
 					/>
-					{product.images[1] && (
+					{!variantId && product.images[1] && (
 						<Image
 							src={product.images[1].src}
 							fill
@@ -68,7 +79,10 @@ const ProductCard = async ({
 									color: discount ? '#AEAEAD' : '#1a1b18'
 								}}
 							>
-								${product.variants[0].price.amount.toString().slice(0, -2)}
+								$
+								{!variantId
+									? product.variants[0].price.amount.toString().slice(0, -2)
+									: product.price.amount.toString().slice(0, -2)}
 							</span>
 							{discount && (
 								<>
@@ -82,7 +96,7 @@ const ProductCard = async ({
 			</Link>
 			<h5>{product.title}</h5>
 
-			{!hideMaterials && (
+			{!hideMaterials && !variantId && (
 				<div className={styles.typeIcons}>
 					{product.options[1].values.map(option => (
 						<div key={option.value} className={styles.typeIcon}>

@@ -7,7 +7,12 @@ import Link from 'next/link'
 import ProductCard from './ProductCard'
 
 // lib
-import { getCollections, getProducts, extractShopifyId } from '@/lib/shopify'
+import {
+	getCollections,
+	getProducts,
+	extractShopifyId,
+	getProduct
+} from '@/lib/shopify'
 
 const Products = async ({
 	title,
@@ -65,7 +70,7 @@ const Products = async ({
 		// Add code here
 	}
 
-	// console.log(products[0].variants[0])
+	// console.log(content[0].variants[0])
 
 	return (
 		<section>
@@ -108,6 +113,25 @@ const Products = async ({
 									discount={discount}
 								/>
 							))}
+
+					{/* Variants */}
+					{type == 'variants' &&
+						items
+							.filter(item => item.availableForSale)
+							.map(product =>
+								product.variants.map(variant => (
+									<ProductCard
+										key={variant.id}
+										id={product.id}
+										permalink={product.handle}
+										threeColumn={threeColumn}
+										showPrice={showPrice}
+										discount={discount}
+										isVariant={true}
+										variantId={variant.id}
+									/>
+								))
+							)}
 				</div>
 			</div>
 		</section>

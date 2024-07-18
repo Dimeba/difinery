@@ -141,7 +141,7 @@ export default async function Page({ params }) {
 										type={section.fields.type}
 										categories={section.fields.collections}
 										products={section.fields.products}
-										variants={section.fields.variants}
+										// variants={section.fields.variants}
 										showPrice={section.fields.showPrice}
 										threeColumn={section.fields.columns == '3' ? true : false}
 									/>
