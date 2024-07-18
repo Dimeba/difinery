@@ -6,9 +6,13 @@ const workSans = Work_Sans({ subsets: ['latin'] })
 // components
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import Cart from '@/components/Cart'
 
 // lib
 import { getEntries } from '@/lib/contentful'
+
+// context
+import { CartProvider } from '@/context/CartContext'
 
 const header = await getEntries('header')
 const footer = await getEntries('footer')
@@ -31,14 +35,17 @@ export default function RootLayout({ children }) {
 			<head>
 				<link rel='icon' href='/favicon.svg' type='image/svg+xml' />
 			</head>
-			<body className={workSans.className}>
-				<Header
-					mainMenu={headerContent.mainMenu}
-					supportPage={headerContent.supportPage}
-				/>
-				{children}
-				<Footer content={footerContent} />
-			</body>
+			<CartProvider>
+				<body className={workSans.className}>
+					<Cart />
+					<Header
+						mainMenu={headerContent.mainMenu}
+						supportPage={headerContent.supportPage}
+					/>
+					{children}
+					<Footer content={footerContent} />
+				</body>
+			</CartProvider>
 		</html>
 	)
 }

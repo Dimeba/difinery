@@ -15,7 +15,13 @@ import { useIsScreenWide } from '@/hooks/useIsScreenWide'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
+// context
+import { useCart } from '@/context/CartContext'
+
 const Header = ({ mainMenu, supportPage }) => {
+	// cart
+	const { showCart, setShowCart } = useCart()
+
 	const [targetRef, isIntersecting] = useIntersectionObserver()
 	const isScreenWide = useIsScreenWide(1024)
 	const [openMenu, setOpenMenu] = useState(false)
@@ -98,21 +104,20 @@ const Header = ({ mainMenu, supportPage }) => {
 					</Link>
 
 					<div className={styles.icons}>
-						<Link href='/' aria-label='Link to homepage.'>
-							<FiUser
-								size={'1.2rem'}
-								stroke={transparentMenu ? 'white' : 'black'}
-								strokeWidth={1}
-							/>
-						</Link>
+						<FiUser
+							size={'1.2rem'}
+							stroke={transparentMenu ? 'white' : 'black'}
+							strokeWidth={1}
+							cursor={'pointer'}
+						/>
 
-						<Link href='/' aria-label='Link to homepage.'>
-							<FiShoppingBag
-								size={'1.2rem'}
-								stroke={transparentMenu ? 'white' : 'black'}
-								strokeWidth={1}
-							/>
-						</Link>
+						<FiShoppingBag
+							size={'1.2rem'}
+							stroke={transparentMenu ? 'white' : 'black'}
+							strokeWidth={1}
+							onClick={() => setShowCart(true)}
+							cursor={'pointer'}
+						/>
 					</div>
 				</div>
 
