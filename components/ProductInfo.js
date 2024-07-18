@@ -4,8 +4,11 @@ import styles from './ProductInfo.module.scss'
 // components
 import Image from 'next/image'
 import Accordion from './Accordion'
+import ProductOptionsUI from './ProductOptionsUI'
 
 const ProductInfo = ({ product }) => {
+	// console.log(product.options[0].values)
+
 	return (
 		<section>
 			<div className={`container ${styles.productInfo}`}>
@@ -22,35 +25,7 @@ const ProductInfo = ({ product }) => {
 					<p>{product.description}</p>
 
 					{/* Options */}
-					<div className={styles.accordion}>
-						<Accordion title='Metal Type' state={true}>
-							<div>
-								<Image
-									src='/yellow.png'
-									alt='Material type icon'
-									width={32}
-									height={32}
-								/>
-								<Image
-									src='/white.png'
-									alt='Material type icon'
-									width={32}
-									height={32}
-								/>
-								<Image
-									src='/rose.png'
-									alt='Material type icon'
-									width={32}
-									height={32}
-								/>
-							</div>
-						</Accordion>
-
-						<Accordion small title='Ring Size' />
-						<Accordion small title='Diamond Shape' />
-						<Accordion small title='Clarity' />
-						<Accordion small title='Engraving' />
-					</div>
+					<ProductOptionsUI product={product} />
 
 					<div className={styles.cartBox}>
 						<p className={styles.orderDate}>

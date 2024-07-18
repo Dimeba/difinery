@@ -119,18 +119,20 @@ const Products = async ({
 						items
 							.filter(item => item.availableForSale)
 							.map(product =>
-								product.variants.map(variant => (
-									<ProductCard
-										key={variant.id}
-										id={product.id}
-										permalink={product.handle}
-										threeColumn={threeColumn}
-										showPrice={showPrice}
-										discount={discount}
-										isVariant={true}
-										variantId={variant.id}
-									/>
-								))
+								product.variants
+									.filter(item => item.available)
+									.map(variant => (
+										<ProductCard
+											key={variant.id}
+											id={product.id}
+											permalink={product.handle}
+											threeColumn={threeColumn}
+											showPrice={showPrice}
+											discount={discount}
+											isVariant={true}
+											variantId={variant.id}
+										/>
+									))
 							)}
 				</div>
 			</div>

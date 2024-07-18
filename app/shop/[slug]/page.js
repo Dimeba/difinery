@@ -22,10 +22,11 @@ export default async function Product({ params }) {
 
 	const id = products.find(product => product.handle === slug).id
 	const product = await getProduct(id)
+	const serializedProduct = JSON.parse(JSON.stringify(product))
 
 	return (
 		<main>
-			<ProductInfo product={product} />
+			<ProductInfo product={serializedProduct} />
 			<FAQ />
 			{/* <Banner
 				image
