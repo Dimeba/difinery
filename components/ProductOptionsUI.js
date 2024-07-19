@@ -9,13 +9,21 @@ import Accordion from './Accordion'
 
 // hooks
 import { useState } from 'react'
-import { useCart } from '@/context/CartContext'
 
 // context
+import { useCart } from '@/context/CartContext'
 
 const ProductOptionsUI = ({ product }) => {
 	const [openOption, setOpenOption] = useState(0)
-	const { addToCart } = useCart()
+	const { addToCart, setShowCart, showCart } = useCart()
+
+	const handleClick = id => {
+		addToCart(id, 1)
+
+		if (!showCart) {
+			setShowCart(true)
+		}
+	}
 
 	return (
 		<>
@@ -36,29 +44,6 @@ const ProductOptionsUI = ({ product }) => {
 						</div>
 					</Accordion>
 				))}
-
-				{/* <Accordion title='Metal Type' state={true}>
-        <div>
-            <Image
-                src='/yellow.png'
-                alt='Material type icon'
-                width={32}
-                height={32}
-            />
-            <Image
-                src='/white.png'
-                alt='Material type icon'
-                width={32}
-                height={32}
-            />
-            <Image
-                src='/rose.png'
-                alt='Material type icon'
-                width={32}
-                height={32}
-            />
-        </div>
-    </Accordion> */}
 			</div>
 
 			<div className={styles.cartBox}>
@@ -68,7 +53,7 @@ const ProductOptionsUI = ({ product }) => {
 
 				<button
 					className={styles.cartButton}
-					onClick={() => addToCart(product.variants[0].id, 1)}
+					onClick={() => handleClick(product.variants[0].id)}
 				>
 					ADD TO CART
 				</button>
