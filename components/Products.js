@@ -134,6 +134,21 @@ const Products = async ({
 										/>
 									))
 							)}
+
+					{/* Recomendations */}
+					{type == 'recommended' &&
+						products
+							.filter(item => item.availableForSale)
+							.map(product => (
+								<ProductCard
+									key={product.id}
+									id={product.id}
+									permalink={product.handle}
+									threeColumn={threeColumn}
+									showPrice={showPrice}
+									discount={discount}
+								/>
+							))}
 				</div>
 			</div>
 		</section>

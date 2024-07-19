@@ -5,7 +5,7 @@ import FAQ from '@/components/FAQ'
 import Products from '@/components/Products'
 
 // lib
-import { getProducts, getProduct } from '@/lib/shopify'
+import { getProducts, getProduct, getRecommendedProducts } from '@/lib/shopify'
 
 const products = await getProducts()
 
@@ -24,6 +24,9 @@ export default async function Product({ params }) {
 	const product = await getProduct(id)
 	const serializedProduct = JSON.parse(JSON.stringify(product))
 
+	// Recommended products
+	const recommendedProducts = await getRecommendedProducts(id)
+
 	return (
 		<main>
 			<ProductInfo product={serializedProduct} />
@@ -35,11 +38,16 @@ export default async function Product({ params }) {
 				title='Elevate your journey to forever.'
 				text='Select up to three exquisite rings, delivered to your doorstep. Try them on, share the excitement, and choose the one that captures your heart. No pressure, just pure elegance.'
 			/> */}
-			<Products
-				title='Pair your product with:'
-				products={products.slice(0, 3)}
-				threeColumn
-			/>
+
+			{recommendedProducts.length > 0 && (
+				<Products
+					title='Pair your product with:'
+					products={recommendedProducts.slice(0, 3)}
+					threeColumn
+					type='recommended'
+					showTitle
+				/>
+			)}
 		</main>
 	)
 }

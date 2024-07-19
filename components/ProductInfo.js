@@ -6,8 +6,6 @@ import Image from 'next/image'
 import ProductOptionsUI from './ProductOptionsUI'
 
 const ProductInfo = ({ product }) => {
-	// console.log(product.options[0].values)
-
 	return (
 		<section>
 			<div className={`container ${styles.productInfo}`}>
