@@ -23,7 +23,7 @@ export const CartProvider = ({ children }) => {
 		}
 
 		if (cart) {
-			console.log(cart.webUrl)
+			// console.log(cart.webUrl)
 		}
 	}, [cart])
 
@@ -33,7 +33,7 @@ export const CartProvider = ({ children }) => {
 			setCart(checkout)
 		)
 
-		console.log(cart.totalPrice.amount)
+		// console.log(cart.totalPrice.amount)
 	}
 
 	const contextValue = {

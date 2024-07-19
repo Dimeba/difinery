@@ -5,14 +5,51 @@
 	position: absolute;
 	top: 0;
 	right: 0;
+	overflow: hidden;
+	position: fixed;
+}
+
+.cartContent {
 	background-color: white;
+	padding: 2rem;
+	width: 400px;
 	height: 100vh;
-	width: 800px;
-	border: 1px solid red;
+	border-left: 1px solid base.$gray;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 2rem;
+
+	// Animation
+	animation: slideIn 0.3s ease-in-out;
+
+	h3 {
+		text-align: left;
+		font-size: 1.5rem;
+	}
+}
+
+.cartHeading {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid base.$gray;
+	padding-bottom: 1rem;
+}
+
+@keyframes slideIn {
+	0% {
+		opacity: 0;
+		transform: translateX(100%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
 }
 
 @media screen and (max-width: 1024px) {
-	.cart {
+	.cartContent {
 		width: 100%;
 	}
 }
