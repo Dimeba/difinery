@@ -27,7 +27,6 @@ const Cart = () => {
 						<div>
 							<div className={styles.cartHeading}>
 								<h3>Cart</h3>
-								{/* <button onClick={() => setShowCart(false)}>Close Cart</button> */}
 								<FiX
 									size={'1.5rem'}
 									stroke={'black'}

@@ -17,13 +17,25 @@ const ProductOptionsUI = ({ product }) => {
 	const [openOption, setOpenOption] = useState(0)
 	const { addToCart, setShowCart, showCart } = useCart()
 
-	const handleClick = id => {
+	const [selectedOptions, setSelectedOptions] = useState(product.options)
+
+	const handleAddToCart = id => {
 		addToCart(id, 1)
 
 		if (!showCart) {
 			setShowCart(true)
 		}
 	}
+
+	const handleOptionSelection = value => {
+		setSelectedOptions(prevState =>
+			prevState.filter(option => option.values.includes(value))
+		)
+
+		console.log(selectedOptions)
+	}
+
+	console.log(product.options)
 
 	return (
 		<>
@@ -37,7 +49,11 @@ const ProductOptionsUI = ({ product }) => {
 					>
 						<div className={styles.variantButtonsContainer}>
 							{option.values.map(value => (
-								<button className={styles.variantButton} key={value.value}>
+								<button
+									className={styles.variantButton}
+									key={value.value}
+									onClick={() => handleOptionSelection(value)}
+								>
 									{value.value}
 								</button>
 							))}
@@ -53,7 +69,7 @@ const ProductOptionsUI = ({ product }) => {
 
 				<button
 					className={styles.cartButton}
-					onClick={() => handleClick(product.variants[0].id)}
+					onClick={() => handleAddToCart(product.variants[0].id)}
 				>
 					ADD TO CART
 				</button>
