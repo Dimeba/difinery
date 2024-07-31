@@ -7,17 +7,21 @@ import styles from './Accordion.module.scss'
 import Image from 'next/image'
 
 // hooks
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const Accordion = ({ state, title, children, small }) => {
 	const [rowOpen, setRowOpen] = useState(state ? state : false)
+
+	useEffect(() => {
+		setRowOpen(state)
+	}, [state])
 
 	const toggleRow = () => {
 		rowOpen ? setRowOpen(false) : setRowOpen(true)
 	}
 
 	return (
-		<div className={styles.accordion} onClick={toggleRow}>
+		<div className={styles.accordion}>
 			<div className={`${styles.titleRow} ${rowOpen ? styles.open : ''}`}>
 				{small ? <p>{title}</p> : <h4>{title}</h4>}
 
@@ -32,6 +36,7 @@ const Accordion = ({ state, title, children, small }) => {
 						objectPosition: 'center'
 					}}
 					className={styles.icon}
+					onClick={toggleRow}
 				/>
 			</div>
 			<div
