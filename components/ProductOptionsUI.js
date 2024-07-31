@@ -20,11 +20,23 @@ const ProductOptionsUI = ({ product }) => {
 	const [selectedOptions, setSelectedOptions] = useState([])
 	const [filteredOptions, setFilteredOptions] = useState(product.options)
 
-	const handleAddToCart = id => {
-		addToCart(id, 1)
+	const handleAddToCart = () => {
+		const matchingVariant = product.variants.find(variant =>
+			selectedOptions.every(selectedOption =>
+				variant.selectedOptions.some(
+					selectedOptionObj => selectedOptionObj.value === selectedOption
+				)
+			)
+		)
 
-		if (!showCart) {
-			setShowCart(true)
+		if (matchingVariant) {
+			addToCart(matchingVariant.id, 1)
+
+			if (!showCart) {
+				setShowCart(true)
+			}
+		} else {
+			console.error('No matching variant found')
 		}
 	}
 
@@ -65,7 +77,7 @@ const ProductOptionsUI = ({ product }) => {
 		}
 	}
 
-	console.log(product.variants.length)
+	const allOptionsSelected = selectedOptions.length === product.options.length
 
 	return (
 		<>
@@ -75,8 +87,8 @@ const ProductOptionsUI = ({ product }) => {
 						key={option.id}
 						small
 						title={option.name}
-						// state={index === openOption}
-						state={true}
+						state={index === openOption}
+						// state={true}
 					>
 						<div className={styles.variantButtonsContainer}>
 							{option.values.map(value => (
@@ -100,7 +112,8 @@ const ProductOptionsUI = ({ product }) => {
 
 				<button
 					className={styles.cartButton}
-					onClick={() => handleAddToCart(product.variants[0].id)}
+					onClick={handleAddToCart}
+					disabled={!allOptionsSelected}
 				>
 					ADD TO CART
 				</button>

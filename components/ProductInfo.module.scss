@@ -55,6 +55,11 @@
 	cursor: pointer;
 }
 
+.cartButton:disabled {
+	background-color: base.$gray;
+	cursor: not-allowed;
+}
+
 .tax {
 	font-size: 0.6rem;
 }
