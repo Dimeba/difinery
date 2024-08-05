@@ -3,6 +3,7 @@
 .accordion {
 	border-bottom: 1px solid rgba($color: base.$gray, $alpha: 1);
 	padding: 1.5rem 0;
+	overflow: hidden;
 }
 
 .titleRow {
@@ -25,7 +26,7 @@
 	z-index: -1;
 
 	// Animation
-	animation: slideIn 0.5s ease-in-out;
+	animation: slideIn 0.6s ease-in-out;
 
 	div {
 		display: flex;

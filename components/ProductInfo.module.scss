@@ -81,6 +81,28 @@
 	font-size: 0.6rem;
 }
 
+.variantButtonsContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem !important;
+
+	button {
+		padding: 0.5rem;
+		border-radius: 0;
+		background-color: white;
+		border: 1px solid base.$gray;
+		font-size: 0.8rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+
+	button:hover {
+		border-color: base.$black;
+	}
+}
+
 @media screen and (max-width: 1024px) {
 	.image,
 	.content {
