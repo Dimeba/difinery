@@ -9,7 +9,7 @@ import Image from 'next/image'
 // hooks
 import { useState, useEffect } from 'react'
 
-const Accordion = ({ state, title, children, small }) => {
+const Accordion = ({ state, title, children, small, product, display }) => {
 	const [rowOpen, setRowOpen] = useState(state ? state : false)
 
 	useEffect(() => {
@@ -21,23 +21,28 @@ const Accordion = ({ state, title, children, small }) => {
 	}
 
 	return (
-		<div className={styles.accordion}>
+		<div
+			className={styles.accordion}
+			style={product && { display: display ? 'block' : 'none' }}
+		>
 			<div className={`${styles.titleRow} ${rowOpen ? styles.open : ''}`}>
 				{small ? <p>{title}</p> : <h4>{title}</h4>}
 
-				<Image
-					src='/arrow.svg'
-					alt='Arrow Button'
-					width={12}
-					height={12}
-					style={{
-						cursor: 'pointer',
-						objectFit: 'contain',
-						objectPosition: 'center'
-					}}
-					className={styles.icon}
-					onClick={toggleRow}
-				/>
+				{!product && (
+					<Image
+						src='/arrow.svg'
+						alt='Arrow Button'
+						width={12}
+						height={12}
+						style={{
+							cursor: 'pointer',
+							objectFit: 'contain',
+							objectPosition: 'center'
+						}}
+						className={styles.icon}
+						onClick={toggleRow}
+					/>
+				)}
 			</div>
 			<div
 				className={styles.content}

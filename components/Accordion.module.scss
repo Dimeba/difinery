@@ -22,9 +22,24 @@
 	margin-top: 1rem;
 	display: flex;
 	flex-direction: column;
+	z-index: -1;
+
+	// Animation
+	animation: slideIn 0.5s ease-in-out;
 
 	div {
 		display: flex;
 		gap: 1rem;
+	}
+}
+
+@keyframes slideIn {
+	0% {
+		opacity: 0;
+		transform: translateY(-100%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
 	}
 }

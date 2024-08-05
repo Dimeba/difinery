@@ -20,7 +20,10 @@ const ProductOptionsUI = ({ product }) => {
 	const [selectedOptions, setSelectedOptions] = useState([])
 	const [filteredOptions, setFilteredOptions] = useState(product.options)
 
-	const handleAddToCart = () => {
+	const [matchingVariant, setMatchingVariant] = useState(product.variants[0])
+
+	// Get the matching variant based on selected options
+	const getMatchingVariant = () => {
 		const matchingVariant = product.variants.find(variant =>
 			selectedOptions.every(selectedOption =>
 				variant.selectedOptions.some(
@@ -29,6 +32,15 @@ const ProductOptionsUI = ({ product }) => {
 			)
 		)
 
+		if (matchingVariant) {
+			setMatchingVariant(matchingVariant)
+		} else {
+			console.error('No matching variant found')
+		}
+	}
+
+	// Add matching variant to cart
+	const handleAddToCart = () => {
 		if (matchingVariant) {
 			addToCart(matchingVariant.id, 1)
 
@@ -40,6 +52,7 @@ const ProductOptionsUI = ({ product }) => {
 		}
 	}
 
+	// Select an option
 	const handleOptionSelection = value => {
 		let newSelectedOptions
 
@@ -70,25 +83,57 @@ const ProductOptionsUI = ({ product }) => {
 			})
 		}))
 		setFilteredOptions(newFilteredOptions)
+		getMatchingVariant()
 
 		// displying next options
-		if (openOption < product.options.length - 1) {
-			setOpenOption(prevState => prevState + 1)
-		}
+		setOpenOption(prevState => prevState + 1)
+
+		// The code bellows will display the next option only if the current option is selected
+
+		// if (openOption < product.options.length - 1) {
+		// 	setOpenOption(prevState => prevState + 1)
+		// }
+	}
+
+	// Reset options
+	const handleReset = () => {
+		setSelectedOptions([])
+		setFilteredOptions(product.options)
+		setOpenOption(0)
+		setMatchingVariant(product.variants[0])
 	}
 
 	const allOptionsSelected = selectedOptions.length === product.options.length
 
 	return (
-		<>
+		<div className={styles.content}>
+			<div className={styles.versionInfo}>
+				<h3>{product.title}</h3>
+				{selectedOptions.length > 0 && (
+					<p>
+						{selectedOptions.join(' / ')} /{' '}
+						<span className={styles.resetButton} onClick={handleReset}>
+							Reset
+						</span>
+					</p>
+				)}
+			</div>
+			<p className={styles.price}>
+				${matchingVariant.price.amount.toString().slice(0, -2)}
+			</p>
+
+			<p>{product.description}</p>
+
 			<div className={styles.accordion}>
 				{filteredOptions.map((option, index) => (
 					<Accordion
 						key={option.id}
 						small
 						title={option.name}
-						state={index === openOption}
-						// state={true}
+						// state={index === openOption}
+						state={true}
+						product={true}
+						display={index === openOption}
 					>
 						<div className={styles.variantButtonsContainer}>
 							{option.values.map(value => (
@@ -126,7 +171,7 @@ const ProductOptionsUI = ({ product }) => {
 					<b>$15 of your purchase goes to The New York Women's Foundation</b>
 				</p>
 			</div>
-		</>
+		</div>
 	)
 }
 

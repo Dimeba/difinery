@@ -70,8 +70,6 @@ const Products = async ({
 		// Add code here
 	}
 
-	// console.log(content[0].variants[0])
-
 	return (
 		<section>
 			<div className={`container ${styles.content}`}>
@@ -85,7 +83,10 @@ const Products = async ({
 								key={item.id}
 								className={`${styles.product} ${styles.fourColumn}`}
 							>
-								<Link href='/shop' aria-label={`Link to ${item.name} page.`}>
+								<Link
+									href={'/' + item.title.replace(/ /g, '-').toLowerCase()}
+									aria-label={`Link to ${item.name} page.`}
+								>
 									<div className={styles.image}>
 										<Image
 											src={item.image.src}

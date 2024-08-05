@@ -23,6 +23,23 @@
 	}
 }
 
+.versionInfo {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	p {
+		font-size: 1rem;
+	}
+}
+
+.resetButton {
+	cursor: pointer;
+	font-size: 0.8rem;
+	text-decoration: underline;
+	color: #8b0000;
+}
+
 .price {
 	font-size: 1.2rem;
 }

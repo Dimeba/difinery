@@ -92,7 +92,7 @@ const Cart = () => {
 								link={cart.webUrl}
 								text='Checkout'
 								disabled={cart.lineItems.length > 0 ? false : true}
-								newWindow
+								// newWindow
 								fullWidth
 							/>
 						</div>
