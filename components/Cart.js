@@ -12,11 +12,27 @@ import Image from 'next/image'
 import { useCart } from '@/context/CartContext'
 
 const Cart = () => {
-	const { showCart, setShowCart, cart } = useCart()
+	const {
+		showCart,
+		setShowCart,
+		cart,
+		addToCart,
+		removeFromCart,
+		updateQuantity
+	} = useCart()
 
 	// if (showCart && cart.lineItems.length > 0) {
 	// 	console.log(cart.lineItems.length)
 	// }
+
+	// Update quantity or remove item from cart
+	const handleUpdateQuantity = (lineItemId, quantity) => {
+		if (quantity > 0) {
+			updateQuantity(lineItemId, quantity - 1)
+		} else {
+			removeFromCart(lineItemId)
+		}
+	}
 
 	return (
 		<>
@@ -64,7 +80,9 @@ const Cart = () => {
 															size={'1rem'}
 															stroke={'black'}
 															strokeWidth={1}
-															onClick={() => setShowCart(false)}
+															onClick={() =>
+																handleUpdateQuantity(item.id, item.quantity)
+															}
 															cursor={'pointer'}
 														/>
 														<p>{item.quantity}</p>
@@ -72,7 +90,7 @@ const Cart = () => {
 															size={'1rem'}
 															stroke={'black'}
 															strokeWidth={1}
-															onClick={() => setShowCart(false)}
+															onClick={() => addToCart(item.variant.id, 1)}
 															cursor={'pointer'}
 														/>
 													</div>

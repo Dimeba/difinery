@@ -5,7 +5,8 @@ import {
 	client,
 	createCheckout,
 	updateCheckoutAttributes,
-	addLineItems
+	addLineItems,
+	removeLineItems
 } from '@/lib/shopify'
 
 // hooks
@@ -36,11 +37,26 @@ export const CartProvider = ({ children }) => {
 		// console.log(cart.totalPrice.amount)
 	}
 
+	const removeFromCart = async lineItemId => {
+		await removeLineItems(cart.id, [lineItemId]).then(checkout =>
+			setCart(checkout)
+		)
+	}
+
+	const updateQuantity = async (lineItemId, quantity) => {
+		const lineItemsToUpdate = [{ id: lineItemId, quantity }]
+		await client.checkout
+			.updateLineItems(cart.id, lineItemsToUpdate)
+			.then(checkout => setCart(checkout))
+	}
+
 	const contextValue = {
 		cart,
 		addToCart,
 		showCart,
-		setShowCart
+		setShowCart,
+		removeFromCart,
+		updateQuantity
 	}
 
 	return (
