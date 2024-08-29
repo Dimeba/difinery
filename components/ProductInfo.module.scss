@@ -103,6 +103,15 @@
 	}
 }
 
+.engravingInput {
+	padding: 0.5rem;
+	border-radius: 0;
+	background-color: white;
+	border: 1px solid base.$gray;
+	font-size: 0.8rem;
+	border-radius: 5px;
+}
+
 @media screen and (max-width: 1024px) {
 	.image,
 	.content {

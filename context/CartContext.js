@@ -28,8 +28,8 @@ export const CartProvider = ({ children }) => {
 		}
 	}, [cart])
 
-	const addToCart = async (variantId, quantity, customAtributes) => {
-		const lineItemsToAdd = [{ variantId, quantity, customAtributes }]
+	const addToCart = async (variantId, quantity, customAttributes) => {
+		const lineItemsToAdd = [{ variantId, quantity, customAttributes }]
 		await addLineItems(cart.id, lineItemsToAdd).then(checkout =>
 			setCart(checkout)
 		)

@@ -22,6 +22,8 @@ const ProductOptionsUI = ({ product }) => {
 
 	const [matchingVariant, setMatchingVariant] = useState(product.variants[0])
 
+	const [engraving, setEngraving] = useState('')
+
 	// Get the matching variant based on selected options
 	const getMatchingVariant = () => {
 		const matchingVariant = product.variants.find(variant =>
@@ -42,7 +44,14 @@ const ProductOptionsUI = ({ product }) => {
 	// Add matching variant to cart
 	const handleAddToCart = () => {
 		if (matchingVariant) {
-			addToCart(matchingVariant.id, 1)
+			addToCart(
+				matchingVariant.id,
+				1,
+				engraving != '' ? [{ key: 'Engraving', value: engraving }] : null
+			)
+
+			// displying next options
+			setOpenOption(prevState => prevState + 1)
 
 			if (!showCart) {
 				setShowCart(true)
@@ -148,6 +157,27 @@ const ProductOptionsUI = ({ product }) => {
 						</div>
 					</Accordion>
 				))}
+
+				{/* Engraving */}
+				{product.productType === 'Ring' && (
+					<Accordion
+						small
+						title='Engraving (max. 20 characters)'
+						// state={index === openOption}
+						state={true}
+						product={true}
+						display={filteredOptions.length === openOption}
+					>
+						<input
+							type='text'
+							placeholder='Add your text here'
+							value={engraving}
+							onChange={e => setEngraving(e.target.value)}
+							className={styles.engravingInput}
+							maxLength={20}
+						/>
+					</Accordion>
+				)}
 			</div>
 
 			<div className={styles.cartBox}>
