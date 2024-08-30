@@ -1,7 +1,9 @@
-import { Work_Sans } from 'next/font/google'
+// import { Work_Sans } from 'next/font/google'
+import { Libre_Franklin } from 'next/font/google'
 import './globals.scss'
 
-const workSans = Work_Sans({ subsets: ['latin'] })
+// const workSans = Work_Sans({ subsets: ['latin'] })
+const libreFranklin = Libre_Franklin({ subsets: ['latin'] })
 
 // components
 import Header from '@/components/Header'
@@ -36,7 +38,7 @@ export default function RootLayout({ children }) {
 				<link rel='icon' href='/favicon.svg' type='image/svg+xml' />
 			</head>
 			<CartProvider>
-				<body className={workSans.className}>
+				<body className={libreFranklin.className}>
 					<Cart />
 					<Header
 						mainMenu={headerContent.mainMenu}
