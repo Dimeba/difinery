@@ -35,6 +35,7 @@ export default async function Home() {
 								<Banner
 									key={section.sys.id}
 									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 									text={section.fields.text}
 									links={section.fields.links}
 									image={section.fields.image}
@@ -47,6 +48,7 @@ export default async function Home() {
 								<ColumnsContent
 									key={section.sys.id}
 									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 									text={section.fields.text}
 									image={section.fields.image}
 									links={section.fields.links}
@@ -57,6 +59,7 @@ export default async function Home() {
 								<ColumnsContent
 									key={section.sys.id}
 									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 									text={section.fields.text}
 									image={section.fields.image}
 									links={section.fields.links}
@@ -68,6 +71,7 @@ export default async function Home() {
 								<SimpleRow
 									key={section.sys.id}
 									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 									text={section.fields.text}
 								/>
 							)
@@ -76,6 +80,7 @@ export default async function Home() {
 								<Banner
 									key={section.sys.id}
 									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 									text={section.fields.text}
 									links={section.fields.links}
 									image={section.fields.image}

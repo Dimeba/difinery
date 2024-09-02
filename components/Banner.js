@@ -5,6 +5,7 @@ import styles from './Banner.module.scss'
 import Button from './Button'
 import Image from 'next/image'
 import Video from './Video'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 // lib
 import { getEntry } from '@/lib/contentful'
@@ -13,6 +14,7 @@ const Banner = async ({
 	video,
 	image,
 	title,
+	stylizedTitle,
 	text,
 	links,
 	top,
@@ -36,7 +38,13 @@ const Banner = async ({
 			)}
 
 			<div className={`container ${styles.content}`}>
-				{title && <h2>{title}</h2>}
+				{stylizedTitle && (
+					<div className='stylizedH2'>
+						{documentToReactComponents(stylizedTitle)}
+					</div>
+				)}
+				{title && !stylizedTitle && <h2>{title}</h2>}
+
 				{text && <p>{text}</p>}
 				{links && (
 					<div className={styles.buttons}>

@@ -8,7 +8,14 @@ import Button from './Button'
 // lib
 import { getEntry } from '@/lib/contentful'
 
-const ColumnsContent = async ({ reverse, title, text, links, image }) => {
+const ColumnsContent = async ({
+	reverse,
+	title,
+	stylizedTitle,
+	text,
+	links,
+	image
+}) => {
 	const buttons = []
 
 	if (links) {
@@ -36,7 +43,12 @@ const ColumnsContent = async ({ reverse, title, text, links, image }) => {
 				style={{ justifyContent: reverse ? 'flex-end' : 'flex-start' }}
 			>
 				<div>
-					<h3>{title}</h3>
+					{stylizedTitle && (
+						<div className='stylizedH3'>
+							{documentToReactComponents(stylizedTitle)}
+						</div>
+					)}
+					{title && !stylizedTitle && <h3>{title}</h3>}
 					<p>{text}</p>
 					{links && (
 						<div className={styles.buttons}>
