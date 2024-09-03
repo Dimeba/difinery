@@ -5,6 +5,7 @@ import styles from './Products.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
 import ProductCard from './ProductCard'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 // lib
 import {
@@ -16,6 +17,7 @@ import {
 
 const Products = async ({
 	title,
+	stylizedTitle,
 	showTitle,
 	type,
 	categories,
@@ -73,7 +75,12 @@ const Products = async ({
 	return (
 		<section>
 			<div className={`container ${styles.content}`}>
-				{showTitle && <h3>{title}</h3>}
+				{showTitle && stylizedTitle && (
+					<div className={`stylizedH3 ${styles.stylizedTitle}`}>
+						{documentToReactComponents(stylizedTitle)}
+					</div>
+				)}
+				{showTitle && title && !stylizedTitle && <h3>{title}</h3>}
 
 				<div className={styles.products}>
 					{/* Categories */}

@@ -114,29 +114,7 @@ const Footer = ({ content }) => {
 					</div>
 				</div>
 
-				<div className={styles.column4}>
-					<h4>Certified Diamonds</h4>
-					<div className={styles.logos}>
-						{content.certifications.map(certification => (
-							<div className={styles.logo} key={certification.sys.id}>
-								<Image
-									src={'https:' + certification.fields.file.url}
-									height={60}
-									width={
-										certification.fields.file.details.image.width /
-										(certification.fields.file.details.image.height / 60)
-									}
-									// fill
-									alt='Certification Logo'
-								/>
-							</div>
-						))}
-					</div>
-				</div>
-
-				{/* Second Row */}
-
-				<div className={styles.column8}>
+				<div className={styles.column2}>
 					<h4>To Know</h4>
 					<div className={styles.links}>
 						{content.toKnow.map(link => (
@@ -156,23 +134,49 @@ const Footer = ({ content }) => {
 						))}
 					</div>
 				</div>
+			</div>
 
-				<div className={styles.column4}>
-					<h4>Follow Us</h4>
-					<div className={styles.logos}>
-						{content.social.map((link, index) => (
-							<Link
-								key={index}
-								href={link}
-								aria-label='Link to social media profile'
-							>
-								{returnCorrecticon(link, 20)}
-							</Link>
-						))}
+			{/* Second Row */}
+
+			<div className={styles.secondRow}>
+				<div className={`container ${styles.content}`}>
+					<div className={styles.column5}>
+						<h4>Certified Diamonds</h4>
+						<div className={styles.logos}>
+							{content.certifications.map(certification => (
+								<div className={styles.logo} key={certification.sys.id}>
+									<Image
+										src={'https:' + certification.fields.file.url}
+										height={60}
+										width={
+											certification.fields.file.details.image.width /
+											(certification.fields.file.details.image.height / 60)
+										}
+										// fill
+										alt='Certification Logo'
+									/>
+								</div>
+							))}
+						</div>
+					</div>
+
+					<div className={styles.column5Right}>
+						<h4>Follow Us</h4>
+						<div className={styles.logos}>
+							{content.social.map((link, index) => (
+								<Link
+									key={index}
+									href={link}
+									aria-label='Link to social media profile'
+								>
+									{returnCorrecticon(link, 20)}
+								</Link>
+							))}
+						</div>
 					</div>
 				</div>
 			</div>
-
+			{/* Credits */}
 			<div className={styles.credits}>
 				<div className='container'>
 					<p>© Difinery</p>
