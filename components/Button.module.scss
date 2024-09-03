@@ -4,12 +4,12 @@
 	min-width: 15rem;
 	width: fit-content;
 	max-width: 90vw;
-	padding: 0.6rem 1rem;
+	padding: 0.6rem 3rem;
 	border-radius: 5px;
 	transition: 0.3s;
 
 	p {
-		font-size: 0.8rem;
+		font-size: 0.7rem;
 		font-weight: 500;
 		text-transform: uppercase;
 		letter-spacing: 0.2em;
@@ -18,36 +18,37 @@
 }
 
 .buttonWhite {
-	background-color: white;
+	// background-color: white;
 	border: 1px solid white;
 
 	p {
-		color: base.$black;
+		color: white;
 	}
 }
 
 .buttonBlack {
-	background-color: base.$black;
+	// background-color: base.$black;
 	border: 1px solid base.$black;
 
 	p {
-		color: white;
+		color: base.$black;
 	}
 }
 
 .buttonWhite:hover {
-	background-color: transparent;
+	background-color: white;
+	// background-color: transparent;
 
 	p {
-		color: white;
+		color: base.$black;
 	}
 }
 
 .buttonBlack:hover {
-	background-color: transparent;
+	background-color: base.$black;
 
 	p {
-		color: base.$black;
+		color: white;
 	}
 }
 

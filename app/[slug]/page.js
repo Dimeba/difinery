@@ -44,6 +44,7 @@ export default async function Page({ params }) {
 							<Hero
 								key={index}
 								title={section.fields.title}
+								stylizedTitle={section.fields.stylizedTitle}
 								text={section.fields.text}
 								image={section.fields.image.fields.file.url}
 								link={section.fields.link}
@@ -55,6 +56,7 @@ export default async function Page({ params }) {
 								<Banner
 									key={section.sys.id}
 									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 									text={section.fields.text}
 									links={section.fields.links}
 									image={section.fields.image}
@@ -67,6 +69,7 @@ export default async function Page({ params }) {
 								<ColumnsContent
 									key={section.sys.id}
 									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 									text={section.fields.text}
 									image={section.fields.image}
 									links={section.fields.links}
@@ -77,6 +80,7 @@ export default async function Page({ params }) {
 								<ColumnsContent
 									key={section.sys.id}
 									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 									text={section.fields.text}
 									image={section.fields.image}
 									links={section.fields.links}
@@ -88,6 +92,7 @@ export default async function Page({ params }) {
 								<SimpleRow
 									key={section.sys.id}
 									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 									text={section.fields.text}
 								/>
 							)
@@ -96,6 +101,7 @@ export default async function Page({ params }) {
 								<Banner
 									key={section.sys.id}
 									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 									text={section.fields.text}
 									links={section.fields.links}
 									image={section.fields.image}
@@ -111,6 +117,7 @@ export default async function Page({ params }) {
 								key={index}
 								features={section.fields.features}
 								title={section.fields.title}
+								stylizedTitle={section.fields.stylizedTitle}
 							/>
 						)
 					case 'products':
@@ -129,6 +136,7 @@ export default async function Page({ params }) {
 										}
 										image={section.fields.saleImage.fields.file.url}
 										title={section.fields.title}
+										stylizedTitle={section.fields.stylizedTitle}
 										text={section.fields.saleText}
 									/>
 								)
@@ -137,6 +145,7 @@ export default async function Page({ params }) {
 									<Products
 										key={section.sys.id}
 										title={section.fields.title}
+										stylizedTitle={section.fields.stylizedTitle}
 										showTitle={section.fields.showTitle}
 										type={section.fields.type}
 										categories={section.fields.collections}
@@ -153,6 +162,7 @@ export default async function Page({ params }) {
 							<RichText
 								key={section.sys.id}
 								title={section.fields.title}
+								stylizedTitle={section.fields.stylizedTitle}
 								content={section.fields.content}
 							/>
 						)
