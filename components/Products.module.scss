@@ -1,5 +1,10 @@
 @use '@/app/base';
 
+.fullWidthSection {
+	margin-top: 4rem;
+	margin-bottom: 0;
+}
+
 .content {
 	display: flex;
 	flex-direction: column;
@@ -14,7 +19,8 @@
 .products {
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
-	grid-gap: 2rem;
+	// column-gap: 0.3rem;
+	// row-gap: 0.5rem;
 	width: 100%;
 }
 
@@ -22,7 +28,7 @@
 	grid-column: span 4;
 
 	.image {
-		aspect-ratio: 2 / 3;
+		aspect-ratio: 1 / 1.25;
 	}
 }
 
@@ -30,22 +36,17 @@
 	grid-column: span 3;
 
 	.image {
-		aspect-ratio: 1 / 1;
+		aspect-ratio: 1 / 1.25;
 	}
 }
 
 .product {
 	display: flex;
 	flex-direction: column;
-	gap: 1.5rem;
+	// gap: 1.5rem;
 
 	a {
 		width: 100%;
-	}
-
-	h4,
-	h5 {
-		text-align: center;
 	}
 }
 
@@ -73,23 +74,35 @@
 	}
 }
 
+.productInfo {
+	padding: 1rem;
+	display: flex;
+	align-items: flex-start;
+}
+
+.productTitleContainer {
+	width: 70%;
+}
+
+.productTitle {
+	font-weight: 600;
+}
+
 .price {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	background-color: white;
-	padding: 0.2rem 0.5rem;
 }
 
 .typeIcons {
+	padding-top: 0.4rem;
+	width: 30%;
 	display: flex;
-	justify-content: center;
+	justify-content: flex-end;
 	gap: 0.5rem;
+	flex-wrap: wrap;
 }
 
 .typeIcon {
 	position: relative;
-	width: 1.5rem;
+	width: 0.7rem;
 	aspect-ratio: 1 /1;
 }
 
@@ -97,10 +110,32 @@
 	color: base.$red;
 }
 
+.floatingTitle {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	color: white;
+	font-size: 1rem;
+	padding: 2rem;
+
+	span {
+		color: white;
+		font-weight: 600;
+	}
+}
+
 @media screen and (max-width: 1024px) {
 	.fourColumn {
 		grid-column: span 6;
 		max-width: 90vw;
+	}
+
+	.fullWidthSection {
+		.threeColumn,
+		.fourColumn {
+			max-width: 100vw;
+		}
 	}
 }
 
@@ -112,6 +147,13 @@
 
 		.image {
 			aspect-ratio: 1 / 1;
+		}
+	}
+
+	.fullWidthSection {
+		.threeColumn,
+		.fourColumn {
+			max-width: 100vw;
 		}
 	}
 }

@@ -153,6 +153,8 @@ export default async function Page({ params }) {
 										// variants={section.fields.variants}
 										showPrice={section.fields.showPrice}
 										threeColumn={section.fields.columns == '3' ? true : false}
+										fullWidth={section.fields.fullWidth}
+										gap={section.fields.gap}
 									/>
 								)
 						}

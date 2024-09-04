@@ -24,6 +24,8 @@ const Products = async ({
 	products,
 	variants,
 	threeColumn,
+	fullWidth,
+	gap,
 	showPrice,
 	discount
 }) => {
@@ -73,8 +75,8 @@ const Products = async ({
 	}
 
 	return (
-		<section>
-			<div className={`container ${styles.content}`}>
+		<section className={`${fullWidth ? styles.fullWidthSection : ''}`}>
+			<div className={`${fullWidth ? '' : 'container'} ${styles.content}`}>
 				{showTitle && stylizedTitle && (
 					<div className={`stylizedH3 ${styles.stylizedTitle}`}>
 						{documentToReactComponents(stylizedTitle)}
@@ -82,7 +84,7 @@ const Products = async ({
 				)}
 				{showTitle && title && !stylizedTitle && <h3>{title}</h3>}
 
-				<div className={styles.products}>
+				<div className={styles.products} style={{ gap: gap ? '0.3rem' : '0' }}>
 					{/* Categories */}
 					{type == 'collections' &&
 						content.map(item => (
@@ -119,6 +121,7 @@ const Products = async ({
 									threeColumn={threeColumn}
 									showPrice={showPrice}
 									discount={discount}
+									secondImagePriority={fullWidth} // Show second image if it's full width
 								/>
 							))}
 
