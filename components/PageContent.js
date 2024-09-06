@@ -2,7 +2,7 @@
 import Hero from '@/components/Hero'
 import Banner from '@/components/Banner'
 import Features from '@/components/Features'
-import Products from '@/components/Products'
+import ProductsSection from '@/components/ProductsSection'
 import ColumnsContent from '@/components/ColumnsContent'
 import SimpleRow from '@/components/SimpleRow'
 import SaleHero from '@/components/SaleHero'
@@ -116,7 +116,7 @@ const PageContent = ({ content }) => {
 								)
 							default:
 								return (
-									<Products
+									<ProductsSection
 										key={section.sys.id}
 										title={section.fields.title}
 										stylizedTitle={section.fields.stylizedTitle}

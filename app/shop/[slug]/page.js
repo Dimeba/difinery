@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 import Banner from '@/components/Banner'
 import ProductInfo from '@/components/ProductInfo'
 import FAQ from '@/components/FAQ'
-import Products from '@/components/Products'
+import ProductsSection from '@/components/ProductsSection'
 
 // lib
 import { getProducts, getProduct, getRecommendedProducts } from '@/lib/shopify'
@@ -42,7 +42,7 @@ export default async function Product({ params }) {
 			/> */}
 
 			{recommendedProducts.length > 0 && (
-				<Products
+				<ProductsSection
 					title='Pair your product with:'
 					products={recommendedProducts.slice(0, 3)}
 					threeColumn

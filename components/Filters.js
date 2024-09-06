@@ -9,7 +9,7 @@ import styles from './Filters.module.scss'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 
-const Filters = ({ content }) => {
+const Filters = ({ items }) => {
 	const pathName = usePathname()
 
 	const [showFilters, setShowFilters] = useState(false)
