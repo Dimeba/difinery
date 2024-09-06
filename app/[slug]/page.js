@@ -7,13 +7,17 @@ import { getEntries } from '@/lib/contentful'
 const pages = await getEntries('page')
 
 export async function generateStaticParams() {
-	return pages.items.map(page => ({
-		slug: page.fields.title
-			.toLowerCase()
-			.replace(/[^a-zA-Z0-9 ]/g, '')
-			.replace(/&/g, '')
-			.replace(/ /g, '-')
-	}))
+	return pages.items
+		.filter(
+			page => page.fields.title != 'Homepage' && page.fields.title != 'Shop'
+		)
+		.map(page => ({
+			slug: page.fields.title
+				.toLowerCase()
+				.replace(/[^a-zA-Z0-9 ]/g, '')
+				.replace(/&/g, '')
+				.replace(/ /g, '-')
+		}))
 }
 
 export default async function Page({ params }) {

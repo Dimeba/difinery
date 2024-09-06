@@ -1,4 +1,4 @@
-import { unstable_noStore as noStore } from 'next/cache'
+// import { unstable_noStore as noStore } from 'next/cache'
 
 // styles
 import styles from './Products.module.scss'
@@ -33,7 +33,7 @@ const Products = async ({
 	discount
 }) => {
 	// Make sure page is dynamic
-	noStore()
+	// noStore()
 
 	const decodedIDs = []
 	const items = []
@@ -82,9 +82,6 @@ const Products = async ({
 
 	return (
 		<section className={`${fullWidth ? styles.fullWidthSection : ''}`}>
-			{/* Filters */}
-			<Filters />
-
 			<div className={`${fullWidth ? '' : 'container'} ${styles.content}`}>
 				{showTitle && stylizedTitle && (
 					<div className={`stylizedH3 ${styles.stylizedTitle}`}>
@@ -92,6 +89,9 @@ const Products = async ({
 					</div>
 				)}
 				{showTitle && title && !stylizedTitle && <h3>{title}</h3>}
+
+				{/* Filters */}
+				<Filters />
 
 				<div className={styles.products} style={{ gap: gap ? '0.3rem' : '0' }}>
 					{/* Categories */}
