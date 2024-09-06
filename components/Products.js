@@ -1,3 +1,5 @@
+import { unstable_noStore as noStore } from 'next/cache'
+
 // styles
 import styles from './Products.module.scss'
 
@@ -5,6 +7,7 @@ import styles from './Products.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
 import ProductCard from './ProductCard'
+import Filters from './Filters'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 // lib
@@ -29,6 +32,9 @@ const Products = async ({
 	showPrice,
 	discount
 }) => {
+	// Make sure page is dynamic
+	noStore()
+
 	const decodedIDs = []
 	const items = []
 	let content
@@ -76,6 +82,9 @@ const Products = async ({
 
 	return (
 		<section className={`${fullWidth ? styles.fullWidthSection : ''}`}>
+			{/* Filters */}
+			<Filters />
+
 			<div className={`${fullWidth ? '' : 'container'} ${styles.content}`}>
 				{showTitle && stylizedTitle && (
 					<div className={`stylizedH3 ${styles.stylizedTitle}`}>
