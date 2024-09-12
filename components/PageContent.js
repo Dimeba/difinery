@@ -7,6 +7,7 @@ import ColumnsContent from '@/components/ColumnsContent'
 import SimpleRow from '@/components/SimpleRow'
 import SaleHero from '@/components/SaleHero'
 import RichText from '@/components/RichText'
+import Columns from './Columns'
 
 const PageContent = ({ content }) => {
 	return (
@@ -140,6 +141,19 @@ const PageContent = ({ content }) => {
 								title={section.fields.title}
 								stylizedTitle={section.fields.stylizedTitle}
 								content={section.fields.content}
+							/>
+						)
+					case 'section':
+						return (
+							<Columns
+								key={section.sys.id}
+								title={section.fields.title}
+								showTitle={section.fields.showTitle}
+								stylizedTitle={section.fields.stylizedTitle}
+								gap={section.fields.gap}
+								content={section.fields.columns}
+								fullHeight={section.fields.fullHeight}
+								fullWidth={section.fields.fullWidth}
 							/>
 						)
 
