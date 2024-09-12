@@ -10,7 +10,7 @@
 }
 
 section {
-	margin: 12rem 0;
+	margin: 8rem 0;
 }
 
 .container {
@@ -37,12 +37,13 @@ p {
 h2 {
 	@extend .title;
 	font-size: 2.25rem;
+	line-height: 1.2;
 }
 
 .stylizedH2 p {
 	@extend .title;
 	font-size: 2.25rem;
-	line-height: 1;
+	line-height: 1.2;
 	letter-spacing: normal;
 }
 
@@ -90,7 +91,7 @@ a {
 
 @media screen and (max-width: 768px) {
 	section {
-		margin: 6rem 0;
+		margin: 4rem 0;
 	}
 
 	h2 {

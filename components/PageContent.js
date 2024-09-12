@@ -154,6 +154,7 @@ const PageContent = ({ content }) => {
 								content={section.fields.columns}
 								fullHeight={section.fields.fullHeight}
 								fullWidth={section.fields.fullWidth}
+								margins={section.fields.margins}
 							/>
 						)
 

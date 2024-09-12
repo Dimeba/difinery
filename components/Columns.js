@@ -13,15 +13,16 @@ const Columns = ({
 	title,
 	showTitle,
 	stylizedTitle,
-	id
+	margins
 }) => {
 	// dynamic styles
 	const dynamicStyles = {
-		gap: gap ? '0.3rem' : ''
+		columns: { gap: gap ? '0.3rem' : '' },
+		section: { margin: margins ? '' : '0' }
 	}
 
 	return (
-		<section>
+		<section style={dynamicStyles.section}>
 			<div className={`${fullWidth ? '' : 'container'}`}>
 				{showTitle && (
 					<>
@@ -35,13 +36,9 @@ const Columns = ({
 					</>
 				)}
 
-				<div className={styles.columns} style={dynamicStyles}>
+				<div className={styles.columns} style={dynamicStyles.columns}>
 					{content.map((item, index) => (
-						<Column
-							key={index}
-							fullHeight={fullHeight}
-							id={item.sys.id}
-						/>
+						<Column key={index} fullHeight={fullHeight} id={item.sys.id} />
 					))}
 				</div>
 			</div>

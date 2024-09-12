@@ -11,20 +11,26 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 // lib
 import { getEntry } from '@/lib/contentful'
 
-const Column = async ({ fullHeight, link, id }) => {
-	const buttons = []
-
-	// if (content.links) {
-	// 	for (let i = 0; i < content.links.length; i++) {
-	// 		const link = await getEntry(content.links[i].sys.id)
-	// 		buttons.push(link)
-	// 	}
-	// }
-
+const Column = async ({ fullHeight, id }) => {
 	const content = await getEntry(id)
 
+	// dynamic styles
+	const dynamicStyles = {
+		content: {
+			alignItems:
+				content.fields.contentAlign == 'center' ? 'center' : 'flex-start'
+		},
+		text: {
+			textAlign: content.fields.contentAlign == 'center' ? 'center' : 'left'
+		}
+	}
+
 	return (
-		<ConditionalLink fullHeight={fullHeight} link={content.fields.link}>
+		<ConditionalLink
+			fullHeight={fullHeight}
+			link={content.fields.link}
+			overlay={content.fields.overlay}
+		>
 			{content.fields.video && (
 				<Video
 					video={content.fields.video}
@@ -40,7 +46,7 @@ const Column = async ({ fullHeight, link, id }) => {
 				/>
 			)}
 
-			<div className={styles.content}>
+			<div className={styles.content} style={dynamicStyles.content}>
 				{content.fields.titlePosition == 'top' && (
 					<>
 						{content.fields.stylizedTitle ? (
@@ -48,12 +54,16 @@ const Column = async ({ fullHeight, link, id }) => {
 								{documentToReactComponents(content.fields.stylizedTitle)}
 							</div>
 						) : (
-							<h2>{content.fields.title}</h2>
+							<h2 style={dynamicStyles.text}>{content.fields.title}</h2>
 						)}
 					</>
 				)}
 
-				{content.fields.text && <p>{content.fields.text}</p>}
+				{content.fields.text && (
+					<p className={styles.text} style={dynamicStyles.text}>
+						{content.fields.text}
+					</p>
+				)}
 				{content.fields.links && (
 					<div className={styles.buttons}>
 						{content.fields.links.map(button => (
