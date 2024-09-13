@@ -42,7 +42,12 @@ const Columns = ({
 
 				<div className={styles.columns} style={dynamicStyles.columns}>
 					{content.map((item, index) => (
-						<Column key={index} fullHeight={fullHeight} id={item.sys.id} />
+						<Column
+							key={index}
+							fullHeight={fullHeight}
+							id={item.sys.id}
+							columns={content.length}
+						/>
 					))}
 				</div>
 			</div>

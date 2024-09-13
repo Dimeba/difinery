@@ -11,25 +11,30 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 // lib
 import { getEntry } from '@/lib/contentful'
 
-const Column = async ({ fullHeight, id }) => {
+const Column = async ({ fullHeight, id, columns }) => {
 	const content = await getEntry(id)
 
 	// dynamic styles
 	const dynamicStyles = {
 		content: {
 			alignItems:
-				content.fields.contentAlign == 'center' ? 'center' : 'flex-start'
-		},
-		text: {
-			textAlign: content.fields.contentAlign == 'center' ? 'center' : 'left'
+				content.fields.contentAlignHorizontal == 'center'
+					? 'center'
+					: 'flex-start',
+			justifyContent:
+				content.fields.contentAlignVertical == 'center' ? 'center' : 'flex-end',
+			maxWidth: columns == 1 ? '1440px' : `${1440 / columns}px`
 		}
 	}
 
 	// text alignment
 	const textAlignClassName =
-		content.fields.contentAlign == 'center'
+		content.fields.contentAlignHorizontal == 'center'
 			? styles.centerAlign
 			: styles.leftAlign
+
+	// text width
+	const textWidth = columns == 1 ? styles.third : ''
 
 	return (
 		<ConditionalLink
@@ -57,7 +62,7 @@ const Column = async ({ fullHeight, id }) => {
 			<div className={styles.content} style={dynamicStyles.content}>
 				{/* Text */}
 				{content.fields.text && content.fields.textPosition == 'top' && (
-					<div className={`${styles.text} ${textAlignClassName}`}>
+					<div className={` ${textAlignClassName} ${styles.text} ${textWidth}`}>
 						{documentToReactComponents(content.fields.text)}
 					</div>
 				)}
@@ -70,7 +75,7 @@ const Column = async ({ fullHeight, id }) => {
 								key={button.sys.id}
 								text={button.fields.text}
 								link={button.fields.url}
-								white
+								white={content.fields.type == 'blank' ? false : true}
 							/>
 						))}
 					</div>
