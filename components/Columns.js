@@ -13,12 +13,16 @@ const Columns = ({
 	title,
 	showTitle,
 	stylizedTitle,
-	margins
+	marginTop,
+	marginBottom
 }) => {
 	// dynamic styles
 	const dynamicStyles = {
 		columns: { gap: gap ? '0.3rem' : '' },
-		section: { margin: margins ? '' : '0' }
+		section: {
+			marginTop: marginTop ? '' : '0',
+			marginBottom: marginBottom ? '' : '0'
+		}
 	}
 
 	return (

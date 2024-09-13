@@ -25,45 +25,44 @@ const Column = async ({ fullHeight, id }) => {
 		}
 	}
 
+	// text alignment
+	const textAlignClassName =
+		content.fields.contentAlign == 'center'
+			? styles.centerAlign
+			: styles.leftAlign
+
 	return (
 		<ConditionalLink
 			fullHeight={fullHeight}
 			link={content.fields.link}
 			overlay={content.fields.overlay}
+			type={content.fields.type}
 		>
-			{content.fields.video && (
+			{content.fields.type == 'video' && (
 				<Video
-					video={content.fields.video}
-					showControls={content.fields.showControls}
+					video={content.fields.media}
+					// showControls={content.fields.showControls}
+					showControls={true}
 				/>
 			)}
 
-			{content.fields.image && (
+			{content.fields.type == 'image' && (
 				<Image
-					src={'https:' + content.fields.image.fields.file.url}
+					src={'https:' + content.fields.media.fields.file.url}
 					alt='image'
 					fill
 				/>
 			)}
 
 			<div className={styles.content} style={dynamicStyles.content}>
-				{content.fields.titlePosition == 'top' && (
-					<>
-						{content.fields.stylizedTitle ? (
-							<div className='stylizedH2'>
-								{documentToReactComponents(content.fields.stylizedTitle)}
-							</div>
-						) : (
-							<h2 style={dynamicStyles.text}>{content.fields.title}</h2>
-						)}
-					</>
+				{/* Text */}
+				{content.fields.text && content.fields.textPosition == 'top' && (
+					<div className={`${styles.text} ${textAlignClassName}`}>
+						{documentToReactComponents(content.fields.text)}
+					</div>
 				)}
 
-				{content.fields.text && (
-					<p className={styles.text} style={dynamicStyles.text}>
-						{content.fields.text}
-					</p>
-				)}
+				{/* Buttons */}
 				{content.fields.links && (
 					<div className={styles.buttons}>
 						{content.fields.links.map(button => (
@@ -78,8 +77,10 @@ const Column = async ({ fullHeight, id }) => {
 				)}
 			</div>
 
-			{content.fields.titlePosition == 'below' && (
-				<h4>{content.fields.title}</h4>
+			{content.fields.text && content.fields.textPosition == 'below' && (
+				<div className={`${styles.belowText} ${textAlignClassName}`}>
+					{documentToReactComponents(content.fields.text)}
+				</div>
 			)}
 		</ConditionalLink>
 	)
