@@ -1,7 +1,7 @@
 'use client'
 
 // styles
-import styles from './Banner.module.scss'
+import styles from './Columns.module.scss'
 
 // components
 import {
