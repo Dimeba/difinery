@@ -13,23 +13,27 @@ import { Spin as Hamburger } from 'hamburger-react'
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { useIsScreenWide } from '@/hooks/useIsScreenWide'
 import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
+// import { usePathname } from 'next/navigation'
 
 // context
 import { useCart } from '@/context/CartContext'
+import { useHeader } from '@/context/HeaderContext'
 
 const Header = ({ mainMenu, supportPage }) => {
 	// cart
 	const { showCart, setShowCart } = useCart()
 
+	// header
+	const { transparentHeader, setTransparentHeader } = useHeader()
+
 	const [targetRef, isIntersecting] = useIntersectionObserver()
 	const isScreenWide = useIsScreenWide(1024)
 	const [openMenu, setOpenMenu] = useState(false)
 	const [showSubmenu, setShowSubmenu] = useState(false)
-	const pathName = usePathname()
-	const isHomepage = pathName == '/' ? true : false
+	// const pathName = usePathname()
+	// const isHomepage = pathName == '/' ? true : false
 	const transparentMenu =
-		isHomepage && isIntersecting && !showSubmenu && !openMenu
+		transparentHeader && isIntersecting && !showSubmenu && !openMenu
 
 	// Submenu Items
 	const tempList = [

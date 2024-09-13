@@ -56,6 +56,7 @@ const Column = async ({ fullHeight, id, columns }) => {
 					src={'https:' + content.fields.media.fields.file.url}
 					alt='image'
 					fill
+					style={{ objectFit: content.fields.fitImage ? 'contain' : 'cover' }}
 				/>
 			)}
 

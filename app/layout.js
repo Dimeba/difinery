@@ -15,6 +15,7 @@ import { getEntries } from '@/lib/contentful'
 
 // context
 import { CartProvider } from '@/context/CartContext'
+import { HeaderProvider } from '@/context/HeaderContext'
 
 const header = await getEntries('header')
 const footer = await getEntries('footer')
@@ -40,12 +41,14 @@ export default function RootLayout({ children }) {
 			<CartProvider>
 				<body className={libreFranklin.className}>
 					<Cart />
-					<Header
-						mainMenu={headerContent.mainMenu}
-						supportPage={headerContent.supportPage}
-					/>
-					{children}
-					<Footer content={footerContent} />
+					<HeaderProvider>
+						<Header
+							mainMenu={headerContent.mainMenu}
+							supportPage={headerContent.supportPage}
+						/>
+						{children}
+						<Footer content={footerContent} />
+					</HeaderProvider>
 				</body>
 			</CartProvider>
 		</html>

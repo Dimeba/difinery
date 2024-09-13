@@ -8,10 +8,15 @@ import SimpleRow from '@/components/SimpleRow'
 import SaleHero from '@/components/SaleHero'
 import RichText from '@/components/RichText'
 import Columns from './Columns'
+import HeaderChanger from './HeaderChanger'
 
 const PageContent = ({ content }) => {
 	return (
 		<main>
+			{/* Header update */}
+			<HeaderChanger transparent={content.transparentHeader} />
+
+			{/* Content */}
 			{content.sections.map((section, index) => {
 				switch (section.sys.contentType.sys.id) {
 					case 'hero':
