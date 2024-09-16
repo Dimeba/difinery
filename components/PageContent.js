@@ -1,6 +1,6 @@
 // components
 import Features from '@/components/Features'
-import ProductsSection from '@/components/ProductsSection'
+import Products from '@/components/Products'
 import SaleHero from '@/components/SaleHero'
 import RichText from '@/components/RichText'
 import Columns from './Columns'
@@ -46,7 +46,7 @@ const PageContent = ({ content }) => {
 								)
 							default:
 								return (
-									<ProductsSection
+									<Products
 										key={section.sys.id}
 										title={section.fields.title}
 										stylizedTitle={section.fields.stylizedTitle}
