@@ -3,11 +3,12 @@ import styles from './Features.module.scss'
 
 // components
 import Image from 'next/image'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 // lib
 import { getEntry } from '@/lib/contentful'
 
-const Features = async ({ features, title }) => {
+const Features = async ({ features, title, stylizedTitle }) => {
 	const content = []
 
 	if (features) {
@@ -20,7 +21,13 @@ const Features = async ({ features, title }) => {
 	return (
 		<section>
 			<div className={`container ${styles.content}`}>
-				<h3>{title && title}</h3>
+				{stylizedTitle ? (
+					<div className={`stylizedH3 ${styles.sectionTitle}`}>
+						{documentToReactComponents(stylizedTitle)}
+					</div>
+				) : (
+					<h3>{title}</h3>
+				)}
 
 				<div className={styles.columns}>
 					{content.map(item => (
