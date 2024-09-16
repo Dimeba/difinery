@@ -33,15 +33,14 @@ export default async function Product({ params }) {
 			<ProductInfo product={serializedProduct} />
 			<FAQ />
 
-			{/* {recommendedProducts.length > 0 && (
+			{recommendedProducts.length > 0 && (
 				<Products
 					title='Pair your product with:'
-					products={recommendedProducts.slice(0, 3)}
-					threeColumn
+					recommendedProducts={recommendedProducts.slice(0, 4)}
 					type='recommended'
 					showTitle
 				/>
-			)} */}
+			)}
 		</main>
 	)
 }

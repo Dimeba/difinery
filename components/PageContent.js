@@ -1,7 +1,6 @@
 // components
 import Features from '@/components/Features'
 import Products from '@/components/Products'
-import SaleHero from '@/components/SaleHero'
 import RichText from '@/components/RichText'
 import Columns from './Columns'
 import HeaderChanger from './HeaderChanger'
@@ -43,6 +42,7 @@ const PageContent = ({ content }) => {
 								title={section.fields.title}
 								stylizedTitle={section.fields.stylizedTitle}
 								content={section.fields.content}
+								index={index}
 							/>
 						)
 					case 'section':

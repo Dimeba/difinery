@@ -1,5 +1,3 @@
-import { unstable_noStore as noStore } from 'next/cache'
-
 // components
 import PageContent from '@/components/PageContent'
 
@@ -29,11 +27,6 @@ export default async function Page({ params }) {
 				.replace(/&/g, '')
 				.replace(/ /g, '-') == slug
 	).fields
-
-	// Make sure page is dynamic
-	if (content.isDynamic) {
-		noStore()
-	}
 
 	return <PageContent content={content} />
 }

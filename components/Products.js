@@ -19,9 +19,8 @@ const Products = ({
 	stylizedTitle,
 	showTitle,
 	collections,
-	threeColumn,
-	showPrice,
-	discount
+	discount,
+	recommendedProducts
 }) => {
 	const [items, setItems] = useState([])
 
@@ -51,11 +50,15 @@ const Products = ({
 			setItems(data)
 		}
 
-		fetchProducts()
-	}, [collections])
+		if (collections) {
+			fetchProducts()
+		} else {
+			setItems(recommendedProducts)
+		}
+	}, [])
 
 	return (
-		<section>
+		<section className='topSection'>
 			<div className={`container ${styles.content}`}>
 				{showTitle && stylizedTitle && (
 					<div className={`stylizedH3 ${styles.stylizedTitle}`}>
