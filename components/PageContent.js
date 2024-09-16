@@ -25,43 +25,16 @@ const PageContent = ({ content }) => {
 							/>
 						)
 					case 'products':
-						switch (section.fields.type) {
-							case 'sale':
-								return (
-									<SaleHero
-										key={section.sys.id}
-										products={
-											section.fields.products &&
-											section.fields.products.slice(0, 2)
-										}
-										variants={
-											section.fields.variants &&
-											section.fields.variants.slice(0, 2)
-										}
-										image={section.fields.saleImage.fields.file.url}
-										title={section.fields.title}
-										stylizedTitle={section.fields.stylizedTitle}
-										text={section.fields.saleText}
-									/>
-								)
-							default:
-								return (
-									<Products
-										key={section.sys.id}
-										title={section.fields.title}
-										stylizedTitle={section.fields.stylizedTitle}
-										showTitle={section.fields.showTitle}
-										type={section.fields.type}
-										categories={section.fields.collections}
-										products={section.fields.products}
-										// variants={section.fields.variants}
-										showPrice={section.fields.showPrice}
-										threeColumn={section.fields.columns == '3' ? true : false}
-										fullWidth={section.fields.fullWidth}
-										gap={section.fields.gap}
-									/>
-								)
-						}
+						return (
+							<Products
+								key={section.sys.id}
+								title={section.fields.title}
+								stylizedTitle={section.fields.stylizedTitle}
+								showTitle={section.fields.showTitle}
+								collections={section.fields.collections}
+								discount={section.fields.discount}
+							/>
+						)
 
 					case 'richText':
 						return (

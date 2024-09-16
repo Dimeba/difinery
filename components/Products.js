@@ -1,84 +1,59 @@
-// import { unstable_noStore as noStore } from 'next/cache'
+'use client'
+
+// React
+import { useState, useEffect } from 'react'
 
 // styles
 import styles from './Products.module.scss'
 
 // components
-import Image from 'next/image'
-import Link from 'next/link'
 import ProductCard from './ProductCard'
 import Filters from './Filters'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 // lib
-import {
-	getCollections,
-	getProducts,
-	extractShopifyId,
-	getProduct
-} from '@/lib/shopify'
+import { getCollections, extractShopifyId } from '@/lib/shopify'
 
-const Products = async ({
+const Products = ({
 	title,
 	stylizedTitle,
 	showTitle,
-	type,
-	categories,
-	products,
-	variants,
+	collections,
 	threeColumn,
-	fullWidth,
-	gap,
 	showPrice,
 	discount
 }) => {
-	// Make sure page is dynamic
-	// noStore()
+	const [items, setItems] = useState([])
 
-	const decodedIDs = []
-	const items = []
-	let content
+	useEffect(() => {
+		const fetchProducts = async () => {
+			const decodedIDs = []
+			const data = []
 
-	// Handling Categories, Products and Variants
-	if (categories) {
-		// Shopify
-		const collections = await getCollections()
+			// Fetch collections (ensure getCollections is accessible on the client)
+			const fetchedCollections = await getCollections()
 
-		// Decode categories
-		categories.forEach(category => {
-			decodedIDs.push(extractShopifyId(category))
-		})
+			// Decode categories
+			collections.forEach(category => {
+				decodedIDs.push(extractShopifyId(category))
+			})
 
-		// Filter collections
-		content = collections
-			.filter(collection => decodedIDs.includes(collection.id))
-			.reverse()
+			// Filter collections
+			const content = fetchedCollections
+				.filter(collection => decodedIDs.includes(collection.id))
+				.reverse()
 
-		// Extract products
-		for (const item of content) {
-			items.push(...item.products)
+			// Extract products
+			for (const item of content) {
+				data.push(...item.products)
+			}
+
+			setItems(data)
 		}
-	} else if (products) {
-		// Shopify
-		const shopifyProducts = await getProducts()
 
-		// Decode products
-		products.forEach(product => {
-			decodedIDs.push(extractShopifyId(product))
-		})
-
-		// Filter products
-		content = shopifyProducts
-			.filter(product => decodedIDs.includes(product.id))
-			.reverse()
-
-		// Extract products
-		for (const item of content) {
-			items.push(item)
-		}
-	} else if (variants) {
-		// Add code here
-	}
+		fetchProducts()
+		console.log(items)
+	}, [collections])
 
 	return (
 		<section>
@@ -93,82 +68,17 @@ const Products = async ({
 				{/* Filters */}
 				<Filters />
 
-				<div className={styles.products} style={{ gap: gap ? '0.3rem' : '0' }}>
-					{/* Categories */}
-					{type == 'collections' &&
-						content.map(item => (
-							<div
-								key={item.id}
-								className={`${styles.product} ${styles.fourColumn}`}
-							>
-								<Link
-									href={'/' + item.title.replace(/ /g, '-').toLowerCase()}
-									aria-label={`Link to ${item.name} page.`}
-								>
-									<div className={styles.image}>
-										<Image
-											src={item.image.src}
-											fill
-											alt='Category Image.'
-											style={{ objectFit: 'cover' }}
-										/>
-									</div>
-								</Link>
-								<h4>{item.title}</h4>
-							</div>
+				<div className={styles.products}>
+					{items
+						.filter(item => item.availableForSale)
+						.map(product => (
+							<ProductCard
+								key={product.id}
+								id={product.id}
+								permalink={product.handle}
+								discount={discount}
+							/>
 						))}
-
-					{/* Products */}
-					{type == 'products' &&
-						items
-							.filter(item => item.availableForSale)
-							.map(product => (
-								<ProductCard
-									key={product.id}
-									id={product.id}
-									permalink={product.handle}
-									threeColumn={threeColumn}
-									showPrice={showPrice}
-									discount={discount}
-									secondImagePriority={fullWidth} // Show second image if it's full width
-								/>
-							))}
-
-					{/* Variants */}
-					{type == 'variants' &&
-						items
-							.filter(item => item.availableForSale)
-							.map(product =>
-								product.variants
-									.filter(item => item.available)
-									.map(variant => (
-										<ProductCard
-											key={variant.id}
-											id={product.id}
-											permalink={product.handle}
-											threeColumn={threeColumn}
-											showPrice={showPrice}
-											discount={discount}
-											isVariant={true}
-											variantId={variant.id}
-										/>
-									))
-							)}
-
-					{/* Recomendations */}
-					{type == 'recommended' &&
-						products
-							.filter(item => item.availableForSale)
-							.map(product => (
-								<ProductCard
-									key={product.id}
-									id={product.id}
-									permalink={product.handle}
-									threeColumn={threeColumn}
-									showPrice={showPrice}
-									discount={discount}
-								/>
-							))}
 				</div>
 			</div>
 		</section>

@@ -1,10 +1,5 @@
 @use '@/app/base';
 
-.fullWidthSection {
-	margin-top: 4rem;
-	margin-bottom: 0;
-}
-
 .content {
 	display: flex;
 	flex-direction: column;
@@ -19,31 +14,19 @@
 .products {
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
-	// column-gap: 0.3rem;
-	// row-gap: 0.5rem;
+	column-gap: 0.3rem;
+	row-gap: 0.5rem;
 	width: 100%;
-}
-
-.threeColumn {
-	grid-column: span 4;
-
-	.image {
-		aspect-ratio: 1 / 1.25;
-	}
-}
-
-.fourColumn {
-	grid-column: span 3;
-
-	.image {
-		aspect-ratio: 1 / 1.25;
-	}
 }
 
 .product {
 	display: flex;
 	flex-direction: column;
-	// gap: 1.5rem;
+	grid-column: span 3;
+
+	.image {
+		aspect-ratio: 1 / 1.25;
+	}
 
 	a {
 		width: 100%;
@@ -126,34 +109,19 @@
 }
 
 @media screen and (max-width: 1024px) {
-	.fourColumn {
+	.product {
 		grid-column: span 6;
 		max-width: 90vw;
-	}
-
-	.fullWidthSection {
-		.threeColumn,
-		.fourColumn {
-			max-width: 100vw;
-		}
 	}
 }
 
 @media screen and (max-width: 768px) {
-	.threeColumn,
-	.fourColumn {
+	.product {
 		grid-column: span 12;
 		max-width: 90vw;
 
 		.image {
 			aspect-ratio: 1 / 1;
-		}
-	}
-
-	.fullWidthSection {
-		.threeColumn,
-		.fourColumn {
-			max-width: 100vw;
 		}
 	}
 }

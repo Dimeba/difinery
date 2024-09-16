@@ -1,3 +1,5 @@
+'use client'
+
 // styles
 import styles from './Products.module.scss'
 
@@ -5,30 +7,27 @@ import styles from './Products.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
 
+// hooks
+import { useState, useEffect } from 'react'
+
 // lib
 import { getProduct } from '@/lib/shopify'
 
-const ProductCard = async ({
-	permalink,
-	id,
-	threeColumn,
-	showPrice,
-	discount,
-	hideMaterials,
-	variantId,
-	secondImagePriority
-}) => {
-	let product
+const ProductCard = ({ permalink, id, discount }) => {
+	const [product, setProduct] = useState({})
 
-	// Switching between product and variant
-	if (!variantId) {
-		product = await getProduct(id)
-	} else {
-		const productWithVariant = await getProduct(id)
-		product = productWithVariant.variants.find(
-			variant => variant.id === variantId
-		)
-	}
+	useEffect(() => {
+		const fetchProduct = async () => {
+			try {
+				const productData = await getProduct(id)
+				setProduct(productData)
+			} catch (error) {
+				console.error('Error fetching product:', error)
+			}
+		}
+
+		fetchProduct()
+	}, [id])
 
 	const returnMetalType = option => {
 		switch (true) {
@@ -45,39 +44,32 @@ const ProductCard = async ({
 		}
 	}
 
+	if (!product) {
+		return (
+			<div className={styles.product}>
+				<p>Loading...</p>
+			</div>
+		)
+	}
+
+	const metal = product.options?.find(option => option.name === 'Metal')
+
 	return (
-		<div
-			className={`${styles.product} ${
-				threeColumn ? styles.threeColumn : styles.fourColumn
-			}`}
-		>
+		<div className={styles.product}>
 			<Link
 				href={`/shop/${permalink}`}
 				aria-label={`Link to ${product.title} page.`}
 			>
-				{secondImagePriority && product.images[1] ? (
+				{/* Product Image */}
+				{product.images && (
 					<div className={styles.image}>
 						<Image
-							src={product.images[1].src}
+							src={product.images[0].src}
 							fill
 							alt='Category Image.'
 							style={{ objectFit: 'cover' }}
 						/>
-
-						<p className={styles.floatingTitle}>
-							<span>{product.title}</span> - From $
-							{product.variants[0].price.amount.toString().slice(0, -2)}
-						</p>
-					</div>
-				) : (
-					<div className={styles.image}>
-						<Image
-							src={!variantId ? product.images[0].src : product.image.src}
-							fill
-							alt='Category Image.'
-							style={{ objectFit: 'cover' }}
-						/>
-						{!variantId && product.images[1] && (
+						{product.images[1] && (
 							<Image
 								src={product.images[1].src}
 								fill
@@ -91,48 +83,44 @@ const ProductCard = async ({
 			</Link>
 
 			{/* Product Info */}
-			{!secondImagePriority && (
-				<div className={styles.productInfo}>
-					<div className={styles.productTitleContainer}>
-						<p className={styles.productTitle}>{product.title}</p>
-						{showPrice && (
-							<p className={styles.price}>
-								<span
-									style={{
-										textDecoration: discount ? 'line-through' : '',
-										color: discount ? '#AEAEAD' : '#1a1b18'
-									}}
-								>
-									From $
-									{!variantId
-										? product.variants[0].price.amount.toString().slice(0, -2)
-										: product.price.amount.toString().slice(0, -2)}
-								</span>
-								{discount && (
-									<>
-										{' '}
-										<span className={styles.discount}>$200</span>
-									</>
-								)}
-							</p>
+			<div className={styles.productInfo}>
+				<div className={styles.productTitleContainer}>
+					<p className={styles.productTitle}>{product.title}</p>
+					<p className={styles.price}>
+						{product.variants && (
+							<span
+								style={{
+									textDecoration: discount ? 'line-through' : '',
+									color: discount ? '#AEAEAD' : '#1a1b18'
+								}}
+							>
+								From ${product.variants[0].price.amount.toString().slice(0, -2)}
+							</span>
 						)}
-					</div>
-
-					{!hideMaterials && !variantId && (
-						<div className={styles.typeIcons}>
-							{product.options[1].values.map(option => (
-								<div key={option.value} className={styles.typeIcon}>
-									<Image
-										src={`/${returnMetalType(option.value.toLowerCase())}`}
-										fill
-										alt={`${option.value} material icon.`}
-									/>
-								</div>
-							))}
-						</div>
-					)}
+						{discount && (
+							<>
+								{' '}
+								<span className={styles.discount}>$200</span>
+							</>
+						)}
+					</p>
 				</div>
-			)}
+
+				{/* Metal */}
+				{metal && (
+					<div className={styles.typeIcons}>
+						{metal.values.map(option => (
+							<div key={option.value} className={styles.typeIcon}>
+								<Image
+									src={`/${returnMetalType(option.value.toLowerCase())}`}
+									fill
+									alt={`${option.value} material icon.`}
+								/>
+							</div>
+						))}
+					</div>
+				)}
+			</div>
 		</div>
 	)
 }
