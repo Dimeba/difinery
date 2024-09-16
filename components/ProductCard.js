@@ -68,6 +68,7 @@ const ProductCard = ({ permalink, id, discount }) => {
 							fill
 							alt='Category Image.'
 							style={{ objectFit: 'cover' }}
+							sizes='(max-width: 768px) 100vw, 50vw'
 						/>
 						{product.images[1] && (
 							<Image
@@ -76,6 +77,7 @@ const ProductCard = ({ permalink, id, discount }) => {
 								alt='Category Image.'
 								style={{ objectFit: 'cover' }}
 								className={styles.hoverImage}
+								sizes='(max-width: 768px) 100vw, 50vw'
 							/>
 						)}
 					</div>
@@ -115,6 +117,7 @@ const ProductCard = ({ permalink, id, discount }) => {
 									src={`/${returnMetalType(option.value.toLowerCase())}`}
 									fill
 									alt={`${option.value} material icon.`}
+									sizes='(max-width: 768px) 100vw, 50vw'
 								/>
 							</div>
 						))}

@@ -57,6 +57,11 @@ const Column = async ({ fullHeight, id, columns }) => {
 					alt='image'
 					fill
 					style={{ objectFit: content.fields.fitImage ? 'contain' : 'cover' }}
+					sizes={
+						columns == 1
+							? '(max-width: 1920px) 100vw, 75vw'
+							: '(max-width: 768px) 100vw, 50vw'
+					}
 				/>
 			)}
 

@@ -52,7 +52,6 @@ const Products = ({
 		}
 
 		fetchProducts()
-		console.log(items)
 	}, [collections])
 
 	return (
