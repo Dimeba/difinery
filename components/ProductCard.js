@@ -96,7 +96,12 @@ const ProductCard = ({ permalink, id, discount }) => {
 									color: discount ? '#AEAEAD' : '#1a1b18'
 								}}
 							>
-								From ${product.variants[0].price.amount.toString().slice(0, -2)}
+								From $
+								{Math.min(
+									...product.variants.map(variant =>
+										parseFloat(variant.price.amount)
+									)
+								)}
 							</span>
 						)}
 						{discount && (

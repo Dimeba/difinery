@@ -23,6 +23,7 @@ const Products = ({
 	recommendedProducts
 }) => {
 	const [items, setItems] = useState([])
+	const [filteredItems, setFilteredItems] = useState([])
 
 	useEffect(() => {
 		const fetchProducts = async () => {
@@ -48,12 +49,14 @@ const Products = ({
 			}
 
 			setItems(data)
+			setFilteredItems(data)
 		}
 
 		if (collections) {
 			fetchProducts()
 		} else {
 			setItems(recommendedProducts)
+			setFilteredItems(recommendedProducts)
 		}
 	}, [])
 
@@ -68,10 +71,10 @@ const Products = ({
 				{showTitle && title && !stylizedTitle && <h3>{title}</h3>}
 
 				{/* Filters */}
-				<Filters />
+				{items && <Filters items={items} setFilteredItems={setFilteredItems} />}
 
 				<div className={styles.products}>
-					{items
+					{filteredItems
 						.filter(item => item.availableForSale)
 						.map(product => (
 							<ProductCard
