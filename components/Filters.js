@@ -4,14 +4,12 @@
 import styles from './Filters.module.scss'
 
 // components
+import { LuSettings2 } from 'react-icons/lu'
 
 // hooks
 import { useState } from 'react'
-import { usePathname } from 'next/navigation'
 
 const Filters = ({ items, setFilteredItems }) => {
-	const pathName = usePathname()
-
 	const [showFilters, setShowFilters] = useState(false)
 
 	const handeShowFilters = () => {
@@ -56,28 +54,36 @@ const Filters = ({ items, setFilteredItems }) => {
 		)
 	}
 
-	console.log(items[0])
+	// console.log(items[0])
 
-	// Returning component if path is '/shop'
-	if (pathName == '/shop') {
-		return (
-			<div className='container'>
-				<button onClick={handeShowFilters}>Filter & Sort</button>
+	return (
+		<div className={`container ${styles.filtersContainer}`}>
+			<button className={styles.showFiltersButton} onClick={handeShowFilters}>
+				<p>Filter & Sort</p>
+				<LuSettings2 />
+			</button>
 
-				{showFilters && (
+			{showFilters && (
+				<div>
 					<div>
-						<p onClick={handleFilter}>Filters</p>
-						<p onClick={handleCancel}>Cancel</p>
-						<p onClick={handleSortByLowestPrice}>Sort by Lowest Price</p>
-						<p onClick={handleSortByHighestPrice}>Sort by Highest Price</p>
-						<p onClick={handleSortByNewest}>Sort by Newest</p>
+						<h4>Filter</h4>
+						<button onClick={handleFilter}>Filters</button>
+						<button onClick={handleCancel}>Cancel</button>
 					</div>
-				)}
-			</div>
-		)
-	} else {
-		return null
-	}
+					<div>
+						<h4>Sort</h4>
+						<button onClick={handleSortByLowestPrice}>
+							Sort by Lowest Price
+						</button>
+						<button onClick={handleSortByHighestPrice}>
+							Sort by Highest Price
+						</button>
+						<button onClick={handleSortByNewest}>Sort by Newest</button>
+					</div>
+				</div>
+			)}
+		</div>
+	)
 }
 
 export default Filters

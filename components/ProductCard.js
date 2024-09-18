@@ -1,5 +1,3 @@
-'use client'
-
 // styles
 import styles from './Products.module.scss'
 
@@ -7,28 +5,7 @@ import styles from './Products.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
 
-// hooks
-import { useState, useEffect } from 'react'
-
-// lib
-import { getProduct } from '@/lib/shopify'
-
-const ProductCard = ({ permalink, id, discount }) => {
-	const [product, setProduct] = useState({})
-
-	useEffect(() => {
-		const fetchProduct = async () => {
-			try {
-				const productData = await getProduct(id)
-				setProduct(productData)
-			} catch (error) {
-				console.error('Error fetching product:', error)
-			}
-		}
-
-		fetchProduct()
-	}, [id])
-
+const ProductCard = ({ permalink, discount, product }) => {
 	const returnMetalType = option => {
 		switch (true) {
 			case option.includes('rose'):

@@ -32,6 +32,7 @@ const PageContent = ({ content }) => {
 								showTitle={section.fields.showTitle}
 								collections={section.fields.collections}
 								discount={section.fields.discount}
+								showFilters={section.fields.showFilters}
 							/>
 						)
 

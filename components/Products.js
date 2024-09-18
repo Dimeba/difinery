@@ -20,7 +20,8 @@ const Products = ({
 	showTitle,
 	collections,
 	discount,
-	recommendedProducts
+	recommendedProducts,
+	showFilters
 }) => {
 	const [items, setItems] = useState([])
 	const [filteredItems, setFilteredItems] = useState([])
@@ -71,7 +72,9 @@ const Products = ({
 				{showTitle && title && !stylizedTitle && <h3>{title}</h3>}
 
 				{/* Filters */}
-				{items && <Filters items={items} setFilteredItems={setFilteredItems} />}
+				{showFilters && items && (
+					<Filters items={items} setFilteredItems={setFilteredItems} />
+				)}
 
 				<div className={styles.products}>
 					{filteredItems
@@ -80,6 +83,7 @@ const Products = ({
 							<ProductCard
 								key={product.id}
 								id={product.id}
+								product={product}
 								permalink={product.handle}
 								discount={discount}
 							/>
