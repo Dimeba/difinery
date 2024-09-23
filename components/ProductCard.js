@@ -1,3 +1,5 @@
+'use client'
+
 // styles
 import styles from './Products.module.scss'
 
@@ -5,7 +7,29 @@ import styles from './Products.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
 
+// hooks
+import { useState, useEffect } from 'react'
+
 const ProductCard = ({ permalink, discount, product }) => {
+	const [metalTypes, setMetalTypes] = useState([])
+
+	useEffect(() => {
+		const types = new Set()
+
+		product.options?.forEach(option => {
+			if (option.name === 'Metal') {
+				option.values.forEach(value => {
+					const image = returnMetalType(value.value.toLowerCase())
+					if (image) {
+						types.add(image)
+					}
+				})
+			}
+		})
+
+		setMetalTypes([...types])
+	}, [product])
+
 	const returnMetalType = option => {
 		switch (true) {
 			case option.includes('rose'):
@@ -14,8 +38,6 @@ const ProductCard = ({ permalink, discount, product }) => {
 				return 'yellow.png'
 			case option.includes('white'):
 				return 'white.png'
-			case option.includes('platinum'):
-				return 'platinum.png'
 			default:
 				return ''
 		}
@@ -28,8 +50,6 @@ const ProductCard = ({ permalink, discount, product }) => {
 			</div>
 		)
 	}
-
-	const metal = product.options?.find(option => option.name === 'Metal')
 
 	return (
 		<div className={styles.product}>
@@ -91,14 +111,14 @@ const ProductCard = ({ permalink, discount, product }) => {
 				</div>
 
 				{/* Metal */}
-				{metal && (
+				{metalTypes.length > 0 && (
 					<div className={styles.typeIcons}>
-						{metal.values.map(option => (
-							<div key={option.value} className={styles.typeIcon}>
+						{metalTypes.map(option => (
+							<div key={option} className={styles.typeIcon}>
 								<Image
-									src={`/${returnMetalType(option.value.toLowerCase())}`}
+									src={`/${option}`}
 									fill
-									alt={`${option.value} material icon.`}
+									alt={`${option} material icon.`}
 									sizes='(max-width: 768px) 100vw, 50vw'
 								/>
 							</div>
