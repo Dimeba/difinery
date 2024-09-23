@@ -4,84 +4,96 @@
 import styles from './Filters.module.scss'
 
 // components
-import { LuSettings2 } from 'react-icons/lu'
+import Accordion from './Accordion'
+import { IoClose } from 'react-icons/io5'
 
 // hooks
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-const Filters = ({ items, setFilteredItems }) => {
-	const [showFilters, setShowFilters] = useState(false)
+const Filters = ({ items, setFilteredItems, toggleFilters }) => {
+	const sortList = ['Lowest Price', 'Highest Price', 'Newest']
+	const [productTypes, setProductTypes] = useState([])
 
-	const handeShowFilters = () => {
-		setShowFilters(!showFilters)
+	useEffect(() => {
+		const types = ['All']
+
+		items.forEach(item => {
+			if (!types.includes(item.productType)) {
+				types.push(item.productType)
+			}
+		})
+
+		setProductTypes(types)
+	}, [])
+
+	// Filtering
+	const handleFilter = (filter, value) => {
+		if (filter === 'productType') {
+			if (value === 'All') {
+				setFilteredItems([...items])
+			} else {
+				setFilteredItems([...items].filter(item => item.productType === value))
+			}
+		}
 	}
 
-	const handleFilter = () => {
-		setFilteredItems([...items].filter(item => item.productType === 'Ring'))
+	// Sorting
+	const handleSort = sort => {
+		switch (sort) {
+			case 'Lowest Price':
+				setFilteredItems(
+					[...items].sort(
+						(a, b) =>
+							Math.min(...a.variants.map(variant => variant.price.amount)) -
+							Math.min(...b.variants.map(variant => variant.price.amount))
+					)
+				)
+				break
+			case 'Highest Price':
+				setFilteredItems(
+					[...items].sort(
+						(a, b) =>
+							Math.max(...b.variants.map(variant => variant.price.amount)) -
+							Math.max(...a.variants.map(variant => variant.price.amount))
+					)
+				)
+				break
+			case 'Newest':
+				setFilteredItems(
+					[...items].sort(
+						(a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+					)
+				)
+				break
+		}
 	}
-
-	const handleCancel = () => {
-		setFilteredItems([...items])
-	}
-
-	// Sorting Methods
-
-	const handleSortByLowestPrice = () => {
-		setFilteredItems(
-			[...items].sort(
-				(a, b) =>
-					Math.min(...a.variants.map(variant => variant.price.amount)) -
-					Math.min(...b.variants.map(variant => variant.price.amount))
-			)
-		)
-	}
-
-	const handleSortByHighestPrice = () => {
-		setFilteredItems(
-			[...items].sort(
-				(a, b) =>
-					Math.max(...b.variants.map(variant => variant.price.amount)) -
-					Math.max(...a.variants.map(variant => variant.price.amount))
-			)
-		)
-	}
-
-	const handleSortByNewest = () => {
-		setFilteredItems(
-			[...items].sort(
-				(a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
-			)
-		)
-	}
-
-	// console.log(items[0])
 
 	return (
-		<div className={`container ${styles.filtersContainer}`}>
-			<button className={styles.showFiltersButton} onClick={handeShowFilters}>
-				<p>Filter & Sort</p>
-				<LuSettings2 />
-			</button>
+		<div className={styles.filters}>
+			<div className={styles.buttons}>
+				<h4>Sort</h4>
 
-			{showFilters && (
-				<div>
-					<div>
-						<h4>Filter</h4>
-						<button onClick={handleFilter}>Filters</button>
-						<button onClick={handleCancel}>Cancel</button>
-					</div>
-					<div>
-						<h4>Sort</h4>
-						<button onClick={handleSortByLowestPrice}>
-							Sort by Lowest Price
-						</button>
-						<button onClick={handleSortByHighestPrice}>
-							Sort by Highest Price
-						</button>
-						<button onClick={handleSortByNewest}>Sort by Newest</button>
-					</div>
-				</div>
-			)}
+				{sortList.map(sort => (
+					<button onClick={() => handleSort(sort)}>
+						<p>Sort by {sort}</p>
+					</button>
+				))}
+			</div>
+
+			<div className={styles.buttons}>
+				<h4>Filters</h4>
+
+				{productTypes.map(type => (
+					<button onClick={() => handleFilter('productType', type)}>
+						<p>{type}</p>
+					</button>
+				))}
+			</div>
+
+			<button className={styles.closeButton} onClick={toggleFilters}>
+				<p>Close</p>
+				<IoClose />
+			</button>
 		</div>
 	)
 }

@@ -9,6 +9,7 @@ import styles from './Products.module.scss'
 // components
 import ProductCard from './ProductCard'
 import Filters from './Filters'
+import { LuSettings2 } from 'react-icons/lu'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 // lib
@@ -25,6 +26,7 @@ const Products = ({
 }) => {
 	const [items, setItems] = useState([])
 	const [filteredItems, setFilteredItems] = useState([])
+	const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
 	useEffect(() => {
 		const fetchProducts = async () => {
@@ -73,21 +75,37 @@ const Products = ({
 
 				{/* Filters */}
 				{showFilters && items && (
-					<Filters items={items} setFilteredItems={setFilteredItems} />
+					<button
+						className={styles.showFiltersButton}
+						onClick={() => setShowFiltersMenu(!showFiltersMenu)}
+					>
+						<p>Sort & Filter</p>
+						<LuSettings2 />
+					</button>
 				)}
 
-				<div className={styles.products}>
-					{filteredItems
-						.filter(item => item.availableForSale)
-						.map(product => (
-							<ProductCard
-								key={product.id}
-								id={product.id}
-								product={product}
-								permalink={product.handle}
-								discount={discount}
-							/>
-						))}
+				<div className={styles.productsContainer}>
+					<div className={styles.products}>
+						{filteredItems
+							.filter(item => item.availableForSale)
+							.map(product => (
+								<ProductCard
+									key={product.id}
+									id={product.id}
+									product={product}
+									permalink={product.handle}
+									discount={discount}
+								/>
+							))}
+					</div>
+
+					{showFiltersMenu && (
+						<Filters
+							items={items}
+							setFilteredItems={setFilteredItems}
+							toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
+						/>
+					)}
 				</div>
 			</div>
 		</section>

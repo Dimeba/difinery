@@ -14,7 +14,7 @@ section {
 }
 
 .topSection {
-	margin-top: 12rem;
+	margin-top: 10rem;
 }
 
 .container {
@@ -91,6 +91,9 @@ a {
 }
 
 @media screen and (max-width: 1024px) {
+	.topSection {
+		margin-top: 8rem;
+	}
 }
 
 @media screen and (max-width: 768px) {
