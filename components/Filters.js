@@ -94,29 +94,31 @@ const Filters = ({
 			</Accordion>
 
 			{/* Product Type */}
-			<Accordion title='Type' state={true}>
-				<div className={styles.buttons}>
-					{productTypes.map(type => (
-						<button
-							key={type}
-							onClick={() => handleFilter('productType', type)}
-							className={`${
-								selectedProductType === type ? styles.active : ''
-							} ${styles.optionButton}`}
-						>
-							<p>{type}</p>
-						</button>
-					))}
-					{selectedProductType !== 'All' && (
-						<button
-							className={styles.resetButton}
-							onClick={() => setSelectedProductType('All')}
-						>
-							Reset Type
-						</button>
-					)}
-				</div>
-			</Accordion>
+			{productTypes.length > 2 && (
+				<Accordion title='Type' state={true}>
+					<div className={styles.buttons}>
+						{productTypes.map(type => (
+							<button
+								key={type}
+								onClick={() => handleFilter('productType', type)}
+								className={`${
+									selectedProductType === type ? styles.active : ''
+								} ${styles.optionButton}`}
+							>
+								<p>{type}</p>
+							</button>
+						))}
+						{selectedProductType !== 'All' && (
+							<button
+								className={styles.resetButton}
+								onClick={() => setSelectedProductType('All')}
+							>
+								Reset Type
+							</button>
+						)}
+					</div>
+				</Accordion>
+			)}
 
 			{/* Metal */}
 			<Accordion title='Metal' state={true}>
