@@ -28,6 +28,11 @@ const Products = ({
 	const [filteredItems, setFilteredItems] = useState([])
 	const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
+	// State variables for filters
+	const [selectedSort, setSelectedSort] = useState(null)
+	const [selectedProductType, setSelectedProductType] = useState('All')
+	const [selectedMetalTypes, setSelectedMetalTypes] = useState([])
+
 	useEffect(() => {
 		const fetchProducts = async () => {
 			const decodedIDs = []
@@ -61,7 +66,61 @@ const Products = ({
 			setItems(recommendedProducts)
 			setFilteredItems(recommendedProducts)
 		}
-	}, [])
+	}, [collections, recommendedProducts])
+
+	// Filter and sort logic
+	useEffect(() => {
+		let updatedItems = [...items]
+
+		// Filter by product type
+		if (selectedProductType && selectedProductType !== 'All') {
+			updatedItems = updatedItems.filter(
+				item => item.productType === selectedProductType
+			)
+		}
+
+		// Filter by metal types
+		if (selectedMetalTypes.length > 0) {
+			updatedItems = updatedItems.filter(item =>
+				item.options?.some(option =>
+					option.values.some(val =>
+						selectedMetalTypes.some(mt =>
+							val.value.toLowerCase().includes(mt.toLowerCase())
+						)
+					)
+				)
+			)
+		}
+
+		// Apply sorting
+		if (selectedSort) {
+			switch (selectedSort) {
+				case 'Lowest Price':
+					updatedItems.sort(
+						(a, b) =>
+							Math.min(...a.variants.map(variant => variant.price.amount)) -
+							Math.min(...b.variants.map(variant => variant.price.amount))
+					)
+					break
+				case 'Highest Price':
+					updatedItems.sort(
+						(a, b) =>
+							Math.max(...b.variants.map(variant => variant.price.amount)) -
+							Math.max(...a.variants.map(variant => variant.price.amount))
+					)
+					break
+				case 'Newest':
+					updatedItems.sort(
+						(a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+					)
+					break
+				default:
+					break
+			}
+		}
+
+		setFilteredItems(updatedItems)
+	}, [items, selectedSort, selectedProductType, selectedMetalTypes])
 
 	return (
 		<section className='topSection'>
@@ -102,8 +161,12 @@ const Products = ({
 					{showFiltersMenu && (
 						<Filters
 							items={items}
-							filteredItems={filteredItems}
-							setFilteredItems={setFilteredItems}
+							selectedSort={selectedSort}
+							setSelectedSort={setSelectedSort}
+							selectedProductType={selectedProductType}
+							setSelectedProductType={setSelectedProductType}
+							selectedMetalTypes={selectedMetalTypes}
+							setSelectedMetalTypes={setSelectedMetalTypes}
 							toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
 						/>
 					)}

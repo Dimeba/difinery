@@ -11,21 +11,26 @@ import { IoClose } from 'react-icons/io5'
 // hooks
 import { useState, useEffect } from 'react'
 
-const Filters = ({ items, filteredItems, setFilteredItems, toggleFilters }) => {
-	const sort = ['Lowest Price', 'Highest Price', 'Newest']
+const Filters = ({
+	items,
+	selectedSort,
+	setSelectedSort,
+	selectedProductType,
+	setSelectedProductType,
+	selectedMetalTypes,
+	setSelectedMetalTypes,
+	toggleFilters
+}) => {
+	const sortOptions = ['Lowest Price', 'Highest Price', 'Newest']
 	const [productTypes, setProductTypes] = useState([])
 	const [metalTypes, setMetalTypes] = useState([])
-	const [showResetButton, setShowResetButton] = useState(false)
 
 	useEffect(() => {
 		const pTypes = new Set(['All'])
 		const mTypes = new Set()
 
-		filteredItems.forEach(item => {
+		items.forEach(item => {
 			pTypes.add(item.productType)
-		})
-
-		filteredItems.forEach(item => {
 			item.options?.forEach(option => {
 				if (option.name === 'Metal') {
 					option.values.forEach(value => {
@@ -43,66 +48,22 @@ const Filters = ({ items, filteredItems, setFilteredItems, toggleFilters }) => {
 
 		setProductTypes([...pTypes])
 		setMetalTypes([...mTypes])
-	}, [])
+	}, [items])
 
-	useEffect(() => {
-		if (filteredItems.length < items.length) {
-			setShowResetButton(true)
-		} else {
-			setShowResetButton(false)
-		}
-	}, [filteredItems])
-
-	// Filtering
 	const handleFilter = (filter, value) => {
 		if (filter === 'productType') {
-			if (value === 'All') {
-				setFilteredItems([...items])
-			} else {
-				setFilteredItems([...items].filter(item => item.productType === value))
-			}
+			setSelectedProductType(value)
 		} else if (filter === 'metalType') {
-			setFilteredItems(
-				[...filteredItems].filter(item =>
-					item.options.some(option =>
-						option.values.some(val =>
-							val.value.toLowerCase().includes(value.toLowerCase())
-						)
-					)
-				)
-			)
+			if (selectedMetalTypes.includes(value)) {
+				setSelectedMetalTypes(selectedMetalTypes.filter(mt => mt !== value))
+			} else {
+				setSelectedMetalTypes([...selectedMetalTypes, value])
+			}
 		}
 	}
 
-	// Sorting
-	const handleSort = sort => {
-		switch (sort) {
-			case 'Lowest Price':
-				setFilteredItems(
-					[...items].sort(
-						(a, b) =>
-							Math.min(...a.variants.map(variant => variant.price.amount)) -
-							Math.min(...b.variants.map(variant => variant.price.amount))
-					)
-				)
-				break
-			case 'Highest Price':
-				setFilteredItems(
-					[...items].sort(
-						(a, b) =>
-							Math.max(...b.variants.map(variant => variant.price.amount)) -
-							Math.max(...a.variants.map(variant => variant.price.amount))
-					)
-				)
-				break
-			case 'Newest':
-				setFilteredItems(
-					[...items].sort(
-						(a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
-					)
-				)
-				break
-		}
+	const handleSort = sortOption => {
+		setSelectedSort(sortOption)
 	}
 
 	return (
@@ -110,11 +71,25 @@ const Filters = ({ items, filteredItems, setFilteredItems, toggleFilters }) => {
 			{/* Sort */}
 			<Accordion title='Sort' state={true}>
 				<div className={styles.buttons}>
-					{sort.map(sort => (
-						<button onClick={() => handleSort(sort)}>
-							<p>Sort by {sort}</p>
+					{sortOptions.map(sortOption => (
+						<button
+							key={sortOption}
+							onClick={() => handleSort(sortOption)}
+							className={`${selectedSort === sortOption ? styles.active : ''} ${
+								styles.optionButton
+							}`}
+						>
+							<p>Sort by {sortOption}</p>
 						</button>
 					))}
+					{selectedSort && (
+						<button
+							className={styles.resetButton}
+							onClick={() => setSelectedSort(null)}
+						>
+							Reset Sort
+						</button>
+					)}
 				</div>
 			</Accordion>
 
@@ -122,10 +97,24 @@ const Filters = ({ items, filteredItems, setFilteredItems, toggleFilters }) => {
 			<Accordion title='Type' state={true}>
 				<div className={styles.buttons}>
 					{productTypes.map(type => (
-						<button onClick={() => handleFilter('productType', type)}>
+						<button
+							key={type}
+							onClick={() => handleFilter('productType', type)}
+							className={`${
+								selectedProductType === type ? styles.active : ''
+							} ${styles.optionButton}`}
+						>
 							<p>{type}</p>
 						</button>
 					))}
+					{selectedProductType !== 'All' && (
+						<button
+							className={styles.resetButton}
+							onClick={() => setSelectedProductType('All')}
+						>
+							Reset Type
+						</button>
+					)}
 				</div>
 			</Accordion>
 
@@ -133,7 +122,13 @@ const Filters = ({ items, filteredItems, setFilteredItems, toggleFilters }) => {
 			<Accordion title='Metal' state={true}>
 				<div className={styles.buttons}>
 					{metalTypes.map(type => (
-						<button onClick={() => handleFilter('metalType', type)}>
+						<button
+							key={type}
+							onClick={() => handleFilter('metalType', type)}
+							className={`${
+								selectedMetalTypes.includes(type) ? styles.active : ''
+							} ${styles.optionButton}`}
+						>
 							<Image
 								src={`/${type.toLowerCase()}.png`}
 								width={16}
@@ -144,18 +139,16 @@ const Filters = ({ items, filteredItems, setFilteredItems, toggleFilters }) => {
 							<p>{type} Gold</p>
 						</button>
 					))}
+					{selectedMetalTypes.length > 0 && (
+						<button
+							className={styles.resetButton}
+							onClick={() => setSelectedMetalTypes([])}
+						>
+							Reset Metal
+						</button>
+					)}
 				</div>
 			</Accordion>
-
-			{/* Reset Button */}
-			{showResetButton && (
-				<button
-					className={styles.resetButton}
-					onClick={() => setFilteredItems([...items])}
-				>
-					<p>Reset Filters</p>
-				</button>
-			)}
 
 			{/* Close Button */}
 			<button className={styles.closeButton} onClick={toggleFilters}>
