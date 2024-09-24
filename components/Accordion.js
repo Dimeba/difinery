@@ -44,11 +44,13 @@ const Accordion = ({ state, title, children, small, product, display }) => {
 					/>
 				)}
 			</div>
-			<div
-				className={styles.content}
-				style={{ display: rowOpen ? 'flex' : 'none' }}
-			>
-				{children}
+			<div className={styles.contentContainer}>
+				<div
+					className={styles.content}
+					style={{ display: rowOpen ? 'flex' : 'none' }}
+				>
+					{children}
+				</div>
 			</div>
 		</div>
 	)

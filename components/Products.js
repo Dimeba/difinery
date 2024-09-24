@@ -102,6 +102,7 @@ const Products = ({
 					{showFiltersMenu && (
 						<Filters
 							items={items}
+							filteredItems={filteredItems}
 							setFilteredItems={setFilteredItems}
 							toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
 						/>
