@@ -19,7 +19,7 @@ import { useState, useEffect } from 'react'
 import { useCart } from '@/context/CartContext'
 import { useHeader } from '@/context/HeaderContext'
 
-const Header = ({ mainMenu, supportPage }) => {
+const Header = ({ content }) => {
 	// cart
 	const { showCart, setShowCart } = useCart()
 
@@ -36,18 +36,16 @@ const Header = ({ mainMenu, supportPage }) => {
 		transparentHeader && isIntersecting && !showSubmenu && !openMenu
 
 	// Submenu Items
-	const tempList = [
+	const productList = [
 		'Rings',
 		'Earrings',
-		'Bracelets',
+		'Necklaces',
 		'Pendants',
-		'Diamonds',
-		'All'
+		'Bracelets'
 	]
 
-	const qucikLinks = ['Order Status', 'Returns', 'Gift Card']
-
-	const occasion = ['Wedding', 'Engagement', 'Anniversary', 'Birthday']
+	const qucikLinks = content.quickLinks.map(link => link.fields.title)
+	const occasion = content.shopByOcassion.map(link => link.fields.title)
 
 	// Reseting open menu
 	useEffect(() => {
@@ -75,11 +73,14 @@ const Header = ({ mainMenu, supportPage }) => {
 					{isIntersecting && isScreenWide ? (
 						<Link
 							href={
-								'/' + supportPage.fields.title.replace(/ /g, '-').toLowerCase()
+								'/' +
+								content.supportPage.fields.title
+									.replace(/ /g, '-')
+									.toLowerCase()
 							}
 							aria-label={`Link to Customer Service page.`}
 						>
-							<p>{supportPage.fields.title}</p>
+							<p>{content.supportPage.fields.title}</p>
 						</Link>
 					) : (
 						<div
@@ -127,7 +128,7 @@ const Header = ({ mainMenu, supportPage }) => {
 
 				{((isIntersecting && isScreenWide) || openMenu) && (
 					<nav className={`container ${styles.headerBot}`}>
-						{mainMenu.map(link => (
+						{content.mainMenu.map(link => (
 							<Link
 								key={link.sys.id}
 								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
@@ -153,10 +154,10 @@ const Header = ({ mainMenu, supportPage }) => {
 					</nav>
 				)}
 
-				{showSubmenu && (
+				{content.showDropdownMenu && showSubmenu && (
 					<div className={`container ${styles.subMenu}`}>
 						<div className={styles.column2}>
-							{tempList.map(link => (
+							{productList.map(link => (
 								<Link
 									key={link}
 									href={'/' + link.replace(/ /g, '-').toLowerCase()}
@@ -196,25 +197,23 @@ const Header = ({ mainMenu, supportPage }) => {
 							))}
 						</div>
 
-						<div className={styles.column3}>
-							<Link href='#' alt='test'>
-								<div className={styles.subMenuImg}>
-									<Image src='/sample-image.jpg' alt='test' fill />
+						{content.promotions &&
+							content.promotions.map(promo => (
+								<div key={promo.sys.id} className={styles.column3}>
+									<Link href={promo.fields.link} alt='test'>
+										<div className={styles.subMenuImg}>
+											<Image
+												src={'https:' + promo.fields.image.fields.file.url}
+												style={{ objectFit: 'cover' }}
+												alt='test'
+												fill
+											/>
+										</div>
+									</Link>
+
+									<p>{promo.fields.title}</p>
 								</div>
-							</Link>
-
-							<p>Gift Card</p>
-						</div>
-
-						<div className={styles.column3}>
-							<Link href='#' alt='test'>
-								<div className={styles.subMenuImg}>
-									<Image src='/sample-image.jpg' alt='test' fill />
-								</div>
-							</Link>
-
-							<p>Gift Card</p>
-						</div>
+							))}
 					</div>
 				)}
 			</div>

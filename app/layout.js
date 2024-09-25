@@ -42,10 +42,7 @@ export default function RootLayout({ children }) {
 				<body className={libreFranklin.className}>
 					<Cart />
 					<HeaderProvider>
-						<Header
-							mainMenu={headerContent.mainMenu}
-							supportPage={headerContent.supportPage}
-						/>
+						<Header content={headerContent} />
 						{children}
 						<Footer content={footerContent} />
 					</HeaderProvider>
