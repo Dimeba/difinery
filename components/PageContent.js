@@ -4,6 +4,7 @@ import Products from '@/components/Products'
 import RichText from '@/components/RichText'
 import Columns from './Columns'
 import HeaderChanger from './HeaderChanger'
+import FAQ from './FAQ'
 
 const PageContent = ({ content }) => {
 	return (
@@ -59,6 +60,14 @@ const PageContent = ({ content }) => {
 								fullWidth={section.fields.fullWidth}
 								marginTop={section.fields.marginTop}
 								marginBottom={section.fields.marginBottom}
+							/>
+						)
+					case 'accordion':
+						return (
+							<FAQ
+								key={section.sys.id}
+								title={section.fields.title}
+								content={section.fields.rows}
 							/>
 						)
 

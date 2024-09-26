@@ -144,6 +144,19 @@ const Products = ({
 				)}
 
 				<div className={styles.productsContainer}>
+					{showFiltersMenu && (
+						<Filters
+							items={items}
+							selectedSort={selectedSort}
+							setSelectedSort={setSelectedSort}
+							selectedProductType={selectedProductType}
+							setSelectedProductType={setSelectedProductType}
+							selectedMetalTypes={selectedMetalTypes}
+							setSelectedMetalTypes={setSelectedMetalTypes}
+							toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
+						/>
+					)}
+
 					<div className={styles.products}>
 						{filteredItems
 							.filter(item => item.availableForSale)
@@ -157,19 +170,6 @@ const Products = ({
 								/>
 							))}
 					</div>
-
-					{showFiltersMenu && (
-						<Filters
-							items={items}
-							selectedSort={selectedSort}
-							setSelectedSort={setSelectedSort}
-							selectedProductType={selectedProductType}
-							setSelectedProductType={setSelectedProductType}
-							selectedMetalTypes={selectedMetalTypes}
-							setSelectedMetalTypes={setSelectedMetalTypes}
-							toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
-						/>
-					)}
 				</div>
 			</div>
 		</section>
