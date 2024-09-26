@@ -7,12 +7,14 @@ import Accordion from './Accordion'
 // contentful
 import { getEntry } from '@/lib/contentful'
 
-const FAQ = async ({ title, content }) => {
+const FAQ = async ({ title, content, productDetails }) => {
 	const rows = []
 
-	for (const item of content) {
-		const entry = await getEntry(item.sys.id)
-		rows.push(entry.fields)
+	if (content) {
+		for (const item of content) {
+			const entry = await getEntry(item.sys.id)
+			rows.push(entry.fields)
+		}
 	}
 
 	return (
@@ -21,6 +23,12 @@ const FAQ = async ({ title, content }) => {
 				<h3>{title}</h3>
 
 				<div className={styles.accordion}>
+					{productDetails && (
+						<Accordion title='Product Details'>
+							<p>{productDetails}</p>
+						</Accordion>
+					)}
+
 					{rows.map((row, index) => (
 						<Accordion key={index} title={row.title}>
 							<p>{row.text}</p>
