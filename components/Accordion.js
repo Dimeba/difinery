@@ -25,24 +25,24 @@ const Accordion = ({ state, title, children, small, product, display }) => {
 			className={styles.accordion}
 			style={product && { display: display ? 'block' : 'none' }}
 		>
-			<div className={`${styles.titleRow} ${rowOpen ? styles.open : ''}`}>
+			<div
+				className={`${styles.titleRow} ${rowOpen ? styles.open : ''}`}
+				onClick={toggleRow}
+			>
 				{small ? <p>{title}</p> : <h4>{title}</h4>}
 
-				{!product && (
-					<Image
-						src='/arrow.svg'
-						alt='Arrow Button'
-						width={12}
-						height={12}
-						style={{
-							cursor: 'pointer',
-							objectFit: 'contain',
-							objectPosition: 'center'
-						}}
-						className={styles.icon}
-						onClick={toggleRow}
-					/>
-				)}
+				<Image
+					src='/arrow.svg'
+					alt='Arrow Button'
+					width={12}
+					height={12}
+					style={{
+						cursor: 'pointer',
+						objectFit: 'contain',
+						objectPosition: 'center'
+					}}
+					className={styles.icon}
+				/>
 			</div>
 			<div className={styles.contentContainer}>
 				<div
