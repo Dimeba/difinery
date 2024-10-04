@@ -9,7 +9,15 @@ import Image from 'next/image'
 // hooks
 import { useState, useEffect } from 'react'
 
-const Accordion = ({ state, title, children, small, product, display }) => {
+const Accordion = ({
+	state,
+	title,
+	children,
+	small,
+	product,
+	display,
+	setOpenOption
+}) => {
 	const [rowOpen, setRowOpen] = useState(state ? state : false)
 
 	useEffect(() => {
@@ -18,6 +26,7 @@ const Accordion = ({ state, title, children, small, product, display }) => {
 
 	const toggleRow = () => {
 		rowOpen ? setRowOpen(false) : setRowOpen(true)
+		setOpenOption && setOpenOption()
 	}
 
 	return (

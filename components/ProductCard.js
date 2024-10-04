@@ -10,6 +10,9 @@ import Link from 'next/link'
 // hooks
 import { useState, useEffect } from 'react'
 
+// helpers
+import { returnMetalType } from '@/lib/helpers'
+
 const ProductCard = ({ permalink, discount, product }) => {
 	const [metalTypes, setMetalTypes] = useState([])
 
@@ -29,19 +32,6 @@ const ProductCard = ({ permalink, discount, product }) => {
 
 		setMetalTypes([...types])
 	}, [product])
-
-	const returnMetalType = option => {
-		switch (true) {
-			case option.includes('rose'):
-				return 'rose.png'
-			case option.includes('yellow'):
-				return 'yellow.png'
-			case option.includes('white'):
-				return 'white.png'
-			default:
-				return ''
-		}
-	}
 
 	if (!product) {
 		return (

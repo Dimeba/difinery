@@ -10,6 +10,9 @@ import Accordion from './Accordion'
 // hooks
 import { useState } from 'react'
 
+// helpers
+import { returnMetalType } from '@/lib/helpers'
+
 // context
 import { useCart } from '@/context/CartContext'
 
@@ -157,6 +160,21 @@ const ProductOptionsUI = ({ product }) => {
 	const allOptionsSelected =
 		Object.keys(selectedOptions).length === product.options.length
 
+	const birthstones = [
+		{ month: 'January', stones: ['Garnet'] },
+		{ month: 'February', stones: ['Amethyst'] },
+		{ month: 'March', stones: ['Aquamarine', 'Bloodstone'] },
+		{ month: 'April', stones: ['Diamond'] },
+		{ month: 'May', stones: ['Emerald'] },
+		{ month: 'June', stones: ['Pearl', 'Moonstone', 'Alexandrite'] },
+		{ month: 'July', stones: ['Ruby'] },
+		{ month: 'August', stones: ['Peridot', 'Sardonyx', 'Spinel'] },
+		{ month: 'September', stones: ['Sapphire'] },
+		{ month: 'October', stones: ['Opal', 'Tourmaline'] },
+		{ month: 'November', stones: ['Topaz', 'Citrine'] },
+		{ month: 'December', stones: ['Turquoise', 'Zircon', 'Tanzanite'] }
+	]
+
 	return (
 		<div className={styles.content}>
 			<div className={styles.versionInfo}>
@@ -171,7 +189,7 @@ const ProductOptionsUI = ({ product }) => {
 				)}
 			</div>
 			<p className={styles.price}>
-				${matchingVariant.price.amount.toString().slice(0, -2)}
+				From ${matchingVariant.price.amount.toString().slice(0, -2)}
 			</p>
 
 			<p>{product.description}</p>
@@ -183,6 +201,7 @@ const ProductOptionsUI = ({ product }) => {
 						small
 						title={option.name}
 						state={index === openOption}
+						setOpenOption={() => setOpenOption(index)}
 						product={true}
 						display={true}
 					>
@@ -195,6 +214,14 @@ const ProductOptionsUI = ({ product }) => {
 										handleOptionSelection(option.name, value.value, index)
 									}
 								>
+									{option.name === 'Metal' && (
+										<Image
+											src={`/${returnMetalType(value.value.toLowerCase())}`}
+											width={16}
+											height={16}
+											alt={`${value.value} ${option.name}`}
+										/>
+									)}
 									{value.value}
 								</button>
 							))}
@@ -219,6 +246,7 @@ const ProductOptionsUI = ({ product }) => {
 						state={openOption === filteredOptions.length}
 						product={true}
 						display={true}
+						setOpenOption={() => setOpenOption(filteredOptions.length)}
 					>
 						<input
 							type='text'
@@ -236,26 +264,36 @@ const ProductOptionsUI = ({ product }) => {
 					product.productType === 'Pendant') && (
 					<Accordion
 						small
-						title='Birthstone (max. 20 characters)'
+						title='Birthstone'
 						state={openOption === filteredOptions.length}
 						product={true}
 						display={true}
+						setOpenOption={() => setOpenOption(filteredOptions.length)}
 					>
-						<input
-							type='text'
-							placeholder='Add your text here'
-							value={birthstone}
+						<select
+							className={styles.select}
 							onChange={e => setBirthstone(e.target.value)}
-							className={styles.engravingInput}
-							maxLength={20}
-						/>
+						>
+							<option value=''>Select birthstone</option>
+							{birthstones.map(({ month, stones }) => (
+								<optgroup label={month} key={month}>
+									{stones.map(stone => (
+										<option value={stone} key={stone}>
+											{stone}
+										</option>
+									))}
+								</optgroup>
+							))}
+						</select>
 					</Accordion>
 				)}
 			</div>
 
 			<div className={styles.cartBox}>
 				<p className={styles.orderDate}>
-					Made to Order: Between 06.04-13.04 with you.
+					Made to Order: Between {new Date().toLocaleDateString()}-
+					{new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}{' '}
+					with you.
 				</p>
 
 				<button
