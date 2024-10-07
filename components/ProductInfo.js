@@ -10,7 +10,12 @@ const ProductInfo = ({ product }) => {
 		<section className='topSection'>
 			<div className={styles.productInfo}>
 				<div className={styles.image}>
-					<Image src={product.images[0].src} fill alt='Image of the product.' />
+					<Image
+						src={product.images[0].src}
+						fill
+						alt='Image of the product.'
+						sizes={'(max-width: 768px) 100vw, 50vw'}
+					/>
 				</div>
 
 				<ProductOptionsUI product={product} />
