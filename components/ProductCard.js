@@ -13,7 +13,7 @@ import { useState, useEffect } from 'react'
 // helpers
 import { returnMetalType } from '@/lib/helpers'
 
-const ProductCard = ({ permalink, discount, product }) => {
+const ProductCard = ({ permalink, discount, product, individual }) => {
 	const [metalTypes, setMetalTypes] = useState([])
 
 	useEffect(() => {
@@ -42,7 +42,7 @@ const ProductCard = ({ permalink, discount, product }) => {
 	}
 
 	return (
-		<div className={styles.product}>
+		<div className={`${!individual ? styles.product : styles.productNoGap}`}>
 			<Link
 				href={`/shop/${permalink}`}
 				aria-label={`Link to ${product.title} page.`}
@@ -50,72 +50,109 @@ const ProductCard = ({ permalink, discount, product }) => {
 				{/* Product Image */}
 				{product.images && (
 					<div className={styles.image}>
-						<Image
-							src={product.images[0].src}
-							fill
-							alt='Category Image.'
-							style={{ objectFit: 'cover' }}
-							sizes='(max-width: 768px) 100vw, 50vw'
-						/>
-						{product.images[1] && (
-							<Image
-								src={product.images[1].src}
-								fill
-								alt='Category Image.'
-								style={{ objectFit: 'cover' }}
-								className={styles.hoverImage}
-								sizes='(max-width: 768px) 100vw, 50vw'
-							/>
+						{!individual ? (
+							<>
+								<Image
+									src={product.images[0].src}
+									fill
+									alt='Category Image.'
+									style={{ objectFit: 'cover' }}
+									sizes='(max-width: 768px) 100vw, 50vw'
+								/>
+								{product.images[1] && (
+									<Image
+										src={product.images[1].src}
+										fill
+										alt='Category Image.'
+										style={{ objectFit: 'cover' }}
+										className={styles.hoverImage}
+										sizes='(max-width: 768px) 100vw, 50vw'
+									/>
+								)}
+							</>
+						) : (
+							<>
+								{product.images[1] ? (
+									<Image
+										src={product.images[1].src}
+										fill
+										alt='Category Image.'
+										style={{ objectFit: 'cover' }}
+										sizes='(max-width: 768px) 100vw, 50vw'
+									/>
+								) : (
+									<Image
+										src={product.images[0].src}
+										fill
+										alt='Category Image.'
+										style={{ objectFit: 'cover' }}
+										sizes='(max-width: 768px) 100vw, 50vw'
+									/>
+								)}
+							</>
+						)}
+
+						{individual && (
+							<p className={styles.individualTitle}>
+								<span>{product.title}</span> - From $
+								{Math.min(
+									...product.variants.map(variant =>
+										parseFloat(variant.price.amount)
+									)
+								)}
+							</p>
 						)}
 					</div>
 				)}
 			</Link>
 
 			{/* Product Info */}
-			<div className={styles.productInfo}>
-				<div className={styles.productTitleContainer}>
-					<p className={styles.productTitle}>{product.title}</p>
-					<p className={styles.price}>
-						{product.variants && (
-							<span
-								style={{
-									textDecoration: discount ? 'line-through' : '',
-									color: discount ? '#AEAEAD' : '#1a1b18'
-								}}
-							>
-								From $
-								{Math.min(
-									...product.variants.map(variant =>
-										parseFloat(variant.price.amount)
-									)
-								)}
-							</span>
-						)}
-						{discount && (
-							<>
-								{' '}
-								<span className={styles.discount}>$200</span>
-							</>
-						)}
-					</p>
-				</div>
-
-				{/* Metal */}
-				{metalTypes.length > 0 && (
-					<div className={styles.typeIcons}>
-						{metalTypes.map(option => (
-							<div key={option} className={styles.typeIcon}>
-								<Image
-									src={`/${option}`}
-									fill
-									alt={`${option} material icon.`}
-									sizes='(max-width: 768px) 100vw, 50vw'
-								/>
-							</div>
-						))}
+			{!individual && (
+				<div className={styles.productInfo}>
+					<div className={styles.productTitleContainer}>
+						<p className={styles.productTitle}>{product.title}</p>
+						<p className={styles.price}>
+							{product.variants && (
+								<span
+									style={{
+										textDecoration: discount ? 'line-through' : '',
+										color: discount ? '#AEAEAD' : '#1a1b18'
+									}}
+								>
+									From $
+									{Math.min(
+										...product.variants.map(variant =>
+											parseFloat(variant.price.amount)
+										)
+									)}
+								</span>
+							)}
+							{discount && (
+								<>
+									{' '}
+									<span className={styles.discount}>$200</span>
+								</>
+							)}
+						</p>
 					</div>
-				)}
-			</div>
+
+					{/* Metal */}
+					{metalTypes.length > 0 && (
+						<div className={styles.typeIcons}>
+							{metalTypes.map(option => (
+								<div key={option} className={styles.typeIcon}>
+									<Image
+										src={`/${option}`}
+										fill
+										alt={`${option} material icon.`}
+										sizes='(max-width: 768px) 100vw, 50vw'
+									/>
+								</div>
+							))}
+						</div>
+					)}
+				</div>
+			)}
 		</div>
 	)
 }

@@ -22,12 +22,15 @@
 .products {
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
-	column-gap: 0.3rem;
-	row-gap: 0.5rem;
 	flex-grow: 1;
 }
+.gap {
+	column-gap: 0.3rem;
+	row-gap: 0.5rem;
+}
 
-.product {
+.product,
+.productNoGap {
 	display: flex;
 	flex-direction: column;
 	grid-column: span 3;
@@ -142,10 +145,28 @@
 	}
 }
 
+.individualTitle {
+	position: absolute;
+	bottom: 2rem;
+	width: 100%;
+	text-align: center;
+	padding: 0 1rem;
+	color: white;
+
+	span {
+		color: white;
+		font-weight: 600;
+	}
+}
+
 @media screen and (max-width: 1024px) {
 	.product {
 		grid-column: span 6;
 		max-width: 90vw;
+	}
+
+	.productNoGap {
+		grid-column: span 6;
 	}
 }
 
@@ -153,6 +174,14 @@
 	.product {
 		grid-column: span 12;
 		max-width: 90vw;
+
+		.image {
+			aspect-ratio: 1 / 1;
+		}
+	}
+
+	.productNoGap {
+		grid-column: span 12;
 
 		.image {
 			aspect-ratio: 1 / 1;

@@ -62,6 +62,7 @@ export default async function Product({ params }) {
 					recommendedProducts={recommendedProducts.slice(0, 4)}
 					type='recommended'
 					showTitle
+					individual={true}
 				/>
 			)}
 		</main>

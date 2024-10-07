@@ -8,7 +8,7 @@ import ProductOptionsUI from './ProductOptionsUI'
 const ProductInfo = ({ product }) => {
 	return (
 		<section className='topSection'>
-			<div className={`container ${styles.productInfo}`}>
+			<div className={styles.productInfo}>
 				<div className={styles.image}>
 					<Image src={product.images[0].src} fill alt='Image of the product.' />
 				</div>

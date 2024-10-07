@@ -22,7 +22,8 @@ const Products = ({
 	collections,
 	discount,
 	recommendedProducts,
-	showFilters
+	showFilters,
+	individual
 }) => {
 	const [items, setItems] = useState([])
 	const [filteredItems, setFilteredItems] = useState([])
@@ -123,8 +124,11 @@ const Products = ({
 	}, [items, selectedSort, selectedProductType, selectedMetalTypes])
 
 	return (
-		<section className='topSection'>
-			<div className={`container ${styles.content}`}>
+		<section
+			className='topSection'
+			style={{ marginBottom: individual ? '0' : '' }}
+		>
+			<div className={`${!individual ? 'container' : ''} ${styles.content}`}>
 				{showTitle && stylizedTitle && (
 					<div className={`stylizedH3 ${styles.stylizedTitle}`}>
 						{documentToReactComponents(stylizedTitle)}
@@ -157,7 +161,9 @@ const Products = ({
 						/>
 					)}
 
-					<div className={styles.products}>
+					<div
+						className={`${styles.products} ${!individual ? styles.gap : ''}`}
+					>
 						{filteredItems
 							.filter(item => item.availableForSale)
 							.map(product => (
@@ -167,6 +173,7 @@ const Products = ({
 									product={product}
 									permalink={product.handle}
 									discount={discount}
+									individual={individual}
 								/>
 							))}
 					</div>
