@@ -10,11 +10,24 @@ import { getProducts, getProduct, getRecommendedProducts } from '@/lib/shopify'
 import { getEntries } from '@/lib/contentful'
 
 const products = await getProducts()
+
 // Products
 export async function generateStaticParams() {
 	return products.map(item => ({
 		slug: item.handle
 	}))
+}
+
+export async function generateMetadata({ params }) {
+	const { slug } = params
+
+	const id = products.find(product => product.handle === slug).id
+	const product = await getProduct(id)
+
+	return {
+		title: 'Difinery | ' + product.title,
+		description: product.description ? product.description : ''
+	}
 }
 
 // FAQs
@@ -25,8 +38,6 @@ const faqs = allFaqs.items.find(item => item.fields.productPage === 'Yes') || {
 
 export default async function Product({ params }) {
 	const { slug } = params
-
-	const products = await getProducts()
 
 	const id = products.find(product => product.handle === slug).id
 	const product = await getProduct(id)

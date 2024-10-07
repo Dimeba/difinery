@@ -2,7 +2,6 @@
 
 // Fonts & Text
 @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
 	box-sizing: border-box;
@@ -11,7 +10,7 @@
 	color: #1a1b18;
 	padding: 0;
 	margin: 0;
-	font-family: 'Libre Franklin', sans-serif;
+	// font-family: 'Libre Franklin', sans-serif;
 }
 
 section {
@@ -51,6 +50,7 @@ h2 {
 	font-size: 2.25rem;
 	line-height: 1.2;
 	letter-spacing: normal;
+	font-family: 'Newsreader', serif;
 }
 
 .stylizedH3 p {
@@ -60,6 +60,7 @@ h2 {
 	text-align: center;
 	text-wrap: balance;
 	letter-spacing: normal;
+	font-family: 'Newsreader', serif;
 }
 
 h3 {
