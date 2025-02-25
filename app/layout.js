@@ -5,21 +5,6 @@ import './globals.scss'
 // const workSans = Work_Sans({ subsets: ['latin'] })
 const libreFranklin = Libre_Franklin({ subsets: ['latin'] })
 
-// components
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import Cart from '@/components/Cart'
-
-// lib
-import { getEntries } from '@/lib/contentful'
-
-// context
-import { CartProvider } from '@/context/CartContext'
-import { HeaderProvider } from '@/context/HeaderContext'
-
-const header = await getEntries('header')
-const footer = await getEntries('footer')
-
 export const metadata = {
 	icons: {
 		icon: '/favicon.svg'
@@ -27,25 +12,12 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
-	// Header
-	const headerContent = header.items[0].fields
-	const footerContent = footer.items[0].fields
-
 	return (
 		<html lang='en'>
 			<head>
 				<link rel='icon' href='/favicon.svg' type='image/svg+xml' />
 			</head>
-			<CartProvider>
-				<body className={libreFranklin.className}>
-					<Cart />
-					<HeaderProvider>
-						<Header content={headerContent} />
-						{children}
-						<Footer content={footerContent} />
-					</HeaderProvider>
-				</body>
-			</CartProvider>
+			<body className={libreFranklin.className}>{children}</body>
 		</html>
 	)
 }
