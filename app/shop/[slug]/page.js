@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic'
-
 // components
 import ProductInfo from '@/components/ProductInfo'
 import FAQ from '@/components/FAQ'
@@ -8,8 +6,14 @@ import Products from '@/components/Products'
 // lib
 import { getProducts, getProduct, getRecommendedProducts } from '@/lib/shopify'
 import { getEntries } from '@/lib/contentful'
+import { apolloClient } from '@/lib/apolloClient'
+import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 
-const products = await getProducts()
+const { data } = await apolloClient.query({
+	query: GET_PRODUCTS
+})
+
+const products = data.products.edges.map(edge => edge.node)
 
 // Products
 export async function generateStaticParams() {
