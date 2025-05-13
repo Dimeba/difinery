@@ -22,7 +22,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 		product.options?.forEach(option => {
 			if (option.name === 'Metal') {
 				option.values.forEach(value => {
-					const image = returnMetalType(value.value.toLowerCase())
+					const image = returnMetalType(value.toLowerCase())
 					if (image) {
 						types.add(image)
 					}
@@ -53,7 +53,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 						{!individual ? (
 							<>
 								<Image
-									src={product.images[0].src}
+									src={product.images.edges[0].node.url}
 									fill
 									alt='Category Image.'
 									style={{ objectFit: 'cover' }}
@@ -61,7 +61,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 								/>
 								{product.images[1] && (
 									<Image
-										src={product.images[1].src}
+										src={product.images.edges[0].node.url}
 										fill
 										alt='Category Image.'
 										style={{ objectFit: 'cover' }}
@@ -74,7 +74,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 							<>
 								{product.images[1] ? (
 									<Image
-										src={product.images[1].src}
+										src={product.images.edges[0].node.url}
 										fill
 										alt='Category Image.'
 										style={{ objectFit: 'cover' }}
@@ -82,7 +82,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 									/>
 								) : (
 									<Image
-										src={product.images[0].src}
+										src={product.images.edges[0].node.url}
 										fill
 										alt='Category Image.'
 										style={{ objectFit: 'cover' }}
@@ -112,27 +112,14 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 					<div className={styles.productTitleContainer}>
 						<p className={styles.productTitle}>{product.title}</p>
 						<p className={styles.price}>
-							{product.variants && (
-								<span
-									style={{
-										textDecoration: discount ? 'line-through' : '',
-										color: discount ? '#AEAEAD' : '#1a1b18'
-									}}
-								>
-									From $
-									{Math.min(
-										...product.variants.map(variant =>
-											parseFloat(variant.price.amount)
-										)
-									)}
-								</span>
-							)}
-							{discount && (
-								<>
-									{' '}
-									<span className={styles.discount}>$200</span>
-								</>
-							)}
+							<span
+								style={{
+									textDecoration: discount ? 'line-through' : '',
+									color: discount ? '#AEAEAD' : '#1a1b18'
+								}}
+							>
+								From ${parseFloat(product.priceRange.minVariantPrice.amount)}
+							</span>
 						</p>
 					</div>
 

@@ -34,11 +34,11 @@ const Filters = ({
 			item.options?.forEach(option => {
 				if (option.name === 'Metal') {
 					option.values.forEach(value => {
-						if (value.value.toLowerCase().includes('rose')) {
+						if (value.toLowerCase().includes('rose')) {
 							mTypes.add('Rose')
-						} else if (value.value.toLowerCase().includes('yellow')) {
+						} else if (value.toLowerCase().includes('yellow')) {
 							mTypes.add('Yellow')
-						} else if (value.value.toLowerCase().includes('white')) {
+						} else if (value.toLowerCase().includes('white')) {
 							mTypes.add('White')
 						}
 					})

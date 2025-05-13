@@ -25,7 +25,7 @@ const Cart = () => {
 	// 	console.log(cart.lineItems.length)
 	// }
 
-	console.log(cart)
+	// console.log(cart)
 
 	// Update quantity or remove item from cart
 	const handleUpdateQuantity = (lineItemId, quantity) => {

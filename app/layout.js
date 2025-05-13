@@ -16,6 +16,7 @@ import { getEntries } from '@/lib/contentful'
 // context
 import { CartProvider } from '@/context/CartContext'
 import { HeaderProvider } from '@/context/HeaderContext'
+import { ApolloContext } from '@/lib/apolloContext'
 
 const header = await getEntries('header')
 const footer = await getEntries('footer')
@@ -36,16 +37,18 @@ export default function RootLayout({ children }) {
 			<head>
 				<link rel='icon' href='/favicon.svg' type='image/svg+xml' />
 			</head>
-			<CartProvider>
-				<body className={libreFranklin.className}>
-					<Cart />
-					<HeaderProvider>
-						<Header content={headerContent} />
-						{children}
-						<Footer content={footerContent} />
-					</HeaderProvider>
-				</body>
-			</CartProvider>
+			<ApolloContext>
+				<CartProvider>
+					<body className={libreFranklin.className}>
+						<Cart />
+						<HeaderProvider>
+							<Header content={headerContent} />
+							{children}
+							<Footer content={footerContent} />
+						</HeaderProvider>
+					</body>
+				</CartProvider>
+			</ApolloContext>
 		</html>
 	)
 }

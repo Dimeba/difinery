@@ -12,14 +12,15 @@ import Filters from './Filters'
 import { LuSettings2 } from 'react-icons/lu'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
-// lib
-import { getCollections, extractShopifyId } from '@/lib/shopify'
+// Apollo
+import { apolloClient } from '@/lib/apolloClient'
+import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
 
 const Products = ({
 	title,
 	stylizedTitle,
 	showTitle,
-	collections,
+	collections, // array of Shopify handles as strings
 	discount,
 	recommendedProducts,
 	showFilters,
@@ -29,99 +30,104 @@ const Products = ({
 	const [filteredItems, setFilteredItems] = useState([])
 	const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
-	// State variables for filters
+	// filters state
 	const [selectedSort, setSelectedSort] = useState(null)
 	const [selectedProductType, setSelectedProductType] = useState('All')
 	const [selectedMetalTypes, setSelectedMetalTypes] = useState([])
 
+	// loading / error
+	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState(null)
+
 	useEffect(() => {
-		const fetchProducts = async () => {
-			const decodedIDs = []
-			const data = []
-
-			// Fetch collections (ensure getCollections is accessible on the client)
-			const fetchedCollections = await getCollections()
-
-			// Decode categories
-			collections.forEach(category => {
-				decodedIDs.push(extractShopifyId(category))
-			})
-
-			// Filter collections
-			const content = fetchedCollections
-				.filter(collection => decodedIDs.includes(collection.id))
-				.reverse()
-
-			// Extract products
-			for (const item of content) {
-				data.push(...item.products)
-			}
-
-			setItems(data)
-			setFilteredItems(data)
-		}
-
-		if (collections) {
-			fetchProducts()
-		} else {
+		if (!collections) {
+			// fallback to recommended
 			setItems(recommendedProducts)
 			setFilteredItems(recommendedProducts)
+			return
 		}
+
+		const fetchProducts = async () => {
+			setLoading(true)
+			setError(null)
+			try {
+				const allProducts = []
+				// for each handle, fetch that collection
+				for (const handle of collections) {
+					const { data } = await apolloClient.query({
+						query: GET_COLLECTION_BY_HANDLE,
+						variables: { handle }
+					})
+					const edges = data.collectionByHandle?.products?.edges || []
+					// pull out the node from each edge
+					const products = edges.map(edge => edge.node)
+					allProducts.push(...products)
+				}
+				// reverse order if you care about most‐recent handle first
+				allProducts.reverse()
+
+				setItems(allProducts)
+				setFilteredItems(allProducts)
+			} catch (err) {
+				setError(err)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		fetchProducts()
 	}, [collections, recommendedProducts])
 
-	// Filter and sort logic
+	// Filter & sort
 	useEffect(() => {
-		let updatedItems = [...items]
+		let updated = [...items]
 
-		// Filter by product type
-		if (selectedProductType && selectedProductType !== 'All') {
-			updatedItems = updatedItems.filter(
-				item => item.productType === selectedProductType
-			)
+		if (selectedProductType !== 'All') {
+			updated = updated.filter(p => p.productType === selectedProductType)
 		}
 
-		// Filter by metal types
-		if (selectedMetalTypes.length > 0) {
-			updatedItems = updatedItems.filter(item =>
-				item.options?.some(option =>
-					option.values.some(val =>
+		if (selectedMetalTypes.length) {
+			updated = updated.filter(p =>
+				p.options?.some(opt =>
+					opt.values.some(value =>
 						selectedMetalTypes.some(mt =>
-							val.value.toLowerCase().includes(mt.toLowerCase())
+							value.toLowerCase().includes(mt.toLowerCase())
 						)
 					)
 				)
 			)
 		}
 
-		// Apply sorting
 		if (selectedSort) {
 			switch (selectedSort) {
 				case 'Lowest Price':
-					updatedItems.sort(
+					updated.sort(
 						(a, b) =>
-							Math.min(...a.variants.map(variant => variant.price.amount)) -
-							Math.min(...b.variants.map(variant => variant.price.amount))
+							+a.priceRange.minVariantPrice.amount -
+							+b.priceRange.minVariantPrice.amount
 					)
 					break
 				case 'Highest Price':
-					updatedItems.sort(
+					updated.sort(
 						(a, b) =>
-							Math.max(...b.variants.map(variant => variant.price.amount)) -
-							Math.max(...a.variants.map(variant => variant.price.amount))
+							+b.priceRange.minVariantPrice.amount -
+							+a.priceRange.minVariantPrice.amount
 					)
 					break
 				case 'Newest':
-					updatedItems.sort(
+					updated.sort(
 						(a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
 					)
-					break
-				default:
 					break
 			}
 		}
 
-		setFilteredItems(updatedItems)
+		setFilteredItems(updated)
 	}, [items, selectedSort, selectedProductType, selectedMetalTypes])
+
+	// show loading / error
+	if (loading) return <p>Loading…</p>
+	if (error) return <p>Error: {error.message}</p>
 
 	return (
 		<section
@@ -136,8 +142,8 @@ const Products = ({
 				)}
 				{showTitle && title && !stylizedTitle && <h3>{title}</h3>}
 
-				{/* Filters */}
-				{showFilters && items && (
+				{/* Filters toggle */}
+				{showFilters && items.length > 0 && (
 					<button
 						className={styles.showFiltersButton}
 						onClick={() => setShowFiltersMenu(!showFiltersMenu)}
@@ -165,7 +171,7 @@ const Products = ({
 						className={`${styles.products} ${!individual ? styles.gap : ''}`}
 					>
 						{filteredItems
-							.filter(item => item.availableForSale)
+							// .filter(item => item.availableForSale)
 							.map(product => (
 								<ProductCard
 									key={product.id}
