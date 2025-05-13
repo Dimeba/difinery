@@ -18,6 +18,6 @@
 		"react-dom": "^18",
 		"react-icons": "^5.0.1",
 		"sass": "^1.72.0",
-		"shopify-buy": "^2.22.0"
+		"shopify-buy": "^3.0.4"
 	}
 }
