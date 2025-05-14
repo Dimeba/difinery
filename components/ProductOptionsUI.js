@@ -17,140 +17,92 @@ import { returnMetalType } from '@/lib/helpers'
 import { useCart } from '@/context/CartContext'
 
 const ProductOptionsUI = ({ product }) => {
-	const [openOption, setOpenOption] = useState(0)
-	const { addToCart, setShowCart, showCart } = useCart()
+	const { cart, addToCart, showCart, setShowCart } = useCart()
 
+	const [openOption, setOpenOption] = useState(0)
 	const [selectedOptions, setSelectedOptions] = useState({})
 	const [filteredOptions, setFilteredOptions] = useState(product.options)
-
 	const [matchingVariant, setMatchingVariant] = useState(
 		product.variants.edges[0].node
 	)
-
 	const [engraving, setEngraving] = useState('')
 	const [birthstone, setBirthstone] = useState('')
 
-	// Get the matching variant based on selected options
+	// Find the Shopify variant node matching the selected options
 	const getMatchingVariant = options => {
 		const selectedEntries = Object.entries(options)
-
-		// Look through each edge’s node.selectedOptions
 		const matchingEdge = product.variants.edges.find(({ node }) =>
 			selectedEntries.every(([name, value]) =>
 				node.selectedOptions.some(so => so.name === name && so.value === value)
 			)
 		)
-
 		if (matchingEdge) {
-			// we keep the full edge so you can still do matchingEdge.node.price, etc.
-			setMatchingVariant(matchingEdge)
+			setMatchingVariant(matchingEdge.node)
 		} else {
 			console.error('No matching variant found')
 		}
 	}
 
-	// Add matching variant to cart
-	const handleAddToCart = () => {
-		const customFields = []
-
-		if (engraving !== '') {
-			customFields.push({ key: 'Engraving', value: engraving })
-		}
-
-		if (birthstone !== '') {
-			customFields.push({ key: 'Birthstone', value: birthstone })
-		}
-
-		if (matchingVariant) {
-			addToCart(
-				matchingVariant.id,
-				1,
-				// engraving !== '' ? [{ key: 'Engraving', value: engraving }] : null,
-				customFields.length > 0 ? customFields : null
-			)
-
-			// displaying next options
-			setOpenOption(prevState => prevState + 1)
-
-			if (!showCart) {
-				setShowCart(true)
-			}
-		} else {
-			console.error('No matching variant found')
-		}
-	}
-
-	// Select an option
+	// User selects an option value
 	const handleOptionSelection = (optionName, value, index) => {
-		// 1) Build the new selectedOptions map
-		const newSelectedOptions = {
-			...selectedOptions,
-			[optionName]: value
-		}
-		setSelectedOptions(newSelectedOptions)
+		// 1) update selectedOptions map
+		const newSelected = { ...selectedOptions, [optionName]: value }
+		setSelectedOptions(newSelected)
 
-		// 2) Re-filter each option’s optionValues based on the updated selections
-		const newFilteredOptions = product.options.map(option => ({
+		// 2) re-filter optionValues for each option
+		const newFiltered = product.options.map(option => ({
 			...option,
-			optionValues: option.optionValues.filter(optVal => {
-				return product.variants.edges.some(({ node: variant }) => {
-					// a) Must match all already-selected options
-					const matchesSelected = Object.entries(newSelectedOptions).every(
+			optionValues: option.optionValues.filter(optVal =>
+				product.variants.edges.some(({ node: variant }) => {
+					// must match all already selected options
+					const matchesSelected = Object.entries(newSelected).every(
 						([selName, selValue]) =>
 							variant.selectedOptions.some(
 								so => so.name === selName && so.value === selValue
 							)
 					)
 					if (!matchesSelected) return false
-
-					// b) And must have this option’s value
+					// and must support this option’s value
 					return variant.selectedOptions.some(
 						so => so.name === option.name && so.value === optVal.name
 					)
 				})
-			})
+			)
 		}))
-		setFilteredOptions(newFilteredOptions)
+		setFilteredOptions(newFiltered)
 
-		// 3) Find any fully-matched variant
-		getMatchingVariant(newSelectedOptions)
+		// 3) update matchingVariant
+		getMatchingVariant(newSelected)
 
-		// 4) Advance to the next dropdown
+		// 4) advance to next dropdown
 		setOpenOption(index + 1)
 	}
 
-	// Reset individual option
+	// Reset a single option
 	const handleOptionReset = optionName => {
-		// 1) Remove that option from selectedOptions
-		const newSelectedOptions = { ...selectedOptions }
-		delete newSelectedOptions[optionName]
-		setSelectedOptions(newSelectedOptions)
+		const newSelected = { ...selectedOptions }
+		delete newSelected[optionName]
+		setSelectedOptions(newSelected)
 
-		// 2) Re-filter all options based on what remains selected
-		const newFilteredOptions = product.options.map(option => ({
+		const newFiltered = product.options.map(option => ({
 			...option,
-			optionValues: option.optionValues.filter(optVal => {
-				return product.variants.edges.some(({ node: variant }) => {
-					// a) Must match all remaining selections
-					const matchesSelected = Object.entries(newSelectedOptions).every(
+			optionValues: option.optionValues.filter(optVal =>
+				product.variants.edges.some(({ node: variant }) => {
+					const matchesSelected = Object.entries(newSelected).every(
 						([selName, selValue]) =>
 							variant.selectedOptions.some(
 								so => so.name === selName && so.value === selValue
 							)
 					)
 					if (!matchesSelected) return false
-
-					// b) Must support this option’s value too
 					return variant.selectedOptions.some(
 						so => so.name === option.name && so.value === optVal.name
 					)
 				})
-			})
+			)
 		}))
-		setFilteredOptions(newFilteredOptions)
-
-		// 3) Recompute matching variant
-		getMatchingVariant(newSelectedOptions)
+		setFilteredOptions(newFiltered)
+		getMatchingVariant(newSelected)
 	}
 
 	// Reset all options
@@ -158,7 +110,33 @@ const ProductOptionsUI = ({ product }) => {
 		setSelectedOptions({})
 		setFilteredOptions(product.options)
 		setOpenOption(0)
-		setMatchingVariant(product.variants[0])
+		setMatchingVariant(product.variants.edges[0].node)
+	}
+
+	// Add the variant (with custom attributes) to the cart
+	const handleAddToCart = async () => {
+		const customFields = []
+		if (engraving) customFields.push({ key: 'Engraving', value: engraving })
+		if (birthstone) customFields.push({ key: 'Birthstone', value: birthstone })
+
+		if (!matchingVariant || !matchingVariant.id) {
+			console.error('No matching variant found')
+			return
+		}
+
+		try {
+			await addToCart(
+				matchingVariant.id,
+				1,
+				customFields.length ? customFields : []
+			)
+
+			// advance your UI steps
+			setOpenOption(prev => prev + 1)
+			if (!showCart) setShowCart(true)
+		} catch (err) {
+			console.error('Add to cart mutation failed', err)
+		}
 	}
 
 	const allOptionsSelected =
@@ -185,16 +163,13 @@ const ProductOptionsUI = ({ product }) => {
 				<h3>{product.title}</h3>
 				{Object.keys(selectedOptions).length > 0 && (
 					<p>
-						{Object.values(selectedOptions).join(' / ')} /{' '}
+						{Object.values(selectedOptions).join(' / ')}{' '}
 						<span className={styles.resetButton} onClick={handleReset}>
 							Reset All
 						</span>
 					</p>
 				)}
 			</div>
-			{/* <p className={styles.price}>
-				From ${matchingVariant.node.price.amount.toString().slice(0, -2)}
-			</p> */}
 
 			<p>{product.description}</p>
 
@@ -206,14 +181,14 @@ const ProductOptionsUI = ({ product }) => {
 						title={option.name}
 						state={index === openOption}
 						setOpenOption={() => setOpenOption(index)}
-						product={true}
-						display={true}
+						product
+						display
 					>
 						<div className={styles.variantButtonsContainer}>
 							{option.optionValues.map(value => (
 								<button
-									className={styles.variantButton}
 									key={value.name}
+									className={styles.variantButton}
 									onClick={() =>
 										handleOptionSelection(option.name, value.name, index)
 									}
@@ -241,15 +216,14 @@ const ProductOptionsUI = ({ product }) => {
 					</Accordion>
 				))}
 
-				{/* Engraving */}
 				{(product.productType === 'Ring' ||
 					product.productType === 'Pendant') && (
 					<Accordion
 						small
 						title='Engraving (max. 20 characters)'
 						state={openOption === filteredOptions.length}
-						product={true}
-						display={true}
+						product
+						display
 						setOpenOption={() => setOpenOption(filteredOptions.length)}
 					>
 						<input
@@ -263,19 +237,19 @@ const ProductOptionsUI = ({ product }) => {
 					</Accordion>
 				)}
 
-				{/* Birthstone */}
 				{(product.productType === 'Ring' ||
 					product.productType === 'Pendant') && (
 					<Accordion
 						small
 						title='Birthstone'
 						state={openOption === filteredOptions.length}
-						product={true}
-						display={true}
+						product
+						display
 						setOpenOption={() => setOpenOption(filteredOptions.length)}
 					>
 						<select
 							className={styles.select}
+							value={birthstone}
 							onChange={e => setBirthstone(e.target.value)}
 						>
 							<option value=''>Select birthstone</option>
@@ -295,7 +269,7 @@ const ProductOptionsUI = ({ product }) => {
 
 			<div className={styles.cartBox}>
 				<p className={styles.orderDate}>
-					Made to Order: Between {new Date().toLocaleDateString()}-
+					Made to Order: Between {new Date().toLocaleDateString()}–{' '}
 					{new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}{' '}
 					with you.
 				</p>
@@ -313,7 +287,9 @@ const ProductOptionsUI = ({ product }) => {
 					<br />
 					Shipping calculated at checkout.
 					<br />
-					<b>$15 of your purchase goes to The New York Women's Foundation</b>
+					<b>
+						$15 of your purchase goes to The New York Women&apos;s Foundation
+					</b>
 				</p>
 			</div>
 		</div>

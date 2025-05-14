@@ -1,7 +1,7 @@
 'use client'
 
 // React
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 
 // styles
 import styles from './Products.module.scss'
