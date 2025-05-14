@@ -171,7 +171,7 @@ const Products = ({
 						className={`${styles.products} ${!individual ? styles.gap : ''}`}
 					>
 						{filteredItems
-							// .filter(item => item.availableForSale)
+							.filter(item => item.availableForSale)
 							.map(product => (
 								<ProductCard
 									key={product.id}
