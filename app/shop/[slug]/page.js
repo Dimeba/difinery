@@ -8,6 +8,7 @@ import { getEntries } from '@/lib/contentful'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
+import { GET_PRODUCT_RECOMMENDATIONS } from '@/lib/queries/getProductRecommendations'
 
 const { data } = await apolloClient.query({
 	query: GET_PRODUCTS
@@ -53,7 +54,12 @@ export default async function Product({ params }) {
 	const product = data.productByHandle
 
 	// Recommended products
-	// const recommendedProducts = await getRecommendedProducts(id)
+	const { data: recommendationsData } = await apolloClient.query({
+		query: GET_PRODUCT_RECOMMENDATIONS,
+		variables: { productHandle: slug }
+	})
+
+	const recommendedProducts = recommendationsData.productRecommendations
 
 	return (
 		<main>
@@ -65,7 +71,7 @@ export default async function Product({ params }) {
 				content={faqs.fields.rows}
 			/>
 
-			{/* {recommendedProducts.length > 0 && (
+			{recommendedProducts.length > 0 && (
 				<Products
 					title='Pair your product with:'
 					recommendedProducts={recommendedProducts.slice(0, 4)}
@@ -73,7 +79,7 @@ export default async function Product({ params }) {
 					showTitle
 					individual={true}
 				/>
-			)} */}
+			)}
 		</main>
 	)
 }

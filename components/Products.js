@@ -1,7 +1,7 @@
 'use client'
 
 // React
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 // styles
 import styles from './Products.module.scss'
@@ -17,14 +17,14 @@ import { apolloClient } from '@/lib/apolloClient'
 import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
 
 const Products = ({
-	title,
+	title = '',
 	stylizedTitle,
-	showTitle,
-	collections, // array of Shopify handles as strings
+	showTitle = false,
+	collections = [], // array of Shopify handles as strings
 	discount,
 	recommendedProducts,
-	showFilters,
-	individual
+	showFilters = false,
+	individual = false
 }) => {
 	const [items, setItems] = useState([])
 	const [filteredItems, setFilteredItems] = useState([])
@@ -170,9 +170,23 @@ const Products = ({
 					<div
 						className={`${styles.products} ${!individual ? styles.gap : ''}`}
 					>
-						{filteredItems
-							.filter(item => item.availableForSale)
-							.map(product => (
+						{!recommendedProducts &&
+							filteredItems
+								.filter(item => item.availableForSale)
+								.map(product => (
+									<ProductCard
+										key={product.id}
+										id={product.id}
+										product={product}
+										permalink={product.handle}
+										discount={discount}
+										individual={individual}
+									/>
+								))}
+
+						{recommendedProducts &&
+							recommendedProducts.length > 0 &&
+							recommendedProducts.map(product => (
 								<ProductCard
 									key={product.id}
 									id={product.id}

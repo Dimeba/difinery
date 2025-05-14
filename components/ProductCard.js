@@ -95,11 +95,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 						{individual && (
 							<p className={styles.individualTitle}>
 								<span>{product.title}</span> - From $
-								{Math.min(
-									...product.variants.map(variant =>
-										parseFloat(variant.price.amount)
-									)
-								)}
+								{parseFloat(product.priceRange.minVariantPrice.amount)}
 							</p>
 						)}
 					</div>
