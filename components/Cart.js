@@ -21,8 +21,8 @@ const Cart = () => {
 		updateQuantity
 	} = useCart()
 
-	// if (showCart && cart.lineItems.length > 0) {
-	// 	console.log(cart.lineItems.length)
+	// if (showCart && cart.lines.edges.length > 0) {
+	// 	console.log(cart.lines.edges.length)
 	// }
 
 	// console.log(cart)
@@ -56,8 +56,8 @@ const Cart = () => {
 
 							{/* Items */}
 							<div className={styles.itemsContainer}>
-								{cart.lineItems.length > 0 &&
-									cart.lineItems.map(item => (
+								{cart.lines.edges.length > 0 &&
+									cart.lines.edges.map(item => (
 										<div className={styles.item} key={item.variant.id}>
 											<Image
 												src={item.variant.image.src}
@@ -106,12 +106,12 @@ const Cart = () => {
 						{/* Checkout */}
 						<div>
 							<p className={styles.totalAmount}>
-								Subtotal: ${cart.totalPrice.amount.slice(0, -2)}
+								Subtotal: ${cart.cost.totalAmount.amount.slice(0, -2)}
 							</p>
 							<Button
-								link={cart.webUrl}
+								link={cart.checkoutUrl}
 								text='Checkout'
-								disabled={cart.lineItems.length > 0 ? false : true}
+								disabled={cart.lines.edges.length > 0 ? false : true}
 								// newWindow
 								fullWidth
 							/>

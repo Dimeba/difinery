@@ -8,23 +8,50 @@ import {
 	addLineItems,
 	removeLineItems
 } from '@/lib/shopify'
-
+import { useMutation } from '@apollo/client'
+import { CREATE_CART } from '@/lib/mutations/createCart'
 // hooks
-import { createContext, useContext, useState, useEffect } from 'react'
+import {
+	createContext,
+	useContext,
+	useState,
+	useEffect,
+	useCallback
+} from 'react'
 
-const CartContext = createContext()
+const CartContext = createContext({
+	cart: null,
+	createCart: async () => {},
+	loading: false,
+	error: null
+})
 
 export const CartProvider = ({ children }) => {
 	const [cart, setCart] = useState(null)
 	const [showCart, setShowCart] = useState(false)
 
+	// prepare the mutation
+	const [cartCreate, { loading, error }] = useMutation(CREATE_CART)
+
+	// function to call when you want to (re)create a cart
+	const createCart = useCallback(async () => {
+		try {
+			const { data } = await cartCreate()
+			const createdCart = data.cartCreate.cart
+			setCart(createdCart)
+		} catch (err) {
+			console.error('Cart creation failed', err)
+			throw err
+		}
+	}, [cartCreate])
+
 	useEffect(() => {
 		if (!cart) {
-			createCheckout().then(checkout => setCart(checkout))
+			createCart()
 		}
 
 		if (cart) {
-			// console.log(cart.webUrl)
+			console.log(cart)
 		}
 	}, [cart])
 

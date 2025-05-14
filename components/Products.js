@@ -20,7 +20,7 @@ const Products = ({
 	title = '',
 	stylizedTitle,
 	showTitle = false,
-	collections = [], // array of Shopify handles as strings
+	collections, // array of Shopify handles as strings
 	discount,
 	recommendedProducts,
 	showFilters = false,
