@@ -4,10 +4,10 @@ import FAQ from '@/components/FAQ'
 import Products from '@/components/Products'
 
 // lib
-import { getProducts, getProduct, getRecommendedProducts } from '@/lib/shopify'
 import { getEntries } from '@/lib/contentful'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
+import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 
 const { data } = await apolloClient.query({
 	query: GET_PRODUCTS
@@ -25,8 +25,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
 	const { slug } = params
 
-	const id = products.find(product => product.handle === slug).id
-	const product = await getProduct(id)
+	const { data } = await apolloClient.query({
+		query: GET_PRODUCT_BY_HANDLE,
+		variables: { handle: slug }
+	})
+	const product = data.productByHandle
 
 	return {
 		title: 'Difinery | ' + product.title,
@@ -43,24 +46,26 @@ const faqs = allFaqs.items.find(item => item.fields.productPage === 'Yes') || {
 export default async function Product({ params }) {
 	const { slug } = params
 
-	const id = products.find(product => product.handle === slug).id
-	const product = await getProduct(id)
-	const serializedProduct = JSON.parse(JSON.stringify(product))
+	const { data } = await apolloClient.query({
+		query: GET_PRODUCT_BY_HANDLE,
+		variables: { handle: slug }
+	})
+	const product = data.productByHandle
 
 	// Recommended products
-	const recommendedProducts = await getRecommendedProducts(id)
+	// const recommendedProducts = await getRecommendedProducts(id)
 
 	return (
 		<main>
-			<ProductInfo product={serializedProduct} />
+			<ProductInfo product={product} />
 
 			<FAQ
 				title='Frequently Asked Questions'
-				productDetails={serializedProduct.description}
+				productDetails={product.description}
 				content={faqs.fields.rows}
 			/>
 
-			{recommendedProducts.length > 0 && (
+			{/* {recommendedProducts.length > 0 && (
 				<Products
 					title='Pair your product with:'
 					recommendedProducts={recommendedProducts.slice(0, 4)}
@@ -68,7 +73,7 @@ export default async function Product({ params }) {
 					showTitle
 					individual={true}
 				/>
-			)}
+			)} */}
 		</main>
 	)
 }

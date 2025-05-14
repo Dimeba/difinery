@@ -11,7 +11,7 @@ const ProductInfo = ({ product }) => {
 			<div className={styles.productInfo}>
 				<div className={styles.image}>
 					<Image
-						src={product.images[0].src}
+						src={product.images.edges[0].node.url}
 						fill
 						alt='Image of the product.'
 						sizes={'(max-width: 768px) 100vw, 50vw'}

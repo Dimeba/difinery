@@ -23,26 +23,27 @@ const ProductOptionsUI = ({ product }) => {
 	const [selectedOptions, setSelectedOptions] = useState({})
 	const [filteredOptions, setFilteredOptions] = useState(product.options)
 
-	const [matchingVariant, setMatchingVariant] = useState(product.variants[0])
+	const [matchingVariant, setMatchingVariant] = useState(
+		product.variants.edges[0].node
+	)
 
 	const [engraving, setEngraving] = useState('')
 	const [birthstone, setBirthstone] = useState('')
 
 	// Get the matching variant based on selected options
 	const getMatchingVariant = options => {
-		const selectedOptionEntries = Object.entries(options)
-		const matchingVariant = product.variants.find(variant =>
-			selectedOptionEntries.every(([optionName, selectedValue]) =>
-				variant.selectedOptions.some(
-					variantOption =>
-						variantOption.name === optionName &&
-						variantOption.value === selectedValue
-				)
+		const selectedEntries = Object.entries(options)
+
+		// Look through each edge’s node.selectedOptions
+		const matchingEdge = product.variants.edges.find(({ node }) =>
+			selectedEntries.every(([name, value]) =>
+				node.selectedOptions.some(so => so.name === name && so.value === value)
 			)
 		)
 
-		if (matchingVariant) {
-			setMatchingVariant(matchingVariant)
+		if (matchingEdge) {
+			// we keep the full edge so you can still do matchingEdge.node.price, etc.
+			setMatchingVariant(matchingEdge)
 		} else {
 			console.error('No matching variant found')
 		}
@@ -81,71 +82,74 @@ const ProductOptionsUI = ({ product }) => {
 
 	// Select an option
 	const handleOptionSelection = (optionName, value, index) => {
+		// 1) Build the new selectedOptions map
 		const newSelectedOptions = {
 			...selectedOptions,
 			[optionName]: value
 		}
-
 		setSelectedOptions(newSelectedOptions)
 
-		// Filter options based on selected options
+		// 2) Re-filter each option’s optionValues based on the updated selections
 		const newFilteredOptions = product.options.map(option => ({
 			...option,
-			values: option.values.filter(val => {
-				return product.variants.some(
-					variant =>
-						Object.entries(newSelectedOptions).every(
-							([selectedOptionName, selectedValue]) =>
-								variant.selectedOptions.some(
-									variantOption =>
-										variantOption.name === selectedOptionName &&
-										variantOption.value === selectedValue
-								)
-						) &&
-						variant.selectedOptions.some(
-							variantOption =>
-								variantOption.name === option.name &&
-								variantOption.value === val.value
-						)
-				)
+			optionValues: option.optionValues.filter(optVal => {
+				return product.variants.edges.some(({ node: variant }) => {
+					// a) Must match all already-selected options
+					const matchesSelected = Object.entries(newSelectedOptions).every(
+						([selName, selValue]) =>
+							variant.selectedOptions.some(
+								so => so.name === selName && so.value === selValue
+							)
+					)
+					if (!matchesSelected) return false
+
+					// b) And must have this option’s value
+					return variant.selectedOptions.some(
+						so => so.name === option.name && so.value === optVal.name
+					)
+				})
 			})
 		}))
 		setFilteredOptions(newFilteredOptions)
+
+		// 3) Find any fully-matched variant
 		getMatchingVariant(newSelectedOptions)
 
-		// displaying next options
+		// 4) Advance to the next dropdown
 		setOpenOption(index + 1)
 	}
 
 	// Reset individual option
 	const handleOptionReset = optionName => {
+		// 1) Remove that option from selectedOptions
 		const newSelectedOptions = { ...selectedOptions }
 		delete newSelectedOptions[optionName]
 		setSelectedOptions(newSelectedOptions)
 
-		// Update filteredOptions
+		// 2) Re-filter all options based on what remains selected
 		const newFilteredOptions = product.options.map(option => ({
 			...option,
-			values: option.values.filter(val => {
-				return product.variants.some(
-					variant =>
-						Object.entries(newSelectedOptions).every(
-							([selectedOptionName, selectedValue]) =>
-								variant.selectedOptions.some(
-									variantOption =>
-										variantOption.name === selectedOptionName &&
-										variantOption.value === selectedValue
-								)
-						) &&
-						variant.selectedOptions.some(
-							variantOption =>
-								variantOption.name === option.name &&
-								variantOption.value === val.value
-						)
-				)
+			optionValues: option.optionValues.filter(optVal => {
+				return product.variants.edges.some(({ node: variant }) => {
+					// a) Must match all remaining selections
+					const matchesSelected = Object.entries(newSelectedOptions).every(
+						([selName, selValue]) =>
+							variant.selectedOptions.some(
+								so => so.name === selName && so.value === selValue
+							)
+					)
+					if (!matchesSelected) return false
+
+					// b) Must support this option’s value too
+					return variant.selectedOptions.some(
+						so => so.name === option.name && so.value === optVal.name
+					)
+				})
 			})
 		}))
 		setFilteredOptions(newFilteredOptions)
+
+		// 3) Recompute matching variant
 		getMatchingVariant(newSelectedOptions)
 	}
 
@@ -188,16 +192,16 @@ const ProductOptionsUI = ({ product }) => {
 					</p>
 				)}
 			</div>
-			<p className={styles.price}>
-				From ${matchingVariant.price.amount.toString().slice(0, -2)}
-			</p>
+			{/* <p className={styles.price}>
+				From ${matchingVariant.node.price.amount.toString().slice(0, -2)}
+			</p> */}
 
 			<p>{product.description}</p>
 
 			<div className={styles.accordion}>
 				{filteredOptions.map((option, index) => (
 					<Accordion
-						key={option.id}
+						key={option.name}
 						small
 						title={option.name}
 						state={index === openOption}
@@ -206,23 +210,23 @@ const ProductOptionsUI = ({ product }) => {
 						display={true}
 					>
 						<div className={styles.variantButtonsContainer}>
-							{option.values.map(value => (
+							{option.optionValues.map(value => (
 								<button
 									className={styles.variantButton}
-									key={value.value}
+									key={value.name}
 									onClick={() =>
-										handleOptionSelection(option.name, value.value, index)
+										handleOptionSelection(option.name, value.name, index)
 									}
 								>
 									{option.name === 'Metal' && (
 										<Image
-											src={`/${returnMetalType(value.value.toLowerCase())}`}
+											src={`/${returnMetalType(value.name.toLowerCase())}`}
 											width={16}
 											height={16}
-											alt={`${value.value} ${option.name}`}
+											alt={`${value.name} ${option.name}`}
 										/>
 									)}
-									{value.value}
+									{value.name}
 								</button>
 							))}
 							{selectedOptions[option.name] && (

@@ -61,7 +61,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 								/>
 								{product.images[1] && (
 									<Image
-										src={product.images.edges[0].node.url}
+										src={product.images.edges[1].node.url}
 										fill
 										alt='Category Image.'
 										style={{ objectFit: 'cover' }}
@@ -74,7 +74,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 							<>
 								{product.images[1] ? (
 									<Image
-										src={product.images.edges[0].node.url}
+										src={product.images.edges[1].node.url}
 										fill
 										alt='Category Image.'
 										style={{ objectFit: 'cover' }}
