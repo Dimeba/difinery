@@ -11,14 +11,18 @@ const Cart = () => {
 	const { showCart, setShowCart, cart, updateQuantity, removeFromCart } =
 		useCart()
 
-	// debug: watch for updates
+	// Debug: verify what shape of cart we have
 	useEffect(() => {
-		console.log('✅ cart updated:', cart)
+		console.log('Cart state:', cart)
 	}, [cart])
 
 	if (!showCart || !cart) return null
 
-	// Decrease a line’s qty or remove when it gets to zero
+	// Safely grab subtotal (fallback to "0.00")
+	const subtotalRaw = cart?.cost?.totalAmount?.amount
+	const subtotal = subtotalRaw ? parseFloat(subtotalRaw).toFixed(2) : '0.00'
+
+	// Handlers expect a CartLine ID, not Variant ID
 	const handleDecrease = (lineId, qty) => {
 		if (qty > 1) {
 			updateQuantity(lineId, qty - 1)
@@ -26,14 +30,9 @@ const Cart = () => {
 			removeFromCart(lineId)
 		}
 	}
-
-	// Increase a line’s qty by 1
 	const handleIncrease = (lineId, qty) => {
 		updateQuantity(lineId, qty + 1)
 	}
-
-	// Format subtotal
-	const subtotal = parseFloat(cart.cost.totalAmount.amount).toFixed(2)
 
 	return (
 		<div className={styles.cart}>
@@ -50,20 +49,31 @@ const Cart = () => {
 
 				{/* Items */}
 				<div className={styles.itemsContainer}>
-					{cart.lines.edges.length === 0 && (
+					{cart.lines?.edges?.length === 0 && (
 						<p className={styles.emptyMessage}>Your cart is empty.</p>
 					)}
-					{cart.lines.edges.map(({ node }) => {
-						const { id: lineId, quantity, merchandise } = node
-						const { title, priceV2, image } = merchandise
-						const unitPrice = parseFloat(priceV2.amount).toFixed(2)
+
+					{cart.lines?.edges?.map(({ node }) => {
+						// Guard against undefined node or merchandise
+						if (!node) return null
+						const { id: lineId, quantity } = node
+						const variant = node.merchandise
+						if (!variant) return null
+
+						const title = variant.title || '—'
+						const imageUrl = variant.image?.url
+						const imageAlt = variant.image?.altText || title
+
+						// Safely parse unit price
+						const unitRaw = variant.priceV2?.amount
+						const unitPrice = unitRaw ? parseFloat(unitRaw).toFixed(2) : '0.00'
 
 						return (
 							<div className={styles.item} key={lineId}>
-								{image?.url && (
+								{imageUrl && (
 									<Image
-										src={image.url}
-										alt={image.altText || title}
+										src={imageUrl}
+										alt={imageAlt}
 										width={80}
 										height={80}
 										style={{ objectFit: 'cover' }}
@@ -100,7 +110,7 @@ const Cart = () => {
 						<Button
 							link={cart.checkoutUrl}
 							text='Checkout'
-							disabled={cart.lines.edges.length === 0}
+							disabled={cart.lines?.edges?.length === 0}
 							fullWidth
 						/>
 					) : (
