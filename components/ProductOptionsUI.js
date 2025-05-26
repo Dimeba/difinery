@@ -128,33 +128,6 @@ const ProductOptionsUI = ({
 		setRingSize('')
 	}
 
-	// Add the variant (with custom attributes) to the cart
-	const handleAddToCart = async () => {
-		const customFields = []
-		if (engraving) customFields.push({ key: 'Engraving', value: engraving })
-		if (birthstone) customFields.push({ key: 'Birthstone', value: birthstone })
-		if (ringSize) customFields.push({ key: 'Ring Size', value: ringSize })
-
-		if (!matchingVariant || !matchingVariant.id) {
-			console.error('No matching variant found')
-			return
-		}
-
-		try {
-			await addToCart(
-				matchingVariant.id,
-				1,
-				customFields.length ? customFields : []
-			)
-
-			// advance your UI steps
-			setOpenOption(prev => prev + 1)
-			if (!showCart) setShowCart(true)
-		} catch (err) {
-			console.error('Add to cart mutation failed', err)
-		}
-	}
-
 	const allOptionsSelected =
 		Object.keys(selectedOptions).length === product.options.length
 
@@ -348,13 +321,11 @@ const ProductOptionsUI = ({
 					with you.
 				</p>
 
-				<button
-					className={styles.cartButton}
-					onClick={handleAddToCart}
-					disabled={!allOptionsSelected}
-				>
-					ADD TO CART
-				</button>
+				<a href='#addToCart'>
+					<button className={styles.cartButton} disabled={!allOptionsSelected}>
+						REVIEW YOUR ORDER
+					</button>
+				</a>
 
 				<p className={styles.tax}>
 					Tax included

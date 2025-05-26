@@ -127,7 +127,7 @@ const ProductInfo = ({ product }) => {
 			</div>
 
 			{selectedColor && (
-				<div className={styles.finalPreviewContainer}>
+				<div className={styles.finalPreviewContainer} id='addToCart'>
 					<div className={`container ${styles.finalPreview}`}>
 						<div className={styles.fpImage}>
 							<Image
@@ -138,7 +138,9 @@ const ProductInfo = ({ product }) => {
 							/>
 						</div>
 
-						<button onClick={handleAddToCart}>Test</button>
+						<button className={styles.cartButton} onClick={handleAddToCart}>
+							Add To Cart
+						</button>
 					</div>
 				</div>
 			)}
