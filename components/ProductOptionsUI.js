@@ -222,8 +222,8 @@ const ProductOptionsUI = ({ product, setSelectedColor }) => {
 					</Accordion>
 				))}
 
-				{(product.productType === 'Ring' ||
-					product.productType === 'Pendant') && (
+				{(product.category.name === 'Rings' ||
+					product.category.name === 'Pendants') && (
 					<Accordion
 						small
 						title='Engraving (max. 20 characters)'
@@ -243,8 +243,8 @@ const ProductOptionsUI = ({ product, setSelectedColor }) => {
 					</Accordion>
 				)}
 
-				{(product.productType === 'Ring' ||
-					product.productType === 'Pendant') && (
+				{/* {(product.category.name === 'Rings' ||
+					product.category.name === 'Pendants') && (
 					<Accordion
 						small
 						title='Birthstone'
@@ -270,7 +270,7 @@ const ProductOptionsUI = ({ product, setSelectedColor }) => {
 							))}
 						</select>
 					</Accordion>
-				)}
+				)} */}
 			</div>
 
 			<div className={styles.cartBox}>

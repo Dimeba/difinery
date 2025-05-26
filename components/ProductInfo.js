@@ -46,6 +46,8 @@ const ProductInfo = ({ product }) => {
 		setCurrentIndex(prev => (prev + 1) % total)
 	}
 
+	console.log(product.category)
+
 	return (
 		<section className='topSection'>
 			<div className={styles.productInfo}>
