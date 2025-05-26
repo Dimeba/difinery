@@ -27,6 +27,7 @@ const ProductOptionsUI = ({ product, setSelectedColor }) => {
 	)
 	const [engraving, setEngraving] = useState('')
 	const [birthstone, setBirthstone] = useState('')
+	const [ringSize, setRingSize] = useState('')
 
 	// Find the Shopify variant node matching the selected options
 	const getMatchingVariant = options => {
@@ -124,6 +125,7 @@ const ProductOptionsUI = ({ product, setSelectedColor }) => {
 		const customFields = []
 		if (engraving) customFields.push({ key: 'Engraving', value: engraving })
 		if (birthstone) customFields.push({ key: 'Birthstone', value: birthstone })
+		if (ringSize) customFields.push({ key: 'Ring Size', value: ringSize })
 
 		if (!matchingVariant || !matchingVariant.id) {
 			console.error('No matching variant found')
@@ -161,6 +163,26 @@ const ProductOptionsUI = ({ product, setSelectedColor }) => {
 		{ month: 'October', stones: ['Opal', 'Tourmaline'] },
 		{ month: 'November', stones: ['Topaz', 'Citrine'] },
 		{ month: 'December', stones: ['Turquoise', 'Zircon', 'Tanzanite'] }
+	]
+
+	const ringSizes = [
+		'4',
+		'4.5',
+		'5',
+		'5.5',
+		'6',
+		'6.5',
+		'7',
+		'7.5',
+		'8',
+		'8.5',
+		'9',
+		'9.5',
+		'10',
+		'10.5',
+		'11',
+		'11.5',
+		'12'
 	]
 
 	return (
@@ -222,25 +244,57 @@ const ProductOptionsUI = ({ product, setSelectedColor }) => {
 					</Accordion>
 				))}
 
-				{(product.category.name === 'Rings' ||
-					product.category.name === 'Pendants') && (
-					<Accordion
-						small
-						title='Engraving (max. 20 characters)'
-						state={openOption === filteredOptions.length}
-						product
-						display
-						setOpenOption={() => setOpenOption(filteredOptions.length)}
-					>
-						<input
-							type='text'
-							placeholder='Add your text here'
-							value={engraving}
-							onChange={e => setEngraving(e.target.value)}
-							className={styles.engravingInput}
-							maxLength={20}
-						/>
-					</Accordion>
+				{product.category.name === 'Rings' && (
+					<>
+						{/* Ring Size */}
+						<Accordion
+							small
+							title='Ring Size'
+							state={openOption === filteredOptions.length}
+							setOpenOption={() => setOpenOption(filteredOptions.length)}
+							product
+							display
+						>
+							<div className={styles.variantButtonsContainer}>
+								{ringSizes.map(value => (
+									<button
+										key={value}
+										className={styles.variantButton}
+										onClick={() => setRingSize(value)}
+									>
+										{value}
+									</button>
+								))}
+								{ringSize && (
+									<button
+										className={styles.resetButton}
+										onClick={() => setRingSize('')}
+									>
+										Reset
+									</button>
+								)}
+							</div>
+						</Accordion>
+
+						{/* Engraving */}
+						<Accordion
+							small
+							title='Engraving (max. 20 characters)'
+							state={openOption === filteredOptions.length}
+							product
+							display
+							setOpenOption={() => setOpenOption(filteredOptions.length)}
+						>
+							<input
+								type='text'
+								placeholder='Add your text here'
+								value={engraving}
+								onChange={e => setEngraving(e.target.value)}
+								className={styles.engravingInput}
+								maxLength={20}
+							/>
+						</Accordion>
+					</>
 				)}
 
 				{/* {(product.category.name === 'Rings' ||
