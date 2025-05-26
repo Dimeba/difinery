@@ -118,6 +118,9 @@ const ProductOptionsUI = ({ product, setSelectedColor }) => {
 		setOpenOption(0)
 		setMatchingVariant(product.variants.edges[0].node)
 		setSelectedColor(null)
+		setEngraving('')
+		setBirthstone('')
+		setRingSize('')
 	}
 
 	// Add the variant (with custom attributes) to the cart
