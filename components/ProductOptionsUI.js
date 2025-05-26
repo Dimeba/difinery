@@ -16,7 +16,7 @@ import { returnMetalType } from '@/lib/helpers'
 // context
 import { useCart } from '@/context/CartContext'
 
-const ProductOptionsUI = ({ product }) => {
+const ProductOptionsUI = ({ product, setSelectedColor }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
 	const [openOption, setOpenOption] = useState(0)
@@ -76,6 +76,11 @@ const ProductOptionsUI = ({ product }) => {
 
 		// 4) advance to next dropdown
 		setOpenOption(index + 1)
+
+		// 5) set selected color if applicable
+		if (optionName === 'Metal') {
+			setSelectedColor(value)
+		}
 	}
 
 	// Reset a single option
@@ -111,6 +116,7 @@ const ProductOptionsUI = ({ product }) => {
 		setFilteredOptions(product.options)
 		setOpenOption(0)
 		setMatchingVariant(product.variants.edges[0].node)
+		setSelectedColor(null)
 	}
 
 	// Add the variant (with custom attributes) to the cart
