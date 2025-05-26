@@ -11,9 +11,20 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 // hooks
 import { useState, useMemo } from 'react'
 
+// context
+import { useCart } from '@/context/CartContext'
+
 const ProductInfo = ({ product }) => {
+	const { cart, addToCart, showCart, setShowCart } = useCart()
+
 	const allImages = product.images.edges.map(edge => edge.node.url)
+	const [matchingVariant, setMatchingVariant] = useState(
+		product.variants.edges[0].node
+	)
 	const [selectedColor, setSelectedColor] = useState(null)
+	const [engraving, setEngraving] = useState('')
+	const [birthStone, setBirthstone] = useState('')
+	const [ringSize, setRingSize] = useState('')
 
 	const images = useMemo(() => {
 		if (!selectedColor) {
@@ -46,7 +57,31 @@ const ProductInfo = ({ product }) => {
 		setCurrentIndex(prev => (prev + 1) % total)
 	}
 
-	console.log(product.category)
+	const handleAddToCart = async () => {
+		const customFields = []
+		if (engraving) customFields.push({ key: 'Engraving', value: engraving })
+		if (birthStone) customFields.push({ key: 'Birthstone', value: birthStone })
+		if (ringSize) customFields.push({ key: 'Ring Size', value: ringSize })
+
+		if (!matchingVariant || !matchingVariant.id) {
+			console.error('No matching variant found')
+			return
+		}
+
+		try {
+			await addToCart(
+				matchingVariant.id,
+				1,
+				customFields.length ? customFields : []
+			)
+
+			// advance your UI steps
+			// setOpenOption(prev => prev + 1)
+			if (!showCart) setShowCart(true)
+		} catch (err) {
+			console.error('Add to cart mutation failed', err)
+		}
+	}
 
 	return (
 		<section className='topSection'>
@@ -80,8 +115,33 @@ const ProductInfo = ({ product }) => {
 				<ProductOptionsUI
 					product={product}
 					setSelectedColor={setSelectedColor}
+					matchingVariant={matchingVariant}
+					setMatchingVariant={setMatchingVariant}
+					engraving={engraving}
+					setEngraving={setEngraving}
+					birthStone={birthStone}
+					setBirthstone={setBirthstone}
+					ringSize={ringSize}
+					setRingSize={setRingSize}
 				/>
 			</div>
+
+			{selectedColor && (
+				<div className={styles.finalPreviewContainer}>
+					<div className={`container ${styles.finalPreview}`}>
+						<div className={styles.fpImage}>
+							<Image
+								src={images[currentIndex]}
+								fill
+								alt='Image of the product.'
+								sizes={'(max-width: 768px) 100vw, 50vw'}
+							/>
+						</div>
+
+						<button onClick={handleAddToCart}>Test</button>
+					</div>
+				</div>
+			)}
 		</section>
 	)
 }

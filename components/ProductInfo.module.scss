@@ -141,6 +141,22 @@
 	border-radius: 5px;
 }
 
+.finalPreviewContainer {
+	background-color: #f4f4f4;
+}
+
+.finalPreview {
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-gap: 2rem;
+
+	.fpImage {
+		position: relative;
+		grid-column: span 4;
+		aspect-ratio: 1 / 1;
+	}
+}
+
 @media screen and (max-width: 1024px) {
 	.productInfo {
 		display: flex;

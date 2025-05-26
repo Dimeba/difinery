@@ -16,18 +16,23 @@ import { returnMetalType } from '@/lib/helpers'
 // context
 import { useCart } from '@/context/CartContext'
 
-const ProductOptionsUI = ({ product, setSelectedColor }) => {
+const ProductOptionsUI = ({
+	product,
+	setSelectedColor,
+	matchingVariant,
+	setMatchingVariant,
+	engraving,
+	setEngraving,
+	birthStone,
+	setBirthstone,
+	ringSize,
+	setRingSize
+}) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
 	const [openOption, setOpenOption] = useState(0)
 	const [selectedOptions, setSelectedOptions] = useState({})
 	const [filteredOptions, setFilteredOptions] = useState(product.options)
-	const [matchingVariant, setMatchingVariant] = useState(
-		product.variants.edges[0].node
-	)
-	const [engraving, setEngraving] = useState('')
-	const [birthstone, setBirthstone] = useState('')
-	const [ringSize, setRingSize] = useState('')
 
 	// Find the Shopify variant node matching the selected options
 	const getMatchingVariant = options => {
@@ -201,6 +206,12 @@ const ProductOptionsUI = ({ product, setSelectedColor }) => {
 					</p>
 				)}
 			</div>
+
+			<p>
+				{' '}
+				FROM $
+				{Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
+			</p>
 
 			<p>{product.description}</p>
 
