@@ -15,13 +15,14 @@ export async function generateStaticParams() {
 			.replace(/[^a-zA-Z0-9 ]/g, '')
 			.replace(/&/g, '')
 			.replace(/ /g, '-')
-	}))
+	}));
 }
 
-export async function generateMetadata({ params }) {
-	const { slug } = params
+export async function generateMetadata(props) {
+    const params = await props.params;
+    const { slug } = params
 
-	const content = pages.items.find(
+    const content = pages.items.find(
 		page =>
 			page.fields.title
 				.toLowerCase()
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }) {
 				.replace(/ /g, '-') == slug
 	).fields
 
-	return {
+    return {
 		title: 'Difinery | ' + content.title,
 		description: content.description ? content.description : '',
 		keywords: content.keywords ? content.keywords : ''
@@ -38,10 +39,11 @@ export async function generateMetadata({ params }) {
 }
 
 // Default export for the page component
-export default async function Page({ params }) {
-	const { slug } = params
+export default async function Page(props) {
+    const params = await props.params;
+    const { slug } = params
 
-	const content = pages.items.find(
+    const content = pages.items.find(
 		page =>
 			page.fields.title
 				.toLowerCase()
@@ -50,5 +52,5 @@ export default async function Page({ params }) {
 				.replace(/ /g, '-') == slug
 	).fields
 
-	return <PageContent content={content} />
+    return <PageContent content={content} />
 }

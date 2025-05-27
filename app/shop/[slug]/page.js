@@ -23,16 +23,17 @@ export async function generateStaticParams() {
 	}))
 }
 
-export async function generateMetadata({ params }) {
-	const { slug } = params
+export async function generateMetadata(props) {
+    const params = await props.params;
+    const { slug } = params
 
-	const { data } = await apolloClient.query({
+    const { data } = await apolloClient.query({
 		query: GET_PRODUCT_BY_HANDLE,
 		variables: { handle: slug }
 	})
-	const product = data.productByHandle
+    const product = data.productByHandle
 
-	return {
+    return {
 		title: 'Difinery | ' + product.title,
 		description: product.description ? product.description : ''
 	}
@@ -44,24 +45,25 @@ const faqs = allFaqs.items.find(item => item.fields.productPage === 'Yes') || {
 	fields: { rows: [] }
 }
 
-export default async function Product({ params }) {
-	const { slug } = params
+export default async function Product(props) {
+    const params = await props.params;
+    const { slug } = params
 
-	const { data } = await apolloClient.query({
+    const { data } = await apolloClient.query({
 		query: GET_PRODUCT_BY_HANDLE,
 		variables: { handle: slug }
 	})
-	const product = data.productByHandle
+    const product = data.productByHandle
 
-	// Recommended products
-	const { data: recommendationsData } = await apolloClient.query({
+    // Recommended products
+    const { data: recommendationsData } = await apolloClient.query({
 		query: GET_PRODUCT_RECOMMENDATIONS,
 		variables: { productHandle: slug }
 	})
 
-	const recommendedProducts = recommendationsData.productRecommendations
+    const recommendedProducts = recommendationsData.productRecommendations
 
-	return (
+    return (
 		<main>
 			<ProductInfo product={product} />
 
