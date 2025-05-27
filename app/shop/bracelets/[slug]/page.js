@@ -1,7 +1,4 @@
-// components
-import ProductInfo from '@/components/ProductInfo'
-import FAQ from '@/components/FAQ'
-import Products from '@/components/Products'
+import ProductPageLayout from '@/components/ProductPageLayout'
 
 // lib
 import { getEntries } from '@/lib/contentful'
@@ -24,16 +21,16 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props) {
-    const params = await props.params;
-    const { slug } = params
+	const params = await props.params
+	const { slug } = params
 
-    const { data } = await apolloClient.query({
+	const { data } = await apolloClient.query({
 		query: GET_PRODUCT_BY_HANDLE,
 		variables: { handle: slug }
 	})
-    const product = data.productByHandle
+	const product = data.productByHandle
 
-    return {
+	return {
 		title: 'Difinery | ' + product.title,
 		description: product.description ? product.description : ''
 	}
@@ -46,42 +43,28 @@ const faqs = allFaqs.items.find(item => item.fields.productPage === 'Yes') || {
 }
 
 export default async function Product(props) {
-    const params = await props.params;
-    const { slug } = params
+	const params = await props.params
+	const { slug } = params
 
-    const { data } = await apolloClient.query({
+	const { data } = await apolloClient.query({
 		query: GET_PRODUCT_BY_HANDLE,
 		variables: { handle: slug }
 	})
-    const product = data.productByHandle
+	const product = data.productByHandle
 
-    // Recommended products
-    const { data: recommendationsData } = await apolloClient.query({
+	// Recommended products
+	const { data: recommendationsData } = await apolloClient.query({
 		query: GET_PRODUCT_RECOMMENDATIONS,
 		variables: { productHandle: slug }
 	})
 
-    const recommendedProducts = recommendationsData.productRecommendations
+	const recommendedProducts = recommendationsData.productRecommendations
 
-    return (
-		<main>
-			<ProductInfo product={product} />
-
-			<FAQ
-				title='Frequently Asked Questions'
-				productDetails={product.description}
-				content={faqs.fields.rows}
-			/>
-
-			{recommendedProducts.length > 0 && (
-				<Products
-					title='Pair your product with:'
-					recommendedProducts={recommendedProducts.slice(0, 4)}
-					type='recommended'
-					showTitle
-					individual={true}
-				/>
-			)}
-		</main>
+	return (
+		<ProductPageLayout
+			product={product}
+			recommendedProducts={recommendedProducts}
+			faqs={faqs}
+		/>
 	)
 }

@@ -44,7 +44,8 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 	return (
 		<div className={`${!individual ? styles.product : styles.productNoGap}`}>
 			<Link
-				href={`/shop/${permalink}`}
+				// href={`/shop/rings/${permalink}`}
+				href={`/shop/${product.category.name.toLowerCase()}/${permalink}`}
 				aria-label={`Link to ${product.title} page.`}
 			>
 				{/* Product Image */}

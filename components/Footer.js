@@ -27,6 +27,8 @@ const Footer = ({ content }) => {
 		}
 	}
 
+	const categories = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
+
 	return (
 		<footer className={styles.footer}>
 			<div className={`container ${styles.content}`}>
@@ -75,19 +77,13 @@ const Footer = ({ content }) => {
 				<div className={styles.column2}>
 					<h4>Collections</h4>
 					<div className={styles.links}>
-						{content.collections.map(link => (
+						{categories.map((title, index) => (
 							<Link
-								key={link.sys.id}
-								href={
-									'/' +
-									link.fields.title
-										.replace(/ /g, '-')
-										.replace(/&/g, '')
-										.toLowerCase()
-								}
-								aria-label={`Link to ${link.fields.title} page.`}
+								key={index}
+								href={`/shop/${title.toLowerCase()}`}
+								aria-label={`Link to ${title} page.`}
 							>
-								<p>{link.fields.title}</p>
+								<p>{title}</p>
 							</Link>
 						))}
 					</div>

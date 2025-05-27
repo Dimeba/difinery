@@ -36,13 +36,7 @@ const Header = ({ content }) => {
 		transparentHeader && isIntersecting && !showSubmenu && !openMenu
 
 	// Submenu Items
-	const productList = [
-		'Rings',
-		'Earrings',
-		'Necklaces',
-		'Pendants',
-		'Bracelets'
-	]
+	const categories = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
 
 	const qucikLinks = content.quickLinks.map(link => link.fields.title)
 	const occasion = content.shopByOcassion.map(link => link.fields.title)
@@ -128,6 +122,32 @@ const Header = ({ content }) => {
 
 				{((isIntersecting && isScreenWide) || openMenu) && (
 					<nav className={`container ${styles.headerBot}`}>
+						{/* Shop Page */}
+						<Link
+							href='/shop'
+							aria-label='Link to Shop page.'
+							className={styles.mainMenuLink}
+							onMouseEnter={() => loadSubmenu()}
+							onClick={() => setOpenMenu(false)}
+						>
+							<p>Shop</p>{' '}
+							<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
+						</Link>
+
+						{/* Categories */}
+						{categories.map((title, index) => (
+							<Link
+								key={index}
+								href={`/shop/${title.toLowerCase()}`}
+								aria-label={`Link to ${title} page.`}
+								className={styles.mainMenuLink}
+							>
+								<p>{title}</p>{' '}
+								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
+							</Link>
+						))}
+
+						{/* Contentful */}
 						{content.mainMenu.map(link => (
 							<Link
 								key={link.sys.id}
@@ -157,14 +177,14 @@ const Header = ({ content }) => {
 				{content.showDropdownMenu && showSubmenu && (
 					<div className={`container ${styles.subMenu}`}>
 						<div className={styles.column2}>
-							{productList.map(link => (
+							{categories.map((title, index) => (
 								<Link
-									key={link}
-									href={'/' + link.replace(/ /g, '-').toLowerCase()}
-									aria-label={`Link to ${link} page.`}
+									key={index}
+									href={`/shop/${title.toLowerCase()}`}
+									aria-label={`Link to ${title} page.`}
 									className={styles.subMenuLink}
 								>
-									<p>{link}</p>{' '}
+									<p>{title}</p>{' '}
 								</Link>
 							))}
 						</div>

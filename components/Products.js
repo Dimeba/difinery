@@ -12,71 +12,24 @@ import Filters from './Filters'
 import { LuSettings2 } from 'react-icons/lu'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
-// Apollo
-import { apolloClient } from '@/lib/apolloClient'
-import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
-
 const Products = ({
 	title = '',
 	stylizedTitle,
 	showTitle = false,
-	collections, // array of Shopify handles as strings
 	discount,
 	recommendedProducts,
 	showFilters = false,
-	individual = false
+	individual = false,
+	products = []
 }) => {
-	const [items, setItems] = useState([])
-	const [filteredItems, setFilteredItems] = useState([])
+	const [items, setItems] = useState(products)
+	const [filteredItems, setFilteredItems] = useState(products)
 	const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
 	// filters state
 	const [selectedSort, setSelectedSort] = useState(null)
 	const [selectedProductType, setSelectedProductType] = useState('All')
 	const [selectedMetalTypes, setSelectedMetalTypes] = useState([])
-
-	// loading / error
-	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState(null)
-
-	useEffect(() => {
-		if (!collections) {
-			// fallback to recommended
-			setItems(recommendedProducts)
-			setFilteredItems(recommendedProducts)
-			return
-		}
-
-		const fetchProducts = async () => {
-			setLoading(true)
-			setError(null)
-			try {
-				const allProducts = []
-				// for each handle, fetch that collection
-				for (const handle of collections) {
-					const { data } = await apolloClient.query({
-						query: GET_COLLECTION_BY_HANDLE,
-						variables: { handle }
-					})
-					const edges = data.collectionByHandle?.products?.edges || []
-					// pull out the node from each edge
-					const products = edges.map(edge => edge.node)
-					allProducts.push(...products)
-				}
-				// reverse order if you care about most‐recent handle first
-				allProducts.reverse()
-
-				setItems(allProducts)
-				setFilteredItems(allProducts)
-			} catch (err) {
-				setError(err)
-			} finally {
-				setLoading(false)
-			}
-		}
-
-		fetchProducts()
-	}, [collections, recommendedProducts])
 
 	// Filter & sort
 	useEffect(() => {
@@ -124,10 +77,6 @@ const Products = ({
 
 		setFilteredItems(updated)
 	}, [items, selectedSort, selectedProductType, selectedMetalTypes])
-
-	// show loading / error
-	if (loading) return <p>Loading…</p>
-	if (error) return <p>Error: {error.message}</p>
 
 	return (
 		<section
@@ -184,7 +133,7 @@ const Products = ({
 									/>
 								))}
 
-						{recommendedProducts &&
+						{/* {recommendedProducts &&
 							recommendedProducts.length > 0 &&
 							recommendedProducts.map(product => (
 								<ProductCard
@@ -195,7 +144,7 @@ const Products = ({
 									discount={discount}
 									individual={individual}
 								/>
-							))}
+							))} */}
 					</div>
 				</div>
 			</div>
