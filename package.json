@@ -10,15 +10,17 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.13.8",
-		"@chec/commerce.js": "^2.8.0",
 		"@contentful/rich-text-react-renderer": "^15.22.1",
+		"@emotion/react": "^11.14.0",
+		"@emotion/styled": "^11.14.0",
+		"@mui/icons-material": "^7.1.0",
+		"@mui/material": "^7.1.0",
 		"contentful": "^10.12.3",
 		"hamburger-react": "^2.5.0",
 		"next": "^14.2.11",
 		"react": "^18",
 		"react-dom": "^18",
 		"react-icons": "^5.0.1",
-		"sass": "^1.72.0",
-		"shopify-buy": "^3.0.4"
+		"sass": "^1.72.0"
 	}
 }
