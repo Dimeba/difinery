@@ -107,6 +107,14 @@ const Footer = ({ content }) => {
 								<p>{link.fields.title}</p>
 							</Link>
 						))}
+
+						<Link href='/shop' aria-label={`Link to Shop page.`}>
+							<p>Shop</p>
+						</Link>
+
+						<Link href='/blog' aria-label={`Link to Blog page.`}>
+							<p>Blog</p>
+						</Link>
 					</div>
 				</div>
 
