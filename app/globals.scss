@@ -14,7 +14,7 @@
 }
 
 section {
-	margin: 8rem 0;
+	margin: 6rem 0;
 }
 
 .topSection {
@@ -28,15 +28,18 @@ section {
 	height: 100%;
 }
 
-p {
-	letter-spacing: 0.04rem;
-}
-
 .title {
 	font-family: 'Newsreader', serif;
 	font-weight: 400;
 	font-optical-sizing: auto;
 	font-style: normal;
+}
+
+h1 {
+	@extend .title;
+	font-size: 42px;
+	line-height: 1.2;
+	font-weight: 500;
 }
 
 h2 {
@@ -85,8 +88,10 @@ h5 {
 
 p {
 	line-height: 1.75;
-	font-size: 0.8rem;
+	font-size: 14px;
 	text-wrap: balance;
+	font-weight: 200;
+	letter-spacing: 0.5px;
 }
 
 a {

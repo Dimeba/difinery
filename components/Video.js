@@ -45,7 +45,15 @@ const Video = ({ video, showControls }) => {
 	return (
 		<>
 			{/* Video */}
-			<video ref={targetRef} autoPlay loop muted playsInline preload='auto'>
+			<video
+				ref={targetRef}
+				autoPlay
+				loop
+				muted
+				playsInline
+				preload='auto'
+				style={{ width: '100%' }}
+			>
 				{isIntersecting && (
 					<source src={'https:' + video.fields.file.url} type='video/mp4' />
 				)}

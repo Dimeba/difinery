@@ -4,6 +4,7 @@
 import styles from './Header.module.scss'
 
 // components
+import { Box } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FiShoppingBag, FiUser, FiArrowRight } from 'react-icons/fi'
@@ -52,7 +53,7 @@ const Header = ({ content }) => {
 	}
 
 	return (
-		<header ref={targetRef}>
+		<Box ref={targetRef}>
 			<div
 				className={`${styles.header} ${
 					!isIntersecting ? styles.dropShadow : ''
@@ -154,8 +155,6 @@ const Header = ({ content }) => {
 								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
 								aria-label={`Link to ${link.fields.title} page.`}
 								className={styles.mainMenuLink}
-								onMouseEnter={() => loadSubmenu()}
-								onClick={() => setOpenMenu(false)}
 							>
 								<p>{link.fields.title}</p>{' '}
 								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
@@ -237,7 +236,7 @@ const Header = ({ content }) => {
 					</div>
 				)}
 			</div>
-		</header>
+		</Box>
 	)
 }
 

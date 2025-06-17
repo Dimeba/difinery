@@ -47,7 +47,7 @@ const Column = async ({ fullHeight, id, columns }) => {
 				<Video
 					video={content.fields.media}
 					// showControls={content.fields.showControls}
-					showControls={true}
+					showControls={content.fields.showVideoControls || false}
 				/>
 			)}
 

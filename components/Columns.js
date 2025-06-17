@@ -14,7 +14,8 @@ const Columns = ({
 	showTitle,
 	stylizedTitle,
 	marginTop,
-	marginBottom
+	marginBottom,
+	heroSection = false
 }) => {
 	// dynamic styles
 	const dynamicStyles = {
