@@ -4,18 +4,16 @@
 import styles from './Columns.module.scss'
 
 // components
-import {
-	IoPlaySharp,
-	IoPauseSharp,
-	IoVolumeMuteSharp,
-	IoVolumeHighSharp
-} from 'react-icons/io5'
+import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined'
+import PauseCircleOutlineOutlinedIcon from '@mui/icons-material/PauseCircleOutlineOutlined'
+import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined'
+import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined'
 
 // hooks
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { useState } from 'react'
 
-const Video = ({ video, showControls }) => {
+const Video = ({ video, showControls, autoPlay = false, mute = true }) => {
 	const options = {
 		root: null,
 		rootMargin: '0%',
@@ -24,8 +22,8 @@ const Video = ({ video, showControls }) => {
 
 	const [targetRef, isIntersecting] = useIntersectionObserver(options)
 
-	const [isPlaying, setIsPlaying] = useState(true)
-	const [isMuted, setIsMuted] = useState(false)
+	const [isPlaying, setIsPlaying] = useState(autoPlay)
+	const [isMuted, setIsMuted] = useState(mute)
 
 	const togglePlay = () => {
 		if (isPlaying) {
@@ -47,9 +45,9 @@ const Video = ({ video, showControls }) => {
 			{/* Video */}
 			<video
 				ref={targetRef}
-				autoPlay
+				autoPlay={autoPlay}
 				loop
-				muted
+				muted={mute}
 				playsInline
 				preload='auto'
 				style={{ width: '100%' }}
@@ -64,17 +62,17 @@ const Video = ({ video, showControls }) => {
 				<div className={styles.controls}>
 					<div className={styles.playIcon} onClick={togglePlay}>
 						{isPlaying ? (
-							<IoPauseSharp color='white' size={26} />
+							<PauseCircleOutlineOutlinedIcon color='white' />
 						) : (
-							<IoPlaySharp color='white' size={26} />
+							<PlayArrowOutlinedIcon color='white' />
 						)}
 					</div>
 
 					<div className={styles.muteIcon} onClick={toggleMute}>
 						{isMuted ? (
-							<IoVolumeMuteSharp color='white' size={26} />
+							<VolumeOffOutlinedIcon color='white' />
 						) : (
-							<IoVolumeHighSharp color='white' size={26} />
+							<VolumeUpOutlinedIcon color='white' />
 						)}
 					</div>
 				</div>

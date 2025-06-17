@@ -15,12 +15,20 @@ const Column = async ({ fullHeight, id, columns }) => {
 	const content = await getEntry(id)
 
 	// dynamic styles
+	const horizontalAlign = () => {
+		switch (content.fields.contentAlignHorizontal) {
+			case 'center':
+				return 'center'
+			case 'right':
+				return 'flex-end'
+			default:
+				return 'flex-start'
+		}
+	}
+
 	const dynamicStyles = {
 		content: {
-			alignItems:
-				content.fields.contentAlignHorizontal == 'center'
-					? 'center'
-					: 'flex-start',
+			alignItems: horizontalAlign(),
 			justifyContent:
 				content.fields.contentAlignVertical == 'center' ? 'center' : 'flex-end',
 			maxWidth: columns == 1 ? '1440px' : `${1440 / columns}px`
@@ -48,6 +56,8 @@ const Column = async ({ fullHeight, id, columns }) => {
 					video={content.fields.media}
 					// showControls={content.fields.showControls}
 					showControls={content.fields.showVideoControls || false}
+					autoPlay={content.fields.autoPlay || false}
+					mute={content.fields.mute}
 				/>
 			)}
 
