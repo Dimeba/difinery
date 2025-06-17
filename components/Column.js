@@ -36,10 +36,16 @@ const Column = async ({ fullHeight, id, columns }) => {
 	}
 
 	// text alignment
-	const textAlignClassName =
-		content.fields.contentAlignHorizontal == 'center'
-			? styles.centerAlign
-			: styles.leftAlign
+	const textAlignClassName = () => {
+		switch (content.fields.contentAlignHorizontal) {
+			case 'center':
+				return styles.centerAlign
+			case 'right':
+				return styles.rightAlign
+			default:
+				return styles.leftAlign
+		}
+	}
 
 	// text width
 	const textWidth = columns == 1 ? styles.third : ''
@@ -78,7 +84,9 @@ const Column = async ({ fullHeight, id, columns }) => {
 			<div className={styles.content} style={dynamicStyles.content}>
 				{/* Text */}
 				{content.fields.text && content.fields.textPosition == 'top' && (
-					<div className={` ${textAlignClassName} ${styles.text} ${textWidth}`}>
+					<div
+						className={` ${textAlignClassName()} ${styles.text} ${textWidth}`}
+					>
 						{documentToReactComponents(content.fields.text)}
 					</div>
 				)}
@@ -99,7 +107,7 @@ const Column = async ({ fullHeight, id, columns }) => {
 			</div>
 
 			{content.fields.text && content.fields.textPosition == 'below' && (
-				<div className={`${styles.belowText} ${textAlignClassName}`}>
+				<div className={`${styles.belowText} ${textAlignClassName()}`}>
 					{documentToReactComponents(content.fields.text)}
 				</div>
 			)}
