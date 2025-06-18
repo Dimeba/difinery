@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const isDev = process.env.NODE_ENV === 'development'
+
 const nextConfig = {
 	env: {
 		// Chec & Shopify API keys
@@ -34,6 +36,28 @@ const nextConfig = {
 		],
 		formats: ['image/avif', 'image/webp'],
 		deviceSizes: [640, 768, 1024, 1280, 1600]
+	},
+	experimental: {
+		middlewarePrefetch: isDev ? 'flexible' : 'strict' // Disable route prefetch cache in dev
+	},
+
+	// Apply no-cache headers during development
+	async headers() {
+		if (!isDev) return []
+		return [
+			{
+				source: '/(.*)', // Match all routes
+				headers: [
+					{
+						key: 'Cache-Control',
+						value: 'no-store, no-cache, must-revalidate, proxy-revalidate'
+					},
+					{ key: 'Pragma', value: 'no-cache' },
+					{ key: 'Expires', value: '0' },
+					{ key: 'Surrogate-Control', value: 'no-store' }
+				]
+			}
+		]
 	}
 }
 
