@@ -1,8 +1,8 @@
 @use '@/app/base';
 
 .accordion {
-	border-bottom: 1px solid rgba($color: base.$gray, $alpha: 1);
 	padding: 1.5rem 0;
+	border-bottom: 1px solid rgba($color: base.$gray, $alpha: 1);
 }
 
 .accordion:last-of-type {
@@ -55,4 +55,29 @@
 		opacity: 1;
 		transform: translateY(0);
 	}
+}
+
+.hidden {
+	display: none;
+}
+
+.hiddenBorder {
+	border: none !important;
+}
+
+@media screen and (max-width: 1024px) {
+	.hidden {
+		display: block;
+	}
+
+	.hiddenBorder {
+		border-bottom: 1px solid rgba($color: base.$gray, $alpha: 1) !important;
+	}
+
+	.hiddenBorder:last-of-type {
+		border-bottom: none !important;
+	}
+}
+
+@media screen and (max-width: 768px) {
 }

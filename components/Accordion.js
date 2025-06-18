@@ -8,6 +8,7 @@ import Image from 'next/image'
 
 // hooks
 import { useState, useEffect } from 'react'
+import { useMediaQuery } from '@mui/material'
 
 const Accordion = ({
 	state,
@@ -16,22 +17,36 @@ const Accordion = ({
 	small,
 	product,
 	display,
-	setOpenOption
+	setOpenOption,
+	hideBorder = false,
+	disabled = false,
+	extraClass = ''
 }) => {
 	const [rowOpen, setRowOpen] = useState(state ? state : false)
+	const isMobile = useMediaQuery('(max-width: 1024px)')
 
 	useEffect(() => {
-		setRowOpen(state)
-	}, [state])
+		if (!disabled) {
+			setRowOpen(state)
+		} else if (disabled && isMobile) {
+			setRowOpen(false)
+		} else {
+			setRowOpen(true)
+		}
+	}, [state, disabled, isMobile])
 
 	const toggleRow = () => {
-		rowOpen ? setRowOpen(false) : setRowOpen(true)
-		setOpenOption && setOpenOption()
+		if (!disabled || isMobile) {
+			rowOpen ? setRowOpen(false) : setRowOpen(true)
+			setOpenOption && setOpenOption()
+		}
 	}
 
 	return (
 		<div
-			className={styles.accordion}
+			className={`${styles.accordion} ${
+				hideBorder ? styles.hiddenBorder : ''
+			} ${extraClass}`}
 			style={product && { display: display ? 'block' : 'none' }}
 		>
 			<div
@@ -50,7 +65,7 @@ const Accordion = ({
 						objectFit: 'contain',
 						objectPosition: 'center'
 					}}
-					className={styles.icon}
+					className={`${styles.icon} ${disabled ? styles.hidden : ''}`}
 				/>
 			</div>
 			<div className={styles.contentContainer}>

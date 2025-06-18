@@ -6,15 +6,14 @@
 }
 
 .content {
-	margin-top: 6rem;
-	margin-bottom: 6rem;
+	width: 90vw;
+	max-width: 1440px;
+	margin: 6rem auto;
 	display: grid;
 	grid-template-columns: repeat(10, 1fr);
 	column-gap: 2rem;
-	row-gap: 4rem;
 
 	h4 {
-		margin-bottom: 2rem;
 		font-size: 0.8rem;
 		font-weight: 600;
 	}
@@ -26,6 +25,10 @@
 
 .secondRow {
 	border-top: 1px solid rgba($color: base.$black, $alpha: 0.25);
+
+	h4 {
+		margin-bottom: 2rem;
+	}
 }
 
 .column2 {
@@ -84,8 +87,20 @@
 }
 
 @media screen and (max-width: 1024px) {
+	.content {
+		width: 100vw;
+		margin: 0 !important;
+	}
+
+	.secondRow {
+		padding: 4rem 0;
+	}
+
 	.column2 {
-		grid-column: span 5;
+		grid-column: span 10;
+		padding-left: 5vw !important;
+		padding-right: 5vw !important;
+		max-width: 100vw !important;
 	}
 
 	.column5,
@@ -114,22 +129,25 @@
 }
 
 @media screen and (max-width: 768px) {
-	.content {
-		max-width: 90vw;
-		margin-top: 4rem;
-		margin-bottom: 4rem;
-	}
-
-	.column2 {
-		grid-column: span 5;
-		max-width: calc(45vw - 1rem);
-	}
-
 	.column5,
 	.column5Right {
 		grid-column: span 10;
-		max-width: 90vw;
 		align-items: flex-start;
+	}
+
+	.column5Right {
+		align-items: center;
+	}
+
+	.column5 {
+		flex-direction: row;
+		align-items: center;
+		gap: 1rem;
+		justify-content: space-around;
+
+		h4 {
+			margin-bottom: 0;
+		}
 	}
 
 	.logo1 {
@@ -138,5 +156,13 @@
 
 	.logo2 {
 		width: 4rem;
+	}
+
+	.secondRow {
+		.content {
+			display: flex;
+			flex-direction: column-reverse;
+			row-gap: 2rem;
+		}
 	}
 }

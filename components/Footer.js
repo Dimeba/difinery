@@ -4,6 +4,7 @@ import styles from './Footer.module.scss'
 // components
 import Link from 'next/link'
 import Image from 'next/image'
+import Accordion from './Accordion'
 import {
 	FaInstagram,
 	FaTiktok,
@@ -31,9 +32,14 @@ const Footer = ({ content }) => {
 
 	return (
 		<footer className={styles.footer}>
-			<div className={`container ${styles.content}`}>
-				<div className={styles.column2}>
-					<h4>Help</h4>
+			<div className={styles.content}>
+				<Accordion
+					title='Help'
+					state={true}
+					hideBorder={true}
+					disabled={true}
+					extraClass={styles.column2}
+				>
 					<div className={styles.links}>
 						{content.help.map(link => (
 							<Link
@@ -51,10 +57,15 @@ const Footer = ({ content }) => {
 							</Link>
 						))}
 					</div>
-				</div>
+				</Accordion>
 
-				<div className={styles.column2}>
-					<h4>Service</h4>
+				<Accordion
+					title='Service'
+					state={true}
+					hideBorder={true}
+					disabled={true}
+					extraClass={styles.column2}
+				>
 					<div className={styles.links}>
 						{content.service.map(link => (
 							<Link
@@ -72,10 +83,15 @@ const Footer = ({ content }) => {
 							</Link>
 						))}
 					</div>
-				</div>
+				</Accordion>
 
-				<div className={styles.column2}>
-					<h4>Collections</h4>
+				<Accordion
+					title='Shop'
+					state={true}
+					hideBorder={true}
+					disabled={true}
+					extraClass={styles.column2}
+				>
 					<div className={styles.links}>
 						{categories.map((title, index) => (
 							<Link
@@ -87,10 +103,15 @@ const Footer = ({ content }) => {
 							</Link>
 						))}
 					</div>
-				</div>
+				</Accordion>
 
-				<div className={styles.column2}>
-					<h4>Difinery</h4>
+				<Accordion
+					title='Difinery'
+					state={true}
+					hideBorder={true}
+					disabled={true}
+					extraClass={styles.column2}
+				>
 					<div className={styles.links}>
 						{content.difinery.map(link => (
 							<Link
@@ -116,10 +137,15 @@ const Footer = ({ content }) => {
 							<p>Blog</p>
 						</Link>
 					</div>
-				</div>
+				</Accordion>
 
-				<div className={styles.column2}>
-					<h4>To Know</h4>
+				<Accordion
+					title='To Know'
+					state={true}
+					hideBorder={true}
+					disabled={true}
+					extraClass={styles.column2}
+				>
 					<div className={styles.links}>
 						{content.toKnow.map(link => (
 							<Link
@@ -137,13 +163,13 @@ const Footer = ({ content }) => {
 							</Link>
 						))}
 					</div>
-				</div>
+				</Accordion>
 			</div>
 
 			{/* Second Row */}
 
 			<div className={styles.secondRow}>
-				<div className={`container ${styles.content}`}>
+				<div className={styles.content}>
 					<div className={styles.column5}>
 						<h4>Certified Diamonds</h4>
 						<div className={styles.logos}>
