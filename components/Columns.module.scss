@@ -1,6 +1,7 @@
 @use '@/app/base';
 
-.columns {
+.columns,
+.columnsGrid {
 	display: flex;
 }
 
@@ -102,7 +103,7 @@
 // Title below the image
 .belowText {
 	position: absolute;
-	bottom: 0;
+	bottom: -32px;
 	width: 100%;
 	background-color: white;
 	padding: 1rem 1rem 2rem 1rem;
@@ -153,8 +154,19 @@
 		flex-direction: column;
 	}
 
+	.columnsGrid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+		padding: 0 5vw;
+	}
+
 	.column {
 		flex: auto;
+	}
+
+	.columnGrid {
+		height: 320px !important;
 	}
 
 	.text {

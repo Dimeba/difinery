@@ -7,14 +7,23 @@ import styles from './Columns.module.scss'
 // components
 import Link from 'next/link'
 
-const ConditionalLink = ({ fullHeight, link, overlay, type, children }) => {
+const ConditionalLink = ({
+	fullHeight,
+	link,
+	overlay,
+	type,
+	children,
+	mobileColumns
+}) => {
 	const dynamicStyles = {
 		backgroundColor: overlay ? 'rgba(0,0,0,0.25)' : ''
 	}
 
 	const sharedClasses = `${styles.column} ${
 		fullHeight ? styles.fullHeight : styles.defaultHeight
-	} ${type == 'blank' ? styles.blackText : styles.whiteText}`
+	} ${type == 'blank' ? styles.blackText : styles.whiteText} ${
+		mobileColumns == 2 ? styles.columnGrid : ''
+	}`
 
 	if (link) {
 		return (

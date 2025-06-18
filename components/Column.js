@@ -11,7 +11,7 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 // lib
 import { getEntry } from '@/lib/contentful'
 
-const Column = async ({ fullHeight, id, columns }) => {
+const Column = async ({ fullHeight, id, columns, mobileColumns = 1 }) => {
 	const content = await getEntry(id)
 
 	// dynamic styles
@@ -56,6 +56,7 @@ const Column = async ({ fullHeight, id, columns }) => {
 			link={content.fields.link}
 			overlay={content.fields.overlay}
 			type={content.fields.type}
+			mobileColumns={mobileColumns}
 		>
 			{content.fields.type == 'video' && (
 				<Video

@@ -15,7 +15,7 @@ const Columns = ({
 	stylizedTitle,
 	marginTop,
 	marginBottom,
-	heroSection = false
+	mobileColumns = 1
 }) => {
 	// dynamic styles
 	const dynamicStyles = {
@@ -41,13 +41,19 @@ const Columns = ({
 					</>
 				)}
 
-				<div className={styles.columns} style={dynamicStyles.columns}>
+				<div
+					className={`${
+						mobileColumns == 2 ? styles.columnsGrid : styles.columns
+					}`}
+					style={dynamicStyles.columns}
+				>
 					{content.map((item, index) => (
 						<Column
 							key={index}
 							fullHeight={fullHeight}
 							id={item.sys.id}
 							columns={content.length}
+							mobileColumns={mobileColumns}
 						/>
 					))}
 				</div>

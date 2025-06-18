@@ -60,6 +60,7 @@ const PageContent = ({ content }) => {
 								fullWidth={section.fields.fullWidth}
 								marginTop={section.fields.marginTop}
 								marginBottom={section.fields.marginBottom}
+								mobileColumns={section.fields.mobileColumns}
 							/>
 						)
 					case 'accordion':
