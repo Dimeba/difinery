@@ -1,6 +1,8 @@
 // import { Work_Sans } from 'next/font/google'
 import { Libre_Franklin } from 'next/font/google'
 import './globals.scss'
+import theme from '@/app/theme/theme'
+import { CssBaseline } from '@mui/material'
 
 // const workSans = Work_Sans({ subsets: ['latin'] })
 const libreFranklin = Libre_Franklin({ subsets: ['latin'] })
@@ -17,6 +19,7 @@ import { getEntries } from '@/lib/contentful'
 import { CartProvider } from '@/context/CartContext'
 import { HeaderProvider } from '@/context/HeaderContext'
 import { ApolloContext } from '@/lib/apolloContext'
+import { ThemeProvider } from '@mui/material'
 
 const header = await getEntries('header')
 const footer = await getEntries('footer')
@@ -40,12 +43,15 @@ export default function RootLayout({ children }) {
 			<ApolloContext>
 				<CartProvider>
 					<body className={libreFranklin.className}>
-						<Cart />
-						<HeaderProvider>
-							<Header content={headerContent} />
-							{children}
-							<Footer content={footerContent} />
-						</HeaderProvider>
+						<ThemeProvider theme={theme}>
+							<CssBaseline />
+							<Cart />
+							<HeaderProvider>
+								<Header content={headerContent} />
+								{children}
+								<Footer content={footerContent} />
+							</HeaderProvider>
+						</ThemeProvider>
 					</body>
 				</CartProvider>
 			</ApolloContext>
