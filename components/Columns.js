@@ -42,9 +42,7 @@ const Columns = ({
 				)}
 
 				<div
-					className={`${
-						mobileColumns == 2 ? styles.columnsGrid : styles.columns
-					}`}
+					className={mobileColumns == 2 ? styles.columnsGrid : styles.columns}
 					style={dynamicStyles.columns}
 				>
 					{content.map((item, index) => (

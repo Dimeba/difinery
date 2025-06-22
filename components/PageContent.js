@@ -5,6 +5,7 @@ import RichText from '@/components/RichText'
 import Columns from './Columns'
 import HeaderChanger from './HeaderChanger'
 import FAQ from './FAQ'
+import MasonryColumns from './MasonryColumns'
 
 const PageContent = ({ content }) => {
 	return (
@@ -69,6 +70,13 @@ const PageContent = ({ content }) => {
 								key={section.sys.id}
 								title={section.fields.title}
 								content={section.fields.rows}
+							/>
+						)
+					case 'masonryColumns':
+						return (
+							<MasonryColumns
+								key={section.sys.id}
+								content={section.fields.columns}
 							/>
 						)
 
