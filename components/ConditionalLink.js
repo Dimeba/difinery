@@ -13,17 +13,17 @@ const ConditionalLink = ({
 	overlay,
 	type,
 	children,
-	mobileColumns
+	mobileColumns,
+	height = '650px'
 }) => {
 	const dynamicStyles = {
-		backgroundColor: overlay ? 'rgba(0,0,0,0.25)' : ''
+		backgroundColor: overlay ? 'rgba(0,0,0,0.25)' : '',
+		height: fullHeight ? '100vh' : height
 	}
 
 	const sharedClasses = `${styles.column} ${
-		fullHeight ? styles.fullHeight : styles.defaultHeight
-	} ${type == 'blank' ? styles.blackText : styles.whiteText} ${
-		mobileColumns == 2 ? styles.columnGrid : ''
-	}`
+		type == 'blank' ? styles.blackText : styles.whiteText
+	} ${mobileColumns == 2 ? styles.columnGrid : ''}`
 
 	if (link) {
 		return (
