@@ -177,6 +177,7 @@ const Products = ({
 								fontWeight={500}
 								letterSpacing={'0.35em'}
 								color='inherit'
+								fontSize={'12px'}
 							>
 								Sort & Filter
 							</Typography>
