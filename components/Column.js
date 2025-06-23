@@ -7,6 +7,8 @@ import Image from 'next/image'
 import Video from './Video'
 import ConditionalLink from './ConditionalLink'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import { BLOCKS } from '@contentful/rich-text-types'
+import { Box } from '@mui/material'
 
 // lib
 import { getEntry } from '@/lib/contentful'
@@ -37,7 +39,8 @@ const Column = async ({
 			alignItems: horizontalAlign(),
 			justifyContent:
 				content.fields.contentAlignVertical == 'center' ? 'center' : 'flex-end',
-			maxWidth: columns == 1 ? '1440px' : `${1440 / columns}px`
+			maxWidth: columns == 1 ? '1440px' : `${1440 / columns}px`,
+			padding: content.fields.noPadding === true ? '0' : ''
 		}
 	}
 
@@ -56,6 +59,27 @@ const Column = async ({
 	// text width
 	const textWidth = columns == 1 ? styles.third : ''
 
+	// extracting image from rich text
+	const richTextOptions = {
+		renderNode: {
+			[BLOCKS.EMBEDDED_ASSET]: node => {
+				const { title, file } = node.data.target.fields
+				// prepend protocol if missing
+				const src = file.url.startsWith('//') ? `https:${file.url}` : file.url
+				return (
+					<Box display='flex' justifyContent='center' width='100%' mb={2}>
+						<Image
+							src={src}
+							alt={title || file.fileName}
+							width={54}
+							height={54}
+						/>
+					</Box>
+				)
+			}
+		}
+	}
+
 	return (
 		<ConditionalLink
 			fullHeight={fullHeight}
@@ -63,7 +87,7 @@ const Column = async ({
 			overlay={content.fields.overlay}
 			type={content.fields.type}
 			mobileColumns={mobileColumns}
-			height={height}
+			height={content.fields.noPadding ? 'fit-content' : height}
 		>
 			{content.fields.type == 'video' && (
 				<Video
@@ -95,7 +119,7 @@ const Column = async ({
 					<div
 						className={` ${textAlignClassName()} ${styles.text} ${textWidth}`}
 					>
-						{documentToReactComponents(content.fields.text)}
+						{documentToReactComponents(content.fields.text, richTextOptions)}
 					</div>
 				)}
 
