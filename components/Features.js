@@ -36,8 +36,8 @@ const Features = async ({ features, title, stylizedTitle }) => {
 								<Image
 									src={'https:' + item.fields.image.fields.file.url}
 									alt='Icon'
-									width={64}
-									height={64}
+									width={54}
+									height={54}
 									style={{ objectFit: 'contain', objectPosition: 'center' }}
 								/>
 							) : (
