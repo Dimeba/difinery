@@ -4,12 +4,11 @@
 	background-color: white;
 	width: 240px;
 	flex-shrink: 0;
-	padding: 0 2rem 2rem 0;
-	// border: 1px solid base.$gray;
+	padding: 2rem;
+	border: 1px solid base.$gray;
 	display: flex;
 	flex-direction: column;
-	position: sticky;
-	top: 6rem;
+	margin-top: 2rem;
 }
 
 .buttons {
@@ -78,13 +77,13 @@
 
 @media screen and (max-width: 768px) {
 	.filters {
-		z-index: 3;
-		width: 100%;
-		position: fixed;
-		padding: 4rem 2rem;
-		top: 0;
-		left: 0;
-		height: 100vh;
+		// z-index: 3;
+		width: 90vw;
+		// position: fixed;
+		// padding: 4rem 2rem;
+		// top: 0;
+		// left: 0;
+		// height: 100vh;
 	}
 
 	.closeButton {

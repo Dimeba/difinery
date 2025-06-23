@@ -13,12 +13,13 @@ import {
 	Box,
 	TextField,
 	InputAdornment,
-	Typography
+	Typography,
+	Popper
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 
 // hooks
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
 
 const Products = ({
@@ -42,6 +43,7 @@ const Products = ({
 	const [searchTerm, setSearchTerm] = useState('')
 
 	const isMobile = useMediaQuery('(max-width: 1024px)')
+	const anchorRef = useRef(null)
 
 	// Filter & sort
 	useEffect(() => {
@@ -149,6 +151,7 @@ const Products = ({
 							onClick={() => setShowFiltersMenu(!showFiltersMenu)}
 							variant='outlined'
 							endIcon={<LuSettings2 size='12px' />}
+							ref={anchorRef}
 							sx={{
 								borderRadius: 0,
 								p: '0.6rem 3rem',
@@ -182,19 +185,6 @@ const Products = ({
 				)}
 
 				<div className={styles.productsContainer}>
-					{showFiltersMenu && (
-						<Filters
-							items={items}
-							selectedSort={selectedSort}
-							setSelectedSort={setSelectedSort}
-							selectedProductType={selectedProductType}
-							setSelectedProductType={setSelectedProductType}
-							selectedMetalTypes={selectedMetalTypes}
-							setSelectedMetalTypes={setSelectedMetalTypes}
-							toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
-						/>
-					)}
-
 					<div
 						className={`${styles.products} ${!individual ? styles.gap : ''}`}
 					>
@@ -227,6 +217,23 @@ const Products = ({
 					</div>
 				</div>
 			</div>
+
+			<Popper
+				open={showFiltersMenu}
+				placement={isMobile ? 'bottom' : 'bottom-end'}
+				anchorEl={anchorRef.current}
+			>
+				<Filters
+					items={items}
+					selectedSort={selectedSort}
+					setSelectedSort={setSelectedSort}
+					selectedProductType={selectedProductType}
+					setSelectedProductType={setSelectedProductType}
+					selectedMetalTypes={selectedMetalTypes}
+					setSelectedMetalTypes={setSelectedMetalTypes}
+					toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
+				/>
+			</Popper>
 		</section>
 	)
 }
