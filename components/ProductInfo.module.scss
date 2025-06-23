@@ -18,19 +18,24 @@
 	width: 100%;
 	display: flex;
 	justify-content: center;
-	// gap: 0.5rem;
-	padding: 1rem;
+	gap: 0.5rem;
+	padding: 2rem;
 
-	button {
-		background-color: transparent;
+	.bullet {
+		background-color: base.$gray;
 		border: none;
 		border-radius: 10px;
-		padding: 0.5rem;
+		width: 8px;
+		aspect-ratio: 1 / 1;
 		cursor: pointer;
 
 		&:hover {
-			border-color: base.$black;
+			background-color: base.$black;
 		}
+	}
+
+	.activeBullet {
+		background-color: base.$black;
 	}
 }
 

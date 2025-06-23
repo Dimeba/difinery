@@ -46,16 +46,16 @@ const ProductInfo = ({ product }) => {
 
 	// State to track the current image index
 	const [currentIndex, setCurrentIndex] = useState(0)
-	const total = images.length
+	// const total = images.length
 
 	// Handlers for navigation
-	const showPrevious = () => {
-		setCurrentIndex(prev => (prev - 1 + total) % total)
-	}
+	// const showPrevious = () => {
+	// 	setCurrentIndex(prev => (prev - 1 + total) % total)
+	// }
 
-	const showNext = () => {
-		setCurrentIndex(prev => (prev + 1) % total)
-	}
+	// const showNext = () => {
+	// 	setCurrentIndex(prev => (prev + 1) % total)
+	// }
 
 	const handleAddToCart = async () => {
 		const customFields = []
@@ -95,7 +95,7 @@ const ProductInfo = ({ product }) => {
 					/>
 
 					<div className={styles.imageControls}>
-						<button
+						{/* <button
 							onClick={showPrevious}
 							className={styles.navButton}
 							aria-label='Previous image'
@@ -109,7 +109,18 @@ const ProductInfo = ({ product }) => {
 							aria-label='Next image'
 						>
 							<IoIosArrowForward size={20} />
-						</button>
+						</button> */}
+
+						{images.map((_, index) => (
+							<button
+								key={index}
+								className={`${styles.bullet} ${
+									currentIndex === index ? styles.activeBullet : ''
+								}`}
+								onClick={() => setCurrentIndex(index)}
+								aria-label={`Go to image ${index + 1}`}
+							/>
+						))}
 					</div>
 				</div>
 				<ProductOptionsUI
