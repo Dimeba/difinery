@@ -9,20 +9,22 @@ const pages = await getEntries('page')
 
 // Function to generate static params for dynamic routing
 export async function generateStaticParams() {
-	return pages.items.map(page => ({
-		slug: page.fields.title
-			.toLowerCase()
-			.replace(/[^a-zA-Z0-9 ]/g, '')
-			.replace(/&/g, '')
-			.replace(/ /g, '-')
-	}));
+	return pages.items
+		.filter(p => p.fields.dontRender !== true)
+		.map(page => ({
+			slug: page.fields.title
+				.toLowerCase()
+				.replace(/[^a-zA-Z0-9 ]/g, '')
+				.replace(/&/g, '')
+				.replace(/ /g, '-')
+		}))
 }
 
 export async function generateMetadata(props) {
-    const params = await props.params;
-    const { slug } = params
+	const params = await props.params
+	const { slug } = params
 
-    const content = pages.items.find(
+	const content = pages.items.find(
 		page =>
 			page.fields.title
 				.toLowerCase()
@@ -31,7 +33,7 @@ export async function generateMetadata(props) {
 				.replace(/ /g, '-') == slug
 	).fields
 
-    return {
+	return {
 		title: 'Difinery | ' + content.title,
 		description: content.description ? content.description : '',
 		keywords: content.keywords ? content.keywords : ''
@@ -40,10 +42,10 @@ export async function generateMetadata(props) {
 
 // Default export for the page component
 export default async function Page(props) {
-    const params = await props.params;
-    const { slug } = params
+	const params = await props.params
+	const { slug } = params
 
-    const content = pages.items.find(
+	const content = pages.items.find(
 		page =>
 			page.fields.title
 				.toLowerCase()
@@ -52,5 +54,5 @@ export default async function Page(props) {
 				.replace(/ /g, '-') == slug
 	).fields
 
-    return <PageContent content={content} />
+	return <PageContent content={content} />
 }

@@ -1,9 +1,15 @@
 // components
 import Products from '@/components/Products'
+import PageContent from '@/components/PageContent'
 
-// data
+// lib
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
+import { getEntries } from '@/lib/contentful'
+
+// Contentful
+const pages = await getEntries('page')
+const content = pages.items.find(page => page.fields.title == 'Shop').fields
 
 export const metadata = {
 	title: 'Difinery | Shop',
@@ -35,6 +41,7 @@ export default async function Home() {
 	return (
 		<main>
 			<Products products={allProducts} showFilters />
+			<PageContent content={content} />
 		</main>
 	)
 }
