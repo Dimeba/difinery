@@ -124,7 +124,7 @@
 	width: fit-content;
 	max-width: 90vw;
 	padding: 0.6rem 3rem;
-	border-radius: 5px;
+	// border-radius: 5px;
 	transition: 0.3s;
 	border: 1px solid base.$black;
 	background-color: transparent;
@@ -132,7 +132,7 @@
 	display: flex;
 	gap: 0.5rem;
 	align-items: center;
-	align-self: flex-start;
+	align-self: flex-end;
 	margin-bottom: 1rem;
 
 	p {
@@ -142,6 +142,14 @@
 		letter-spacing: 0.35em;
 		text-align: center;
 		color: base.$black;
+	}
+}
+
+.showFiltersButton:hover {
+	background-color: base.$black;
+
+	p {
+		color: white;
 	}
 }
 

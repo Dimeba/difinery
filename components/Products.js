@@ -1,8 +1,5 @@
 'use client'
 
-// React
-import { useState, useEffect } from 'react'
-
 // styles
 import styles from './Products.module.scss'
 
@@ -11,6 +8,18 @@ import ProductCard from './ProductCard'
 import Filters from './Filters'
 import { LuSettings2 } from 'react-icons/lu'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import {
+	Button,
+	Box,
+	TextField,
+	InputAdornment,
+	Typography
+} from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
+
+// hooks
+import { useState, useEffect } from 'react'
+import { useMediaQuery } from '@mui/material'
 
 const Products = ({
 	title = '',
@@ -30,6 +39,9 @@ const Products = ({
 	const [selectedSort, setSelectedSort] = useState(null)
 	const [selectedProductType, setSelectedProductType] = useState('All')
 	const [selectedMetalTypes, setSelectedMetalTypes] = useState([])
+	const [searchTerm, setSearchTerm] = useState('')
+
+	const isMobile = useMediaQuery('(max-width: 1024px)')
 
 	// Filter & sort
 	useEffect(() => {
@@ -49,6 +61,19 @@ const Products = ({
 					)
 				)
 			)
+		}
+
+		if (searchTerm) {
+			const term = searchTerm.toLowerCase()
+			updated = updated.filter(p => {
+				const titleMatch = p.title.toLowerCase().includes(term)
+				const categoryMatch = p.category?.name.toLowerCase().includes(term)
+				const metalOpt = p.options?.find(o => o.name === 'Metal')
+				const metalMatch = metalOpt
+					? metalOpt.values.some(v => v.toLowerCase().includes(term))
+					: false
+				return titleMatch || categoryMatch || metalMatch
+			})
 		}
 
 		if (selectedSort) {
@@ -76,7 +101,7 @@ const Products = ({
 		}
 
 		setFilteredItems(updated)
-	}, [items, selectedSort, selectedProductType, selectedMetalTypes])
+	}, [items, selectedSort, selectedProductType, selectedMetalTypes, searchTerm])
 
 	return (
 		<section
@@ -91,15 +116,69 @@ const Products = ({
 				)}
 				{showTitle && title && !stylizedTitle && <h3>{title}</h3>}
 
-				{/* Filters toggle */}
+				{/* Search and Filters toggle */}
 				{showFilters && items.length > 0 && (
-					<button
-						className={styles.showFiltersButton}
-						onClick={() => setShowFiltersMenu(!showFiltersMenu)}
+					<Box
+						width='100%'
+						display='flex'
+						justifyContent={isMobile ? 'center' : 'space-between'}
+						alignItems='center'
+						mb={4}
 					>
-						<p>Sort & Filter</p>
-						<LuSettings2 />
-					</button>
+						{!isMobile && (
+							<TextField
+								id='standard-basic'
+								variant='standard'
+								placeholder='NEED HELP?'
+								value={searchTerm}
+								onChange={e => setSearchTerm(e.target.value)}
+								sx={{ fontStyle: 'italic', fontSize: '12px' }}
+								slotProps={{
+									input: {
+										startAdornment: (
+											<InputAdornment position='start'>
+												<SearchIcon fontSize='10px' />
+											</InputAdornment>
+										)
+									}
+								}}
+							/>
+						)}
+
+						<Button
+							onClick={() => setShowFiltersMenu(!showFiltersMenu)}
+							variant='outlined'
+							endIcon={<LuSettings2 size='12px' />}
+							sx={{
+								borderRadius: 0,
+								p: '0.6rem 3rem',
+								color: 'black', // default text/icon color
+								bgcolor: 'transparent',
+								transition: 'all 0.2s ease',
+								// target the SVG stroke on the icon:
+								'& svg': {
+									stroke: 'black',
+									transition: 'stroke 0.2s ease'
+								},
+								'&:hover': {
+									bgcolor: 'black', // hover background
+									color: 'white', // hover text color
+									'& svg': {
+										stroke: 'white' // hover icon color
+									}
+								}
+							}}
+						>
+							<Typography
+								variant='p'
+								fontWeight={500}
+								letterSpacing={'0.35em'}
+								color='inherit'
+							>
+								Sort & Filter
+							</Typography>
+						</Button>
+					</Box>
 				)}
 
 				<div className={styles.productsContainer}>
