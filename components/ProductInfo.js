@@ -92,6 +92,7 @@ const ProductInfo = ({ product }) => {
 						fill
 						alt='Image of the product.'
 						sizes={'(max-width: 768px) 100vw, 50vw'}
+						style={{ objectFit: 'cover' }}
 					/>
 
 					<div className={styles.imageControls}>

@@ -9,7 +9,7 @@
 .image {
 	position: relative;
 	grid-column: span 6;
-	aspect-ratio: 1 / 1;
+	height: calc(100vh - 10rem);
 }
 
 .imageControls {
@@ -117,9 +117,9 @@
 	flex-wrap: wrap;
 
 	button {
-		padding: 0.5rem 1rem;
-		background-color: white;
-		border: 1px solid rgba($color: base.$gray, $alpha: 0.5);
+		// padding: 0.5rem 1rem;
+		background-color: transparent;
+		border: none;
 		border-radius: 10px;
 		font-size: 0.8rem;
 		letter-spacing: 0.1em;

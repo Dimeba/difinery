@@ -13,6 +13,7 @@ import { useMediaQuery } from '@mui/material'
 const Accordion = ({
 	state,
 	title,
+	extraTitleText = null,
 	children,
 	small,
 	product,
@@ -53,7 +54,19 @@ const Accordion = ({
 				className={`${styles.titleRow} ${rowOpen ? styles.open : ''}`}
 				onClick={toggleRow}
 			>
-				{small ? <p>{title}</p> : <h4>{title}</h4>}
+				{small ? (
+					<p>{title}</p>
+				) : (
+					<h4>
+						{title}
+						{rowOpen && extraTitleText && (
+							<span style={{ fontWeight: '400', color: '#9b9b9b' }}>
+								{' '}
+								/ {extraTitleText}
+							</span>
+						)}
+					</h4>
+				)}
 
 				<Image
 					src='/arrow.svg'

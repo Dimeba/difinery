@@ -186,14 +186,17 @@ const ProductOptionsUI = ({
 				{Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
 			</p>
 
-			<p>{product.description}</p>
+			<p className={styles.description}>{product.description}</p>
 
 			<div className={styles.accordion}>
 				{filteredOptions.map((option, index) => (
 					<Accordion
 						key={option.name}
-						small
+						// small
 						title={option.name}
+						extraTitleText={
+							option.name === 'Metal' ? '100% RECYCLED GOLD' : null
+						}
 						state={index === openOption}
 						setOpenOption={() => setOpenOption(index)}
 						product
@@ -203,7 +206,6 @@ const ProductOptionsUI = ({
 							{option.optionValues.map(value => (
 								<button
 									key={value.name}
-									className={styles.variantButton}
 									onClick={() =>
 										handleOptionSelection(option.name, value.name, index)
 									}
@@ -211,8 +213,8 @@ const ProductOptionsUI = ({
 									{option.name === 'Metal' && (
 										<Image
 											src={`/${returnMetalType(value.name.toLowerCase())}`}
-											width={16}
-											height={16}
+											width={32}
+											height={32}
 											alt={`${value.name} ${option.name}`}
 										/>
 									)}
@@ -235,7 +237,7 @@ const ProductOptionsUI = ({
 					<>
 						{/* Ring Size */}
 						<Accordion
-							small
+							// small
 							title='Ring Size'
 							state={openOption === filteredOptions.length}
 							setOpenOption={() => setOpenOption(filteredOptions.length)}
@@ -248,6 +250,9 @@ const ProductOptionsUI = ({
 										key={value}
 										className={styles.variantButton}
 										onClick={() => setRingSize(value)}
+										style={{
+											fontWeight: ringSize === value ? 'bold' : 'normal'
+										}}
 									>
 										{value}
 									</button>
@@ -265,7 +270,7 @@ const ProductOptionsUI = ({
 
 						{/* Engraving */}
 						<Accordion
-							small
+							// small
 							title='Engraving (max. 20 characters)'
 							state={openOption === filteredOptions.length}
 							product
