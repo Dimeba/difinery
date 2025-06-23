@@ -176,11 +176,20 @@
 	.productNoGap {
 		grid-column: span 6;
 	}
+
+	.productInfo {
+		flex-direction: column;
+		align-items: center;
+
+		* {
+			text-align: center;
+		}
+	}
 }
 
 @media screen and (max-width: 768px) {
 	.product {
-		grid-column: span 12;
+		// grid-column: span 12;
 		max-width: 90vw;
 
 		.image {
@@ -189,7 +198,7 @@
 	}
 
 	.productNoGap {
-		grid-column: span 12;
+		// grid-column: span 12;
 
 		.image {
 			aspect-ratio: 1 / 1;
