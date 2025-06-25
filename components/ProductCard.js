@@ -95,7 +95,8 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 
 						{individual && (
 							<p className={styles.individualTitle}>
-								<span>{product.title}</span> - From $
+								<span>{product.title}</span>
+								<br />
 								{parseFloat(product.priceRange.minVariantPrice.amount)}
 							</p>
 						)}

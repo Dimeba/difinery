@@ -8,12 +8,6 @@ const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
 		<main>
 			<ProductInfo product={product} />
 
-			<FAQ
-				title='Frequently Asked Questions'
-				productDetails={product.description}
-				content={faqs.fields.rows}
-			/>
-
 			{recommendedProducts.length > 0 && (
 				<Products
 					title='Pair your product with:'
@@ -23,6 +17,12 @@ const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
 					individual={true}
 				/>
 			)}
+
+			<FAQ
+				title='Frequently Asked Questions'
+				productDetails={product.description}
+				content={faqs.fields.rows}
+			/>
 		</main>
 	)
 }

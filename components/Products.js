@@ -203,7 +203,7 @@ const Products = ({
 									/>
 								))}
 
-						{/* {recommendedProducts &&
+						{recommendedProducts &&
 							recommendedProducts.length > 0 &&
 							recommendedProducts.map(product => (
 								<ProductCard
@@ -214,7 +214,7 @@ const Products = ({
 									discount={discount}
 									individual={individual}
 								/>
-							))} */}
+							))}
 					</div>
 				</div>
 			</div>
