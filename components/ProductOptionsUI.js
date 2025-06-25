@@ -32,7 +32,6 @@ const ProductOptionsUI = ({
 
 	const [openOption, setOpenOption] = useState(0)
 	const [selectedOptions, setSelectedOptions] = useState({})
-	const [filteredOptions, setFilteredOptions] = useState(product.options)
 
 	// Find the Shopify variant node matching the selected options
 	const getMatchingVariant = options => {
@@ -212,8 +211,8 @@ const ProductOptionsUI = ({
 						<Accordion
 							// small
 							title='Ring Size'
-							state={openOption === filteredOptions.length}
-							setOpenOption={() => setOpenOption(filteredOptions.length)}
+							state={openOption === product.options.length}
+							setOpenOption={() => setOpenOption(product.options.length)}
 							product
 							display
 						>
