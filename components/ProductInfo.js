@@ -74,10 +74,9 @@ const ProductInfo = ({ product }) => {
 			<div className={styles.productInfo}>
 				<div className={styles.images}>
 					{images.map((image, index) => (
-						<div className={styles.image}>
+						<div className={styles.image} key={index}>
 							<Image
 								src={image}
-								key={image}
 								fill
 								alt='Image of the product.'
 								sizes={'(max-width: 768px) 100vw, 50vw'}

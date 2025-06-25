@@ -133,6 +133,14 @@ const ProductOptionsUI = ({
 		'12'
 	]
 
+	const toggleRingSize = value => {
+		if (ringSize === value) {
+			setRingSize('')
+		} else {
+			setRingSize(value)
+		}
+	}
+
 	return (
 		<div className={styles.content}>
 			<div className={styles.versionInfo}>
@@ -214,7 +222,7 @@ const ProductOptionsUI = ({
 									<button
 										key={value}
 										className={styles.variantButton}
-										onClick={() => setRingSize(value)}
+										onClick={() => toggleRingSize(value)}
 										style={{
 											fontWeight: ringSize === value ? 'bold' : 'normal'
 										}}
@@ -226,7 +234,7 @@ const ProductOptionsUI = ({
 						</Accordion>
 
 						{/* Engraving */}
-						<Accordion
+						{/* <Accordion
 							// small
 							title='Engraving (max. 20 characters)'
 							state={openOption === filteredOptions.length}
@@ -242,7 +250,7 @@ const ProductOptionsUI = ({
 								className={styles.engravingInput}
 								maxLength={20}
 							/>
-						</Accordion>
+						</Accordion> */}
 					</>
 				)}
 
@@ -276,18 +284,25 @@ const ProductOptionsUI = ({
 				)} */}
 			</div>
 
-			<div className={styles.cartBox}>
+			{allOptionsSelected &&
+				(product.category.name !== 'Rings' || ringSize !== '') && (
+					<div className={styles.reviewOrderButtons}>
+						<button className={styles.personailzeButton}>PERSONALIZE IT</button>
+
+						<a href='#addToCart'>
+							<button className={styles.reviewOrderButton}>
+								ADD TO THE CART AND REVIEW YOUR ORDER
+							</button>
+						</a>
+					</div>
+				)}
+
+			{/* <div className={styles.cartBox}>
 				<p className={styles.orderDate}>
 					Made to Order: Between {new Date().toLocaleDateString()}–{' '}
 					{new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}{' '}
 					with you.
 				</p>
-
-				<a href='#addToCart'>
-					<button className={styles.cartButton} disabled={!allOptionsSelected}>
-						REVIEW YOUR ORDER
-					</button>
-				</a>
 
 				<p className={styles.tax}>
 					Tax included
@@ -298,7 +313,7 @@ const ProductOptionsUI = ({
 						$15 of your purchase goes to The New York Women&apos;s Foundation
 					</b>
 				</p>
-			</div>
+			</div> */}
 		</div>
 	)
 }
