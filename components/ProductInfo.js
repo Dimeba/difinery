@@ -86,44 +86,21 @@ const ProductInfo = ({ product }) => {
 	return (
 		<section className='topSection'>
 			<div className={styles.productInfo}>
-				<div className={styles.image}>
-					<Image
-						src={images[currentIndex]}
-						fill
-						alt='Image of the product.'
-						sizes={'(max-width: 768px) 100vw, 50vw'}
-						style={{ objectFit: 'cover' }}
-					/>
-
-					<div className={styles.imageControls}>
-						{/* <button
-							onClick={showPrevious}
-							className={styles.navButton}
-							aria-label='Previous image'
-						>
-							<IoIosArrowBack size={20} />
-						</button>
-
-						<button
-							onClick={showNext}
-							className={styles.navButton}
-							aria-label='Next image'
-						>
-							<IoIosArrowForward size={20} />
-						</button> */}
-
-						{images.map((_, index) => (
-							<button
-								key={index}
-								className={`${styles.bullet} ${
-									currentIndex === index ? styles.activeBullet : ''
-								}`}
-								onClick={() => setCurrentIndex(index)}
-								aria-label={`Go to image ${index + 1}`}
+				<div className={styles.images}>
+					{images.map((image, index) => (
+						<div className={styles.image}>
+							<Image
+								src={image}
+								key={image}
+								fill
+								alt='Image of the product.'
+								sizes={'(max-width: 768px) 100vw, 50vw'}
+								style={{ objectFit: 'cover' }}
 							/>
-						))}
-					</div>
+						</div>
+					))}
 				</div>
+
 				<ProductOptionsUI
 					product={product}
 					setSelectedColor={setSelectedColor}
