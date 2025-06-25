@@ -14,7 +14,8 @@ const ConditionalLink = ({
 	type,
 	children,
 	mobileColumns,
-	height = '650px'
+	height = '650px',
+	fixedRatio = false
 }) => {
 	const dynamicStyles = {
 		backgroundColor: overlay ? 'rgba(0,0,0,0.25)' : '',

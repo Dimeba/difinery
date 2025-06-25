@@ -80,6 +80,8 @@ const Column = async ({
 		}
 	}
 
+	const isPng = content.fields.media?.fields?.file?.contentType === 'image/png'
+
 	return (
 		<ConditionalLink
 			fullHeight={fullHeight}
@@ -88,6 +90,7 @@ const Column = async ({
 			type={content.fields.type}
 			mobileColumns={mobileColumns}
 			height={content.fields.noPadding ? 'fit-content' : height}
+			fixedRatio={content.fields.fixedRatio}
 		>
 			{content.fields.type == 'video' && (
 				<Video
@@ -104,7 +107,10 @@ const Column = async ({
 					src={'https:' + content.fields.media.fields.file.url}
 					alt='image'
 					fill
-					style={{ objectFit: content.fields.fitImage ? 'contain' : 'cover' }}
+					style={{
+						objectFit: content.fields.fitImage ? 'contain' : 'cover',
+						backgroundColor: isPng ? '#F5F5F5' : ''
+					}}
 					sizes={
 						columns == 1
 							? '(max-width: 1920px) 100vw, 75vw'
