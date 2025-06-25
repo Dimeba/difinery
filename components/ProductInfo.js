@@ -6,7 +6,6 @@ import styles from './ProductInfo.module.scss'
 // components
 import Image from 'next/image'
 import ProductOptionsUI from './ProductOptionsUI'
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 
 // hooks
 import { useState, useMemo } from 'react'
@@ -43,19 +42,6 @@ const ProductInfo = ({ product }) => {
 			? allImages.filter(url => url.toLowerCase().includes(`/files/${code}`))
 			: allImages
 	}, [allImages, selectedColor])
-
-	// State to track the current image index
-	const [currentIndex, setCurrentIndex] = useState(0)
-	// const total = images.length
-
-	// Handlers for navigation
-	// const showPrevious = () => {
-	// 	setCurrentIndex(prev => (prev - 1 + total) % total)
-	// }
-
-	// const showNext = () => {
-	// 	setCurrentIndex(prev => (prev + 1) % total)
-	// }
 
 	const handleAddToCart = async () => {
 		const customFields = []
@@ -120,7 +106,7 @@ const ProductInfo = ({ product }) => {
 					<div className={`container ${styles.finalPreview}`}>
 						<div className={styles.fpImage}>
 							<Image
-								src={images[currentIndex]}
+								src={images[0]}
 								fill
 								alt='Image of the product.'
 								sizes={'(max-width: 768px) 100vw, 50vw'}
