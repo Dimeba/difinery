@@ -51,39 +51,22 @@ const ProductOptionsUI = ({
 
 	// User selects an option value
 	const handleOptionSelection = (optionName, value, index) => {
+		// If user clicks the same value again, clear it
+		if (selectedOptions[optionName] === value) {
+			return handleOptionReset(optionName)
+		}
+
 		// 1) update selectedOptions map
 		const newSelected = { ...selectedOptions, [optionName]: value }
 		setSelectedOptions(newSelected)
 
-		// 2) re-filter optionValues for each option
-		const newFiltered = product.options.map(option => ({
-			...option,
-			optionValues: option.optionValues.filter(optVal =>
-				product.variants.edges.some(({ node: variant }) => {
-					// must match all already selected options
-					const matchesSelected = Object.entries(newSelected).every(
-						([selName, selValue]) =>
-							variant.selectedOptions.some(
-								so => so.name === selName && so.value === selValue
-							)
-					)
-					if (!matchesSelected) return false
-					// and must support this option’s value
-					return variant.selectedOptions.some(
-						so => so.name === option.name && so.value === optVal.name
-					)
-				})
-			)
-		}))
-		setFilteredOptions(newFiltered)
-
-		// 3) update matchingVariant
+		// 2) update matchingVariant
 		getMatchingVariant(newSelected)
 
-		// 4) advance to next dropdown
+		// 3) advance to next dropdown
 		setOpenOption(index + 1)
 
-		// 5) set selected color if applicable
+		// 4) set selected color if applicable
 		if (optionName === 'Metal') {
 			setSelectedColor(value)
 		}
@@ -94,39 +77,23 @@ const ProductOptionsUI = ({
 		const newSelected = { ...selectedOptions }
 		delete newSelected[optionName]
 		setSelectedOptions(newSelected)
-
-		const newFiltered = product.options.map(option => ({
-			...option,
-			optionValues: option.optionValues.filter(optVal =>
-				product.variants.edges.some(({ node: variant }) => {
-					const matchesSelected = Object.entries(newSelected).every(
-						([selName, selValue]) =>
-							variant.selectedOptions.some(
-								so => so.name === selName && so.value === selValue
-							)
-					)
-					if (!matchesSelected) return false
-					return variant.selectedOptions.some(
-						so => so.name === option.name && so.value === optVal.name
-					)
-				})
-			)
-		}))
-		setFilteredOptions(newFiltered)
 		getMatchingVariant(newSelected)
+
+		if (optionName === 'Metal') {
+			setSelectedColor(null)
+		}
 	}
 
 	// Reset all options
-	const handleReset = () => {
-		setSelectedOptions({})
-		setFilteredOptions(product.options)
-		setOpenOption(0)
-		setMatchingVariant(product.variants.edges[0].node)
-		setSelectedColor(null)
-		setEngraving('')
-		setBirthstone('')
-		setRingSize('')
-	}
+	// const handleReset = () => {
+	// 	setSelectedOptions({})
+	// 	setOpenOption(0)
+	// 	setMatchingVariant(product.variants.edges[0].node)
+	// 	setSelectedColor(null)
+	// 	setEngraving('')
+	// 	setBirthstone('')
+	// 	setRingSize('')
+	// }
 
 	const allOptionsSelected =
 		Object.keys(selectedOptions).length === product.options.length
@@ -170,26 +137,26 @@ const ProductOptionsUI = ({
 		<div className={styles.content}>
 			<div className={styles.versionInfo}>
 				<h3>{product.title}</h3>
-				{Object.keys(selectedOptions).length > 0 && (
+				{/* {Object.keys(selectedOptions).length > 0 && (
 					<p>
 						{Object.values(selectedOptions).join(' / ')}{' '}
 						<span className={styles.resetButton} onClick={handleReset}>
 							Reset All
 						</span>
 					</p>
-				)}
+				)} */}
 			</div>
 
-			<p>
+			{/* <p>
 				{' '}
 				FROM $
 				{Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
-			</p>
+			</p> */}
 
 			<p className={styles.description}>{product.description}</p>
 
 			<div className={styles.accordion}>
-				{filteredOptions.map((option, index) => (
+				{product.options.map((option, index) => (
 					<Accordion
 						key={option.name}
 						// small
@@ -209,6 +176,12 @@ const ProductOptionsUI = ({
 									onClick={() =>
 										handleOptionSelection(option.name, value.name, index)
 									}
+									style={{
+										fontWeight:
+											selectedOptions[option.name] === value.name
+												? 'bold'
+												: 'normal'
+									}}
 								>
 									{option.name === 'Metal' && (
 										<Image
@@ -221,14 +194,6 @@ const ProductOptionsUI = ({
 									{value.name}
 								</button>
 							))}
-							{selectedOptions[option.name] && (
-								<button
-									className={styles.resetButton}
-									onClick={() => handleOptionReset(option.name)}
-								>
-									Reset
-								</button>
-							)}
 						</div>
 					</Accordion>
 				))}
@@ -257,14 +222,6 @@ const ProductOptionsUI = ({
 										{value}
 									</button>
 								))}
-								{ringSize && (
-									<button
-										className={styles.resetButton}
-										onClick={() => setRingSize('')}
-									>
-										Reset
-									</button>
-								)}
 							</div>
 						</Accordion>
 
