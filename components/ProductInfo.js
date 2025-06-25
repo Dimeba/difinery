@@ -6,6 +6,7 @@ import styles from './ProductInfo.module.scss'
 // components
 import Image from 'next/image'
 import ProductOptionsUI from './ProductOptionsUI'
+import OrderReview from './OrderReview'
 
 // hooks
 import { useState, useMemo } from 'react'
@@ -24,6 +25,7 @@ const ProductInfo = ({ product }) => {
 	const [engraving, setEngraving] = useState('')
 	const [birthStone, setBirthstone] = useState('')
 	const [ringSize, setRingSize] = useState('')
+	const [showOrderSummary, setShowOrderSummary] = useState(false)
 
 	const images = useMemo(() => {
 		if (!selectedColor) {
@@ -105,26 +107,17 @@ const ProductInfo = ({ product }) => {
 					setBirthstone={setBirthstone}
 					ringSize={ringSize}
 					setRingSize={setRingSize}
+					setShowOrderSummary={setShowOrderSummary}
 				/>
 			</div>
 
-			{selectedColor && (
-				<div className={styles.finalPreviewContainer} id='addToCart'>
-					<div className={`container ${styles.finalPreview}`}>
-						<div className={styles.fpImage}>
-							<Image
-								src={pngImages[0]} // Update to use correct color image later
-								fill
-								alt='Image of the product.'
-								sizes={'(max-width: 768px) 100vw, 50vw'}
-							/>
-						</div>
-
-						<button className={styles.cartButton} onClick={handleAddToCart}>
-							Add To Cart
-						</button>
-					</div>
-				</div>
+			{showOrderSummary && (
+				<OrderReview
+					image={pngImages.length > 0 ? pngImages[0] : images[0]}
+					handleAddToCart={handleAddToCart}
+					matchingVariant={matchingVariant}
+					product={product}
+				/>
 			)}
 		</section>
 	)

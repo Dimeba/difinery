@@ -26,7 +26,8 @@ const ProductOptionsUI = ({
 	birthStone,
 	setBirthstone,
 	ringSize,
-	setRingSize
+	setRingSize,
+	setShowOrderSummary
 }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
@@ -289,7 +290,7 @@ const ProductOptionsUI = ({
 					<div className={styles.reviewOrderButtons}>
 						<button className={styles.personailzeButton}>PERSONALIZE IT</button>
 
-						<a href='#addToCart'>
+						<a href='#order-review' onClick={() => setShowOrderSummary(true)}>
 							<button className={styles.reviewOrderButton}>
 								ADD TO THE CART AND REVIEW YOUR ORDER
 							</button>

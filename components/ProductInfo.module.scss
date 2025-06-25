@@ -118,6 +118,8 @@
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	cursor: pointer;
+	line-height: 1.5;
+	text-wrap: balance;
 }
 
 .personailzeButton {
@@ -151,6 +153,7 @@
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	cursor: pointer;
+	width: fit-content;
 }
 
 .cartButton:disabled {
@@ -198,11 +201,11 @@
 	border-radius: 5px;
 }
 
-.finalPreviewContainer {
+.orderReviewContainer {
 	background-color: #f4f4f4;
 }
 
-.finalPreview {
+.orderReview {
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	grid-gap: 2rem;
