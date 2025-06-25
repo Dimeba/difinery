@@ -7,7 +7,13 @@ import styles from './ProductInfo.module.scss'
 import { Box, Grid, Typography } from '@mui/material'
 import Image from 'next/image'
 
-const OrderReview = ({ image, handleAddToCart, matchingVariant, product }) => {
+const OrderReview = ({
+	image,
+	handleAddToCart,
+	matchingVariant,
+	product,
+	customOptions
+}) => {
 	const additionalInfo = [
 		{ icon: '/box-icon.png', text: 'Free shipping for purchases above $300' },
 		{ icon: '/quality-icon.png', text: 'Excellent quality, handmade in USA' },
@@ -19,8 +25,6 @@ const OrderReview = ({ image, handleAddToCart, matchingVariant, product }) => {
 			text: '1 Year of free polish & cleaning if you subscribe.'
 		}
 	]
-
-	console.log(matchingVariant)
 
 	return (
 		<Box sx={{ backgroundColor: '#f4f4f4' }} id='order-review'>
@@ -113,7 +117,52 @@ const OrderReview = ({ image, handleAddToCart, matchingVariant, product }) => {
 						flex: 1
 					}}
 				>
-					<Typography variant='p'>
+					<Box>
+						{/* Selected Options */}
+						{matchingVariant.selectedOptions.map((option, index) => (
+							<Box
+								key={index}
+								sx={{
+									marginBottom: '0.5rem'
+								}}
+							>
+								<Typography variant='p'>
+									{option.name} / {option.value}
+								</Typography>
+							</Box>
+						))}
+
+						{/* Ring Size */}
+						{product.category.name === 'Rings' && (
+							<Box
+								sx={{
+									marginBottom: '0.5rem'
+								}}
+							>
+								<Typography variant='p'>
+									Size / {customOptions.ringSize}
+								</Typography>
+							</Box>
+						)}
+						{/* Engraving */}
+						{customOptions.engraving !== '' && (
+							<Box
+								sx={{
+									marginBottom: '0.5rem'
+								}}
+							>
+								<Typography variant='p'>
+									Engraving / {customOptions.engraving}
+								</Typography>
+							</Box>
+						)}
+					</Box>
+
+					<Typography
+						variant='p'
+						paddingTop={'1rem'}
+						borderTop={'1px solid #d6d6d6'}
+					>
 						With you between {new Date().toLocaleDateString()}–{' '}
 						{new Date(
 							Date.now() + 5 * 24 * 60 * 60 * 1000

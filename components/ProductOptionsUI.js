@@ -78,6 +78,7 @@ const ProductOptionsUI = ({
 		delete newSelected[optionName]
 		setSelectedOptions(newSelected)
 		getMatchingVariant(newSelected)
+		setShowOrderSummary(false)
 
 		if (optionName === 'Metal') {
 			setSelectedColor(null)
@@ -136,6 +137,7 @@ const ProductOptionsUI = ({
 	const toggleRingSize = value => {
 		if (ringSize === value) {
 			setRingSize('')
+			setShowOrderSummary(false)
 		} else {
 			setRingSize(value)
 		}

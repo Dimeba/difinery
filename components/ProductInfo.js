@@ -117,6 +117,10 @@ const ProductInfo = ({ product }) => {
 					handleAddToCart={handleAddToCart}
 					matchingVariant={matchingVariant}
 					product={product}
+					customOptions={{
+						ringSize,
+						engraving
+					}}
 				/>
 			)}
 		</section>
