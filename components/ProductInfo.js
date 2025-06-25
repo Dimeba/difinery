@@ -28,7 +28,7 @@ const ProductInfo = ({ product }) => {
 	const images = useMemo(() => {
 		if (!selectedColor) {
 			// No color chosen yet, show all images
-			return allImages
+			return allImages.filter(url => url.toLowerCase().includes('.jpg'))
 		}
 
 		// Decide code letter based on selection (W for White, Y for Yellow)
@@ -39,9 +39,17 @@ const ProductInfo = ({ product }) => {
 
 		// Filter URLs by matching "/files/{code}" case-insensitively
 		return code
-			? allImages.filter(url => url.toLowerCase().includes(`/files/${code}`))
-			: allImages
+			? allImages.filter(
+					url =>
+						url.toLowerCase().includes(`/files/${code}`) &&
+						url.toLowerCase().includes('.jpg')
+			  )
+			: allImages.filter(url => url.toLowerCase().includes('.jpg'))
 	}, [allImages, selectedColor])
+
+	const pngImages = useMemo(() => {
+		return allImages.filter(url => url.toLowerCase().includes('.png'))
+	}, [allImages])
 
 	const handleAddToCart = async () => {
 		const customFields = []
@@ -105,7 +113,7 @@ const ProductInfo = ({ product }) => {
 					<div className={`container ${styles.finalPreview}`}>
 						<div className={styles.fpImage}>
 							<Image
-								src={images[0]}
+								src={pngImages[0]} // Update to use correct color image later
 								fill
 								alt='Image of the product.'
 								sizes={'(max-width: 768px) 100vw, 50vw'}

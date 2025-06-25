@@ -59,7 +59,7 @@ const Accordion = ({
 				) : (
 					<h4>
 						{title}
-						{rowOpen && extraTitleText && (
+						{extraTitleText && (
 							<span style={{ fontWeight: '400', color: '#9b9b9b' }}>
 								{' '}
 								/ {extraTitleText}

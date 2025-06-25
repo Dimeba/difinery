@@ -169,7 +169,7 @@ const ProductOptionsUI = ({
 						// small
 						title={option.name}
 						extraTitleText={
-							option.name === 'Metal' ? '100% RECYCLED GOLD' : null
+							selectedOptions[option.name] ? selectedOptions[option.name] : null
 						}
 						state={index === openOption}
 						setOpenOption={() => setOpenOption(index)}
@@ -211,6 +211,7 @@ const ProductOptionsUI = ({
 						<Accordion
 							// small
 							title='Ring Size'
+							extraTitleText={ringSize ? ringSize : null}
 							state={openOption === product.options.length}
 							setOpenOption={() => setOpenOption(product.options.length)}
 							product
