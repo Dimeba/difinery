@@ -39,8 +39,12 @@ const Column = async ({
 			alignItems: horizontalAlign(),
 			justifyContent:
 				content.fields.contentAlignVertical == 'center' ? 'center' : 'flex-end',
-			maxWidth: columns == 1 ? '1440px' : `${1440 / columns}px`,
-			padding: content.fields.noPadding === true ? '0' : ''
+			maxWidth: columns == 1 ? '1440px' : ``,
+			width: columns == 1 ? '90%' : '100%',
+			paddingTop: content.fields.noPadding === true ? '0' : '',
+			paddingBottom: content.fields.noPadding === true ? '0' : '',
+			paddingLeft: columns > 1 ? '4rem' : '',
+			paddingRight: columns > 1 ? '4rem' : ''
 		}
 	}
 

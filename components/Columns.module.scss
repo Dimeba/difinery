@@ -47,10 +47,10 @@
 }
 
 .content {
-	width: 90%;
+	// width: 90%;
 	// max-width: 1440px;
 	margin: 0 auto;
-	padding: 10vh 0;
+	padding: 4rem 0;
 	height: 100%;
 	position: relative;
 	display: flex;
@@ -163,6 +163,12 @@
 
 	.column {
 		flex: auto;
+	}
+
+	.content {
+		max-width: 90%;
+		padding-left: 0 !important;
+		padding-right: 0 !important;
 	}
 
 	.columnGrid {
