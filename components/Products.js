@@ -131,7 +131,7 @@ const Products = ({
 							<TextField
 								id='standard-basic'
 								variant='standard'
-								placeholder='NEED HELP?'
+								placeholder='Search'
 								value={searchTerm}
 								onChange={e => setSearchTerm(e.target.value)}
 								sx={{ fontStyle: 'italic', fontSize: '12px' }}
@@ -175,7 +175,7 @@ const Products = ({
 							<Typography
 								variant='p'
 								fontWeight={500}
-								letterSpacing={'0.35em'}
+								letterSpacing={'2px'}
 								color='inherit'
 								fontSize={'12px'}
 							>

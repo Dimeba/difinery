@@ -157,11 +157,11 @@ const ProductOptionsUI = ({
 				)} */}
 			</div>
 
-			{/* <p>
+			<p>
 				{' '}
 				FROM $
 				{Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
-			</p> */}
+			</p>
 
 			<p className={styles.description}>{product.description}</p>
 
@@ -216,7 +216,7 @@ const ProductOptionsUI = ({
 							title='Ring Size'
 							extraTitleText={ringSize ? ringSize : null}
 							state={openOption === product.options.length}
-							setOpenOption={() => setOpenOption(product.options.length)}
+							setOpenOption={() => setOpenOption(product.options.length + 1)}
 							product
 							display
 						>
@@ -237,13 +237,13 @@ const ProductOptionsUI = ({
 						</Accordion>
 
 						{/* Engraving */}
-						{/* <Accordion
+						<Accordion
 							// small
 							title='Engraving (max. 20 characters)'
-							state={openOption === filteredOptions.length}
+							state={openOption === product.options.length + 1}
 							product
 							display
-							setOpenOption={() => setOpenOption(filteredOptions.length)}
+							// setOpenOption={() => setOpenOption(filteredOptions.length)}
 						>
 							<input
 								type='text'
@@ -253,7 +253,7 @@ const ProductOptionsUI = ({
 								className={styles.engravingInput}
 								maxLength={20}
 							/>
-						</Accordion> */}
+						</Accordion>
 					</>
 				)}
 
@@ -290,11 +290,11 @@ const ProductOptionsUI = ({
 			{allOptionsSelected &&
 				(product.category.name !== 'Rings' || ringSize !== '') && (
 					<div className={styles.reviewOrderButtons}>
-						<button className={styles.personailzeButton}>PERSONALIZE IT</button>
+						{/* <button className={styles.personailzeButton}>PERSONALIZE IT</button> */}
 
 						<a href='#order-review' onClick={() => setShowOrderSummary(true)}>
 							<button className={styles.reviewOrderButton}>
-								ADD TO THE CART AND REVIEW YOUR ORDER
+								REVIEW YOUR ORDER
 							</button>
 						</a>
 					</div>
