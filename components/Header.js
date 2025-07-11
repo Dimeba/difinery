@@ -56,7 +56,7 @@ const Header = ({ content }) => {
 		<Box ref={targetRef}>
 			<div
 				className={`${styles.header} ${
-					!isIntersecting ? styles.dropShadow : ''
+					!isIntersecting || showSubmenu ? styles.dropShadow : ''
 				} ${transparentMenu ? styles.transparent : ''}`}
 				onMouseLeave={() => setShowSubmenu(false)}
 				onWheel={() => {
