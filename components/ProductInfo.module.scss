@@ -215,6 +215,17 @@
 	}
 }
 
+.inputContainer {
+	display: grid !important;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 2rem;
+}
+
+.inputText {
+	display: flex;
+	flex-direction: column;
+}
+
 .engravingInput,
 .select {
 	padding: 0.5rem;
@@ -242,6 +253,13 @@
 	}
 }
 
+.inputImage {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	margin-bottom: 1rem;
+}
+
 @media screen and (max-width: 1024px) {
 	.productInfo {
 		display: flex;
@@ -267,6 +285,12 @@
 	.content {
 		padding: 0;
 		padding-top: 1rem;
+	}
+
+	.inputContainer {
+		display: flex !important;
+		flex-direction: column-reverse;
+		gap: 1rem;
 	}
 }
 

@@ -14,9 +14,6 @@ import { useState } from 'react'
 // helpers
 import { returnMetalType } from '@/lib/helpers'
 
-// context
-import { useCart } from '@/context/CartContext'
-
 const ProductOptionsUI = ({
 	product,
 	setSelectedColor,
@@ -28,8 +25,6 @@ const ProductOptionsUI = ({
 	setBoxText,
 	setShowOrderSummary
 }) => {
-	const { cart, addToCart, showCart, setShowCart } = useCart()
-
 	const [openOption, setOpenOption] = useState(0)
 	const [selectedOptions, setSelectedOptions] = useState({})
 
@@ -84,47 +79,13 @@ const ProductOptionsUI = ({
 		}
 	}
 
-	// Reset all options
-	// const handleReset = () => {
-	// 	setSelectedOptions({})
-	// 	setOpenOption(0)
-	// 	setMatchingVariant(product.variants.edges[0].node)
-	// 	setSelectedColor(null)
-	// 	setEngraving('')
-	// 	setBirthstone('')
-	// 	setRingSize('')
-	// }
-
 	const allOptionsSelected =
 		Object.keys(selectedOptions).length === product.options.length
-
-	const birthstones = [
-		{ month: 'January', stones: ['Garnet'] },
-		{ month: 'February', stones: ['Amethyst'] },
-		{ month: 'March', stones: ['Aquamarine', 'Bloodstone'] },
-		{ month: 'April', stones: ['Diamond'] },
-		{ month: 'May', stones: ['Emerald'] },
-		{ month: 'June', stones: ['Pearl', 'Moonstone', 'Alexandrite'] },
-		{ month: 'July', stones: ['Ruby'] },
-		{ month: 'August', stones: ['Peridot', 'Sardonyx', 'Spinel'] },
-		{ month: 'September', stones: ['Sapphire'] },
-		{ month: 'October', stones: ['Opal', 'Tourmaline'] },
-		{ month: 'November', stones: ['Topaz', 'Citrine'] },
-		{ month: 'December', stones: ['Turquoise', 'Zircon', 'Tanzanite'] }
-	]
 
 	return (
 		<div className={styles.content}>
 			<div className={styles.versionInfo}>
 				<h3>{product.title}</h3>
-				{/* {Object.keys(selectedOptions).length > 0 && (
-					<p>
-						{Object.values(selectedOptions).join(' / ')}{' '}
-						<span className={styles.resetButton} onClick={handleReset}>
-							Reset All
-						</span>
-					</p>
-				)} */}
 			</div>
 
 			<p>
@@ -193,23 +154,39 @@ const ProductOptionsUI = ({
 						product
 						display
 					>
-						<input
-							type='text'
-							placeholder='Add your text here'
-							value={engraving}
-							onChange={e => setEngraving(e.target.value)}
-							className={styles.engravingInput}
-							maxLength={20}
-						/>
-						<p
-							style={{
-								fontSize: '10px',
-								fontStyle: 'italic',
-								marginTop: '0.5rem'
-							}}
-						>
-							*Max 20 characters. We recommend up to 15.
-						</p>
+						<div className={styles.inputContainer}>
+							<div className={styles.inputText}>
+								<p>
+									Personalize your jewelry with a message that lasts a lifetime.
+								</p>
+
+								<input
+									type='text'
+									placeholder='Add your text here'
+									value={engraving}
+									onChange={e => setEngraving(e.target.value)}
+									className={styles.engravingInput}
+									maxLength={25}
+								/>
+								<p
+									style={{
+										fontSize: '10px',
+										fontStyle: 'italic'
+									}}
+								>
+									*Max 20 characters. We recommend up to 15.
+								</p>
+							</div>
+
+							<div className={styles.inputImage}>
+								<Image
+									src='/engraving-image.jpg'
+									alt='Engraving Image'
+									fill
+									style={{ objectFit: 'cover' }}
+								/>
+							</div>
+						</div>
 					</Accordion>
 				)}
 
@@ -222,23 +199,37 @@ const ProductOptionsUI = ({
 					product
 					display
 				>
-					<input
-						type='text'
-						placeholder='Add your text here'
-						value={boxText}
-						onChange={e => setBoxText(e.target.value)}
-						className={styles.engravingInput}
-						maxLength={25}
-					/>
-					<p
-						style={{
-							fontSize: '10px',
-							fontStyle: 'italic',
-							marginTop: '0.5rem'
-						}}
-					>
-						*Max 25 characters. We recommend up to 20.
-					</p>
+					<div className={styles.inputContainer}>
+						<div className={styles.inputText}>
+							<p>Personalize Your White Canvas.</p>
+
+							<input
+								type='text'
+								placeholder='Add your text here'
+								value={boxText}
+								onChange={e => setBoxText(e.target.value)}
+								className={styles.engravingInput}
+								maxLength={25}
+							/>
+							<p
+								style={{
+									fontSize: '10px',
+									fontStyle: 'italic'
+								}}
+							>
+								*Max 25 characters. We recommend up to 20.
+							</p>
+						</div>
+
+						<div className={styles.inputImage}>
+							<Image
+								src='/box-image.jpg'
+								alt='Box Image'
+								fill
+								style={{ objectFit: 'cover' }}
+							/>
+						</div>
+					</div>
 				</Accordion>
 			</div>
 

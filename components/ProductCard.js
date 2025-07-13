@@ -97,7 +97,9 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 							<p className={styles.individualTitle}>
 								<span>{product.title}</span>
 								<br />
-								{parseFloat(product.priceRange.minVariantPrice.amount)}
+								{Number(
+									product.priceRange.minVariantPrice.amount.slice(0, -2)
+								).toLocaleString()}
 							</p>
 						)}
 					</div>
@@ -116,7 +118,10 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 									color: discount ? '#AEAEAD' : '#1a1b18'
 								}}
 							>
-								From ${parseFloat(product.priceRange.minVariantPrice.amount)}
+								From $
+								{Number(
+									product.priceRange.minVariantPrice.amount.slice(0, -2)
+								).toLocaleString()}
 							</span>
 						</p>
 					</div>
