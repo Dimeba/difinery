@@ -11,6 +11,17 @@
 	grid-column: span 6;
 	display: flex;
 	flex-direction: column;
+	aspect-ratio: 1 / 1;
+	overflow-y: scroll;
+
+	// Hide scrollbar in Firefox
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+
+	// Hide scrollbar in WebKit browsers
+	&::-webkit-scrollbar {
+		display: none;
+	}
 }
 
 .image {
@@ -47,10 +58,10 @@
 }
 
 .content {
-	position: sticky;
-	top: 0;
+	// position: sticky;
+	// top: 0;
 	grid-column: span 6;
-	padding: 10rem 6rem 6rem 6rem;
+	padding: 0 6rem 6rem 6rem;
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
@@ -246,7 +257,6 @@
 
 	.images {
 		flex-direction: row;
-		aspect-ratio: 1 / 1;
 		overflow-x: scroll;
 	}
 
