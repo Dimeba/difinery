@@ -23,8 +23,7 @@ const ProductInfo = ({ product }) => {
 	)
 	const [selectedColor, setSelectedColor] = useState(null)
 	const [engraving, setEngraving] = useState('')
-	const [birthStone, setBirthstone] = useState('')
-	const [ringSize, setRingSize] = useState('')
+	const [boxText, setBoxText] = useState('')
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 
 	const images = useMemo(() => {
@@ -56,8 +55,7 @@ const ProductInfo = ({ product }) => {
 	const handleAddToCart = async () => {
 		const customFields = []
 		if (engraving) customFields.push({ key: 'Engraving', value: engraving })
-		if (birthStone) customFields.push({ key: 'Birthstone', value: birthStone })
-		if (ringSize) customFields.push({ key: 'Ring Size', value: ringSize })
+		if (boxText) customFields.push({ key: 'Box', value: boxText })
 
 		if (!matchingVariant || !matchingVariant.id) {
 			console.error('No matching variant found')
@@ -103,10 +101,8 @@ const ProductInfo = ({ product }) => {
 					setMatchingVariant={setMatchingVariant}
 					engraving={engraving}
 					setEngraving={setEngraving}
-					birthStone={birthStone}
-					setBirthstone={setBirthstone}
-					ringSize={ringSize}
-					setRingSize={setRingSize}
+					boxText={boxText}
+					setBoxText={setBoxText}
 					setShowOrderSummary={setShowOrderSummary}
 				/>
 			</div>
@@ -118,8 +114,8 @@ const ProductInfo = ({ product }) => {
 					matchingVariant={matchingVariant}
 					product={product}
 					customOptions={{
-						ringSize,
-						engraving
+						engraving,
+						boxText
 					}}
 				/>
 			)}

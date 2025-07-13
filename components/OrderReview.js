@@ -131,19 +131,6 @@ const OrderReview = ({
 								</Typography>
 							</Box>
 						))}
-
-						{/* Ring Size */}
-						{product.category.name === 'Rings' && (
-							<Box
-								sx={{
-									marginBottom: '0.5rem'
-								}}
-							>
-								<Typography variant='p'>
-									Size / {customOptions.ringSize}
-								</Typography>
-							</Box>
-						)}
 						{/* Engraving */}
 						{customOptions.engraving !== '' && (
 							<Box
@@ -153,6 +140,18 @@ const OrderReview = ({
 							>
 								<Typography variant='p'>
 									Engraving / {customOptions.engraving}
+								</Typography>
+							</Box>
+						)}
+						{/* Box Text */}
+						{customOptions.boxText !== '' && (
+							<Box
+								sx={{
+									marginBottom: '0.5rem'
+								}}
+							>
+								<Typography variant='p'>
+									Box Text / {customOptions.boxText}
 								</Typography>
 							</Box>
 						)}

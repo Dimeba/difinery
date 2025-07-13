@@ -24,10 +24,8 @@ const ProductOptionsUI = ({
 	setMatchingVariant,
 	engraving,
 	setEngraving,
-	birthStone,
-	setBirthstone,
-	ringSize,
-	setRingSize,
+	boxText,
+	setBoxText,
 	setShowOrderSummary
 }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
@@ -214,6 +212,34 @@ const ProductOptionsUI = ({
 						</p>
 					</Accordion>
 				)}
+
+				{/* Boxes */}
+				<Accordion
+					// small
+					title='Box'
+					extraTitleText={boxText ? `"${boxText}"` : null}
+					state={openOption === product.options.length}
+					product
+					display
+				>
+					<input
+						type='text'
+						placeholder='Add your text here'
+						value={boxText}
+						onChange={e => setBoxText(e.target.value)}
+						className={styles.engravingInput}
+						maxLength={25}
+					/>
+					<p
+						style={{
+							fontSize: '10px',
+							fontStyle: 'italic',
+							marginTop: '0.5rem'
+						}}
+					>
+						*Max 25 characters. We recommend up to 20.
+					</p>
+				</Accordion>
 			</div>
 
 			<div className={styles.reviewOrderButtons}>
