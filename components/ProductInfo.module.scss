@@ -133,17 +133,7 @@
 	text-wrap: balance;
 }
 
-.personailzeButton {
-	@extend .button;
-	background-color: transparent;
-}
-
-.personailzeButton:hover {
-	background-color: base.$black;
-	color: white;
-}
-
-.reviewOrderButton {
+.cartButton {
 	@extend .button;
 	background-color: transparent;
 	background-image: url('/btn-background.svg');
@@ -155,34 +145,16 @@
 	transition: ease-out 0.7s;
 }
 
-.reviewOrderButton:hover {
+.cartButton:hover {
 	background-color: transparent;
 	color: white;
 	background-position: bottom;
 }
 
-.reviewOrderButton:disabled {
+.cartButton:disabled {
 	background-color: transparent;
 	color: base.$gray;
 	border-color: base.$gray;
-}
-
-.cartButton {
-	padding: 1rem;
-	border-radius: 0;
-	border: 0;
-	background-color: base.$black;
-	font-size: 1rem;
-	color: white;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	cursor: pointer;
-	width: fit-content;
-}
-
-.cartButton:disabled {
-	background-color: base.$gray;
-	cursor: not-allowed;
 }
 
 .tax {

@@ -241,10 +241,7 @@ const ProductOptionsUI = ({
 					onClick={() => setShowOrderSummary(true)}
 					style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
 				>
-					<button
-						className={styles.reviewOrderButton}
-						disabled={!allOptionsSelected}
-					>
+					<button className={styles.cartButton} disabled={!allOptionsSelected}>
 						REVIEW YOUR ORDER
 					</button>
 				</a>

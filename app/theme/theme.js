@@ -52,7 +52,7 @@ const theme = createTheme({
 		p: {
 			fontFamily: "'Libre Franklin', sans-serif",
 			fontWeight: 200,
-			fontSize: '14px',
+			fontSize: '12px',
 			lineHeight: 1.75,
 			letterSpacing: '0.5px'
 		}
