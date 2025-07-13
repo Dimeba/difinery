@@ -114,35 +114,6 @@ const ProductOptionsUI = ({
 		{ month: 'December', stones: ['Turquoise', 'Zircon', 'Tanzanite'] }
 	]
 
-	const ringSizes = [
-		'4',
-		'4.5',
-		'5',
-		'5.5',
-		'6',
-		'6.5',
-		'7',
-		'7.5',
-		'8',
-		'8.5',
-		'9',
-		'9.5',
-		'10',
-		'10.5',
-		'11',
-		'11.5',
-		'12'
-	]
-
-	const toggleRingSize = value => {
-		if (ringSize === value) {
-			setRingSize('')
-			setShowOrderSummary(false)
-		} else {
-			setRingSize(value)
-		}
-	}
-
 	return (
 		<div className={styles.content}>
 			<div className={styles.versionInfo}>
