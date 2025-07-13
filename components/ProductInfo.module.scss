@@ -135,19 +135,19 @@
 
 .cartButton {
 	@extend .button;
-	background-color: transparent;
-	background-image: url('/btn-background.svg');
+	background-color: black;
+	background-image: url('/btn-background-white.svg');
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 -100%;
-	// color: white;
+	color: white;
 	font-size: 12px;
 	transition: ease-out 0.7s;
 }
 
 .cartButton:hover {
 	background-color: transparent;
-	color: white;
+	color: black;
 	background-position: bottom;
 }
 

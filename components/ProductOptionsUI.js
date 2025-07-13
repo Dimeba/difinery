@@ -233,37 +233,80 @@ const ProductOptionsUI = ({
 				</Accordion>
 			</div>
 
-			<div className={styles.reviewOrderButtons}>
-				{/* <button className={styles.personailzeButton}>PERSONALIZE IT</button> */}
+			<a
+				href='#order-review'
+				onClick={() => setShowOrderSummary(true)}
+				style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
+			>
+				<button className={styles.cartButton} disabled={!allOptionsSelected}>
+					REVIEW YOUR ORDER
+				</button>
+			</a>
 
-				<a
-					href='#order-review'
-					onClick={() => setShowOrderSummary(true)}
-					style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
+			<div>
+				<Accordion
+					title='Product Details'
+					setOpenOption={() => setOpenOption(index)}
+					display
 				>
-					<button className={styles.cartButton} disabled={!allOptionsSelected}>
-						REVIEW YOUR ORDER
-					</button>
-				</a>
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: '700' }}>Product Name:</span>{' '}
+						{product.title}
+					</p>
+
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: '700' }}>ID / SKU:</span> WR-RD-0001
+					</p>
+
+					<p style={{ marginBottom: '0.5rem' }} className={styles.description}>
+						{product.description}
+					</p>
+				</Accordion>
+
+				<Accordion
+					title='Gold Details'
+					setOpenOption={() => setOpenOption(index)}
+					display
+				>
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: 700 }}>Metal:</span> White Gold
+					</p>
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: 700 }}>Purity:</span> 14K, 100% Recycled
+					</p>
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: 700 }}>Category:</span> Ring
+					</p>
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: 700 }}>Sub-category:</span> Fine Jewelry
+					</p>
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: 700 }}>Setting:</span> Bezel
+					</p>
+				</Accordion>
+
+				<Accordion
+					title='Diamond Details'
+					setOpenOption={() => setOpenOption(index)}
+					display
+				>
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: 700 }}>Total Weight:</span> 0.74 ct
+					</p>
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: 700 }}>Shape:</span> Radiant
+					</p>
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: 700 }}>Number of Stones:</span> 1
+					</p>
+					<p style={{ marginBottom: '0.5rem' }}>
+						<span style={{ fontWeight: 700 }}>Diameter Height:</span> 6.50 mm
+					</p>
+					<p style={{ marginBottom: '0.5.rem' }}>
+						<span style={{ fontWeight: 700 }}>Diameter Width:</span> 4.50 mm
+					</p>
+				</Accordion>
 			</div>
-
-			{/* <div className={styles.cartBox}>
-				<p className={styles.orderDate}>
-					Made to Order: Between {new Date().toLocaleDateString()}–{' '}
-					{new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}{' '}
-					with you.
-				</p>
-
-				<p className={styles.tax}>
-					Tax included
-					<br />
-					Shipping calculated at checkout.
-					<br />
-					<b>
-						$15 of your purchase goes to The New York Women&apos;s Foundation
-					</b>
-				</p>
-			</div> */}
 		</div>
 	)
 }
