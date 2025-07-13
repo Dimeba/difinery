@@ -141,13 +141,13 @@
 	background-position: 0 -100%;
 	// color: white;
 	font-size: 12px;
-	transition: ease-out 0.5s;
+	transition: ease-out 0.7s;
 }
 
 .reviewOrderButton:hover {
 	background-color: transparent;
 	color: white;
-	background-position: center;
+	background-position: bottom;
 }
 
 .reviewOrderButton:disabled {
