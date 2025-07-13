@@ -9,12 +9,30 @@
 	border-bottom: none;
 }
 
-.titleRow {
+.title {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	gap: 2rem;
 	cursor: pointer;
+}
+
+.needHelpButton {
+	margin-top: 0.5rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: base.$gray;
+	cursor: pointer;
+	width: fit-content;
+
+	p {
+		font-size: 10px;
+	}
+
+	* {
+		color: #b9b9b9;
+	}
 }
 
 .open {

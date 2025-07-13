@@ -6,6 +6,7 @@ import styles from './ProductInfo.module.scss'
 // components
 import Image from 'next/image'
 import Accordion from './Accordion'
+import NeedHelpInfo from './NeedHelpInfo'
 
 // hooks
 import { useState } from 'react'
@@ -149,6 +150,11 @@ const ProductOptionsUI = ({
 						setOpenOption={() => setOpenOption(index)}
 						product
 						display
+						showHelp={
+							option.name.toLowerCase() === 'ring size' ||
+							option.name === 'carat'
+						}
+						helpContent={<NeedHelpInfo type={option.name.toLowerCase()} />}
 					>
 						<div className={styles.variantButtonsContainer}>
 							{option.optionValues.map(value => (
