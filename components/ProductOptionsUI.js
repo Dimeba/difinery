@@ -208,97 +208,53 @@ const ProductOptionsUI = ({
 					</Accordion>
 				))}
 
-				{product.category.name === 'Rings' && (
-					<>
-						{/* Ring Size */}
-						<Accordion
-							// small
-							title='Ring Size'
-							extraTitleText={ringSize ? ringSize : null}
-							state={openOption === product.options.length}
-							setOpenOption={() => setOpenOption(product.options.length + 1)}
-							product
-							display
-						>
-							<div className={styles.variantButtonsContainer}>
-								{ringSizes.map(value => (
-									<button
-										key={value}
-										className={styles.variantButton}
-										onClick={() => toggleRingSize(value)}
-										style={{
-											fontWeight: ringSize === value ? 'bold' : 'normal'
-										}}
-									>
-										{value}
-									</button>
-								))}
-							</div>
-						</Accordion>
-
-						{/* Engraving */}
-						<Accordion
-							// small
-							title='Engraving (max. 20 characters)'
-							state={openOption === product.options.length + 1}
-							product
-							display
-							// setOpenOption={() => setOpenOption(filteredOptions.length)}
-						>
-							<input
-								type='text'
-								placeholder='Add your text here'
-								value={engraving}
-								onChange={e => setEngraving(e.target.value)}
-								className={styles.engravingInput}
-								maxLength={20}
-							/>
-						</Accordion>
-					</>
-				)}
-
-				{/* {(product.category.name === 'Rings' ||
-					product.category.name === 'Pendants') && (
+				{product.category.name !== 'Earrings' && (
+					/* Engraving */
 					<Accordion
-						small
-						title='Birthstone'
-						state={openOption === filteredOptions.length}
+						// small
+						title='Engraving'
+						extraTitleText={engraving ? `"${engraving}"` : null}
+						state={openOption === product.options.length}
 						product
 						display
-						setOpenOption={() => setOpenOption(filteredOptions.length)}
 					>
-						<select
-							className={styles.select}
-							value={birthstone}
-							onChange={e => setBirthstone(e.target.value)}
+						<input
+							type='text'
+							placeholder='Add your text here'
+							value={engraving}
+							onChange={e => setEngraving(e.target.value)}
+							className={styles.engravingInput}
+							maxLength={20}
+						/>
+						<p
+							style={{
+								fontSize: '10px',
+								fontStyle: 'italic',
+								marginTop: '0.5rem'
+							}}
 						>
-							<option value=''>Select birthstone</option>
-							{birthstones.map(({ month, stones }) => (
-								<optgroup label={month} key={month}>
-									{stones.map(stone => (
-										<option value={stone} key={stone}>
-											{stone}
-										</option>
-									))}
-								</optgroup>
-							))}
-						</select>
+							*Max 20 characters. We recommend up to 15.
+						</p>
 					</Accordion>
-				)} */}
+				)}
 			</div>
 
-			{allOptionsSelected &&
-				(product.category.name !== 'Rings' || ringSize !== '') && (
-					<div className={styles.reviewOrderButtons}>
-						{/* <button className={styles.personailzeButton}>PERSONALIZE IT</button> */}
+			<div className={styles.reviewOrderButtons}>
+				{/* <button className={styles.personailzeButton}>PERSONALIZE IT</button> */}
 
-						<a href='#order-review' onClick={() => setShowOrderSummary(true)}>
-							<button className={styles.reviewOrderButton}>
-								REVIEW YOUR ORDER
-							</button>
-						</a>
-					</div>
-				)}
+				<a
+					href='#order-review'
+					onClick={() => setShowOrderSummary(true)}
+					style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
+				>
+					<button
+						className={styles.reviewOrderButton}
+						disabled={!allOptionsSelected}
+					>
+						REVIEW YOUR ORDER
+					</button>
+				</a>
+			</div>
 
 			{/* <div className={styles.cartBox}>
 				<p className={styles.orderDate}>

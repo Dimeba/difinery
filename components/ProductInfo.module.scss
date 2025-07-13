@@ -144,6 +144,12 @@
 	color: base.$black;
 }
 
+.reviewOrderButton:disabled {
+	background-color: transparent;
+	color: base.$gray;
+	border-color: base.$gray;
+}
+
 .cartButton {
 	padding: 1rem;
 	border-radius: 0;
