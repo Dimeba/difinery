@@ -252,7 +252,7 @@
 
 	.image {
 		width: 90vw;
-		flex-grow: 1;
+		flex-shrink: 0;
 	}
 
 	.content {
