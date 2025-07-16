@@ -132,7 +132,7 @@ const Filters = ({
 							} ${styles.optionButton}`}
 						>
 							<Image
-								src={`/${type.toLowerCase()}.png`}
+								src={`/${type.toLowerCase()}-gold.png`}
 								width={16}
 								height={16}
 								alt={`${type} material icon.`}
