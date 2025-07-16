@@ -38,7 +38,7 @@ const Products = ({
 
 	// filters state
 	const [selectedSort, setSelectedSort] = useState(null)
-	const [selectedProductType, setSelectedProductType] = useState('All')
+	const [selectedCategory, setSelectedCategory] = useState('All')
 	const [selectedMetalTypes, setSelectedMetalTypes] = useState([])
 	const [searchTerm, setSearchTerm] = useState('')
 
@@ -49,8 +49,8 @@ const Products = ({
 	useEffect(() => {
 		let updated = [...items]
 
-		if (selectedProductType !== 'All') {
-			updated = updated.filter(p => p.productType === selectedProductType)
+		if (selectedCategory !== 'All') {
+			updated = updated.filter(p => p.category.name === selectedCategory)
 		}
 
 		if (selectedMetalTypes.length) {
@@ -103,7 +103,7 @@ const Products = ({
 		}
 
 		setFilteredItems(updated)
-	}, [items, selectedSort, selectedProductType, selectedMetalTypes, searchTerm])
+	}, [items, selectedSort, selectedCategory, selectedMetalTypes, searchTerm])
 
 	return (
 		<section
@@ -228,8 +228,8 @@ const Products = ({
 					items={items}
 					selectedSort={selectedSort}
 					setSelectedSort={setSelectedSort}
-					selectedProductType={selectedProductType}
-					setSelectedProductType={setSelectedProductType}
+					selectedCategory={selectedCategory}
+					setSelectedCategory={setSelectedCategory}
 					selectedMetalTypes={selectedMetalTypes}
 					setSelectedMetalTypes={setSelectedMetalTypes}
 					toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}

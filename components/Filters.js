@@ -15,8 +15,8 @@ const Filters = ({
 	items,
 	selectedSort,
 	setSelectedSort,
-	selectedProductType,
-	setSelectedProductType,
+	selectedCategory,
+	setSelectedCategory,
 	selectedMetalTypes,
 	setSelectedMetalTypes,
 	toggleFilters
@@ -30,7 +30,7 @@ const Filters = ({
 		const mTypes = new Set()
 
 		items.forEach(item => {
-			pTypes.add(item.productType)
+			pTypes.add(item.category.name)
 			item.options?.forEach(option => {
 				if (option.name === 'Metal') {
 					option.values.forEach(value => {
@@ -51,8 +51,8 @@ const Filters = ({
 	}, [items])
 
 	const handleFilter = (filter, value) => {
-		if (filter === 'productType') {
-			setSelectedProductType(value)
+		if (filter === 'category') {
+			setSelectedCategory(value)
 		} else if (filter === 'metalType') {
 			if (selectedMetalTypes.includes(value)) {
 				setSelectedMetalTypes(selectedMetalTypes.filter(mt => mt !== value))
@@ -93,27 +93,27 @@ const Filters = ({
 				</div>
 			</Accordion>
 
-			{/* Product Type */}
+			{/* Product Category */}
 			{productTypes.length > 2 && (
-				<Accordion title='Type' state={true}>
+				<Accordion title='Category' state={true}>
 					<div className={styles.buttons}>
 						{productTypes.map(type => (
 							<button
 								key={type}
-								onClick={() => handleFilter('productType', type)}
-								className={`${
-									selectedProductType === type ? styles.active : ''
-								} ${styles.optionButton}`}
+								onClick={() => handleFilter('category', type)}
+								className={`${selectedCategory === type ? styles.active : ''} ${
+									styles.optionButton
+								}`}
 							>
 								<p>{type}</p>
 							</button>
 						))}
-						{selectedProductType !== 'All' && (
+						{selectedCategory !== 'All' && (
 							<button
 								className={styles.resetButton}
-								onClick={() => setSelectedProductType('All')}
+								onClick={() => setSelectedCategory('All')}
 							>
-								Reset Type
+								Reset Category
 							</button>
 						)}
 					</div>
