@@ -12,7 +12,7 @@ import NeedHelpInfo from './NeedHelpInfo'
 import { useState, useEffect } from 'react'
 
 // helpers
-import { returnMetalType } from '@/lib/helpers'
+import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 
 const ProductOptionsUI = ({
 	product,
@@ -142,9 +142,18 @@ const ProductOptionsUI = ({
 												: 'normal'
 									}}
 								>
-									{option.name === 'Metal' && (
+									{option.name.toLowerCase() === 'metal' && (
 										<Image
-											src={`/${returnMetalType(value.name.toLowerCase())}`}
+											src={`/${returnMetalType(value.name)}`}
+											width={32}
+											height={32}
+											alt={`${value.name} ${option.name}`}
+										/>
+									)}
+
+									{option.name.toLowerCase() === 'diamond shape' && (
+										<Image
+											src={`/${returnDiamondShape(value.name)}`}
 											width={32}
 											height={32}
 											alt={`${value.name} ${option.name}`}

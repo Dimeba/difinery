@@ -1,6 +1,5 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 // styles
 import styles from './Columns.module.scss'
 
