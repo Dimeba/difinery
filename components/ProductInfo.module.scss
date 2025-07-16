@@ -199,13 +199,20 @@
 }
 
 .engravingInput,
-.select {
+.select,
+.boxInput {
 	padding: 0.5rem;
 	border-radius: 0;
 	background-color: white;
 	border: 1px solid base.$gray;
 	font-size: 0.8rem;
 	border-radius: 5px;
+	resize: none;
+}
+
+.boxInput {
+	flex-shrink: 0;
+	flex-grow: 1;
 }
 
 .orderReviewContainer {

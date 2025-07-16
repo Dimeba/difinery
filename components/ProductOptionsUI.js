@@ -206,7 +206,7 @@ const ProductOptionsUI = ({
 				{/* Boxes */}
 				<Accordion
 					// small
-					title='Box'
+					title='Make Your Box Truly Yours'
 					extraTitleText={boxText ? `"${boxText}"` : null}
 					state={openOption === product.options.length}
 					product
@@ -214,23 +214,30 @@ const ProductOptionsUI = ({
 				>
 					<div className={styles.inputContainer}>
 						<div className={styles.inputText}>
-							<p>Personalize Your White Canvas.</p>
+							<p>
+								Personalize it with a special touch to create a unique and
+								memorable keepsake.
+							</p>
 
-							<input
-								type='text'
-								placeholder='Add your text here'
+							{/* <div className={styles.boxColors}>
+								<button>Clear Text</button>
+							</div> */}
+
+							<textarea
+								className={styles.boxInput}
 								value={boxText}
 								onChange={e => setBoxText(e.target.value)}
-								className={styles.engravingInput}
-								maxLength={25}
+								placeholder='Write here'
+								maxLength={60}
 							/>
+
 							<p
 								style={{
 									fontSize: '10px',
 									fontStyle: 'italic'
 								}}
 							>
-								*Max 25 characters. We recommend up to 20.
+								*We recommend up to 8 words.
 							</p>
 						</div>
 
