@@ -25,7 +25,7 @@ const Header = ({ content }) => {
 
 	// header
 	const { transparentHeader, setTransparentHeader } = useHeader()
-
+	const [hasMounted, setHasMounted] = useState(false)
 	const [targetRef, isIntersecting] = useIntersectionObserver()
 	const isScreenWide = useIsScreenWide(1024)
 	const [openMenu, setOpenMenu] = useState(false)
@@ -40,6 +40,10 @@ const Header = ({ content }) => {
 
 	const qucikLinks = content.quickLinks.map(link => link.fields.title)
 	const occasion = content.shopByOcassion.map(link => link.fields.title)
+
+	useEffect(() => {
+		setHasMounted(true)
+	}, [])
 
 	// Reseting open menu
 	useEffect(() => {
@@ -64,7 +68,7 @@ const Header = ({ content }) => {
 				}}
 			>
 				<div className={`container ${styles.headerTop}`}>
-					{isIntersecting && isScreenWide ? (
+					{hasMounted && isIntersecting && isScreenWide ? (
 						<Link
 							href={
 								'/' +
