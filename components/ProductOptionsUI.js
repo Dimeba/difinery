@@ -12,6 +12,7 @@ import NeedHelpInfo from './NeedHelpInfo'
 import { useState, useEffect } from 'react'
 
 // helpers
+import parse from 'html-react-parser'
 import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 
 const ProductOptionsUI = ({
@@ -89,6 +90,16 @@ const ProductOptionsUI = ({
 	const allOptionsSelected =
 		Object.keys(selectedOptions).length === product.options.length
 
+	const details = product.descriptionHtml.replace(
+		/<p\s+id=(["'])description\1[^>]*>[\s\S]*?<\/p>/i,
+		''
+	)
+
+	const match = product.descriptionHtml.match(
+		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i
+	)
+	const description = match ? match[0] : ''
+
 	useEffect(() => {
 		if (selectedColor) {
 			getMatchingVariant({ ...selectedOptions, Metal: selectedColor })
@@ -107,7 +118,7 @@ const ProductOptionsUI = ({
 				{Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
 			</p>
 
-			{/* <p className={styles.description}>{product.description}</p> */}
+			<div>{parse(description)}</div>
 
 			<div className={styles.accordion}>
 				{product.options.map((option, index) => (
@@ -273,10 +284,7 @@ const ProductOptionsUI = ({
 			</a>
 
 			<Accordion title='Product Details'>
-				<div
-					className={styles.productDetails}
-					dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
-				/>
+				<div className={styles.productDetails}>{parse(details)}</div>
 			</Accordion>
 		</div>
 	)

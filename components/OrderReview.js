@@ -7,6 +7,9 @@ import styles from './ProductInfo.module.scss'
 import { Box, Grid, Typography } from '@mui/material'
 import Image from 'next/image'
 
+// helpers
+import parse from 'html-react-parser'
+
 const OrderReview = ({
 	image,
 	handleAddToCart,
@@ -25,6 +28,11 @@ const OrderReview = ({
 			text: '1 Year of free polish & cleaning if you subscribe.'
 		}
 	]
+
+	const match = product.descriptionHtml.match(
+		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i
+	)
+	const description = match ? match[0] : ''
 
 	return (
 		<Box sx={{ backgroundColor: '#f4f4f4' }} id='order-review'>
@@ -85,7 +93,7 @@ const OrderReview = ({
 						gap: '2rem'
 					}}
 				>
-					<Typography variant='p'>{product.description}</Typography>
+					<Box>{parse(description)}</Box>
 
 					<Box>
 						{additionalInfo.map((info, index) => (
