@@ -125,10 +125,7 @@ const Header = ({ content }) => {
 				</div>
 
 				{((isIntersecting && isScreenWide) || openMenu) && (
-					<nav
-						className={`container ${styles.headerBot}`}
-						onClick={() => setShowSubmenu(false)}
-					>
+					<nav className={`container ${styles.headerBot}`}>
 						{/* Shop Page */}
 						<Link
 							href='/shop'
@@ -148,6 +145,7 @@ const Header = ({ content }) => {
 								href={`/shop/${title.toLowerCase()}`}
 								aria-label={`Link to ${title} page.`}
 								className={styles.mainMenuLink}
+								onClick={() => setOpenMenu(false)}
 							>
 								<p>{title}</p>{' '}
 								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
@@ -161,6 +159,7 @@ const Header = ({ content }) => {
 								href={'/' + link.fields.title.replace(/ /g, '-').toLowerCase()}
 								aria-label={`Link to ${link.fields.title} page.`}
 								className={styles.mainMenuLink}
+								onClick={() => setOpenMenu(false)}
 							>
 								<p>{link.fields.title}</p>{' '}
 								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />

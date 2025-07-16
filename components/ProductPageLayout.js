@@ -2,11 +2,14 @@
 import ProductInfo from '@/components/ProductInfo'
 import FAQ from '@/components/FAQ'
 import Products from '@/components/Products'
+import { Suspense } from 'react'
 
 const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
 	return (
 		<main>
-			<ProductInfo product={product} />
+			<Suspense fallback={<div>Loading…</div>}>
+				<ProductInfo product={product} />
+			</Suspense>
 
 			{recommendedProducts.length > 0 && (
 				<Products
