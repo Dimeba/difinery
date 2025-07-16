@@ -272,13 +272,12 @@ const ProductOptionsUI = ({
 				</button>
 			</a>
 
-			<div>
-				<h4 style={{ fontWeight: '700' }}>Product Details</h4>
-
-				<br />
-
-				<div dangerouslySetInnerHTML={{ __html: product.descriptionHtml }} />
-			</div>
+			<Accordion title='Product Details'>
+				<div
+					className={styles.productDetails}
+					dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+				/>
+			</Accordion>
 		</div>
 	)
 }

@@ -239,6 +239,12 @@
 	margin-bottom: 1rem;
 }
 
+.productDetails {
+	display: flex;
+	flex-direction: column;
+	gap: 0 !important;
+}
+
 @media screen and (max-width: 1024px) {
 	.productInfo {
 		display: flex;

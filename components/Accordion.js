@@ -61,7 +61,7 @@ const Accordion = ({
 					{small ? (
 						<p>{title}</p>
 					) : (
-						<h4 style={{ opacity: rowOpen && product ? 1 : 0.5 }}>
+						<h4>
 							{title}
 							{extraTitleText && (
 								<span style={{ fontWeight: '400', color: '#9b9b9b' }}>

@@ -17,12 +17,12 @@ const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
 					individual={true}
 				/>
 			)}
-
+			{/* 
 			<FAQ
 				title='Frequently Asked Questions'
 				productDetails={product.description}
 				content={faqs.fields.rows}
-			/>
+			/> */}
 		</main>
 	)
 }
