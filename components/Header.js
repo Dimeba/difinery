@@ -125,7 +125,10 @@ const Header = ({ content }) => {
 				</div>
 
 				{((isIntersecting && isScreenWide) || openMenu) && (
-					<nav className={`container ${styles.headerBot}`}>
+					<nav
+						className={`container ${styles.headerBot}`}
+						onClick={() => setShowSubmenu(false)}
+					>
 						{/* Shop Page */}
 						<Link
 							href='/shop'

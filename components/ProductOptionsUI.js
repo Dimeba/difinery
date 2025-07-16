@@ -243,7 +243,7 @@ const ProductOptionsUI = ({
 
 						<div className={styles.inputImage}>
 							<Image
-								src='/box-image.jpg'
+								src='/box-image-zoom.jpg'
 								alt='Box Image'
 								fill
 								style={{ objectFit: 'cover' }}
