@@ -107,7 +107,7 @@ const ProductOptionsUI = ({
 				{Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
 			</p>
 
-			<p className={styles.description}>{product.description}</p>
+			{/* <p className={styles.description}>{product.description}</p> */}
 
 			<div className={styles.accordion}>
 				{product.options.map((option, index) => (
@@ -264,7 +264,56 @@ const ProductOptionsUI = ({
 			</a>
 
 			<div>
-				<Accordion
+				<h4 style={{ fontWeight: '700' }}>Product Details</h4>
+
+				<br />
+
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: '700' }}>Product Name:</span>{' '}
+					{product.title}
+				</p>
+
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: '700' }}>ID / SKU:</span> WR-RD-0001
+				</p>
+
+				<p style={{ marginBottom: '0.5rem' }} className={styles.description}>
+					{product.description}
+				</p>
+
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: 700 }}>Metal:</span> White Gold
+				</p>
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: 700 }}>Purity:</span> 14K, 100% Recycled
+				</p>
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: 700 }}>Category:</span> Ring
+				</p>
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: 700 }}>Sub-category:</span> Fine Jewelry
+				</p>
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: 700 }}>Setting:</span> Bezel
+				</p>
+
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: 700 }}>Total Weight:</span> 0.74 ct
+				</p>
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: 700 }}>Shape:</span> Radiant
+				</p>
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: 700 }}>Number of Stones:</span> 1
+				</p>
+				<p style={{ marginBottom: '0.5rem' }}>
+					<span style={{ fontWeight: 700 }}>Diameter Height:</span> 6.50 mm
+				</p>
+				<p style={{ marginBottom: '0.5.rem' }}>
+					<span style={{ fontWeight: 700 }}>Diameter Width:</span> 4.50 mm
+				</p>
+
+				{/* <Accordion
 					title='Product Details'
 					setOpenOption={() => setOpenOption(index)}
 					display
@@ -281,9 +330,9 @@ const ProductOptionsUI = ({
 					<p style={{ marginBottom: '0.5rem' }} className={styles.description}>
 						{product.description}
 					</p>
-				</Accordion>
+				</Accordion> */}
 
-				<Accordion
+				{/* <Accordion
 					title='Gold Details'
 					setOpenOption={() => setOpenOption(index)}
 					display
@@ -303,9 +352,9 @@ const ProductOptionsUI = ({
 					<p style={{ marginBottom: '0.5rem' }}>
 						<span style={{ fontWeight: 700 }}>Setting:</span> Bezel
 					</p>
-				</Accordion>
+				</Accordion> */}
 
-				<Accordion
+				{/* <Accordion
 					title='Diamond Details'
 					setOpenOption={() => setOpenOption(index)}
 					display
@@ -325,7 +374,7 @@ const ProductOptionsUI = ({
 					<p style={{ marginBottom: '0.5.rem' }}>
 						<span style={{ fontWeight: 700 }}>Diameter Width:</span> 4.50 mm
 					</p>
-				</Accordion>
+				</Accordion> */}
 			</div>
 		</div>
 	)
