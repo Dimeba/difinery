@@ -39,21 +39,27 @@
 	margin-bottom: 1rem;
 }
 
-.totalAmount {
-	margin-bottom: 1rem;
-	font-size: 1rem;
-}
-
 .itemsContainer {
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
+	flex-grow: 1;
 }
 
 .item {
 	display: flex;
-	gap: 1rem;
+	gap: 2rem;
 	align-items: center;
+	justify-content: space-between;
+}
+
+.itemImage {
+	position: relative;
+	width: calc(50% - 1rem);
+	aspect-ratio: 1 / 1;
+	flex-shrink: 0;
+	overflow: hidden;
+	background-color: rgba($color: base.$gray, $alpha: 0.2);
 }
 
 .itemContent {
@@ -64,6 +70,9 @@
 
 .itemTitle {
 	text-wrap: wrap;
+	// font-size: 1rem;
+	font-weight: 700;
+
 	span {
 		font-weight: 600;
 	}
@@ -79,6 +88,41 @@
 	display: flex;
 	gap: 0.5rem;
 	align-items: center;
+}
+
+.removeIcon {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+}
+
+.checkoutSection {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.totalAmount {
+	// font-size: 1rem;
+}
+
+.subtotal {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	// border-top: 1px solid base.$gray;
+}
+
+.note {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+
+	p {
+		font-size: 10px;
+		color: #6d6b6b;
+		line-height: normal;
+	}
 }
 
 @keyframes slideIn {

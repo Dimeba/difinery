@@ -1,20 +1,23 @@
 'use client'
 
+// styles
 import styles from './Cart.module.scss'
+import productStyles from './ProductInfo.module.scss'
+
+// components
 import { FiX, FiMinus, FiPlus } from 'react-icons/fi'
+import { MdDeleteForever } from 'react-icons/md'
+
 import Button from './Button'
 import Image from 'next/image'
+import Link from 'next/link'
+
+// hooks
 import { useCart } from '@/context/CartContext'
-import { useEffect } from 'react'
 
 const Cart = () => {
 	const { showCart, setShowCart, cart, updateQuantity, removeFromCart } =
 		useCart()
-
-	// Debug: verify what shape of cart we have
-	useEffect(() => {
-		console.log('Cart state:', cart)
-	}, [cart])
 
 	if (!showCart || !cart) return null
 
@@ -33,6 +36,8 @@ const Cart = () => {
 	const handleIncrease = (lineId, qty) => {
 		updateQuantity(lineId, qty + 1)
 	}
+
+	console.log(cart)
 
 	return (
 		<div className={styles.cart}>
@@ -60,7 +65,7 @@ const Cart = () => {
 						const variant = node.merchandise
 						if (!variant) return null
 
-						const title = variant.title || '—'
+						const title = variant.product.title || '—'
 						const imageUrl = variant.image?.url
 						const imageAlt = variant.image?.altText || title
 
@@ -70,34 +75,52 @@ const Cart = () => {
 
 						return (
 							<div className={styles.item} key={lineId}>
-								{imageUrl && (
-									<Image
-										src={imageUrl}
-										alt={imageAlt}
-										width={80}
-										height={80}
-										style={{ objectFit: 'cover' }}
-									/>
-								)}
 								<div className={styles.itemContent}>
 									<p className={styles.itemTitle}>{title}</p>
+
+									<div className={styles.selectedOptions}>
+										{variant.selectedOptions.map(option => (
+											<p key={option.name}>{option.value}</p>
+										))}
+									</div>
 									<div className={styles.itemPriceContainer}>
-										<p>Price: ${unitPrice}</p>
-										<div className={styles.itemQuantity}>
-											<FiMinus
+										<p>
+											Price: ${Number(unitPrice.slice(0, -3)).toLocaleString()}
+										</p>
+									</div>
+									{/* <div className={styles.itemQuantity}>
+										<FiMinus
+											size='1rem'
+											onClick={() => handleDecrease(lineId, quantity)}
+											cursor='pointer'
+										/>
+										<span className={styles.quantity}>{quantity}</span>
+										<FiPlus
+											size='1rem'
+											onClick={() => handleIncrease(lineId, quantity)}
+											cursor='pointer'
+										/>
+									</div> */}
+								</div>
+
+								{imageUrl && (
+									<div className={styles.itemImage}>
+										<Image
+											src={imageUrl}
+											alt={imageAlt}
+											fill
+											style={{ objectFit: 'cover' }}
+										/>
+
+										<div className={styles.removeIcon}>
+											<MdDeleteForever
 												size='1rem'
 												onClick={() => handleDecrease(lineId, quantity)}
 												cursor='pointer'
 											/>
-											<span className={styles.quantity}>{quantity}</span>
-											<FiPlus
-												size='1rem'
-												onClick={() => handleIncrease(lineId, quantity)}
-												cursor='pointer'
-											/>
 										</div>
 									</div>
-								</div>
+								)}
 							</div>
 						)
 					})}
@@ -105,17 +128,66 @@ const Cart = () => {
 
 				{/* Subtotal & Checkout */}
 				<div className={styles.checkoutSection}>
-					<p className={styles.totalAmount}>Subtotal: ${subtotal}</p>
-					{cart.checkoutUrl ? (
-						<Button
-							link={cart.checkoutUrl}
-							text='Checkout'
+					<div>
+						<div className={styles.subtotal}>
+							{/* Price */}
+							<p className={styles.totalAmount} style={{ color: '#6d6b6b' }}>
+								Subtotal
+							</p>
+
+							<p className={styles.totalAmount} style={{ fontWeight: '700' }}>
+								${Number(subtotal.slice(0, -3)).toLocaleString()}
+							</p>
+						</div>
+
+						{/* Taxes */}
+						<div className={styles.subtotal}>
+							<p className={styles.totalAmount} style={{ color: '#6d6b6b' }}>
+								Taxes
+							</p>
+
+							<p className={styles.totalAmount} style={{ fontWeight: '700' }}>
+								-
+							</p>
+						</div>
+
+						{/* Shipping */}
+						<div className={styles.subtotal}>
+							<p className={styles.totalAmount} style={{ color: '#6d6b6b' }}>
+								Shipping*
+							</p>
+
+							<p className={styles.totalAmount} style={{ fontWeight: '700' }}>
+								Calculated at checkout
+							</p>
+						</div>
+					</div>
+
+					<div className={styles.note}>
+						<p>*Your order will be fulfilled within 7 business days.</p>
+
+						<p>
+							*Please note that any special request affecting weight or
+							dimensions may impact the final price and extend the standard
+							production timeline by 2-3 business days (in addition to the 7-day
+							shipping window). If this applies, we'll follow up via email with
+							an updated quote before proceeding with payment.
+						</p>
+					</div>
+
+					<Link
+						href={cart.checkoutUrl}
+						style={{
+							pointerEvents: cart.lines?.edges?.length > 0 ? 'auto' : 'none'
+						}}
+					>
+						<button
+							className={productStyles.cartButton}
 							disabled={cart.lines?.edges?.length === 0}
-							fullWidth
-						/>
-					) : (
-						<Button text='Checkout' disabled fullWidth />
-					)}
+						>
+							Checkout
+						</button>
+					</Link>
 				</div>
 			</div>
 		</div>
