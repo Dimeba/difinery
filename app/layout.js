@@ -1,11 +1,10 @@
-// import { Work_Sans } from 'next/font/google'
-import { Libre_Franklin } from 'next/font/google'
+import { Libre_Franklin, Newsreader } from 'next/font/google'
 import './globals.scss'
 import theme from '@/app/theme/theme'
 import { CssBaseline } from '@mui/material'
 
-// const workSans = Work_Sans({ subsets: ['latin'] })
 const libreFranklin = Libre_Franklin({ subsets: ['latin'] })
+const newsreader = Newsreader({ subsets: ['latin'] })
 
 // components
 import Header from '@/components/Header'
@@ -42,7 +41,9 @@ export default function RootLayout({ children }) {
 			</head>
 			<ApolloContext>
 				<CartProvider>
-					<body className={libreFranklin.className}>
+					<body
+						className={`${libreFranklin.className} ${newsreader.className}`}
+					>
 						<ThemeProvider theme={theme}>
 							<CssBaseline />
 							<Cart />
