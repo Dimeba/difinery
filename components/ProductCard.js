@@ -17,6 +17,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 	const [metalTypes, setMetalTypes] = useState([])
 	const [activeMetalType, setActiveMetalType] = useState('')
 
+	// getting png images
 	const productImages = useMemo(() => {
 		return (product.images?.edges || []).filter(edge =>
 			edge.node.url.includes('.png')
@@ -35,7 +36,8 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 		)
 	}, [productImages])
 
-	const returnCorectImage = () => {
+	// Function to return the correct image based on active metal type
+	const returnCorrectImage = () => {
 		if (!activeMetalType) {
 			return productImages[0]?.node.url
 		}
@@ -87,7 +89,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 				{productImages.length > 0 && (
 					<div className={styles.image}>
 						<Image
-							src={returnCorectImage()}
+							src={returnCorrectImage()}
 							fill
 							alt='Category Image.'
 							style={{ objectFit: 'cover' }}
