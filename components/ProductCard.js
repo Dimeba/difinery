@@ -8,13 +8,42 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 // hooks
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 // helpers
 import { returnMetalType } from '@/lib/helpers'
 
 const ProductCard = ({ permalink, discount, product, individual }) => {
 	const [metalTypes, setMetalTypes] = useState([])
+	const [activeMetalType, setActiveMetalType] = useState('')
+
+	const productImages = useMemo(() => {
+		return (product.images?.edges || []).filter(edge =>
+			edge.node.url.includes('.png')
+		)
+	}, [product.images])
+
+	const yellowGoldImage = useMemo(() => {
+		return productImages.find(image =>
+			image.node.url.toLowerCase().includes('/files/y')
+		)
+	}, [productImages])
+
+	const whiteGoldImage = useMemo(() => {
+		return productImages.find(image =>
+			image.node.url.toLowerCase().includes('/files/w')
+		)
+	}, [productImages])
+
+	const returnCorectImage = () => {
+		if (!activeMetalType) {
+			return productImages[0]?.node.url
+		}
+
+		return activeMetalType.includes('yellow')
+			? yellowGoldImage?.node.url
+			: whiteGoldImage?.node.url
+	}
 
 	useEffect(() => {
 		const types = new Set()
@@ -33,6 +62,12 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 		setMetalTypes([...types])
 	}, [product])
 
+	useEffect(() => {
+		if (metalTypes.length > 0) {
+			setActiveMetalType(metalTypes[0])
+		}
+	}, [metalTypes])
+
 	if (!product) {
 		return (
 			<div className={styles.product}>
@@ -49,49 +84,15 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 				aria-label={`Link to ${product.title} page.`}
 			>
 				{/* Product Image */}
-				{product.images && (
+				{productImages.length > 0 && (
 					<div className={styles.image}>
-						{!individual ? (
-							<>
-								<Image
-									src={product.images.edges[0].node.url}
-									fill
-									alt='Category Image.'
-									style={{ objectFit: 'cover' }}
-									sizes='(max-width: 768px) 100vw, 50vw'
-								/>
-								{product.images[1] && (
-									<Image
-										src={product.images.edges[1].node.url}
-										fill
-										alt='Category Image.'
-										style={{ objectFit: 'cover' }}
-										className={styles.hoverImage}
-										sizes='(max-width: 768px) 100vw, 50vw'
-									/>
-								)}
-							</>
-						) : (
-							<>
-								{product.images[1] ? (
-									<Image
-										src={product.images.edges[1].node.url}
-										fill
-										alt='Category Image.'
-										style={{ objectFit: 'cover' }}
-										sizes='(max-width: 768px) 100vw, 50vw'
-									/>
-								) : (
-									<Image
-										src={product.images.edges[0].node.url}
-										fill
-										alt='Category Image.'
-										style={{ objectFit: 'cover' }}
-										sizes='(max-width: 768px) 100vw, 50vw'
-									/>
-								)}
-							</>
-						)}
+						<Image
+							src={returnCorectImage()}
+							fill
+							alt='Category Image.'
+							style={{ objectFit: 'cover' }}
+							sizes='(max-width: 768px) 100vw, 50vw'
+						/>
 
 						{individual && (
 							<p className={styles.individualTitle}>
@@ -130,13 +131,21 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 					{metalTypes.length > 0 && (
 						<div className={styles.typeIcons}>
 							{metalTypes.map(option => (
-								<div key={option} className={styles.typeIcon}>
+								<div
+									key={option}
+									className={styles.typeIcon}
+									onClick={() => setActiveMetalType(option)}
+								>
 									<Image
 										src={`/${option}`}
 										fill
 										alt={`${option} material icon.`}
 										sizes='(max-width: 768px) 100vw, 50vw'
 									/>
+
+									{activeMetalType === option && (
+										<div className={styles.typeCircle}></div>
+									)}
 								</div>
 							))}
 						</div>
