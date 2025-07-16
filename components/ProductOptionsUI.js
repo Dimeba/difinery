@@ -9,13 +9,14 @@ import Accordion from './Accordion'
 import NeedHelpInfo from './NeedHelpInfo'
 
 // hooks
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // helpers
 import { returnMetalType } from '@/lib/helpers'
 
 const ProductOptionsUI = ({
 	product,
+	selectedColor,
 	setSelectedColor,
 	matchingVariant,
 	setMatchingVariant,
@@ -25,8 +26,14 @@ const ProductOptionsUI = ({
 	setBoxText,
 	setShowOrderSummary
 }) => {
-	const [openOption, setOpenOption] = useState(0)
-	const [selectedOptions, setSelectedOptions] = useState({})
+	const [openOption, setOpenOption] = useState(selectedColor ? 1 : 0)
+	const [selectedOptions, setSelectedOptions] = useState(() => {
+		const initialOptions = {}
+		if (selectedColor) {
+			initialOptions['Metal'] = selectedColor
+		}
+		return initialOptions
+	})
 
 	// Find the Shopify variant node matching the selected options
 	const getMatchingVariant = options => {
@@ -81,6 +88,12 @@ const ProductOptionsUI = ({
 
 	const allOptionsSelected =
 		Object.keys(selectedOptions).length === product.options.length
+
+	useEffect(() => {
+		if (selectedColor) {
+			getMatchingVariant({ ...selectedOptions, Metal: selectedColor })
+		}
+	}, [])
 
 	return (
 		<div className={styles.content}>

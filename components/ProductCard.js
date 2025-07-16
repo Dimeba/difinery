@@ -47,6 +47,20 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 			: whiteGoldImage?.node.url
 	}
 
+	// Function to return the correct URL based on active metal type
+	const returnCorrectURL = () => {
+		if (!activeMetalType) {
+			return `/shop/${product.category.name.toLowerCase()}/${permalink}`
+		}
+
+		return {
+			pathname: `/shop/${product.category.name.toLowerCase()}/${permalink}`,
+			query: {
+				gold: activeMetalType.includes('yellow') ? 'yellow' : 'white'
+			}
+		}
+	}
+
 	useEffect(() => {
 		const types = new Set()
 
@@ -81,11 +95,9 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 	return (
 		<div className={`${!individual ? styles.product : styles.productNoGap}`}>
 			<Link
-				// href={`/shop/rings/${permalink}`}
-				href={`/shop/${product.category.name.toLowerCase()}/${permalink}`}
+				href={returnCorrectURL()}
 				aria-label={`Link to ${product.title} page.`}
 			>
-				{/* Product Image */}
 				{productImages.length > 0 && (
 					<div className={styles.image}>
 						<Image

@@ -10,6 +10,7 @@ import OrderReview from './OrderReview'
 
 // hooks
 import { useState, useMemo } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 // context
 import { useCart } from '@/context/CartContext'
@@ -18,10 +19,30 @@ const ProductInfo = ({ product }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
 	const allImages = product.images.edges.map(edge => edge.node.url)
+
+	// Getting the default metal type
+	const searchParams = useSearchParams()
+	const gold = searchParams.get('gold')
+
+	const metalOptions = useMemo(() => {
+		const metal = product.options.find(opt => opt.name === 'Metal')
+		return metal ? metal.optionValues : []
+	}, [product.options])
+
+	const initialColor = useMemo(
+		() =>
+			metalOptions.find(opt =>
+				opt.name.toLowerCase().includes(gold ? gold.toLowerCase() : '')
+			),
+		[metalOptions, gold]
+	)
+
 	const [matchingVariant, setMatchingVariant] = useState(
 		product.variants.edges[0].node
 	)
-	const [selectedColor, setSelectedColor] = useState(null)
+	const [selectedColor, setSelectedColor] = useState(
+		gold ? initialColor.name : null
+	)
 	const [engraving, setEngraving] = useState('')
 	const [boxText, setBoxText] = useState('')
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
@@ -96,6 +117,7 @@ const ProductInfo = ({ product }) => {
 
 				<ProductOptionsUI
 					product={product}
+					selectedColor={selectedColor}
 					setSelectedColor={setSelectedColor}
 					matchingVariant={matchingVariant}
 					setMatchingVariant={setMatchingVariant}
