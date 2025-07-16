@@ -4,7 +4,6 @@
 import styles from './Header.module.scss'
 
 // components
-import { Box } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FiShoppingBag, FiUser, FiArrowRight } from 'react-icons/fi'
@@ -53,7 +52,7 @@ const Header = ({ content }) => {
 	}
 
 	return (
-		<Box ref={targetRef}>
+		<div ref={targetRef}>
 			<div
 				className={`${styles.header} ${
 					!isIntersecting || showSubmenu ? styles.dropShadow : ''
@@ -236,7 +235,7 @@ const Header = ({ content }) => {
 					</div>
 				)}
 			</div>
-		</Box>
+		</div>
 	)
 }
 
