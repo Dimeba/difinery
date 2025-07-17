@@ -4,7 +4,7 @@ import PageContent from '@/components/PageContent'
 
 // lib
 import { apolloClient } from '@/lib/apolloClient'
-import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
+import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { getEntries } from '@/lib/contentful'
 
 // Contentful
@@ -18,29 +18,22 @@ export const metadata = {
 }
 
 export default async function Home() {
-	const fetchProducts = async handle => {
-		const { data } = await apolloClient.query({
-			query: GET_COLLECTION_BY_HANDLE,
-			variables: { handle }
-		})
-		return data.collectionByHandle?.products?.edges.map(edge => edge.node) || []
-	}
+	const { data } = await apolloClient.query({
+		query: GET_PRODUCTS,
+		variables: { first: 20, after: null }
+	})
 
-	const rings = await fetchProducts('rings')
-	const earrings = await fetchProducts('earrings')
-	const necklaces = await fetchProducts('necklaces')
-	const bracelets = await fetchProducts('bracelets')
-
-	const allProducts = [
-		...rings,
-		...earrings,
-		...necklaces,
-		...bracelets
-	].reverse()
+	const initialEdges = data.products.edges
+	const initialItems = initialEdges.map(edge => edge.node)
+	const initialPageInfo = data.products.pageInfo
 
 	return (
 		<main>
-			<Products products={allProducts} showFilters />
+			<Products
+				products={initialItems}
+				initialPageInfo={initialPageInfo}
+				showFilters
+			/>
 			<PageContent content={content} />
 		</main>
 	)

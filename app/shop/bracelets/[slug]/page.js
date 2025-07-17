@@ -8,7 +8,11 @@ import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 import { GET_PRODUCT_RECOMMENDATIONS } from '@/lib/queries/getProductRecommendations'
 
 const { data } = await apolloClient.query({
-	query: GET_PRODUCTS
+	query: GET_PRODUCTS,
+	variables: {
+		first: 250,
+		after: null
+	}
 })
 
 const products = data.products.edges.map(edge => edge.node)

@@ -84,6 +84,8 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 		}
 	}, [metalTypes])
 
+	const imageSrc = returnCorrectImage()
+
 	if (!product) {
 		return (
 			<div className={styles.product}>
@@ -100,13 +102,15 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 			>
 				{productImages.length > 0 && (
 					<div className={styles.image}>
-						<Image
-							src={returnCorrectImage()}
-							fill
-							alt='Category Image.'
-							style={{ objectFit: 'cover' }}
-							sizes='(max-width: 768px) 100vw, 50vw'
-						/>
+						{imageSrc && (
+							<Image
+								src={imageSrc}
+								fill
+								alt='Category Image.'
+								style={{ objectFit: 'cover' }}
+								sizes='(max-width: 768px) 100vw, 50vw'
+							/>
+						)}
 
 						{individual && (
 							<p className={styles.individualTitle}>

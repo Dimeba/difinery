@@ -2,6 +2,7 @@
 
 // styles
 import styles from './Products.module.scss'
+import productStyles from './ProductInfo.module.scss'
 
 // components
 import ProductCard from './ProductCard'
@@ -22,6 +23,10 @@ import SearchIcon from '@mui/icons-material/Search'
 import { useState, useEffect, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
 
+// lib
+import { GET_PRODUCTS } from '@/lib/queries/getProducts'
+import { useApolloClient } from '@apollo/client'
+
 const Products = ({
 	title = '',
 	stylizedTitle,
@@ -30,9 +35,11 @@ const Products = ({
 	recommendedProducts,
 	showFilters = false,
 	individual = false,
-	products = []
+	products = [],
+	initialPageInfo = {}
 }) => {
 	const [items, setItems] = useState(products)
+	const [pageInfo, setPageInfo] = useState(initialPageInfo)
 	const [filteredItems, setFilteredItems] = useState(products)
 	const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
@@ -42,8 +49,20 @@ const Products = ({
 	const [selectedMetalTypes, setSelectedMetalTypes] = useState([])
 	const [searchTerm, setSearchTerm] = useState('')
 
+	const client = useApolloClient()
 	const isMobile = useMediaQuery('(max-width: 1024px)')
 	const anchorRef = useRef(null)
+
+	const loadMore = async () => {
+		if (!pageInfo.hasNextPage) return
+		const { data } = await client.query({
+			query: GET_PRODUCTS,
+			variables: { first: 20, after: pageInfo.endCursor }
+		})
+		const newEdges = data.products.edges
+		setItems(prev => [...prev, ...newEdges.map(edge => edge.node)])
+		setPageInfo(data.products.pageInfo)
+	}
 
 	// Filter & sort
 	useEffect(() => {
@@ -218,6 +237,19 @@ const Products = ({
 					</div>
 				</div>
 			</div>
+
+			{/* “Load more” button */}
+			{pageInfo.hasNextPage && (
+				<Box textAlign='center' mt={4}>
+					<button
+						onClick={loadMore}
+						className={productStyles.cartButton}
+						style={{ width: 'fit-content', backgroundImage: 'none' }}
+					>
+						Load More
+					</button>
+				</Box>
+			)}
 
 			<Popper
 				open={showFiltersMenu}
