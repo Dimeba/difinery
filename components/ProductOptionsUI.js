@@ -211,14 +211,14 @@ const ProductOptionsUI = ({
 								</p>
 							</div>
 
-							<div className={styles.inputImage}>
+							{/* <div className={styles.inputImage}>
 								<Image
 									src='/engraving-image.jpg'
 									alt='Engraving Image'
 									fill
 									style={{ objectFit: 'cover' }}
 								/>
-							</div>
+							</div> */}
 						</div>
 					</Accordion>
 				)}
