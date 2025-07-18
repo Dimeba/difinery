@@ -20,6 +20,8 @@ const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
 					individual={true}
 				/>
 			)}
+
+			<div style={{ marginTop: '4rem' }}></div>
 			{/* 
 			<FAQ
 				title='Frequently Asked Questions'

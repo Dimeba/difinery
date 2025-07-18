@@ -244,7 +244,7 @@ const Products = ({
 									product={product}
 									permalink={product.handle}
 									discount={discount}
-									individual={individual}
+									// individual={individual}
 								/>
 							))}
 					</div>
