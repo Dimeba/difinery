@@ -108,6 +108,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 								fill
 								alt='Category Image.'
 								style={{ objectFit: 'cover' }}
+								quality={100}
 								sizes='(max-width: 768px) 100vw, 50vw'
 							/>
 						)}

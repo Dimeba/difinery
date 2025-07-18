@@ -115,6 +115,7 @@ const Column = async ({
 						objectFit: content.fields.fitImage ? 'contain' : 'cover',
 						backgroundColor: isPng ? '#F5F5F5' : ''
 					}}
+					quality={100}
 					sizes={
 						columns == 1
 							? '(max-width: 1920px) 100vw, 75vw'

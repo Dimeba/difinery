@@ -108,6 +108,7 @@ const ProductInfo = ({ product }) => {
 								src={image}
 								fill
 								alt='Image of the product.'
+								quality={100}
 								sizes={'(max-width: 768px) 100vw, 50vw'}
 								style={{ objectFit: 'cover' }}
 							/>
