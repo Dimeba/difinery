@@ -107,12 +107,12 @@ const Header = ({ content }) => {
 					</Link>
 
 					<div className={styles.icons}>
-						<FiUser
+						{/* <FiUser
 							size={'1.2rem'}
 							stroke={transparentMenu ? 'white' : 'black'}
 							strokeWidth={1}
 							cursor={'pointer'}
-						/>
+						/> */}
 
 						<FiShoppingBag
 							size={'1.2rem'}
