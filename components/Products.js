@@ -25,6 +25,7 @@ import { useMediaQuery } from '@mui/material'
 
 // lib
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
+import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
 import { useApolloClient } from '@apollo/client'
 
 const Products = ({
@@ -36,7 +37,8 @@ const Products = ({
 	showFilters = false,
 	individual = false,
 	products = [],
-	initialPageInfo = {}
+	initialPageInfo = {},
+	productType = ''
 }) => {
 	const [items, setItems] = useState(products)
 	const [pageInfo, setPageInfo] = useState(initialPageInfo)
@@ -56,12 +58,23 @@ const Products = ({
 	const loadMore = async () => {
 		if (!pageInfo.hasNextPage) return
 		const { data } = await client.query({
-			query: GET_PRODUCTS,
-			variables: { first: 20, after: pageInfo.endCursor }
+			query: productType === 'all' ? GET_PRODUCTS : GET_COLLECTION_BY_HANDLE,
+			variables:
+				productType === 'all'
+					? { first: 16, after: pageInfo.endCursor }
+					: { handle: productType, first: 16, after: pageInfo.endCursor }
 		})
-		const newEdges = data.products.edges
+
+		const newEdges =
+			productType === 'all'
+				? data.products.edges
+				: data.collectionByHandle.products.edges
 		setItems(prev => [...prev, ...newEdges.map(edge => edge.node)])
-		setPageInfo(data.products.pageInfo)
+		setPageInfo(
+			productType === 'all'
+				? data.products.pageInfo
+				: data.collectionByHandle.products.pageInfo
+		)
 	}
 
 	// Filter & sort

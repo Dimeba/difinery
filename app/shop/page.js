@@ -20,7 +20,7 @@ export const metadata = {
 export default async function Home() {
 	const { data } = await apolloClient.query({
 		query: GET_PRODUCTS,
-		variables: { first: 20, after: null }
+		variables: { first: 16, after: null }
 	})
 
 	const initialEdges = data.products.edges
@@ -32,6 +32,7 @@ export default async function Home() {
 			<Products
 				products={initialItems}
 				initialPageInfo={initialPageInfo}
+				productType='all'
 				showFilters
 			/>
 			<PageContent content={content} />

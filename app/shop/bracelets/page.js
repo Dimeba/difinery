@@ -18,19 +18,23 @@ export const metadata = {
 }
 
 export default async function Home() {
-	const fetchProducts = async handle => {
-		const { data } = await apolloClient.query({
-			query: GET_COLLECTION_BY_HANDLE,
-			variables: { handle }
-		})
-		return data.collectionByHandle?.products?.edges.map(edge => edge.node) || []
-	}
+	const { data } = await apolloClient.query({
+		query: GET_COLLECTION_BY_HANDLE,
+		variables: { handle: 'bracelets', first: 16, after: null }
+	})
 
-	const bracelets = await fetchProducts('bracelets')
+	const initialEdges = data.collectionByHandle?.products.edges
+	const initialItems = initialEdges.map(edge => edge.node)
+	const initialPageInfo = data.collectionByHandle?.products.pageInfo
 
 	return (
 		<main>
-			<Products products={bracelets} showFilters />
+			<Products
+				products={initialItems}
+				initialPageInfo={initialPageInfo}
+				productType='bracelets'
+				showFilters
+			/>
 			<PageContent content={content} />
 		</main>
 	)
