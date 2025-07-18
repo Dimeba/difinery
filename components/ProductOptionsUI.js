@@ -106,6 +106,8 @@ const ProductOptionsUI = ({
 		}
 	}, [])
 
+	console.log('matchingVariant', matchingVariant)
+
 	return (
 		<div className={styles.content}>
 			<div className={styles.versionInfo}>
@@ -284,7 +286,29 @@ const ProductOptionsUI = ({
 			</a>
 
 			<Accordion title='Product Details'>
-				<div className={styles.productDetails}>{parse(details)}</div>
+				<div className={styles.productDetails}>
+					<p>
+						<span style={{ fontWeight: '700' }}>Product Name: </span>
+						{product.title}
+					</p>
+					{matchingVariant && (
+						<p>
+							<span style={{ fontWeight: '700' }}>ID / SKU: </span>
+							{matchingVariant.sku}
+						</p>
+					)}
+					{selectedColor && (
+						<p>
+							<span style={{ fontWeight: '700' }}>Metal: </span>
+							{selectedColor.toLowerCase().includes('yellow') ? (
+								<span>Yellow Gold</span>
+							) : (
+								<span>White Gold</span>
+							)}
+						</p>
+					)}
+					{parse(details)}
+				</div>
 			</Accordion>
 		</div>
 	)
