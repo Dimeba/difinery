@@ -128,7 +128,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 				{productImages.length > 0 && (
 					<div
 						className={styles.image}
-						onMouseEnter={() => setImageZoom(1.1)}
+						onMouseEnter={() => setImageZoom(0.9)}
 						onMouseLeave={() => setImageZoom(0.8)}
 					>
 						{imageSrc && (
