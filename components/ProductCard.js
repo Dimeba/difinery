@@ -16,6 +16,7 @@ import { returnMetalType } from '@/lib/helpers'
 const ProductCard = ({ permalink, discount, product, individual }) => {
 	const [metalTypes, setMetalTypes] = useState([])
 	const [activeMetalType, setActiveMetalType] = useState('')
+	const [imageZoom, setImageZoom] = useState(1)
 
 	// getting png images
 	const productImages = useMemo(() => {
@@ -61,6 +62,26 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 		}
 	}
 
+	const imageSrc = returnCorrectImage()
+
+	const dynamicImageStyle = () => {
+		switch (product.category.name.toLowerCase()) {
+			case 'rings':
+				return { objectFit: 'cover' }
+			case 'necklaces':
+				return {
+					objectFit: 'contain',
+					objectPosition: 'top'
+				}
+			case 'earrings':
+				return { objectFit: 'contain', transform: `scale(${imageZoom})` }
+			case 'bracelets':
+				return { objectFit: 'cover' }
+			default:
+				return { objectFit: 'cover' }
+		}
+	}
+
 	useEffect(() => {
 		const types = new Set()
 
@@ -84,7 +105,11 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 		}
 	}, [metalTypes])
 
-	const imageSrc = returnCorrectImage()
+	useEffect(() => {
+		if (product.category.name.toLowerCase() === 'earrings') {
+			setImageZoom(0.8)
+		}
+	}, [])
 
 	if (!product) {
 		return (
@@ -101,13 +126,17 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 				aria-label={`Link to ${product.title} page.`}
 			>
 				{productImages.length > 0 && (
-					<div className={styles.image}>
+					<div
+						className={styles.image}
+						onMouseEnter={() => setImageZoom(1.1)}
+						onMouseLeave={() => setImageZoom(0.8)}
+					>
 						{imageSrc && (
 							<Image
 								src={imageSrc}
 								fill
 								alt='Category Image.'
-								style={{ objectFit: 'cover' }}
+								style={dynamicImageStyle()}
 								quality={100}
 								sizes='(max-width: 768px) 100vw, 50vw'
 							/>
