@@ -45,6 +45,7 @@ const ProductInfo = ({ product }) => {
 	)
 	const [engraving, setEngraving] = useState('')
 	const [boxText, setBoxText] = useState('')
+	const [boxColor, setBoxColor] = useState('')
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 
 	const images = useMemo(() => {
@@ -77,6 +78,8 @@ const ProductInfo = ({ product }) => {
 		const customFields = []
 		if (engraving) customFields.push({ key: 'Engraving', value: engraving })
 		if (boxText) customFields.push({ key: 'Box', value: boxText })
+		if (boxColor)
+			customFields.push({ key: 'Box Message Color', value: boxColor })
 
 		if (!matchingVariant || !matchingVariant.id) {
 			console.error('No matching variant found')
@@ -126,6 +129,8 @@ const ProductInfo = ({ product }) => {
 					setEngraving={setEngraving}
 					boxText={boxText}
 					setBoxText={setBoxText}
+					boxColor={boxColor}
+					setBoxColor={setBoxColor}
 					setShowOrderSummary={setShowOrderSummary}
 				/>
 			</div>
@@ -138,7 +143,8 @@ const ProductInfo = ({ product }) => {
 					product={product}
 					customOptions={{
 						engraving,
-						boxText
+						boxText,
+						boxColor
 					}}
 				/>
 			)}

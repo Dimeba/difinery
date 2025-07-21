@@ -215,6 +215,20 @@
 	flex-grow: 1;
 }
 
+.boxColors {
+	display: flex;
+	gap: 0.5rem !important;
+
+	button {
+		margin: 0;
+		width: 1rem;
+		height: 1rem;
+		border-radius: 50%;
+		border: none;
+		cursor: pointer;
+	}
+}
+
 .orderReviewContainer {
 	background-color: #f4f4f4;
 }

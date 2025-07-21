@@ -25,6 +25,8 @@ const ProductOptionsUI = ({
 	setEngraving,
 	boxText,
 	setBoxText,
+	boxColor,
+	setBoxColor,
 	setShowOrderSummary
 }) => {
 	const [openOption, setOpenOption] = useState(selectedColor ? 1 : 0)
@@ -99,6 +101,13 @@ const ProductOptionsUI = ({
 		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i
 	)
 	const description = match ? match[0] : ''
+
+	const boxColorOptions = [
+		{ backgroundColor: '#b8a3ee', boxColor: 'Purple' },
+		{ backgroundColor: '#5d8059', boxColor: 'Green' },
+		{ backgroundColor: '#bababa', boxColor: 'Light Gray' },
+		{ backgroundColor: '#999999', boxColor: 'Dark Gray' }
+	]
 
 	useEffect(() => {
 		if (selectedColor) {
@@ -201,7 +210,7 @@ const ProductOptionsUI = ({
 									value={engraving}
 									onChange={e => setEngraving(e.target.value)}
 									className={styles.engravingInput}
-									maxLength={25}
+									maxLength={product.category.name === 'Rings' ? 20 : 10}
 								/>
 								<p
 									style={{
@@ -209,7 +218,9 @@ const ProductOptionsUI = ({
 										fontStyle: 'italic'
 									}}
 								>
-									*Max 20 characters. We recommend up to 15.
+									{product.category.name === 'Rings'
+										? '*Max 20 characters. We recommend up to 15.'
+										: '*Max 10 characters.'}
 								</p>
 							</div>
 
@@ -241,9 +252,23 @@ const ProductOptionsUI = ({
 								memorable keepsake.
 							</p>
 
-							{/* <div className={styles.boxColors}>
-								<button>Clear Text</button>
-							</div> */}
+							<p>Message Color:</p>
+
+							<div className={styles.boxColors}>
+								{boxColorOptions.map((option, index) => (
+									<button
+										key={index}
+										style={{
+											backgroundColor: option.backgroundColor,
+											border:
+												boxColor === option.boxColor
+													? '1px solid black'
+													: 'none'
+										}}
+										onClick={() => setBoxColor(option.boxColor)}
+									></button>
+								))}
+							</div>
 
 							<textarea
 								className={styles.boxInput}
