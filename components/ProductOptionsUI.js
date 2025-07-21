@@ -109,13 +109,39 @@ const ProductOptionsUI = ({
 		{ backgroundColor: '#999999', boxColor: 'Dark Gray' }
 	]
 
+	const materialInfo = [
+		{
+			icon: '/polish-icon.png',
+			title: 'Metal',
+			text: 'To ensure quality and longevity, each of our pieces is crafted using certified 100% repurposed 14k solid white or yellow gold.'
+		},
+		{
+			icon: '/sustainability-icon.png',
+			title: 'Sustainability',
+			text: 'Aligned with our values and ethics, every piece features lab-grown diamonds created through CVD and HPHT methods . Meeting the highest standards in color (D, E, F) and clarity (FL). We believe in responsible production and conscious consumption.'
+		},
+		{
+			icon: '/warranty-icon.png',
+			title: 'Practices',
+			text: 'We believe in clean practices, not just for the planet, but for the people we serve. Fair pricing, stable value, privacy-first policies, and a seamless buying experience are all part of our commitment to honest, transparent, and effective standards across every touchpoint of the brand.'
+		},
+		{
+			icon: '/polish-icon.png',
+			title: 'Care',
+			text: 'Every purchase includes one year of free  polishing and cleaning. While our 14k solid gold and lab-grown diamond pieces are built to last, we recommend avoiding harsh chemicals, storing them separately, and cleaning them gently with mild soap and water.'
+		},
+		{
+			icon: '/return-icon.png',
+			title: 'Shipping',
+			text: 'Free shipping for purchases above $300.'
+		}
+	]
+
 	useEffect(() => {
 		if (selectedColor) {
 			getMatchingVariant({ ...selectedOptions, Metal: selectedColor })
 		}
 	}, [])
-
-	console.log('matchingVariant', matchingVariant)
 
 	return (
 		<div className={styles.content}>
@@ -310,31 +336,65 @@ const ProductOptionsUI = ({
 				</button>
 			</a>
 
-			<Accordion title='Product Details'>
-				<div className={styles.productDetails}>
+			<div>
+				<Accordion title='Product Details'>
+					<div className={styles.productDetails}>
+						<p>
+							<span style={{ fontWeight: '700' }}>Product Name: </span>
+							{product.title}
+						</p>
+						{matchingVariant && (
+							<p>
+								<span style={{ fontWeight: '700' }}>ID / SKU: </span>
+								{matchingVariant.sku}
+							</p>
+						)}
+						{selectedColor && (
+							<p>
+								<span style={{ fontWeight: '700' }}>Metal: </span>
+								{selectedColor.toLowerCase().includes('yellow') ? (
+									<span>Yellow Gold</span>
+								) : (
+									<span>White Gold</span>
+								)}
+							</p>
+						)}
+						{parse(details)}
+					</div>
+				</Accordion>
+
+				<Accordion title='Material'>
+					<div
+						style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+					>
+						{materialInfo.map((info, index) => (
+							<div key={index} className={styles.materialInfo}>
+								<Image src={info.icon} width={32} height={32} alt='Icon' />
+								<div
+									style={{
+										display: 'flex',
+										flexDirection: 'column',
+										gap: '0.25rem'
+									}}
+								>
+									<p style={{ fontWeight: '700' }}>{info.title}</p>
+									<p>{info.text}</p>
+								</div>
+							</div>
+						))}
+					</div>
+				</Accordion>
+
+				<Accordion title='Handcrafted in USA'>
 					<p>
-						<span style={{ fontWeight: '700' }}>Product Name: </span>
-						{product.title}
+						Each one of our pieces are handcrafted in New York's Diamond
+						District using only ethical lab-grown diamonds of the highest
+						standards and 100% certified recycled solid gold. We honor timeless
+						design and exceptional craftsmanship, creating heirloom-quality fine
+						jewelry made to last for generations.
 					</p>
-					{matchingVariant && (
-						<p>
-							<span style={{ fontWeight: '700' }}>ID / SKU: </span>
-							{matchingVariant.sku}
-						</p>
-					)}
-					{selectedColor && (
-						<p>
-							<span style={{ fontWeight: '700' }}>Metal: </span>
-							{selectedColor.toLowerCase().includes('yellow') ? (
-								<span>Yellow Gold</span>
-							) : (
-								<span>White Gold</span>
-							)}
-						</p>
-					)}
-					{parse(details)}
-				</div>
-			</Accordion>
+				</Accordion>
+			</div>
 		</div>
 	)
 }
