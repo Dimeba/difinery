@@ -23,7 +23,7 @@ const Column = async ({
 	const content = await getEntry(id)
 
 	// dynamic styles
-	const horizontalAlign = () => {
+	const horizontalAlignDesktop = () => {
 		switch (content.fields.contentAlignHorizontal) {
 			case 'center':
 				return 'center'
@@ -34,9 +34,19 @@ const Column = async ({
 		}
 	}
 
+	const horizontalAlignMobile = () => {
+		switch (content.fields.contentAlignHorizontal) {
+			case 'center':
+				return 'center'
+			case 'right':
+				return 'flex-start'
+			default:
+				return 'flex-start'
+		}
+	}
+
 	const dynamicStyles = {
 		content: {
-			alignItems: horizontalAlign(),
 			justifyContent:
 				content.fields.contentAlignVertical == 'center' ? 'center' : 'flex-end',
 			maxWidth: columns == 1 ? '1440px' : ``,
@@ -124,7 +134,16 @@ const Column = async ({
 				/>
 			)}
 
-			<div className={styles.content} style={dynamicStyles.content}>
+			<Box
+				sx={{
+					alignItems: {
+						xs: horizontalAlignMobile(),
+						md: horizontalAlignDesktop()
+					}
+				}}
+				className={styles.content}
+				style={dynamicStyles.content}
+			>
 				{/* Text */}
 				{content.fields.text && content.fields.textPosition == 'top' && (
 					<div
@@ -147,7 +166,7 @@ const Column = async ({
 						))}
 					</div>
 				)}
-			</div>
+			</Box>
 
 			{content.fields.text && content.fields.textPosition == 'below' && (
 				<div className={`${styles.belowText} ${textAlignClassName()}`}>
