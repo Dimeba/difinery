@@ -105,6 +105,7 @@ const Column = async ({
 			mobileColumns={mobileColumns}
 			height={content.fields.noPadding ? 'fit-content' : height}
 			fixedRatio={content.fields.fixedRatio}
+			mediaMobileAlign={content.fields.mediaMobileAlign || 'center'}
 		>
 			{content.fields.type == 'video' && (
 				<Video

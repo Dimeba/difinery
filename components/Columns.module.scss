@@ -169,6 +169,24 @@
 		flex: auto;
 	}
 
+	.mediaMobileAlignLeft {
+		video {
+			object-position: left;
+		}
+	}
+
+	.mediaMobileAlignRight {
+		video {
+			object-position: right;
+		}
+	}
+
+	.mediaMobileAlignCenter {
+		video {
+			object-position: center;
+		}
+	}
+
 	.content {
 		max-width: 90%;
 		padding-left: 0 !important;
