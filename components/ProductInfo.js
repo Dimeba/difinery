@@ -51,7 +51,7 @@ const ProductInfo = ({ product }) => {
 	const images = useMemo(() => {
 		if (!selectedColor) {
 			// No color chosen yet, show all images
-			return allImages.filter(url => !url.toLowerCase().includes('-cover'))
+			return allImages.filter(url => !url.toLowerCase().includes('-review'))
 		}
 
 		// Decide code letter based on selection (W for White, Y for Yellow)
@@ -65,13 +65,22 @@ const ProductInfo = ({ product }) => {
 			? allImages.filter(
 					url =>
 						url.toLowerCase().includes(`/files/${code}`) &&
-						!url.toLowerCase().includes('-cover')
+						!url.toLowerCase().includes('-review')
 			  )
-			: allImages.filter(url => !url.toLowerCase().includes('-cover'))
+			: allImages.filter(url => !url.toLowerCase().includes('-review'))
 	}, [allImages, selectedColor])
 
-	const pngImages = useMemo(() => {
-		return allImages.filter(url => url.toLowerCase().includes('.png'))
+	const reviewImage = useMemo(() => {
+		const lc = selectedColor.toLowerCase()
+		let code = ''
+		if (lc.includes('white')) code = 'w'
+		else if (lc.includes('yellow')) code = 'y'
+
+		return allImages.find(
+			url =>
+				url.toLowerCase().includes(`/files/${code}`) &&
+				url.toLowerCase().includes('-review')
+		)
 	}, [allImages])
 
 	const handleAddToCart = async () => {
@@ -147,7 +156,7 @@ const ProductInfo = ({ product }) => {
 
 			{showOrderSummary && (
 				<OrderReview
-					image={pngImages.length > 0 ? pngImages[0] : images[0]}
+					image={reviewImage ? reviewImage : images[0]}
 					handleAddToCart={handleAddToCart}
 					matchingVariant={matchingVariant}
 					product={product}
