@@ -51,7 +51,7 @@ const ProductInfo = ({ product }) => {
 	const images = useMemo(() => {
 		if (!selectedColor) {
 			// No color chosen yet, show all images
-			return allImages.filter(url => url.toLowerCase().includes('.jpg'))
+			return allImages.filter(url => !url.toLowerCase().includes('-cover'))
 		}
 
 		// Decide code letter based on selection (W for White, Y for Yellow)
@@ -65,9 +65,9 @@ const ProductInfo = ({ product }) => {
 			? allImages.filter(
 					url =>
 						url.toLowerCase().includes(`/files/${code}`) &&
-						url.toLowerCase().includes('.jpg')
+						!url.toLowerCase().includes('-cover')
 			  )
-			: allImages.filter(url => url.toLowerCase().includes('.jpg'))
+			: allImages.filter(url => !url.toLowerCase().includes('-cover'))
 	}, [allImages, selectedColor])
 
 	const pngImages = useMemo(() => {
@@ -105,18 +105,28 @@ const ProductInfo = ({ product }) => {
 		<section className='topSection'>
 			<div className={styles.productInfo}>
 				<div className={styles.images}>
-					{images.map((image, index) => (
-						<div className={styles.image} key={index}>
-							<Image
-								src={image}
-								fill
-								alt='Image of the product.'
-								quality={100}
-								sizes={'(max-width: 768px) 100vw, 50vw'}
-								style={{ objectFit: 'cover' }}
-							/>
-						</div>
-					))}
+					{images.map((image, index) => {
+						const steps = images.length > 1 ? images.length - 1 : 1
+						const alpha = 0.03 + (index / steps) * 0.05
+						return (
+							<div
+								className={styles.image}
+								key={index}
+								style={{
+									backgroundColor: `rgba(0, 0, 0, ${alpha.toFixed(2)})`
+								}}
+							>
+								<Image
+									src={image}
+									fill
+									alt='Image of the product.'
+									quality={100}
+									sizes='(max-width: 768px) 100vw, 50vw'
+									style={{ objectFit: 'cover' }}
+								/>
+							</div>
+						)
+					})}
 				</div>
 
 				<ProductOptionsUI
