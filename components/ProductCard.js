@@ -64,23 +64,23 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 
 	const imageSrc = returnCorrectImage()
 
-	const dynamicImageStyle = () => {
-		switch (product.category.name.toLowerCase()) {
-			case 'rings':
-				return { objectFit: 'cover' }
-			case 'necklaces':
-				return {
-					objectFit: 'contain',
-					objectPosition: 'top'
-				}
-			case 'earrings':
-				return { objectFit: 'contain', transform: `scale(${imageZoom})` }
-			case 'bracelets':
-				return { objectFit: 'cover' }
-			default:
-				return { objectFit: 'cover' }
-		}
-	}
+	// const dynamicImageStyle = () => {
+	// 	switch (product.category.name.toLowerCase()) {
+	// 		case 'rings':
+	// 			return { objectFit: 'cover' }
+	// 		case 'necklaces':
+	// 			return {
+	// 				objectFit: 'contain',
+	// 				objectPosition: 'top'
+	// 			}
+	// 		case 'earrings':
+	// 			return { objectFit: 'contain', transform: `scale(${imageZoom})` }
+	// 		case 'bracelets':
+	// 			return { objectFit: 'cover' }
+	// 		default:
+	// 			return { objectFit: 'cover' }
+	// 	}
+	// }
 
 	useEffect(() => {
 		const types = new Set()
@@ -136,7 +136,13 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 								src={imageSrc}
 								fill
 								alt='Category Image.'
-								style={dynamicImageStyle()}
+								style={{
+									objectFit: 'contain',
+									objectPosition:
+										product.category.name.toLowerCase() === 'necklaces'
+											? 'top'
+											: 'center'
+								}}
 								quality={100}
 								sizes='(max-width: 768px) 100vw, 50vw'
 							/>
