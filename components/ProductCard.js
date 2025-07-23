@@ -21,7 +21,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 	// getting png images
 	const productImages = useMemo(() => {
 		return (product.images?.edges || []).filter(edge =>
-			edge.node.url.includes('.png')
+			edge.node.url.toLowerCase().includes('-cover.png')
 		)
 	}, [product.images])
 
