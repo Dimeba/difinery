@@ -47,7 +47,15 @@ const OrderReview = ({
 				spacing={{ xs: 1, md: 6 }}
 			>
 				{/* Image */}
-				<Grid size={{ xs: 12, md: 4 }} sx={{ position: 'relative' }}>
+				<Grid
+					size={{ xs: 12, md: 4 }}
+					sx={{ position: 'relative' }}
+					display='flex'
+					flexDirection='column'
+					alignItems='center'
+					gap={'1rem'}
+					marginBottom={{ xs: '2rem', md: '0' }}
+				>
 					<Typography
 						variant='h2'
 						align='center'
@@ -65,6 +73,7 @@ const OrderReview = ({
 					</Typography>
 					<Box
 						sx={{
+							width: '66%',
 							aspectRatio: image.width / image.height,
 							position: 'relative',
 							overflow: 'hidden',
