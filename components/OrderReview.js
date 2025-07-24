@@ -53,8 +53,6 @@ const OrderReview = ({
 						align='center'
 						zIndex={1}
 						sx={{
-							position: 'absolute',
-							top: '0',
 							width: '100%',
 							textWrap: ' balance'
 						}}
@@ -67,15 +65,17 @@ const OrderReview = ({
 					</Typography>
 					<Box
 						sx={{
-							aspectRatio: '1/1',
+							aspectRatio: image.width / image.height,
 							position: 'relative',
 							overflow: 'hidden',
 							marginTop: { xs: '2rem', md: '0' }
 						}}
 					>
 						<Image
-							src={image}
+							src={image.url}
 							fill
+							style={{ objectFit: 'contain', objectPosition: 'top' }}
+							quality={100}
 							alt='Image of the product.'
 							sizes={'(max-width: 768px) 100vw, 50vw'}
 						/>

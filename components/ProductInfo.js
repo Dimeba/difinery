@@ -18,7 +18,7 @@ import { useCart } from '@/context/CartContext'
 const ProductInfo = ({ product }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
-	const allImages = product.images.edges.map(edge => edge.node.url)
+	const allImages = product.images.edges.map(edge => edge.node)
 
 	// Getting the default metal type
 	const searchParams = useSearchParams()
@@ -51,7 +51,9 @@ const ProductInfo = ({ product }) => {
 	const images = useMemo(() => {
 		if (!selectedColor) {
 			// No color chosen yet, show all images
-			return allImages.filter(url => !url.toLowerCase().includes('-review'))
+			return allImages.filter(
+				node => !node.url.toLowerCase().includes('-review')
+			)
 		}
 
 		// Decide code letter based on selection (W for White, Y for Yellow)
@@ -63,11 +65,11 @@ const ProductInfo = ({ product }) => {
 		// Filter URLs by matching "/files/{code}" case-insensitively
 		return code
 			? allImages.filter(
-					url =>
-						url.toLowerCase().includes(`/files/${code}`) &&
-						!url.toLowerCase().includes('-review')
+					node =>
+						node.url.toLowerCase().includes(`/files/${code}`) &&
+						!node.url.toLowerCase().includes('-review')
 			  )
-			: allImages.filter(url => !url.toLowerCase().includes('-review'))
+			: allImages.filter(node => !node.url.toLowerCase().includes('-review'))
 	}, [allImages, selectedColor])
 
 	const reviewImage = useMemo(() => {
@@ -77,9 +79,9 @@ const ProductInfo = ({ product }) => {
 		else if (lc.includes('yellow')) code = 'y'
 
 		return allImages.find(
-			url =>
-				url.toLowerCase().includes(`/files/${code}`) &&
-				url.toLowerCase().includes('-review')
+			node =>
+				node.url.toLowerCase().includes(`/files/${code}`) &&
+				node.url.toLowerCase().includes('-review')
 		)
 	}, [allImages])
 
@@ -126,7 +128,7 @@ const ProductInfo = ({ product }) => {
 								}}
 							>
 								<Image
-									src={image}
+									src={image.url}
 									fill
 									alt='Image of the product.'
 									quality={100}
