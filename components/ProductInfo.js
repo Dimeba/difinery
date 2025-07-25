@@ -73,6 +73,11 @@ const ProductInfo = ({ product }) => {
 	}, [allImages, selectedColor])
 
 	const reviewImage = useMemo(() => {
+		if (!selectedColor) {
+			// No color chosen yet, show all images
+			return allImages.find(node => node.url.toLowerCase().includes('-review'))
+		}
+
 		const lc = selectedColor.toLowerCase()
 		let code = ''
 		if (lc.includes('white')) code = 'w'
@@ -133,7 +138,7 @@ const ProductInfo = ({ product }) => {
 									alt='Image of the product.'
 									quality={100}
 									sizes='(max-width: 768px) 100vw, 50vw'
-									style={{ objectFit: 'cover' }}
+									style={{ objectFit: 'contain' }}
 								/>
 							</div>
 						)
