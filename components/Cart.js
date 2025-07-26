@@ -109,7 +109,7 @@ const Cart = () => {
 											src={imageUrl}
 											alt={imageAlt}
 											fill
-											style={{ objectFit: 'cover' }}
+											style={{ objectFit: 'contain' }}
 										/>
 
 										<div className={styles.removeIcon}>
