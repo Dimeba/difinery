@@ -21,11 +21,10 @@ import { useHeader } from '@/context/HeaderContext'
 
 const Header = ({ content }) => {
 	// cart
-	const { showCart, setShowCart } = useCart()
+	const { setShowCart } = useCart()
 
 	// header
-	const { transparentHeader, setTransparentHeader } = useHeader()
-	const [hasMounted, setHasMounted] = useState(false)
+	const { transparentHeader } = useHeader()
 	const [targetRef, isIntersecting] = useIntersectionObserver()
 	const isScreenWide = useIsScreenWide(1024)
 	const [openMenu, setOpenMenu] = useState(false)
@@ -40,10 +39,6 @@ const Header = ({ content }) => {
 
 	const qucikLinks = content.quickLinks.map(link => link.fields.title)
 	const occasion = content.shopByOcassion.map(link => link.fields.title)
-
-	useEffect(() => {
-		setHasMounted(true)
-	}, [])
 
 	// Reseting open menu
 	useEffect(() => {
@@ -68,7 +63,7 @@ const Header = ({ content }) => {
 				}}
 			>
 				<div className={`container ${styles.headerTop}`}>
-					{hasMounted && isIntersecting && isScreenWide ? (
+					{isIntersecting && isScreenWide ? (
 						<Link
 							href={
 								'/' +

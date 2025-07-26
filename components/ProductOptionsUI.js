@@ -103,10 +103,10 @@ const ProductOptionsUI = ({
 	const description = match ? match[0] : ''
 
 	const boxColorOptions = [
-		{ backgroundColor: '#b8a3ee', boxColor: 'Purple' },
+		{ backgroundColor: '#b8a3ee', boxColor: 'Lavender' },
 		{ backgroundColor: '#5d8059', boxColor: 'Green' },
-		{ backgroundColor: '#bababa', boxColor: 'Light Gray' },
-		{ backgroundColor: '#999999', boxColor: 'Dark Gray' }
+		{ backgroundColor: '#bababa', boxColor: 'Light-Grey' },
+		{ backgroundColor: '#999999', boxColor: 'Dark-Grey' }
 	]
 
 	const materialInfo = [
@@ -232,7 +232,11 @@ const ProductOptionsUI = ({
 
 								<input
 									type='text'
-									placeholder='Add your text here'
+									placeholder={
+										product.category.name === 'Rings'
+											? 'Type up to 15 characters'
+											: 'Type up to 10 characters'
+									}
 									value={engraving}
 									onChange={e => setEngraving(e.target.value)}
 									className={styles.engravingInput}
@@ -244,9 +248,7 @@ const ProductOptionsUI = ({
 										fontStyle: 'italic'
 									}}
 								>
-									{product.category.name === 'Rings'
-										? '*Max 20 characters. We recommend up to 15.'
-										: '*Max 10 characters.'}
+									*Additional $20
 								</p>
 							</div>
 
@@ -300,7 +302,7 @@ const ProductOptionsUI = ({
 								className={styles.boxInput}
 								value={boxText}
 								onChange={e => setBoxText(e.target.value)}
-								placeholder='Write here'
+								placeholder='Type up to 25 characters'
 								maxLength={60}
 							/>
 
@@ -310,13 +312,17 @@ const ProductOptionsUI = ({
 									fontStyle: 'italic'
 								}}
 							>
-								*We recommend up to 8 words.
+								*Additional $50
 							</p>
 						</div>
 
 						<div className={styles.inputImage}>
 							<Image
-								src='/box-image-zoom.jpg'
+								src={
+									boxColor
+										? `/box-image-${boxColor.toLowerCase()}.jpg`
+										: '/box-image-lavender.jpg'
+								}
 								alt='Box Image'
 								fill
 								style={{ objectFit: 'cover' }}
