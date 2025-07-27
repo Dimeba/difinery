@@ -153,8 +153,7 @@ const ProductOptionsUI = ({
 
 			<p>
 				{' '}
-				FROM $
-				{Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
+				${Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
 			</p>
 
 			<div>{parse(description)}</div>

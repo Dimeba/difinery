@@ -5,6 +5,7 @@ import styles from './Cart.module.scss'
 import productStyles from './ProductInfo.module.scss'
 
 // components
+import CartItem from './CartItem'
 import { FiX, FiMinus, FiPlus } from 'react-icons/fi'
 import { MdDeleteForever } from 'react-icons/md'
 
@@ -37,6 +38,10 @@ const Cart = () => {
 		updateQuantity(lineId, qty + 1)
 	}
 
+	const removeAllrelatedItems = lineId => {
+		removeFromCart(lineId)
+	}
+
 	console.log(cart)
 
 	return (
@@ -58,72 +63,13 @@ const Cart = () => {
 						<p className={styles.emptyMessage}>Your cart is empty.</p>
 					)}
 
-					{cart.lines?.edges?.map(({ node }) => {
-						// Guard against undefined node or merchandise
-						if (!node) return null
-						const { id: lineId, quantity } = node
-						const variant = node.merchandise
-						if (!variant) return null
-
-						const title = variant.product.title || '—'
-						const imageUrl = variant.image?.url
-						const imageAlt = variant.image?.altText || title
-
-						// Safely parse unit price
-						const unitRaw = variant.priceV2?.amount
-						const unitPrice = unitRaw ? parseFloat(unitRaw).toFixed(2) : '0.00'
-
-						return (
-							<div className={styles.item} key={lineId}>
-								<div className={styles.itemContent}>
-									<p className={styles.itemTitle}>{title}</p>
-
-									<div className={styles.selectedOptions}>
-										{variant.selectedOptions.map(option => (
-											<p key={option.name}>{option.value}</p>
-										))}
-									</div>
-									<div className={styles.itemPriceContainer}>
-										<p>
-											Price: ${Number(unitPrice.slice(0, -3)).toLocaleString()}
-										</p>
-									</div>
-									{/* <div className={styles.itemQuantity}>
-										<FiMinus
-											size='1rem'
-											onClick={() => handleDecrease(lineId, quantity)}
-											cursor='pointer'
-										/>
-										<span className={styles.quantity}>{quantity}</span>
-										<FiPlus
-											size='1rem'
-											onClick={() => handleIncrease(lineId, quantity)}
-											cursor='pointer'
-										/>
-									</div> */}
-								</div>
-
-								{imageUrl && (
-									<div className={styles.itemImage}>
-										<Image
-											src={imageUrl}
-											alt={imageAlt}
-											fill
-											style={{ objectFit: 'contain' }}
-										/>
-
-										<div className={styles.removeIcon}>
-											<MdDeleteForever
-												size='1rem'
-												onClick={() => handleDecrease(lineId, quantity)}
-												cursor='pointer'
-											/>
-										</div>
-									</div>
-								)}
-							</div>
-						)
-					})}
+					{cart.lines?.edges?.map(({ node }) => (
+						<CartItem
+							node={node}
+							key={node.id}
+							removeAllrelatedItems={removeAllrelatedItems}
+						/>
+					))}
 				</div>
 
 				{/* Subtotal & Checkout */}

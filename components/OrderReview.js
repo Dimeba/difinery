@@ -7,8 +7,18 @@ import styles from './ProductInfo.module.scss'
 import { Box, Grid, Typography } from '@mui/material'
 import Image from 'next/image'
 
+// hooks
+import { useState, useEffect } from 'react'
+
+// context
+import { useCart } from '@/context/CartContext'
+
 // helpers
 import parse from 'html-react-parser'
+
+// lib
+import { useApolloClient } from '@apollo/client'
+import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 
 const OrderReview = ({
 	image,
@@ -17,6 +27,69 @@ const OrderReview = ({
 	product,
 	customOptions
 }) => {
+	const { addToCart } = useCart()
+
+	const [engravingProduct, setEngravingProduct] = useState(null)
+	const [boxProduct, setBoxProduct] = useState(null)
+
+	const client = useApolloClient()
+
+	useEffect(() => {
+		const fetchProducts = async () => {
+			if (customOptions.engraving !== '') {
+				const { data } = await client.query({
+					query: GET_PRODUCT_BY_HANDLE,
+					variables: { handle: 'engraving' }
+				})
+				setEngravingProduct(data.productByHandle)
+			}
+			if (customOptions.boxText !== '') {
+				const { data } = await client.query({
+					query: GET_PRODUCT_BY_HANDLE,
+					variables: { handle: 'custom-box' }
+				})
+				setBoxProduct(data.productByHandle)
+			}
+		}
+		fetchProducts()
+	}, [customOptions.engraving, customOptions.boxText])
+
+	console.log(engravingProduct?.variants)
+
+	const addAllToCart = async () => {
+		if (engravingProduct) {
+			await addToCart(engravingProduct.variants.edges[0].node.id, 1, [
+				{
+					key: 'text',
+					value: customOptions.engraving
+				},
+				{
+					key: 'product',
+					value: product.title
+				}
+			])
+		}
+
+		if (boxProduct) {
+			await addToCart(boxProduct.variants.edges[0].node.id, 1, [
+				{
+					key: 'boxText',
+					value: customOptions.boxText
+				},
+				{
+					key: 'boxColor',
+					value: customOptions.boxColor
+				},
+				{
+					key: 'product',
+					value: product.title
+				}
+			])
+		}
+
+		await handleAddToCart()
+	}
+
 	const additionalInfo = [
 		{ icon: '/box-icon.png', text: 'Free shipping for purchases above $300' },
 		{ icon: '/quality-icon.png', text: 'Excellent quality, handmade in USA' },
@@ -33,6 +106,8 @@ const OrderReview = ({
 		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i
 	)
 	const description = match ? match[0] : ''
+
+	console.log(customOptions)
 
 	return (
 		<Box sx={{ backgroundColor: '#f4f4f4' }} id='order-review'>
@@ -200,7 +275,7 @@ const OrderReview = ({
 						</Typography>
 					</Typography>
 
-					<button className={styles.cartButton} onClick={handleAddToCart}>
+					<button className={styles.cartButton} onClick={addAllToCart}>
 						Add To Cart
 					</button>
 				</Grid>
