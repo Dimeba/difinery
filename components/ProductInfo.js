@@ -15,7 +15,7 @@ import { useSearchParams } from 'next/navigation'
 // context
 import { useCart } from '@/context/CartContext'
 
-const ProductInfo = ({ product }) => {
+const ProductInfo = ({ product, isGiftCard = false }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
 	const allImages = product.images.edges.map(edge => edge.node)
@@ -147,6 +147,7 @@ const ProductInfo = ({ product }) => {
 
 				<ProductOptionsUI
 					product={product}
+					isGiftCard={isGiftCard}
 					selectedColor={selectedColor}
 					setSelectedColor={setSelectedColor}
 					matchingVariant={matchingVariant}
@@ -158,6 +159,7 @@ const ProductInfo = ({ product }) => {
 					boxColor={boxColor}
 					setBoxColor={setBoxColor}
 					setShowOrderSummary={setShowOrderSummary}
+					handleAddToCart={handleAddToCart}
 				/>
 			</div>
 

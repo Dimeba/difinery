@@ -17,6 +17,7 @@ import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 
 const ProductOptionsUI = ({
 	product,
+	isGiftCard = false,
 	selectedColor,
 	setSelectedColor,
 	matchingVariant,
@@ -27,7 +28,8 @@ const ProductOptionsUI = ({
 	setBoxText,
 	boxColor,
 	setBoxColor,
-	setShowOrderSummary
+	setShowOrderSummary,
+	handleAddToCart
 }) => {
 	const [openOption, setOpenOption] = useState(selectedColor ? 1 : 0)
 	const [selectedOptions, setSelectedOptions] = useState(() => {
@@ -176,7 +178,14 @@ const ProductOptionsUI = ({
 						}
 						helpContent={<NeedHelpInfo type={option.name.toLowerCase()} />}
 					>
-						<div className={styles.variantButtonsContainer}>
+						<div
+							className={styles.variantButtonsContainer}
+							style={{
+								flexDirection: isGiftCard ? 'column' : '',
+								alignItems: isGiftCard ? 'flex-start' : '',
+								marginTop: isGiftCard ? '2rem' : '0'
+							}}
+						>
 							{option.optionValues.map(value => (
 								<button
 									key={value.name}
@@ -207,14 +216,14 @@ const ProductOptionsUI = ({
 											alt={`${value.name} ${option.name}`}
 										/>
 									)}
-									{value.name}
+									{isGiftCard ? value.name.slice(0, -3) : value.name}
 								</button>
 							))}
 						</div>
 					</Accordion>
 				))}
 
-				{product.category.name !== 'Earrings' && (
+				{product.category.name !== 'Earrings' && !isGiftCard && (
 					/* Engraving */
 					<Accordion
 						// small
@@ -265,142 +274,158 @@ const ProductOptionsUI = ({
 				)}
 
 				{/* Boxes */}
-				<Accordion
-					// small
-					title='Make Your Box Truly Yours'
-					extraTitleText={boxText ? `"${boxText}"` : null}
-					state={openOption === product.options.length}
-					product
-					display
-				>
-					<div className={styles.inputContainer}>
-						<div className={styles.inputText}>
-							<p>
-								Personalize it with a special touch to create a unique and
-								memorable keepsake.
-							</p>
-
-							<p>Message Color:</p>
-
-							<div className={styles.boxColors}>
-								{boxColorOptions.map((option, index) => (
-									<button
-										key={index}
-										style={{
-											backgroundColor: option.backgroundColor,
-											border:
-												boxColor === option.boxColor
-													? '1px solid black'
-													: 'none'
-										}}
-										onClick={() => setBoxColor(option.boxColor)}
-									></button>
-								))}
-							</div>
-
-							<textarea
-								className={styles.boxInput}
-								value={boxText}
-								onChange={e => setBoxText(e.target.value)}
-								placeholder='Type up to 25 characters'
-								maxLength={60}
-							/>
-
-							<p
-								style={{
-									fontSize: '10px',
-									fontStyle: 'italic'
-								}}
-							>
-								*Additional $50
-							</p>
-						</div>
-
-						<div className={styles.inputImage}>
-							<Image
-								src={
-									boxColor
-										? `/box-image-${boxColor.toLowerCase()}.jpg`
-										: '/box-image-lavender.jpg'
-								}
-								alt='Box Image'
-								fill
-								style={{ objectFit: 'cover' }}
-							/>
-						</div>
-					</div>
-				</Accordion>
-			</div>
-
-			<a
-				href='#order-review'
-				onClick={() => setShowOrderSummary(true)}
-				style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
-			>
-				<button className={styles.cartButton} disabled={!allOptionsSelected}>
-					REVIEW YOUR ORDER
-				</button>
-			</a>
-
-			<div>
-				<Accordion title='Product Details'>
-					<div className={styles.productDetails}>
-						<p>
-							<span style={{ fontWeight: '700' }}>Product Name: </span>
-							{product.title}
-						</p>
-						{matchingVariant && (
-							<p>
-								<span style={{ fontWeight: '700' }}>ID / SKU: </span>
-								{matchingVariant.sku}
-							</p>
-						)}
-						{selectedColor && (
-							<p>
-								<span style={{ fontWeight: '700' }}>Metal: </span>
-								{selectedColor.toLowerCase().includes('yellow') ? (
-									<span>Yellow Gold</span>
-								) : (
-									<span>White Gold</span>
-								)}
-							</p>
-						)}
-						{parse(details)}
-					</div>
-				</Accordion>
-
-				<Accordion title='Material'>
-					<div
-						style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+				{!isGiftCard && (
+					<Accordion
+						// small
+						title='Make Your Box Truly Yours'
+						extraTitleText={boxText ? `"${boxText}"` : null}
+						state={openOption === product.options.length}
+						product
+						display
 					>
-						{materialInfo.map((info, index) => (
-							<div key={index} className={styles.materialInfo}>
-								<Image src={info.icon} width={32} height={32} alt='Icon' />
-								<div
+						<div className={styles.inputContainer}>
+							<div className={styles.inputText}>
+								<p>
+									Personalize it with a special touch to create a unique and
+									memorable keepsake.
+								</p>
+
+								<p>Message Color:</p>
+
+								<div className={styles.boxColors}>
+									{boxColorOptions.map((option, index) => (
+										<button
+											key={index}
+											style={{
+												backgroundColor: option.backgroundColor,
+												border:
+													boxColor === option.boxColor
+														? '1px solid black'
+														: 'none'
+											}}
+											onClick={() => setBoxColor(option.boxColor)}
+										></button>
+									))}
+								</div>
+
+								<textarea
+									className={styles.boxInput}
+									value={boxText}
+									onChange={e => setBoxText(e.target.value)}
+									placeholder='Type up to 25 characters'
+									maxLength={60}
+								/>
+
+								<p
 									style={{
-										display: 'flex',
-										flexDirection: 'column',
-										gap: '0.25rem'
+										fontSize: '10px',
+										fontStyle: 'italic'
 									}}
 								>
-									<p style={{ fontWeight: '700' }}>{info.title}</p>
-									<p>{info.text}</p>
-								</div>
+									*Additional $50
+								</p>
 							</div>
-						))}
-					</div>
-				</Accordion>
 
-				<Accordion title='Handcrafted in USA'>
-					<p>
-						Each one of our pieces are handcrafted in New York's Diamond
-						District using only ethical lab-grown diamonds of the highest
-						standards and 100% certified recycled solid gold. We honor timeless
-						design and exceptional craftsmanship, creating heirloom-quality fine
-						jewelry made to last for generations.
-					</p>
-				</Accordion>
+							<div className={styles.inputImage}>
+								<Image
+									src={
+										boxColor
+											? `/box-image-${boxColor.toLowerCase()}.jpg`
+											: '/box-image-lavender.jpg'
+									}
+									alt='Box Image'
+									fill
+									style={{ objectFit: 'cover' }}
+								/>
+							</div>
+						</div>
+					</Accordion>
+				)}
 			</div>
+
+			{!isGiftCard ? (
+				<a
+					href='#order-review'
+					onClick={() => setShowOrderSummary(true)}
+					style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
+				>
+					<button className={styles.cartButton} disabled={!allOptionsSelected}>
+						REVIEW YOUR ORDER
+					</button>
+				</a>
+			) : (
+				<>
+					<button
+						className={styles.cartButton}
+						onClick={handleAddToCart}
+						disabled={!allOptionsSelected}
+					>
+						AddToCart
+					</button>
+				</>
+			)}
+
+			{!isGiftCard && (
+				<div>
+					<Accordion title='Product Details'>
+						<div className={styles.productDetails}>
+							<p>
+								<span style={{ fontWeight: '700' }}>Product Name: </span>
+								{product.title}
+							</p>
+							{matchingVariant && (
+								<p>
+									<span style={{ fontWeight: '700' }}>ID / SKU: </span>
+									{matchingVariant.sku}
+								</p>
+							)}
+							{selectedColor && (
+								<p>
+									<span style={{ fontWeight: '700' }}>Metal: </span>
+									{selectedColor.toLowerCase().includes('yellow') ? (
+										<span>Yellow Gold</span>
+									) : (
+										<span>White Gold</span>
+									)}
+								</p>
+							)}
+							{parse(details)}
+						</div>
+					</Accordion>
+
+					<Accordion title='Material'>
+						<div
+							style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+						>
+							{materialInfo.map((info, index) => (
+								<div key={index} className={styles.materialInfo}>
+									<Image src={info.icon} width={32} height={32} alt='Icon' />
+									<div
+										style={{
+											display: 'flex',
+											flexDirection: 'column',
+											gap: '0.25rem'
+										}}
+									>
+										<p style={{ fontWeight: '700' }}>{info.title}</p>
+										<p>{info.text}</p>
+									</div>
+								</div>
+							))}
+						</div>
+					</Accordion>
+
+					<Accordion title='Handcrafted in USA'>
+						<p>
+							Each one of our pieces are handcrafted in New York's Diamond
+							District using only ethical lab-grown diamonds of the highest
+							standards and 100% certified recycled solid gold. We honor
+							timeless design and exceptional craftsmanship, creating
+							heirloom-quality fine jewelry made to last for generations.
+						</p>
+					</Accordion>
+				</div>
+			)}
 		</div>
 	)
 }
