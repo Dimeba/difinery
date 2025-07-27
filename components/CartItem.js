@@ -5,7 +5,7 @@ import styles from './Cart.module.scss'
 import Image from 'next/image'
 import { MdDeleteForever } from 'react-icons/md'
 
-const CartItem = ({ node, removeAllrelatedItems }) => {
+const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 	// Guard against undefined node or merchandise
 	if (!node) return null
 	const { id: lineId, quantity } = node
@@ -23,10 +23,20 @@ const CartItem = ({ node, removeAllrelatedItems }) => {
 	return (
 		<div className={styles.item}>
 			<div className={styles.itemContent}>
-				<p className={styles.itemTitle}>
+				<p
+					className={styles.itemTitle}
+					style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+				>
 					{title}{' '}
 					{(title === 'Engraving' || title == 'Custom Box') &&
 						`$${Number(unitPrice.slice(0, -3)).toLocaleString()}`}
+					{(title === 'Engraving' || title == 'Custom Box') && (
+						<MdDeleteForever
+							size='1rem'
+							onClick={() => removeAllrelatedItems(lineId)}
+							cursor='pointer'
+						/>
+					)}
 				</p>
 
 				{title !== 'Engraving' && title !== 'Custom Box' && (

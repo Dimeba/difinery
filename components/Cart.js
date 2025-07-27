@@ -42,8 +42,6 @@ const Cart = () => {
 		removeFromCart(lineId)
 	}
 
-	console.log(cart)
-
 	return (
 		<div className={styles.cart}>
 			<div className={styles.cartContent}>
@@ -68,6 +66,7 @@ const Cart = () => {
 							node={node}
 							key={node.id}
 							removeAllrelatedItems={removeAllrelatedItems}
+							removeFromCart={removeFromCart}
 						/>
 					))}
 				</div>
