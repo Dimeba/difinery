@@ -61,6 +61,9 @@ const Header = ({ content }) => {
 					setShowSubmenu(false)
 					setOpenMenu(false)
 				}}
+				onClick={() => {
+					setShowSubmenu(false)
+				}}
 			>
 				<div className={`container ${styles.headerTop}`}>
 					{isIntersecting && isScreenWide ? (
