@@ -29,7 +29,7 @@ const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 				>
 					{title}{' '}
 					{(title === 'Engraving' || title == 'Custom Box') &&
-						`$${Number(unitPrice.slice(0, -3)).toLocaleString()}`}
+						`+$${Number(unitPrice.slice(0, -3)).toLocaleString()}`}
 					{(title === 'Engraving' || title == 'Custom Box') && (
 						<MdDeleteForever
 							size='1rem'
