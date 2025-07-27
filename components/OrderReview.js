@@ -8,7 +8,7 @@ import { Box, Grid, Typography } from '@mui/material'
 import Image from 'next/image'
 
 // hooks
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 
 // context
 import { useCart } from '@/context/CartContext'
@@ -35,23 +35,31 @@ const OrderReview = ({
 	const client = useApolloClient()
 
 	useEffect(() => {
-		const fetchProducts = async () => {
-			if (customOptions.engraving !== '') {
+		const loadOrClear = async () => {
+			// ENGRAVING
+			if (customOptions.engraving) {
 				const { data } = await client.query({
 					query: GET_PRODUCT_BY_HANDLE,
 					variables: { handle: 'engraving' }
 				})
 				setEngravingProduct(data.productByHandle)
+			} else {
+				setEngravingProduct(null)
 			}
-			if (customOptions.boxText !== '') {
+
+			// CUSTOM BOX
+			if (customOptions.boxText) {
 				const { data } = await client.query({
 					query: GET_PRODUCT_BY_HANDLE,
 					variables: { handle: 'custom-box' }
 				})
 				setBoxProduct(data.productByHandle)
+			} else {
+				setBoxProduct(null)
 			}
 		}
-		fetchProducts()
+
+		loadOrClear()
 	}, [customOptions.engraving, customOptions.boxText])
 
 	const addAllToCart = async () => {
@@ -104,6 +112,11 @@ const OrderReview = ({
 		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i
 	)
 	const description = match ? match[0] : ''
+
+	const basePrice = Number(matchingVariant.price.amount.slice(0, -2))
+	const engravingFee = engravingProduct ? 20 : 0
+	const boxFee = boxProduct ? 50 : 0
+	const totalPrice = basePrice + engravingFee + boxFee
 
 	return (
 		<Box sx={{ backgroundColor: '#f4f4f4' }} id='order-review'>
@@ -264,10 +277,7 @@ const OrderReview = ({
 							variant='p'
 							sx={{ fontWeight: 500, fontSize: '1.5rem' }}
 						>
-							$
-							{Number(
-								matchingVariant.price.amount.slice(0, -2)
-							).toLocaleString()}
+							${totalPrice.toLocaleString()}
 						</Typography>
 					</Typography>
 
