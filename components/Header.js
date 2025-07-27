@@ -87,7 +87,15 @@ const Header = ({ content }) => {
 						setShowSubmenu(false)
 					}}
 				>
-					<div className={`container ${styles.headerTop}`}>
+					{/* Support, Icons and Logo */}
+					<Box
+						className='container'
+						display='flex'
+						alignItems='center'
+						justifyContent='space-between'
+						padding='2rem 0'
+						position='relative'
+					>
 						{isIntersecting && isScreenWide ? (
 							<Link
 								href={
@@ -98,22 +106,31 @@ const Header = ({ content }) => {
 								}
 								aria-label={`Link to Customer Service page.`}
 							>
-								<p>{content.supportPage.fields.title}</p>
+								<Typography
+									variant='p'
+									sx={{
+										fontSize: '0.7rem',
+										textTransform: 'uppercase',
+										letterSpacing: '0.2em'
+									}}
+								>
+									{content.supportPage.fields.title}
+								</Typography>
 							</Link>
 						) : (
-							<div
+							<Box
 								className={styles.hamburger}
 								onClick={() => setShowSubmenu(false)}
 							>
-								<div>
+								<Box>
 									<Hamburger
 										color={transparentMenu ? 'white' : 'black'}
 										size={20}
 										toggled={openMenu}
 										toggle={setOpenMenu}
 									/>
-								</div>
-							</div>
+								</Box>
+							</Box>
 						)}
 
 						<Link
@@ -130,7 +147,7 @@ const Header = ({ content }) => {
 							/>
 						</Link>
 
-						<div className={styles.icons}>
+						<Box display='flex' alignItems='center' gap='1rem'>
 							{/* <FiUser
 							size={'1.2rem'}
 							stroke={transparentMenu ? 'white' : 'black'}
@@ -145,9 +162,10 @@ const Header = ({ content }) => {
 								onClick={() => setShowCart(true)}
 								cursor={'pointer'}
 							/>
-						</div>
-					</div>
+						</Box>
+					</Box>
 
+					{/* Main Menu */}
 					{((isIntersecting && isScreenWide) || openMenu) && (
 						<nav className={`container ${styles.headerBot}`}>
 							{/* Shop Page */}
@@ -175,6 +193,17 @@ const Header = ({ content }) => {
 									<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
 								</Link>
 							))}
+
+							{/* Gift Card */}
+							<Link
+								href='/shop/gift-card'
+								aria-label={`Link to Gift Card page.`}
+								className={`${styles.mainMenuLink} ${styles.mobileLink}`}
+								onClick={() => setOpenMenu(false)}
+							>
+								<p>Gift Card</p>
+								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
+							</Link>
 
 							{/* Contentful */}
 							{content.mainMenu.map(link => (
@@ -204,6 +233,7 @@ const Header = ({ content }) => {
 						</nav>
 					)}
 
+					{/* Submenu */}
 					{content.showDropdownMenu && showSubmenu && (
 						<div className={`container ${styles.subMenu}`}>
 							<div className={styles.column2}>
