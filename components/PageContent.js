@@ -3,16 +3,12 @@ import Features from '@/components/Features'
 import Products from '@/components/Products'
 import RichText from '@/components/RichText'
 import Columns from './Columns'
-import HeaderChanger from './HeaderChanger'
 import FAQ from './FAQ'
 import MasonryColumns from './MasonryColumns'
 
 const PageContent = ({ content }) => {
 	return (
 		<main>
-			{/* Header update */}
-			<HeaderChanger transparent={content.transparentHeader} />
-
 			{/* Content */}
 			{content.sections.map((section, index) => {
 				switch (section.sys.contentType.sys.id) {

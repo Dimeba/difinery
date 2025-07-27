@@ -16,7 +16,6 @@ import { getEntries } from '@/lib/contentful'
 
 // context
 import { CartProvider } from '@/context/CartContext'
-import { HeaderProvider } from '@/context/HeaderContext'
 import { ApolloContext } from '@/lib/apolloContext'
 import { ThemeProvider } from '@mui/material'
 
@@ -47,11 +46,9 @@ export default function RootLayout({ children }) {
 						<ThemeProvider theme={theme}>
 							<CssBaseline />
 							<Cart />
-							<HeaderProvider>
-								<Header content={headerContent} />
-								{children}
-								<Footer content={footerContent} />
-							</HeaderProvider>
+							<Header content={headerContent} />
+							{children}
+							<Footer content={footerContent} />
 						</ThemeProvider>
 					</body>
 				</CartProvider>
