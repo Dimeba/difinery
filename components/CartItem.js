@@ -65,7 +65,7 @@ const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 					<div className={styles.removeIcon}>
 						<MdDeleteForever
 							size='1rem'
-							onClick={() => removeAllrelatedItems(lineId)}
+							onClick={() => removeAllrelatedItems(lineId, title)}
 							cursor='pointer'
 						/>
 					</div>

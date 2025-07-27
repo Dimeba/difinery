@@ -7,10 +7,6 @@ import productStyles from './ProductInfo.module.scss'
 // components
 import CartItem from './CartItem'
 import { FiX, FiMinus, FiPlus } from 'react-icons/fi'
-import { MdDeleteForever } from 'react-icons/md'
-
-import Button from './Button'
-import Image from 'next/image'
 import Link from 'next/link'
 
 // hooks
@@ -38,8 +34,19 @@ const Cart = () => {
 		updateQuantity(lineId, qty + 1)
 	}
 
-	const removeAllrelatedItems = lineId => {
-		removeFromCart(lineId)
+	const removeAllrelatedItems = async (lineId, productTitle) => {
+		const relatedIds = cart.lines.edges
+			.filter(({ node }) =>
+				node.attributes.some(
+					a => a.key === 'product' && a.value === productTitle
+				)
+			)
+			.map(({ node }) => node.id)
+
+		// remove the main item + all related extras, one at a time
+		for (const id of [lineId, ...relatedIds]) {
+			await removeFromCart(id)
+		}
 	}
 
 	return (

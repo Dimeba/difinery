@@ -54,8 +54,6 @@ const OrderReview = ({
 		fetchProducts()
 	}, [customOptions.engraving, customOptions.boxText])
 
-	console.log(engravingProduct?.variants)
-
 	const addAllToCart = async () => {
 		if (engravingProduct) {
 			await addToCart(engravingProduct.variants.edges[0].node.id, 1, [
@@ -106,8 +104,6 @@ const OrderReview = ({
 		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i
 	)
 	const description = match ? match[0] : ''
-
-	console.log(customOptions)
 
 	return (
 		<Box sx={{ backgroundColor: '#f4f4f4' }} id='order-review'>
