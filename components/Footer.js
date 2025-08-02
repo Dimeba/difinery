@@ -198,6 +198,7 @@ const Footer = ({ content }) => {
 									key={index}
 									href={link}
 									aria-label='Link to social media profile'
+									target='_blank'
 								>
 									{returnCorrecticon(link, 20)}
 								</Link>
