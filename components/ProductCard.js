@@ -16,7 +16,6 @@ import { returnMetalType } from '@/lib/helpers'
 const ProductCard = ({ permalink, discount, product, individual }) => {
 	const [metalTypes, setMetalTypes] = useState([])
 	const [activeMetalType, setActiveMetalType] = useState('')
-	const [loading, setLoading] = useState(false)
 
 	// getting png images
 	const productImages = useMemo(() => {
@@ -37,17 +36,6 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 		)
 	}, [productImages])
 
-	// Function to return the correct image based on active metal type
-	const returnCorrectImage = () => {
-		if (!activeMetalType) {
-			return productImages[0]?.node.url
-		}
-
-		return activeMetalType.includes('yellow')
-			? yellowGoldImage?.node.url
-			: whiteGoldImage?.node.url
-	}
-
 	// Function to return the correct URL based on active metal type
 	const returnCorrectURL = () => {
 		if (!activeMetalType) {
@@ -61,12 +49,6 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 			}
 		}
 	}
-
-	const imageSrc = returnCorrectImage()
-
-	useEffect(() => {
-		setLoading(true)
-	}, [imageSrc])
 
 	useEffect(() => {
 		const types = new Set()
@@ -84,18 +66,6 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 
 		setMetalTypes([...types])
 	}, [product])
-
-	useEffect(() => {
-		if (!yellowGoldImage?.node.url || !whiteGoldImage?.node.url) return
-
-		metalTypes.forEach(type => {
-			const url = type.includes('yellow')
-				? yellowGoldImage.node.url
-				: whiteGoldImage.node.url
-			const img = new window.Image()
-			img.src = url
-		})
-	}, [metalTypes, yellowGoldImage, whiteGoldImage])
 
 	useEffect(() => {
 		if (metalTypes.length > 0) {
@@ -118,14 +88,31 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 				aria-label={`Link to ${product.title} page.`}
 			>
 				{productImages.length > 0 && (
-					<div className={`${styles.image} ${loading ? 'loading' : ''}`}>
+					<div className={styles.image}>
 						<Image
-							src={imageSrc}
+							src={yellowGoldImage?.node.url || productImages[0]?.node.url}
 							fill
-							priority={activeMetalType === metalTypes[0]}
-							onLoad={() => setLoading(false)}
+							priority={true}
 							alt='Category Image.'
 							style={{
+								zIndex: activeMetalType.includes('yellow') ? 1 : 0,
+								objectFit: 'contain',
+								objectPosition:
+									product.category.name.toLowerCase() === 'necklaces'
+										? 'top'
+										: 'center'
+							}}
+							quality={100}
+							sizes='(max-width: 768px) 100vw, 50vw'
+						/>
+
+						<Image
+							src={whiteGoldImage?.node.url || productImages[0]?.node.url}
+							fill
+							priority={true}
+							alt='Category Image.'
+							style={{
+								zIndex: activeMetalType.includes('white') ? 1 : 0,
 								objectFit: 'contain',
 								objectPosition:
 									product.category.name.toLowerCase() === 'necklaces'
