@@ -51,7 +51,12 @@
 	background-color: rgba($color: base.$gray, $alpha: 0.1);
 
 	img {
-		transition: 0.3s ease-in;
+		transition: 0.2s ease-in-out;
+		opacity: 1;
+	}
+
+	&.loading img {
+		opacity: 0;
 	}
 }
 

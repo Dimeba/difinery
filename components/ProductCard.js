@@ -16,7 +16,7 @@ import { returnMetalType } from '@/lib/helpers'
 const ProductCard = ({ permalink, discount, product, individual }) => {
 	const [metalTypes, setMetalTypes] = useState([])
 	const [activeMetalType, setActiveMetalType] = useState('')
-	const [imageZoom, setImageZoom] = useState(1)
+	const [loading, setLoading] = useState(false)
 
 	// getting png images
 	const productImages = useMemo(() => {
@@ -64,23 +64,9 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 
 	const imageSrc = returnCorrectImage()
 
-	// const dynamicImageStyle = () => {
-	// 	switch (product.category.name.toLowerCase()) {
-	// 		case 'rings':
-	// 			return { objectFit: 'cover' }
-	// 		case 'necklaces':
-	// 			return {
-	// 				objectFit: 'contain',
-	// 				objectPosition: 'top'
-	// 			}
-	// 		case 'earrings':
-	// 			return { objectFit: 'contain', transform: `scale(${imageZoom})` }
-	// 		case 'bracelets':
-	// 			return { objectFit: 'cover' }
-	// 		default:
-	// 			return { objectFit: 'cover' }
-	// 	}
-	// }
+	useEffect(() => {
+		setLoading(true)
+	}, [imageSrc])
 
 	useEffect(() => {
 		const types = new Set()
@@ -100,16 +86,22 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 	}, [product])
 
 	useEffect(() => {
+		if (!yellowGoldImage?.node.url || !whiteGoldImage?.node.url) return
+
+		metalTypes.forEach(type => {
+			const url = type.includes('yellow')
+				? yellowGoldImage.node.url
+				: whiteGoldImage.node.url
+			const img = new window.Image()
+			img.src = url
+		})
+	}, [metalTypes, yellowGoldImage, whiteGoldImage])
+
+	useEffect(() => {
 		if (metalTypes.length > 0) {
 			setActiveMetalType(metalTypes[0])
 		}
 	}, [metalTypes])
-
-	useEffect(() => {
-		if (product.category.name.toLowerCase() === 'earrings') {
-			setImageZoom(0.8)
-		}
-	}, [])
 
 	if (!product) {
 		return (
@@ -126,27 +118,23 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 				aria-label={`Link to ${product.title} page.`}
 			>
 				{productImages.length > 0 && (
-					<div
-						className={styles.image}
-						onMouseEnter={() => setImageZoom(0.9)}
-						onMouseLeave={() => setImageZoom(0.8)}
-					>
-						{imageSrc && (
-							<Image
-								src={imageSrc}
-								fill
-								alt='Category Image.'
-								style={{
-									objectFit: 'contain',
-									objectPosition:
-										product.category.name.toLowerCase() === 'necklaces'
-											? 'top'
-											: 'center'
-								}}
-								quality={100}
-								sizes='(max-width: 768px) 100vw, 50vw'
-							/>
-						)}
+					<div className={`${styles.image} ${loading ? 'loading' : ''}`}>
+						<Image
+							src={imageSrc}
+							fill
+							priority={activeMetalType === metalTypes[0]}
+							onLoad={() => setLoading(false)}
+							alt='Category Image.'
+							style={{
+								objectFit: 'contain',
+								objectPosition:
+									product.category.name.toLowerCase() === 'necklaces'
+										? 'top'
+										: 'center'
+							}}
+							quality={100}
+							sizes='(max-width: 768px) 100vw, 50vw'
+						/>
 
 						{individual && (
 							<p className={styles.individualTitle}>
