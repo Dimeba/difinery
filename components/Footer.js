@@ -191,9 +191,10 @@ const Footer = ({ content }) => {
 					</div>
 
 					<div className={styles.column4}>
+						<h4>Handcrafted in USA</h4>
 						<Image
 							src='/m-i-usa.png'
-							height={60}
+							height={40}
 							width={60}
 							// fill
 							alt='made in usa icon'

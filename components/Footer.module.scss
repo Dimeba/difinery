@@ -134,8 +134,10 @@
 	}
 
 	.iconsSection {
-		margin: 1rem auto;
-		gap: 1.5rem;
+		margin: 3rem auto;
+		display: flex;
+		flex-direction: column-reverse;
+		gap: 3rem;
 	}
 
 	.column4 {
