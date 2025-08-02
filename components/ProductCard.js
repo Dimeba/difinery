@@ -95,7 +95,7 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 							priority={true}
 							alt='Category Image.'
 							style={{
-								zIndex: activeMetalType.includes('yellow') ? 1 : 0,
+								opacity: activeMetalType.includes('yellow') ? 1 : 0,
 								objectFit: 'contain',
 								objectPosition:
 									product.category.name.toLowerCase() === 'necklaces'
@@ -109,10 +109,9 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 						<Image
 							src={whiteGoldImage?.node.url || productImages[0]?.node.url}
 							fill
-							priority={true}
 							alt='Category Image.'
 							style={{
-								zIndex: activeMetalType.includes('white') ? 1 : 0,
+								opacity: activeMetalType.includes('white') ? 1 : 0,
 								objectFit: 'contain',
 								objectPosition:
 									product.category.name.toLowerCase() === 'necklaces'

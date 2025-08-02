@@ -51,7 +51,7 @@
 	background-color: rgba($color: base.$gray, $alpha: 0.1);
 
 	img {
-		transition: 0.3s ease-in-out;
+		transition: opacity 0s, transform 0.3s ease-in-out;
 	}
 }
 
