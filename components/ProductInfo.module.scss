@@ -13,6 +13,8 @@
 	flex-direction: column;
 	aspect-ratio: 1 / 1;
 	overflow-y: scroll;
+	position: sticky;
+	top: 0;
 
 	// Hide scrollbar in Firefox
 	scrollbar-width: none;
