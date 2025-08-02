@@ -131,12 +131,12 @@ const ProductOptionsUI = ({
 			icon: '/polish-icon.png',
 			title: 'Care',
 			text: 'Every purchase includes one year of free  polishing and cleaning. While our 14k solid gold and lab-grown diamond pieces are built to last, we recommend avoiding harsh chemicals, storing them separately, and cleaning them gently with mild soap and water.'
-		},
-		{
-			icon: '/return-icon.png',
-			title: 'Shipping',
-			text: 'Free shipping for purchases above $300.'
 		}
+		// {
+		// 	icon: '/return-icon.png',
+		// 	title: 'Shipping',
+		// 	text: 'Free shipping for purchases above $300.'
+		// }
 	]
 
 	useEffect(() => {
