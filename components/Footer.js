@@ -169,8 +169,8 @@ const Footer = ({ content }) => {
 			{/* Second Row */}
 
 			<div className={styles.secondRow}>
-				<div className={styles.content}>
-					<div className={styles.column5}>
+				<div className={styles.iconsSection}>
+					<div className={styles.column4}>
 						<h4>Certified Diamonds</h4>
 						<div className={styles.logos}>
 							{content.certifications.map(certification => (
@@ -190,7 +190,16 @@ const Footer = ({ content }) => {
 						</div>
 					</div>
 
-					<div className={styles.column5Right}>
+					<div className={styles.column4}>
+						<Image
+							src='/m-i-usa.png'
+							height={60}
+							width={60}
+							// fill
+							alt='made in usa icon'
+						/>
+					</div>
+					<div className={styles.column4}>
 						<h4>Follow Us</h4>
 						<div className={styles.logos}>
 							{content.social.map((link, index) => (
