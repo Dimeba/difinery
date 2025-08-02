@@ -138,7 +138,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 									alt='Image of the product.'
 									quality={100}
 									sizes='(max-width: 768px) 100vw, 50vw'
-									style={{ objectFit: 'contain' }}
+									style={{ objectFit: isGiftCard ? 'cover' : 'contain' }}
 								/>
 							</div>
 						)

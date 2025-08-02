@@ -359,7 +359,7 @@ const ProductOptionsUI = ({
 						onClick={handleAddToCart}
 						disabled={!allOptionsSelected}
 					>
-						Send with Love
+						Go to Cart
 					</button>
 				</>
 			)}
