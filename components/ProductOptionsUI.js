@@ -30,8 +30,8 @@ const ProductOptionsUI = ({
 	setEngraving,
 	boxText,
 	setBoxText,
-	boxColor,
-	setBoxColor,
+	boxVariant,
+	setBoxVariant,
 	setShowOrderSummary,
 	handleAddToCart
 }) => {
@@ -243,8 +243,8 @@ const ProductOptionsUI = ({
 						display
 					>
 						<CustomBox
-							boxColor={boxColor}
-							setBoxColor={setBoxColor}
+							boxVariant={boxVariant}
+							setBoxVariant={setBoxVariant}
 							boxText={boxText}
 							setBoxText={setBoxText}
 						/>
@@ -255,7 +255,10 @@ const ProductOptionsUI = ({
 			{!isGiftCard ? (
 				<a
 					href='#order-review'
-					onClick={() => setShowOrderSummary(true)}
+					onClick={() => {
+						setShowOrderSummary(true)
+						handleAddToCart()
+					}}
 					style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
 				>
 					<button className={styles.cartButton} disabled={!allOptionsSelected}>

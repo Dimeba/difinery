@@ -45,7 +45,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	)
 	const [engraving, setEngraving] = useState('')
 	const [boxText, setBoxText] = useState('')
-	const [boxColor, setBoxColor] = useState('Lavender')
+	const [boxVariant, setBoxVariant] = useState(null)
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 
 	const images = useMemo(() => {
@@ -94,8 +94,6 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		const customFields = []
 		if (engraving) customFields.push({ key: 'Engraving', value: engraving })
 		if (boxText) customFields.push({ key: 'Box', value: boxText })
-		if (boxColor)
-			customFields.push({ key: 'Box Message Color', value: boxColor })
 
 		if (!matchingVariant || !matchingVariant.id) {
 			console.error('No matching variant found')
@@ -103,6 +101,16 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		}
 
 		try {
+			if (boxText !== '') {
+				await addToCart(boxVariant.id, 1, [
+					{ key: 'text', value: boxText },
+					{
+						key: 'product',
+						value: product.title
+					}
+				])
+			}
+
 			await addToCart(
 				matchingVariant.id,
 				1,
@@ -111,7 +119,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 
 			// advance your UI steps
 			// setOpenOption(prev => prev + 1)
-			if (!showCart) setShowCart(true)
+			// if (!showCart) setShowCart(true)
 		} catch (err) {
 			console.error('Add to cart mutation failed', err)
 		}
@@ -156,8 +164,8 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 					setEngraving={setEngraving}
 					boxText={boxText}
 					setBoxText={setBoxText}
-					boxColor={boxColor}
-					setBoxColor={setBoxColor}
+					boxVariant={boxVariant}
+					setBoxVariant={setBoxVariant}
 					setShowOrderSummary={setShowOrderSummary}
 					handleAddToCart={handleAddToCart}
 				/>
@@ -171,8 +179,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 					product={product}
 					customOptions={{
 						engraving,
-						boxText,
-						boxColor
+						boxText
 					}}
 				/>
 			)}

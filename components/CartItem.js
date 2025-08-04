@@ -53,7 +53,7 @@ const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 				)}
 			</div>
 
-			{imageUrl && (
+			{imageUrl && title !== 'Engraving' && title !== 'Custom Box' && (
 				<div className={styles.itemImage}>
 					<Image
 						src={imageUrl}

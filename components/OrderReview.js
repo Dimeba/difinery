@@ -27,7 +27,7 @@ const OrderReview = ({
 	product,
 	customOptions
 }) => {
-	const { addToCart } = useCart()
+	const { addToCart, setShowCart } = useCart()
 
 	const [engravingProduct, setEngravingProduct] = useState(null)
 	const [boxProduct, setBoxProduct] = useState(null)
@@ -281,8 +281,11 @@ const OrderReview = ({
 						</Typography>
 					</Typography>
 
-					<button className={styles.cartButton} onClick={addAllToCart}>
-						Add To Cart
+					<button
+						className={styles.cartButton}
+						onClick={() => setShowCart(true)}
+					>
+						Go To Cart
 					</button>
 				</Grid>
 			</Grid>

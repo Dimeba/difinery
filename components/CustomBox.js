@@ -14,9 +14,8 @@ import { useEffect, useState } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 
-const CustomBox = ({ boxText, setBoxText }) => {
+const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 	const [boxProduct, setBoxProduct] = useState(null)
-	const [selectedVariant, setSelectedVariant] = useState(null)
 
 	const client = useApolloClient()
 
@@ -35,7 +34,7 @@ const CustomBox = ({ boxText, setBoxText }) => {
 			})
 
 			setBoxProduct(data.productByHandle)
-			setSelectedVariant(data.productByHandle.variants.edges[0].node)
+			setBoxVariant(data.productByHandle.variants.edges[0].node)
 		}
 
 		fetchData()
@@ -66,11 +65,9 @@ const CustomBox = ({ boxText, setBoxText }) => {
 								cursor: 'pointer',
 								backgroundColor: boxColors[index].backgroundColor,
 								border:
-									selectedVariant?.id === option.node.id
-										? '1px solid black'
-										: 'none'
+									boxVariant?.id === option.node.id ? '1px solid black' : 'none'
 							}}
-							onClick={() => setSelectedVariant(option.node)}
+							onClick={() => setBoxVariant(option.node)}
 						/>
 					))}
 				</Box>
@@ -88,20 +85,22 @@ const CustomBox = ({ boxText, setBoxText }) => {
 				</Typography>
 			</Grid>
 
-			<Grid
-				item
-				size={{ xs: 12, lg: 6 }}
-				position='relative'
-				// width='100%'
-				sx={{ aspectRatio: '16/10' }}
-			>
-				<Image
-					src={selectedVariant?.image.url}
-					alt='Box Image'
-					fill
-					style={{ objectFit: 'cover' }}
-				/>
-			</Grid>
+			{boxVariant && (
+				<Grid
+					item
+					size={{ xs: 12, lg: 6 }}
+					position='relative'
+					// width='100%'
+					sx={{ aspectRatio: '16/10' }}
+				>
+					<Image
+						src={boxVariant?.image.url}
+						alt='Box Image'
+						fill
+						style={{ objectFit: 'cover' }}
+					/>
+				</Grid>
+			)}
 		</Grid>
 	)
 }
