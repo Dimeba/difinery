@@ -59,7 +59,9 @@ const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 						src={imageUrl}
 						alt={imageAlt}
 						fill
-						style={{ objectFit: 'contain' }}
+						style={{
+							objectFit: title === 'Difinery Gift Card' ? 'cover' : 'contain'
+						}}
 					/>
 
 					<div className={styles.removeIcon}>

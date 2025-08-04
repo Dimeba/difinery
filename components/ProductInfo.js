@@ -131,7 +131,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 
 			// advance your UI steps
 			// setOpenOption(prev => prev + 1)
-			// if (!showCart) setShowCart(true)
+			if (product.title === 'Difinery Gift Card') setShowCart(true)
 		} catch (err) {
 			console.error('Add to cart mutation failed', err)
 		}
