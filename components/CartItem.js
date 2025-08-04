@@ -43,7 +43,9 @@ const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 					<>
 						<div className={styles.selectedOptions}>
 							{variant.selectedOptions?.map(option => (
-								<p key={option.name}>{option.value}</p>
+								<p key={option.name}>
+									{option.name}: {option.value}
+								</p>
 							))}
 						</div>
 						<div className={styles.itemPriceContainer}>
