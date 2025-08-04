@@ -127,7 +127,7 @@ const ProductOptionsUI = ({
 				${Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
 			</p>
 
-			<div>{parse(description)}</div>
+			<div className={styles.description}>{isGiftCard ? parse(product.descriptionHtml) : parse(description)}</div>
 
 			<div className={styles.accordion}>
 				{product.options.map((option, index) => (
