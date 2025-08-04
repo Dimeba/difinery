@@ -7,6 +7,7 @@ import styles from './ProductInfo.module.scss'
 import Image from 'next/image'
 import Accordion from './Accordion'
 import NeedHelpInfo from './NeedHelpInfo'
+import Engraving from './Engraving'
 import CustomBox from './CustomBox'
 
 // hooks
@@ -28,6 +29,7 @@ const ProductOptionsUI = ({
 	setMatchingVariant,
 	engraving,
 	setEngraving,
+	setEngravingVariant,
 	boxText,
 	setBoxText,
 	boxVariant,
@@ -201,34 +203,12 @@ const ProductOptionsUI = ({
 						product
 						display
 					>
-						<div className={styles.inputContainer}>
-							<div className={styles.inputText}>
-								<p>
-									Personalize your jewelry with a message that lasts a lifetime.
-								</p>
-
-								<input
-									type='text'
-									placeholder={
-										product.category.name === 'Rings'
-											? 'Type up to 15 characters'
-											: 'Type up to 10 characters'
-									}
-									value={engraving}
-									onChange={e => setEngraving(e.target.value)}
-									className={styles.engravingInput}
-									maxLength={product.category.name === 'Rings' ? 15 : 10}
-								/>
-								<p
-									style={{
-										fontSize: '10px',
-										fontStyle: 'italic'
-									}}
-								>
-									*Additional $20
-								</p>
-							</div>
-						</div>
+						<Engraving
+							product={product}
+							engraving={engraving}
+							setEngraving={setEngraving}
+							setEngravingVariant={setEngravingVariant}
+						/>
 					</Accordion>
 				)}
 

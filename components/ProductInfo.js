@@ -44,6 +44,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		gold ? initialColor.name : null
 	)
 	const [engraving, setEngraving] = useState('')
+	const [engravingVariant, setEngravingVariant] = useState(null)
 	const [boxText, setBoxText] = useState('')
 	const [boxVariant, setBoxVariant] = useState(null)
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
@@ -92,8 +93,9 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 
 	const handleAddToCart = async () => {
 		const customFields = []
-		if (engraving) customFields.push({ key: 'Engraving', value: engraving })
-		if (boxText) customFields.push({ key: 'Box', value: boxText })
+		if (engraving)
+			customFields.push({ key: 'Engraving Text', value: engraving })
+		if (boxText) customFields.push({ key: 'Box Text', value: boxText })
 
 		if (!matchingVariant || !matchingVariant.id) {
 			console.error('No matching variant found')
@@ -101,6 +103,16 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		}
 
 		try {
+			if (engraving !== '') {
+				await addToCart(engravingVariant.id, 1, [
+					{ key: 'text', value: engraving },
+					{
+						key: 'product',
+						value: product.title
+					}
+				])
+			}
+
 			if (boxText !== '') {
 				await addToCart(boxVariant.id, 1, [
 					{ key: 'text', value: boxText },
@@ -162,6 +174,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 					setMatchingVariant={setMatchingVariant}
 					engraving={engraving}
 					setEngraving={setEngraving}
+					setEngravingVariant={setEngravingVariant}
 					boxText={boxText}
 					setBoxText={setBoxText}
 					boxVariant={boxVariant}

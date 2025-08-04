@@ -20,9 +20,11 @@ import parse from 'html-react-parser'
 import { useApolloClient } from '@apollo/client'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 
+// data
+import additionalInfo from '@/data/reviewAdditionalInfo.json' with { type: 'json' }
+
 const OrderReview = ({
 	image,
-	handleAddToCart,
 	matchingVariant,
 	product,
 	customOptions
@@ -61,52 +63,6 @@ const OrderReview = ({
 
 		loadOrClear()
 	}, [customOptions.engraving, customOptions.boxText])
-
-	const addAllToCart = async () => {
-		if (engravingProduct) {
-			await addToCart(engravingProduct.variants.edges[0].node.id, 1, [
-				{
-					key: 'text',
-					value: customOptions.engraving
-				},
-				{
-					key: 'product',
-					value: product.title
-				}
-			])
-		}
-
-		if (boxProduct) {
-			await addToCart(boxProduct.variants.edges[0].node.id, 1, [
-				{
-					key: 'boxText',
-					value: customOptions.boxText
-				},
-				{
-					key: 'boxColor',
-					value: customOptions.boxColor
-				},
-				{
-					key: 'product',
-					value: product.title
-				}
-			])
-		}
-
-		await handleAddToCart()
-	}
-
-	const additionalInfo = [
-		{ icon: '/box-icon.png', text: 'Free shipping for purchases above $300' },
-		{ icon: '/quality-icon.png', text: 'Excellent quality, handmade in USA' },
-		{ icon: '/sustainability-icon.png', text: 'Sustainably created diamonds' },
-		{ icon: '/return-icon.png', text: '30 days return' },
-		{ icon: '/warranty-icon.png', text: '2 Year manufacturing warranty ' },
-		{
-			icon: '/polish-icon.png',
-			text: '1 Year of free polish & cleaning if you subscribe.'
-		}
-	]
 
 	const match = product.descriptionHtml.match(
 		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i

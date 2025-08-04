@@ -1,0 +1,26 @@
+[
+	{
+		"icon": "/box-icon.png",
+		"text": "Free shipping for purchases above $300"
+	},
+	{
+		"icon": "/quality-icon.png",
+		"text": "Excellent quality, handmade in USA"
+	},
+	{
+		"icon": "/sustainability-icon.png",
+		"text": "Sustainably created diamonds"
+	},
+	{
+		"icon": "/return-icon.png",
+		"text": "30 days return"
+	},
+	{
+		"icon": "/warranty-icon.png",
+		"text": "2 Year manufacturing warranty"
+	},
+	{
+		"icon": "/polish-icon.png",
+		"text": "1 Year of free polish & cleaning if you subscribe."
+	}
+]
