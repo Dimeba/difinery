@@ -48,7 +48,8 @@ const Products = ({
 	// filters state
 	const [selectedSort, setSelectedSort] = useState(null)
 	const [selectedCategory, setSelectedCategory] = useState('All')
-	const [selectedMetalTypes, setSelectedMetalTypes] = useState([])
+	const [selectedMetalType, setSelectedMetalType] = useState('Yellow')
+	const [selectedShape, setSelectedShape] = useState('All')
 	const [searchTerm, setSearchTerm] = useState('')
 
 	const client = useApolloClient()
@@ -85,16 +86,19 @@ const Products = ({
 			updated = updated.filter(p => p.category.name === selectedCategory)
 		}
 
-		if (selectedMetalTypes.length) {
+		if (selectedMetalType) {
 			updated = updated.filter(p =>
 				p.options?.some(opt =>
 					opt.values.some(value =>
-						selectedMetalTypes.some(mt =>
-							value.toLowerCase().includes(mt.toLowerCase())
-						)
+						value.toLowerCase().includes(selectedMetalType.toLowerCase())
 					)
 				)
 			)
+		}
+
+		if (selectedShape !== 'All') {
+			updated = updated.filter(p => p.tags?.includes(selectedShape))
+			console.log(updated)
 		}
 
 		if (searchTerm) {
@@ -135,7 +139,14 @@ const Products = ({
 		}
 
 		setFilteredItems(updated)
-	}, [items, selectedSort, selectedCategory, selectedMetalTypes, searchTerm])
+	}, [
+		items,
+		selectedSort,
+		selectedCategory,
+		selectedMetalType,
+		selectedShape,
+		searchTerm
+	])
 
 	return (
 		<section
@@ -232,6 +243,7 @@ const Products = ({
 										permalink={product.handle}
 										discount={discount}
 										individual={individual}
+										selectedMetalType={selectedMetalType}
 									/>
 								))}
 
@@ -275,8 +287,10 @@ const Products = ({
 					setSelectedSort={setSelectedSort}
 					selectedCategory={selectedCategory}
 					setSelectedCategory={setSelectedCategory}
-					selectedMetalTypes={selectedMetalTypes}
-					setSelectedMetalTypes={setSelectedMetalTypes}
+					selectedMetalType={selectedMetalType}
+					setSelectedMetalType={setSelectedMetalType}
+					selectedShape={selectedShape}
+					setSelectedShape={setSelectedShape}
 					toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
 				/>
 			</Popper>

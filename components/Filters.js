@@ -17,48 +17,32 @@ const Filters = ({
 	setSelectedSort,
 	selectedCategory,
 	setSelectedCategory,
-	selectedMetalTypes,
-	setSelectedMetalTypes,
+	selectedMetalType,
+	setSelectedMetalType,
+	selectedShape,
+	setSelectedShape,
 	toggleFilters
 }) => {
 	const sortOptions = ['Lowest Price', 'Highest Price', 'Newest']
-	const [productTypes, setProductTypes] = useState([])
-	const [metalTypes, setMetalTypes] = useState([])
-
-	useEffect(() => {
-		const pTypes = new Set(['All'])
-		const mTypes = new Set()
-
-		items.forEach(item => {
-			pTypes.add(item.category.name)
-			item.options?.forEach(option => {
-				if (option.name === 'Metal') {
-					option.values.forEach(value => {
-						if (value.toLowerCase().includes('rose')) {
-							mTypes.add('Rose')
-						} else if (value.toLowerCase().includes('yellow')) {
-							mTypes.add('Yellow')
-						} else if (value.toLowerCase().includes('white')) {
-							mTypes.add('White')
-						}
-					})
-				}
-			})
-		})
-
-		setProductTypes([...pTypes])
-		setMetalTypes([...mTypes])
-	}, [items])
+	const metalTypes = ['Yellow', 'White']
+	const productTypes = ['All', 'Rings', 'Earrings', 'Necklaces', 'Bracelets']
+	const shapes = [
+		'All',
+		'Marquise',
+		'Round',
+		'Pear',
+		'Heart',
+		'Radiant',
+		'Oval'
+	]
 
 	const handleFilter = (filter, value) => {
 		if (filter === 'category') {
 			setSelectedCategory(value)
 		} else if (filter === 'metalType') {
-			if (selectedMetalTypes.includes(value)) {
-				setSelectedMetalTypes(selectedMetalTypes.filter(mt => mt !== value))
-			} else {
-				setSelectedMetalTypes([...selectedMetalTypes, value])
-			}
+			setSelectedMetalType(value)
+		} else if (filter === 'shape') {
+			setSelectedShape(value)
 		}
 	}
 
@@ -127,9 +111,9 @@ const Filters = ({
 						<button
 							key={type}
 							onClick={() => handleFilter('metalType', type)}
-							className={`${
-								selectedMetalTypes.includes(type) ? styles.active : ''
-							} ${styles.optionButton}`}
+							className={`${selectedMetalType === type ? styles.active : ''} ${
+								styles.optionButton
+							}`}
 						>
 							<Image
 								src={`/${type.toLowerCase()}-gold.png`}
@@ -141,14 +125,31 @@ const Filters = ({
 							<p>{type} Gold</p>
 						</button>
 					))}
-					{selectedMetalTypes.length > 0 && (
+					{selectedMetalType.length > 0 && (
 						<button
 							className={styles.resetButton}
-							onClick={() => setSelectedMetalTypes([])}
+							onClick={() => setSelectedMetalType([])}
 						>
 							Reset Metal
 						</button>
 					)}
+				</div>
+			</Accordion>
+
+			{/* Shape */}
+			<Accordion title='Shape' state={true}>
+				<div className={styles.buttons}>
+					{shapes.map(shape => (
+						<button
+							key={shape}
+							onClick={() => handleFilter('shape', shape)}
+							className={`${shape === selectedShape ? styles.active : ''} ${
+								styles.optionButton
+							}`}
+						>
+							<p>{shape}</p>
+						</button>
+					))}
 				</div>
 			</Accordion>
 

@@ -13,7 +13,13 @@ import { useState, useEffect, useMemo } from 'react'
 // helpers
 import { returnMetalType } from '@/lib/helpers'
 
-const ProductCard = ({ permalink, discount, product, individual }) => {
+const ProductCard = ({
+	permalink,
+	discount,
+	product,
+	individual,
+	selectedMetalType
+}) => {
 	const [metalTypes, setMetalTypes] = useState([])
 	const [activeMetalType, setActiveMetalType] = useState('')
 
@@ -69,9 +75,11 @@ const ProductCard = ({ permalink, discount, product, individual }) => {
 
 	useEffect(() => {
 		if (metalTypes.length > 0) {
-			setActiveMetalType(metalTypes[0])
+			setActiveMetalType(
+				selectedMetalType === 'Yellow' ? metalTypes[0] : metalTypes[1]
+			)
 		}
-	}, [metalTypes])
+	}, [metalTypes, selectedMetalType])
 
 	if (!product) {
 		return (
