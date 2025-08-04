@@ -7,6 +7,7 @@ import styles from './ProductInfo.module.scss'
 import Image from 'next/image'
 import Accordion from './Accordion'
 import NeedHelpInfo from './NeedHelpInfo'
+import CustomBox from './CustomBox'
 
 // hooks
 import { useState, useEffect } from 'react'
@@ -14,6 +15,9 @@ import { useState, useEffect } from 'react'
 // helpers
 import parse from 'html-react-parser'
 import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
+
+// data
+import materialInfo from '@/data/materialInfo.json' with { type: 'json' }
 
 const ProductOptionsUI = ({
 	product,
@@ -103,41 +107,6 @@ const ProductOptionsUI = ({
 		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i
 	)
 	const description = match ? match[0] : ''
-
-	const boxColorOptions = [
-		{ backgroundColor: '#b8a3ee', boxColor: 'Lavender' },
-		{ backgroundColor: '#5d8059', boxColor: 'Green' },
-		{ backgroundColor: '#bababa', boxColor: 'Light-Grey' },
-		{ backgroundColor: '#999999', boxColor: 'Dark-Grey' }
-	]
-
-	const materialInfo = [
-		{
-			icon: '/polish-icon.png',
-			title: 'Metal',
-			text: 'To ensure quality and longevity, each of our pieces is crafted using certified 100% repurposed 14k solid white or yellow gold.'
-		},
-		{
-			icon: '/sustainability-icon.png',
-			title: 'Sustainability',
-			text: 'Aligned with our values and ethics, every piece features lab-grown diamonds created through CVD and HPHT methods . Meeting the highest standards in color (D, E, F) and clarity (FL). We believe in responsible production and conscious consumption.'
-		},
-		{
-			icon: '/warranty-icon.png',
-			title: 'Practices',
-			text: 'We believe in clean practices, not just for the planet, but for the people we serve. Fair pricing, stable value, privacy-first policies, and a seamless buying experience are all part of our commitment to honest, transparent, and effective standards across every touchpoint of the brand.'
-		},
-		{
-			icon: '/polish-icon.png',
-			title: 'Care',
-			text: 'Every purchase includes one year of free  polishing and cleaning. While our 14k solid gold and lab-grown diamond pieces are built to last, we recommend avoiding harsh chemicals, storing them separately, and cleaning them gently with mild soap and water.'
-		}
-		// {
-		// 	icon: '/return-icon.png',
-		// 	title: 'Shipping',
-		// 	text: 'Free shipping for purchases above $300.'
-		// }
-	]
 
 	useEffect(() => {
 		if (selectedColor) {
@@ -259,15 +228,6 @@ const ProductOptionsUI = ({
 									*Additional $20
 								</p>
 							</div>
-
-							{/* <div className={styles.inputImage}>
-								<Image
-									src='/engraving-image.jpg'
-									alt='Engraving Image'
-									fill
-									style={{ objectFit: 'cover' }}
-								/>
-							</div> */}
 						</div>
 					</Accordion>
 				)}
@@ -282,62 +242,12 @@ const ProductOptionsUI = ({
 						product
 						display
 					>
-						<div className={styles.inputContainer}>
-							<div className={styles.inputText}>
-								<p>
-									Personalize it with a special touch to create a unique and
-									memorable keepsake.
-								</p>
-
-								<p>Message Color:</p>
-
-								<div className={styles.boxColors}>
-									{boxColorOptions.map((option, index) => (
-										<button
-											key={index}
-											style={{
-												backgroundColor: option.backgroundColor,
-												border:
-													boxColor === option.boxColor
-														? '1px solid black'
-														: 'none'
-											}}
-											onClick={() => setBoxColor(option.boxColor)}
-										></button>
-									))}
-								</div>
-
-								<textarea
-									className={styles.boxInput}
-									value={boxText}
-									onChange={e => setBoxText(e.target.value)}
-									placeholder='Type up to 25 characters'
-									maxLength={25}
-								/>
-
-								<p
-									style={{
-										fontSize: '10px',
-										fontStyle: 'italic'
-									}}
-								>
-									*Additional $50
-								</p>
-							</div>
-
-							<div className={styles.inputImage}>
-								<Image
-									src={
-										boxColor
-											? `/box-image-${boxColor.toLowerCase()}.jpg`
-											: '/box-image-lavender.jpg'
-									}
-									alt='Box Image'
-									fill
-									style={{ objectFit: 'cover' }}
-								/>
-							</div>
-						</div>
+						<CustomBox
+							boxColor={boxColor}
+							setBoxColor={setBoxColor}
+							boxText={boxText}
+							setBoxText={setBoxText}
+						/>
 					</Accordion>
 				)}
 			</div>

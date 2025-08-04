@@ -45,7 +45,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	)
 	const [engraving, setEngraving] = useState('')
 	const [boxText, setBoxText] = useState('')
-	const [boxColor, setBoxColor] = useState('')
+	const [boxColor, setBoxColor] = useState('Lavender')
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 
 	const images = useMemo(() => {
