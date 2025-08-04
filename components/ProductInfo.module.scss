@@ -217,6 +217,30 @@
 	flex-grow: 1;
 }
 
+.engravingInput::placeholder,
+.boxInput::placeholder {
+	font-family: 'Libre Franklin', sans-serif;
+	font-style: normal;
+	font-size: 12px;
+	opacity: 1;
+}
+
+.engravingInput::-webkit-input-placeholder,
+.boxInput::-webkit-input-placeholder {
+	font-family: 'Libre Franklin', sans-serif;
+	font-style: normal;
+	font-size: 12px;
+	opacity: 1;
+}
+
+.engravingInput::-moz-placeholder,
+.boxInput::-moz-placeholder {
+	font-family: 'Libre Franklin', sans-serif;
+	font-style: normal;
+	font-size: 12px;
+	opacity: 1;
+}
+
 .boxColors {
 	display: flex;
 	gap: 0.5rem !important;

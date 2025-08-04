@@ -248,7 +248,7 @@ const ProductOptionsUI = ({
 									value={engraving}
 									onChange={e => setEngraving(e.target.value)}
 									className={styles.engravingInput}
-									maxLength={product.category.name === 'Rings' ? 20 : 10}
+									maxLength={product.category.name === 'Rings' ? 15 : 10}
 								/>
 								<p
 									style={{
@@ -312,7 +312,7 @@ const ProductOptionsUI = ({
 									value={boxText}
 									onChange={e => setBoxText(e.target.value)}
 									placeholder='Type up to 25 characters'
-									maxLength={60}
+									maxLength={25}
 								/>
 
 								<p
