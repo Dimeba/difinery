@@ -5,6 +5,7 @@ import styles from './Accordion.module.scss'
 
 // components
 import Image from 'next/image'
+import Link from 'next/link'
 import InfoIcon from '@mui/icons-material/Info'
 
 // hooks
@@ -23,12 +24,12 @@ const Accordion = ({
 	hideBorder = false,
 	disabled = false,
 	showHelp = false,
-	helpContent = null,
+	helpLink = '/',
 	extraClass = ''
 }) => {
 	const [rowOpen, setRowOpen] = useState(state ? state : false)
 	const isMobile = useMediaQuery('(max-width: 1024px)')
-	const [showHelpDropdown, setShowHelpDropdown] = useState(false)
+	// const [showHelpDropdown, setShowHelpDropdown] = useState(false)
 
 	useEffect(() => {
 		if (!disabled) {
@@ -87,22 +88,24 @@ const Accordion = ({
 				</div>
 
 				{showHelp && (
-					<div
-						className={styles.needHelpButton}
-						onClick={() => setShowHelpDropdown(!showHelpDropdown)}
-					>
-						<InfoIcon fontSize='8px' />
-						<p>Need help?</p>
-					</div>
+					<Link href={helpLink} target='_blank' aria-label='Help Document'>
+						<div
+							className={styles.needHelpButton}
+							// onClick={() => setShowHelpDropdown(!showHelpDropdown)}
+						>
+							<InfoIcon fontSize='8px' />
+							<p>Need help?</p>
+						</div>
+					</Link>
 				)}
 
-				{showHelpDropdown && helpContent}
+				{/* {showHelpDropdown && helpContent} */}
 			</div>
 			<div className={styles.contentContainer}>
 				<div
 					className={styles.content}
 					style={{ display: rowOpen ? 'flex' : 'none' }}
-					onClick={() => setShowHelpDropdown(false)}
+					// onClick={() => setShowHelpDropdown(false)}
 				>
 					{children}
 				</div>

@@ -146,7 +146,8 @@ const ProductOptionsUI = ({
 							option.name.toLowerCase() === 'ring size' ||
 							option.name === 'carat'
 						}
-						helpContent={<NeedHelpInfo type={option.name.toLowerCase()} />}
+						// helpContent={<NeedHelpInfo type={option.name.toLowerCase()} />}
+						helpLink='/Size-Guide-Difinery.pdf'
 					>
 						<div
 							className={styles.variantButtonsContainer}
