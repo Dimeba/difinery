@@ -21,7 +21,12 @@ const Filters = ({
 	setSelectedMetalType,
 	selectedShape,
 	setSelectedShape,
-	toggleFilters
+	toggleFilters,
+	selectedSetting,
+	setSelectedSetting,
+	selectedDesign,
+	setSelectedDesign,
+	productType = 'All'
 }) => {
 	const sortOptions = ['Lowest Price', 'Highest Price', 'Newest']
 	const metalTypes = ['Yellow', 'White']
@@ -35,6 +40,14 @@ const Filters = ({
 		'Radiant',
 		'Oval'
 	]
+	const setting =
+		productType === 'rings'
+			? ['All', 'Prong', 'Bezel']
+			: ['All', 'Prong', 'Bezel', 'Fishtail']
+	const design =
+		productType === 'earrings'
+			? ['All', 'Stud', 'Hoops']
+			: ['All', 'Pendant', 'Station', 'Fixed']
 
 	const handleFilter = (filter, value) => {
 		if (filter === 'category') {
@@ -43,6 +56,10 @@ const Filters = ({
 			setSelectedMetalType(value)
 		} else if (filter === 'shape') {
 			setSelectedShape(value)
+		} else if (filter === 'setting') {
+			setSelectedSetting(value)
+		} else if (filter === 'design') {
+			setSelectedDesign(value)
 		}
 	}
 
@@ -125,14 +142,6 @@ const Filters = ({
 							<p>{type} Gold</p>
 						</button>
 					))}
-					{selectedMetalType.length > 0 && (
-						<button
-							className={styles.resetButton}
-							onClick={() => setSelectedMetalType([])}
-						>
-							Reset Metal
-						</button>
-					)}
 				</div>
 			</Accordion>
 
@@ -152,6 +161,44 @@ const Filters = ({
 					))}
 				</div>
 			</Accordion>
+
+			{/* Setting */}
+			{productType !== 'all' && (
+				<Accordion title='Setting' state={true}>
+					<div className={styles.buttons}>
+						{setting.map(setting => (
+							<button
+								key={setting}
+								onClick={() => handleFilter('setting', setting)}
+								className={`${
+									setting === selectedSetting ? styles.active : ''
+								} ${styles.optionButton}`}
+							>
+								<p>{setting}</p>
+							</button>
+						))}
+					</div>
+				</Accordion>
+			)}
+
+			{/* Design */}
+			{productType !== 'all' && productType !== 'rings' && (
+				<Accordion title='Design' state={true}>
+					<div className={styles.buttons}>
+						{design.map(design => (
+							<button
+								key={design}
+								onClick={() => handleFilter('design', design)}
+								className={`${design === selectedDesign ? styles.active : ''} ${
+									styles.optionButton
+								}`}
+							>
+								<p>{design}</p>
+							</button>
+						))}
+					</div>
+				</Accordion>
+			)}
 
 			{/* Close Button */}
 			<button className={styles.closeButton} onClick={toggleFilters}>

@@ -50,6 +50,8 @@ const Products = ({
 	const [selectedCategory, setSelectedCategory] = useState('All')
 	const [selectedMetalType, setSelectedMetalType] = useState('Yellow')
 	const [selectedShape, setSelectedShape] = useState('All')
+	const [selectedSetting, setSelectedSetting] = useState('All')
+	const [selectedDesign, setSelectedDesign] = useState('All')
 	const [searchTerm, setSearchTerm] = useState('')
 
 	const client = useApolloClient()
@@ -98,7 +100,14 @@ const Products = ({
 
 		if (selectedShape !== 'All') {
 			updated = updated.filter(p => p.tags?.includes(selectedShape))
-			console.log(updated)
+		}
+
+		if (selectedSetting !== 'All') {
+			updated = updated.filter(p => p.tags?.includes(selectedSetting))
+		}
+
+		if (selectedDesign !== 'All') {
+			updated = updated.filter(p => p.tags?.includes(selectedDesign))
 		}
 
 		if (searchTerm) {
@@ -145,6 +154,8 @@ const Products = ({
 		selectedCategory,
 		selectedMetalType,
 		selectedShape,
+		selectedSetting,
+		selectedDesign,
 		searchTerm
 	])
 
@@ -291,7 +302,12 @@ const Products = ({
 					setSelectedMetalType={setSelectedMetalType}
 					selectedShape={selectedShape}
 					setSelectedShape={setSelectedShape}
+					selectedSetting={selectedSetting}
+					setSelectedSetting={setSelectedSetting}
+					selectedDesign={selectedDesign}
+					setSelectedDesign={setSelectedDesign}
 					toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
+					productType={productType}
 				/>
 			</Popper>
 		</section>
