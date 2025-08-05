@@ -12,6 +12,7 @@ import {
 	FaYoutube,
 	FaEtsy
 } from 'react-icons/fa'
+import SubscribeForm from './SubscribeForm'
 
 const Footer = ({ content }) => {
 	const returnCorrecticon = (url, size) => {
@@ -27,8 +28,6 @@ const Footer = ({ content }) => {
 			return <FaEtsy size={size} />
 		}
 	}
-
-	const categories = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
 
 	return (
 		<footer className={styles.footer}>
@@ -59,111 +58,7 @@ const Footer = ({ content }) => {
 					</div>
 				</Accordion>
 
-				<Accordion
-					title='Service'
-					state={true}
-					hideBorder={true}
-					disabled={true}
-					extraClass={styles.column2}
-				>
-					<div className={styles.links}>
-						{content.service.map(link => (
-							<Link
-								key={link.sys.id}
-								href={
-									'/' +
-									link.fields.title
-										.replace(/ /g, '-')
-										.replace(/&/g, '')
-										.toLowerCase()
-								}
-								aria-label={`Link to ${link.fields.title} page.`}
-							>
-								<p>{link.fields.title}</p>
-							</Link>
-						))}
-					</div>
-				</Accordion>
-
-				<Accordion
-					title='Shop'
-					state={true}
-					hideBorder={true}
-					disabled={true}
-					extraClass={styles.column2}
-				>
-					<div className={styles.links}>
-						{categories.map((title, index) => (
-							<Link
-								key={index}
-								href={`/shop/${title.toLowerCase()}`}
-								aria-label={`Link to ${title} page.`}
-							>
-								<p>{title}</p>
-							</Link>
-						))}
-					</div>
-				</Accordion>
-
-				<Accordion
-					title='Difinery'
-					state={true}
-					hideBorder={true}
-					disabled={true}
-					extraClass={styles.column2}
-				>
-					<div className={styles.links}>
-						{content.difinery.map(link => (
-							<Link
-								key={link.sys.id}
-								href={
-									'/' +
-									link.fields.title
-										.replace(/ /g, '-')
-										.replace(/&/g, '')
-										.toLowerCase()
-								}
-								aria-label={`Link to ${link.fields.title} page.`}
-							>
-								<p>{link.fields.title}</p>
-							</Link>
-						))}
-
-						<Link href='/shop' aria-label={`Link to Shop page.`}>
-							<p>Shop</p>
-						</Link>
-
-						<Link href='/blog' aria-label={`Link to Blog page.`}>
-							<p>Blog</p>
-						</Link>
-					</div>
-				</Accordion>
-
-				<Accordion
-					title='To Know'
-					state={true}
-					hideBorder={true}
-					disabled={true}
-					extraClass={styles.column2}
-				>
-					<div className={styles.links}>
-						{content.toKnow.map(link => (
-							<Link
-								key={link.sys.id}
-								href={
-									'/' +
-									link.fields.title
-										.replace(/ /g, '-')
-										.replace(/&/g, '')
-										.toLowerCase()
-								}
-								aria-label={`Link to ${link.fields.title} page.`}
-							>
-								<p>{link.fields.title}</p>
-							</Link>
-						))}
-					</div>
-				</Accordion>
+				<SubscribeForm />
 			</div>
 
 			{/* Second Row */}
