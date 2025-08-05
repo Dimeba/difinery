@@ -44,7 +44,7 @@ const Header = ({ content }) => {
 	const categories = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
 
 	const quickLinks = content.quickLinks.map(link => link.fields.title)
-	const occasion = content.shopByOcassion.map(link => link.fields.title)
+	const occasion = []
 
 	// Reseting open menu
 	useEffect(() => {
