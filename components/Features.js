@@ -32,7 +32,7 @@ const Features = async ({ features, title, stylizedTitle }) => {
 				<div className={styles.columns}>
 					{content.map(item => (
 						<div key={item.sys.id} className={styles.column}>
-							{item.fields.image ? (
+							{item.fields.image && (
 								<Image
 									src={'https:' + item.fields.image.fields.file.url}
 									alt='Icon'
@@ -40,9 +40,8 @@ const Features = async ({ features, title, stylizedTitle }) => {
 									height={54}
 									style={{ objectFit: 'contain', objectPosition: 'center' }}
 								/>
-							) : (
-								<h2>{item.fields.number}</h2>
 							)}
+							{item.fields.number && <h2>{item.fields.number}</h2>}
 							<p>{item.fields.text}</p>
 						</div>
 					))}
