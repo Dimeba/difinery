@@ -119,85 +119,79 @@ const ProductCard = ({
 						onMouseEnter={() => setShowCloseup(true)}
 						onMouseLeave={() => setShowCloseup(false)}
 					>
-						<Image
-							src={yellowGoldImage?.node.url || coverImages[0]?.node.url}
-							fill
-							priority={true}
-							alt='Category Image.'
-							style={{
-								opacity:
-									(activeMetalType.includes('yellow') && !showCloseup) ||
-									!yellowGoldImageCloseup
-										? 1
-										: 0,
-								objectFit: 'contain',
-								objectPosition:
-									product.category.name.toLowerCase() === 'necklaces'
-										? 'top'
-										: 'center'
-							}}
-							quality={100}
-							sizes='(max-width: 768px) 100vw, 50vw'
-						/>
+						{activeMetalType.includes('yellow') ? (
+							<>
+								<Image
+									src={yellowGoldImage?.node.url || coverImages[0]?.node.url}
+									fill
+									priority={true}
+									alt='Category Image.'
+									style={{
+										opacity: !showCloseup || !yellowGoldImageCloseup ? 1 : 0,
+										objectFit: 'contain',
+										objectPosition:
+											product.category.name.toLowerCase() === 'necklaces'
+												? 'top'
+												: 'center'
+									}}
+									quality={100}
+									sizes='(max-width: 768px) 100vw, 50vw'
+								/>
 
-						{yellowGoldImageCloseup && (
-							<Image
-								src={yellowGoldImageCloseup.node.url}
-								fill
-								priority={true}
-								alt='Category Image.'
-								style={{
-									opacity:
-										activeMetalType.includes('yellow') && showCloseup ? 1 : 0,
-									objectFit: 'contain',
-									objectPosition:
-										product.category.name.toLowerCase() === 'necklaces'
-											? 'top'
-											: 'center'
-								}}
-								quality={100}
-								sizes='(max-width: 768px) 100vw, 50vw'
-							/>
-						)}
+								{yellowGoldImageCloseup && (
+									<Image
+										src={yellowGoldImageCloseup.node.url}
+										fill
+										alt='Category Image.'
+										style={{
+											opacity: showCloseup ? 1 : 0,
+											objectFit: 'contain',
+											objectPosition:
+												product.category.name.toLowerCase() === 'necklaces'
+													? 'top'
+													: 'center'
+										}}
+										quality={100}
+										sizes='(max-width: 768px) 100vw, 50vw'
+									/>
+								)}
+							</>
+						) : (
+							<>
+								<Image
+									src={whiteGoldImage?.node.url || coverImages[0]?.node.url}
+									fill
+									alt='Category Image.'
+									style={{
+										opacity: !showCloseup || !whiteGoldImageCloseup ? 1 : 0,
+										objectFit: 'contain',
+										objectPosition:
+											product.category.name.toLowerCase() === 'necklaces'
+												? 'top'
+												: 'center'
+									}}
+									quality={100}
+									sizes='(max-width: 768px) 100vw, 50vw'
+								/>
 
-						<Image
-							src={whiteGoldImage?.node.url || coverImages[0]?.node.url}
-							fill
-							alt='Category Image.'
-							style={{
-								opacity:
-									(activeMetalType.includes('white') && !showCloseup) ||
-									!whiteGoldImageCloseup
-										? 1
-										: 0,
-								objectFit: 'contain',
-								objectPosition:
-									product.category.name.toLowerCase() === 'necklaces'
-										? 'top'
-										: 'center'
-							}}
-							quality={100}
-							sizes='(max-width: 768px) 100vw, 50vw'
-						/>
-
-						{whiteGoldImageCloseup && (
-							<Image
-								src={whiteGoldImageCloseup.node.url}
-								fill
-								priority={true}
-								alt='Category Image.'
-								style={{
-									opacity:
-										activeMetalType.includes('white') && showCloseup ? 1 : 0,
-									objectFit: 'contain',
-									objectPosition:
-										product.category.name.toLowerCase() === 'necklaces'
-											? 'top'
-											: 'center'
-								}}
-								quality={100}
-								sizes='(max-width: 768px) 100vw, 50vw'
-							/>
+								{whiteGoldImageCloseup && (
+									<Image
+										src={whiteGoldImageCloseup.node.url}
+										fill
+										alt='Category Image.'
+										style={{
+											opacity: showCloseup ? 1 : 0,
+											objectFit: 'contain',
+											objectPosition:
+												product.category.name.toLowerCase() === 'necklaces'
+													? 'top'
+													: 'center'
+										}}
+										quality={100}
+										sizes='(max-width: 768px) 100vw, 50vw'
+									/>
+								)}
+							</>
 						)}
 
 						{individual && (
