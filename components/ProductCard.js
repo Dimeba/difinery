@@ -22,25 +22,43 @@ const ProductCard = ({
 }) => {
 	const [metalTypes, setMetalTypes] = useState([])
 	const [activeMetalType, setActiveMetalType] = useState('')
+	const [showCloseup, setShowCloseup] = useState(false)
 
-	// getting png images
-	const productImages = useMemo(() => {
+	const coverImages = useMemo(() => {
 		return (product.images?.edges || []).filter(edge =>
 			edge.node.url.toLowerCase().includes('-cover')
 		)
 	}, [product.images])
 
+	const closeupImages = useMemo(() => {
+		return (product.images?.edges || []).filter(edge =>
+			edge.node.url.toLowerCase().includes('-closeup')
+		)
+	}, [product.images])
+
 	const yellowGoldImage = useMemo(() => {
-		return productImages.find(image =>
+		return coverImages.find(image =>
 			image.node.url.toLowerCase().includes('/files/y')
 		)
-	}, [productImages])
+	}, [coverImages])
+
+	const yellowGoldImageCloseup = useMemo(() => {
+		return closeupImages.find(image =>
+			image.node.url.toLowerCase().includes('/files/y')
+		)
+	}, [closeupImages])
 
 	const whiteGoldImage = useMemo(() => {
-		return productImages.find(image =>
+		return coverImages.find(image =>
 			image.node.url.toLowerCase().includes('/files/w')
 		)
-	}, [productImages])
+	}, [coverImages])
+
+	const whiteGoldImageCloseup = useMemo(() => {
+		return closeupImages.find(image =>
+			image.node.url.toLowerCase().includes('/files/w')
+		)
+	}, [closeupImages])
 
 	// Function to return the correct URL based on active metal type
 	const returnCorrectURL = () => {
@@ -95,15 +113,23 @@ const ProductCard = ({
 				href={returnCorrectURL()}
 				aria-label={`Link to ${product.title} page.`}
 			>
-				{productImages.length > 0 && (
-					<div className={styles.image}>
+				{coverImages.length > 0 && (
+					<div
+						className={styles.image}
+						onMouseEnter={() => setShowCloseup(true)}
+						onMouseLeave={() => setShowCloseup(false)}
+					>
 						<Image
-							src={yellowGoldImage?.node.url || productImages[0]?.node.url}
+							src={yellowGoldImage?.node.url || coverImages[0]?.node.url}
 							fill
 							priority={true}
 							alt='Category Image.'
 							style={{
-								opacity: activeMetalType.includes('yellow') ? 1 : 0,
+								opacity:
+									(activeMetalType.includes('yellow') && !showCloseup) ||
+									!yellowGoldImageCloseup
+										? 1
+										: 0,
 								objectFit: 'contain',
 								objectPosition:
 									product.category.name.toLowerCase() === 'necklaces'
@@ -114,12 +140,36 @@ const ProductCard = ({
 							sizes='(max-width: 768px) 100vw, 50vw'
 						/>
 
+						{yellowGoldImageCloseup && (
+							<Image
+								src={yellowGoldImageCloseup.node.url}
+								fill
+								priority={true}
+								alt='Category Image.'
+								style={{
+									opacity:
+										activeMetalType.includes('yellow') && showCloseup ? 1 : 0,
+									objectFit: 'contain',
+									objectPosition:
+										product.category.name.toLowerCase() === 'necklaces'
+											? 'top'
+											: 'center'
+								}}
+								quality={100}
+								sizes='(max-width: 768px) 100vw, 50vw'
+							/>
+						)}
+
 						<Image
-							src={whiteGoldImage?.node.url || productImages[0]?.node.url}
+							src={whiteGoldImage?.node.url || coverImages[0]?.node.url}
 							fill
 							alt='Category Image.'
 							style={{
-								opacity: activeMetalType.includes('white') ? 1 : 0,
+								opacity:
+									(activeMetalType.includes('white') && !showCloseup) ||
+									!whiteGoldImageCloseup
+										? 1
+										: 0,
 								objectFit: 'contain',
 								objectPosition:
 									product.category.name.toLowerCase() === 'necklaces'
@@ -129,6 +179,26 @@ const ProductCard = ({
 							quality={100}
 							sizes='(max-width: 768px) 100vw, 50vw'
 						/>
+
+						{whiteGoldImageCloseup && (
+							<Image
+								src={whiteGoldImageCloseup.node.url}
+								fill
+								priority={true}
+								alt='Category Image.'
+								style={{
+									opacity:
+										activeMetalType.includes('white') && showCloseup ? 1 : 0,
+									objectFit: 'contain',
+									objectPosition:
+										product.category.name.toLowerCase() === 'necklaces'
+											? 'top'
+											: 'center'
+								}}
+								quality={100}
+								sizes='(max-width: 768px) 100vw, 50vw'
+							/>
+						)}
 
 						{individual && (
 							<p className={styles.individualTitle}>
