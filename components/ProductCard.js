@@ -119,79 +119,87 @@ const ProductCard = ({
 						onMouseEnter={() => setShowCloseup(true)}
 						onMouseLeave={() => setShowCloseup(false)}
 					>
-						{activeMetalType.includes('yellow') ? (
-							<>
-								<Image
-									src={yellowGoldImage?.node.url || coverImages[0]?.node.url}
-									fill
-									priority={true}
-									alt='Category Image.'
-									style={{
-										opacity: !showCloseup || !yellowGoldImageCloseup ? 1 : 0,
-										objectFit: 'contain',
-										objectPosition:
-											product.category.name.toLowerCase() === 'necklaces'
-												? 'top'
-												: 'center'
-									}}
-									quality={100}
-									sizes='(max-width: 768px) 100vw, 50vw'
-								/>
+						{/* Yellow Gold */}
+						<Image
+							src={yellowGoldImage?.node.url || coverImages[0]?.node.url}
+							fill
+							priority={true}
+							alt='Category Image.'
+							style={{
+								visibility: activeMetalType.includes('yellow')
+									? 'visible'
+									: 'hidden',
+								opacity: !showCloseup || !yellowGoldImageCloseup ? 1 : 0,
+								objectFit: 'contain',
+								objectPosition:
+									product.category.name.toLowerCase() === 'necklaces'
+										? 'top'
+										: 'center'
+							}}
+							quality={100}
+							sizes='(max-width: 768px) 100vw, 50vw'
+						/>
 
-								{yellowGoldImageCloseup && (
-									<Image
-										src={yellowGoldImageCloseup.node.url}
-										fill
-										alt='Category Image.'
-										style={{
-											opacity: showCloseup ? 1 : 0,
-											objectFit: 'contain',
-											objectPosition:
-												product.category.name.toLowerCase() === 'necklaces'
-													? 'top'
-													: 'center'
-										}}
-										quality={100}
-										sizes='(max-width: 768px) 100vw, 50vw'
-									/>
-								)}
-							</>
-						) : (
-							<>
-								<Image
-									src={whiteGoldImage?.node.url || coverImages[0]?.node.url}
-									fill
-									alt='Category Image.'
-									style={{
-										opacity: !showCloseup || !whiteGoldImageCloseup ? 1 : 0,
-										objectFit: 'contain',
-										objectPosition:
-											product.category.name.toLowerCase() === 'necklaces'
-												? 'top'
-												: 'center'
-									}}
-									quality={100}
-									sizes='(max-width: 768px) 100vw, 50vw'
-								/>
+						{yellowGoldImageCloseup && (
+							<Image
+								src={yellowGoldImageCloseup.node.url}
+								fill
+								alt='Category Image.'
+								style={{
+									visibility: activeMetalType.includes('yellow')
+										? 'visible'
+										: 'hidden',
+									opacity: showCloseup ? 1 : 0,
+									objectFit: 'contain',
+									objectPosition:
+										product.category.name.toLowerCase() === 'necklaces'
+											? 'top'
+											: 'center'
+								}}
+								quality={100}
+								sizes='(max-width: 768px) 100vw, 50vw'
+							/>
+						)}
 
-								{whiteGoldImageCloseup && (
-									<Image
-										src={whiteGoldImageCloseup.node.url}
-										fill
-										alt='Category Image.'
-										style={{
-											opacity: showCloseup ? 1 : 0,
-											objectFit: 'contain',
-											objectPosition:
-												product.category.name.toLowerCase() === 'necklaces'
-													? 'top'
-													: 'center'
-										}}
-										quality={100}
-										sizes='(max-width: 768px) 100vw, 50vw'
-									/>
-								)}
-							</>
+						{/* White Gold */}
+						<Image
+							src={whiteGoldImage?.node.url || coverImages[0]?.node.url}
+							fill
+							alt='Category Image.'
+							style={{
+								visibility: !activeMetalType.includes('yellow')
+									? 'visible'
+									: 'hidden',
+								opacity: !showCloseup || !whiteGoldImageCloseup ? 1 : 0,
+								objectFit: 'contain',
+								objectPosition:
+									product.category.name.toLowerCase() === 'necklaces'
+										? 'top'
+										: 'center'
+							}}
+							quality={100}
+							sizes='(max-width: 768px) 100vw, 50vw'
+						/>
+
+						{whiteGoldImageCloseup && (
+							<Image
+								src={whiteGoldImageCloseup.node.url}
+								fill
+								alt='Category Image.'
+								style={{
+									visibility: !activeMetalType.includes('yellow')
+										? 'visible'
+										: 'hidden',
+									opacity: showCloseup ? 1 : 0,
+									objectFit: 'contain',
+									objectPosition:
+										product.category.name.toLowerCase() === 'necklaces'
+											? 'top'
+											: 'center'
+								}}
+								quality={100}
+								sizes='(max-width: 768px) 100vw, 50vw'
+							/>
 						)}
 
 						{individual && (
