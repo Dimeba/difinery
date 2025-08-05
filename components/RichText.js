@@ -1,16 +1,27 @@
 // styles
 import styles from './RichText.module.scss'
 
+// components
+import { Box, Typography } from '@mui/material'
+
 // hooks
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
-const RichText = ({ title, content, index }) => {
+const RichText = ({ title, content, index, thin }) => {
 	return (
 		<section className={`${index == 0 ? 'topSection' : ''}`}>
-			<div className={`container ${styles.content}`}>
-				<h2>{title}</h2>
+			<Box
+				width={'90vw'}
+				maxWidth={thin ? '482px' : '1440px'}
+				margin={'0 auto'}
+				height={'100%'}
+				className={styles.content}
+			>
+				<Typography variant='h2' sx={{ textWrap: 'balance' }}>
+					{title}
+				</Typography>
 				{documentToReactComponents(content)}
-			</div>
+			</Box>
 		</section>
 	)
 }

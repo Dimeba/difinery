@@ -25,7 +25,7 @@ const theme = createTheme({
 		},
 		h2: {
 			fontFamily: "'Newsreader', serif",
-			fontWeight: 400,
+			fontWeight: 300,
 			fontSize: '2.25rem',
 			lineHeight: 1.2
 		},
