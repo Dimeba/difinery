@@ -12,13 +12,15 @@ const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
 			</Suspense>
 
 			{recommendedProducts && recommendedProducts.length > 0 && (
-				<Products
-					title='Pair your product with:'
-					recommendedProducts={recommendedProducts.slice(0, 4)}
-					type='recommended'
-					showTitle
-					individual={true}
-				/>
+				<Suspense fallback={<div>Loading…</div>}>
+					<Products
+						title='Pair your product with:'
+						recommendedProducts={recommendedProducts.slice(0, 4)}
+						type='recommended'
+						showTitle
+						individual={true}
+					/>
+				</Suspense>
 			)}
 
 			<div style={{ marginTop: '4rem' }}></div>
