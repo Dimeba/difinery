@@ -1,7 +1,5 @@
 import { Libre_Franklin, Newsreader } from 'next/font/google'
 import './globals.scss'
-import theme from '@/app/theme/theme'
-import { CssBaseline } from '@mui/material'
 
 const libreFranklin = Libre_Franklin({ subsets: ['latin'] })
 const newsreader = Newsreader({ subsets: ['latin'] })
@@ -17,7 +15,8 @@ import { getEntries } from '@/lib/contentful'
 // context
 import { CartProvider } from '@/context/CartContext'
 import { ApolloContext } from '@/lib/apolloContext'
-import { ThemeProvider } from '@mui/material'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
+import MUIProviders from '@/components/MUIProviders'
 
 const header = await getEntries('header')
 const footer = await getEntries('footer')
@@ -43,13 +42,14 @@ export default function RootLayout({ children }) {
 					<body
 						className={`${libreFranklin.className} ${newsreader.className}`}
 					>
-						<ThemeProvider theme={theme}>
-							<CssBaseline />
-							<Cart />
-							<Header content={headerContent} />
-							{children}
-							<Footer content={footerContent} />
-						</ThemeProvider>
+						<AppRouterCacheProvider>
+							<MUIProviders>
+								<Cart />
+								<Header content={headerContent} />
+								{children}
+								<Footer content={footerContent} />
+							</MUIProviders>
+						</AppRouterCacheProvider>
 					</body>
 				</CartProvider>
 			</ApolloContext>
