@@ -1,6 +1,7 @@
 // components
 import Products from '@/components/Products'
 import PageContent from '@/components/PageContent'
+import { Suspense } from 'react'
 
 // lib
 import { apolloClient } from '@/lib/apolloClient'
@@ -29,12 +30,14 @@ export default async function Home() {
 
 	return (
 		<main>
-			<Products
-				products={initialItems}
-				initialPageInfo={initialPageInfo}
-				productType='rings'
-				showFilters
-			/>
+			<Suspense fallback={<div>Loading…</div>}>
+				<Products
+					products={initialItems}
+					initialPageInfo={initialPageInfo}
+					productType='rings'
+					showFilters
+				/>
+			</Suspense>
 			<PageContent content={content} />
 		</main>
 	)
