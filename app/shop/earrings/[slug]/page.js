@@ -5,7 +5,6 @@ import { getEntries } from '@/lib/contentful'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
-import { GET_PRODUCT_RECOMMENDATIONS } from '@/lib/queries/getProductRecommendations'
 
 const { data } = await apolloClient.query({
 	query: GET_PRODUCTS,
@@ -57,12 +56,11 @@ export default async function Product(props) {
 	const product = data.productByHandle
 
 	// Recommended products
-	const { data: recommendationsData } = await apolloClient.query({
-		query: GET_PRODUCT_RECOMMENDATIONS,
-		variables: { productHandle: slug }
-	})
+	const recommendedProductIds = product.metafield.value
 
-	const recommendedProducts = recommendationsData.productRecommendations
+	const recommendedProducts = products.filter(item => {
+		return recommendedProductIds.includes(item.id)
+	})
 
 	return (
 		<ProductPageLayout

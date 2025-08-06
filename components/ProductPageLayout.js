@@ -11,7 +11,7 @@ const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
 				<ProductInfo product={product} />
 			</Suspense>
 
-			{recommendedProducts.length > 0 && (
+			{recommendedProducts && recommendedProducts.length > 0 && (
 				<Products
 					title='Pair your product with:'
 					recommendedProducts={recommendedProducts.slice(0, 4)}

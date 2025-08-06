@@ -267,6 +267,7 @@ const Products = ({
 									product={product}
 									permalink={product.handle}
 									discount={discount}
+									selectedMetalType={selectedMetalType}
 									// individual={individual}
 								/>
 							))}
