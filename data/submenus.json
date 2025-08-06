@@ -119,19 +119,19 @@
 				"rows": [
 					{
 						"title": "Infinity Collection",
-						"url": "/shop/collections/infinity"
+						"url": "/shop/collections/infinity?type=rings"
 					},
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart"
+						"url": "/shop/collections/heart?type=rings"
 					},
 					{
 						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear"
+						"url": "/shop/collections/daily-wear?type=rings"
 					},
 					{
 						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection"
+						"url": "/shop/collections/summer-selection?type=rings"
 					}
 				]
 			}
@@ -186,11 +186,11 @@
 				"rows": [
 					{
 						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear"
+						"url": "/shop/collections/daily-wear?type=earrings"
 					},
 					{
 						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection"
+						"url": "/shop/collections/summer-selection?type=earrings"
 					}
 				]
 			}
@@ -245,15 +245,15 @@
 				"rows": [
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart"
+						"url": "/shop/collections/heart?type=necklaces"
 					},
 					{
 						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear"
+						"url": "/shop/collections/daily-wear?type=necklaces"
 					},
 					{
 						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection"
+						"url": "/shop/collections/summer-selection?type=necklaces"
 					}
 				]
 			}
@@ -304,15 +304,15 @@
 				"rows": [
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart"
+						"url": "/shop/collections/heart?type=bracelets"
 					},
 					{
 						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear"
+						"url": "/shop/collections/daily-wear?type=bracelets"
 					},
 					{
 						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection"
+						"url": "/shop/collections/summer-selection?type=bracelets"
 					}
 				]
 			}
