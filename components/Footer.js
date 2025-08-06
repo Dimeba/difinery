@@ -12,7 +12,6 @@ import {
 	FaYoutube,
 	FaEtsy
 } from 'react-icons/fa'
-import SubscribeForm from './SubscribeForm'
 
 const Footer = ({ content }) => {
 	const returnCorrecticon = (url, size) => {
@@ -29,15 +28,63 @@ const Footer = ({ content }) => {
 		}
 	}
 
+	const categories = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
+
 	return (
 		<footer className={styles.footer}>
 			<div className={styles.content}>
+				<Accordion
+					title='Difinery'
+					state={true}
+					hideBorder={true}
+					disabled={true}
+					extraClass={styles.column3}
+				>
+					<div className={styles.links}>
+						{content.difinery.map(link => (
+							<Link
+								key={link.sys.id}
+								href={
+									'/' +
+									link.fields.title
+										.replace(/ /g, '-')
+										.replace(/&/g, '')
+										.toLowerCase()
+								}
+								aria-label={`Link to ${link.fields.title} page.`}
+							>
+								<p>{link.fields.title}</p>
+							</Link>
+						))}
+					</div>
+				</Accordion>
+
+				<Accordion
+					title='Shop'
+					state={true}
+					hideBorder={true}
+					disabled={true}
+					extraClass={styles.column3}
+				>
+					<div className={styles.links}>
+						{categories.map((title, index) => (
+							<Link
+								key={index}
+								href={`/shop/${title.toLowerCase()}`}
+								aria-label={`Link to ${title} page.`}
+							>
+								<p>{title}</p>
+							</Link>
+						))}
+					</div>
+				</Accordion>
+
 				<Accordion
 					title='Help'
 					state={true}
 					hideBorder={true}
 					disabled={true}
-					extraClass={styles.column2}
+					extraClass={styles.column3}
 				>
 					<div className={styles.links}>
 						{content.help.map(link => (
@@ -58,7 +105,31 @@ const Footer = ({ content }) => {
 					</div>
 				</Accordion>
 
-				<SubscribeForm />
+				<Accordion
+					title='Legal'
+					state={true}
+					hideBorder={true}
+					disabled={true}
+					extraClass={styles.column3}
+				>
+					<div className={styles.links}>
+						{content.legal.map(link => (
+							<Link
+								key={link.sys.id}
+								href={
+									'/' +
+									link.fields.title
+										.replace(/ /g, '-')
+										.replace(/&/g, '')
+										.toLowerCase()
+								}
+								aria-label={`Link to ${link.fields.title} page.`}
+							>
+								<p>{link.fields.title}</p>
+							</Link>
+						))}
+					</div>
+				</Accordion>
 			</div>
 
 			{/* Second Row */}
@@ -113,7 +184,7 @@ const Footer = ({ content }) => {
 				</div>
 			</div>
 			{/* Credits */}
-			<div className={styles.credits}>
+			{/* <div className={styles.credits}>
 				<div className='container'>
 					<p>© Difinery</p>
 
@@ -133,7 +204,7 @@ const Footer = ({ content }) => {
 						</Link>
 					))}
 				</div>
-			</div>
+			</div> */}
 		</footer>
 	)
 }
