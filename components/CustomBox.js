@@ -42,7 +42,7 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 
 	return (
 		<Grid container spacing='1rem'>
-			<Grid item size={{ xs: 12, lg: 6 }} display='flex' flexDirection='column'>
+			<Grid size={{ xs: 12, lg: 6 }} display='flex' flexDirection='column'>
 				<Typography variant='p'>
 					Personalize it with a special touch to create a unique and memorable
 					keepsake.
@@ -87,7 +87,6 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 
 			{boxVariant && (
 				<Grid
-					item
 					size={{ xs: 12, lg: 6 }}
 					position='relative'
 					// width='100%'

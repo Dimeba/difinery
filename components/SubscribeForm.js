@@ -24,7 +24,7 @@ const SubscribeForm = () => {
 				maxWidth={'90vw'}
 			>
 				{/* Full Name */}
-				<Grid item size={{ xs: 6 }}>
+				<Grid size={{ xs: 6 }}>
 					<TextField
 						id='name'
 						label='Full Name'
@@ -44,7 +44,7 @@ const SubscribeForm = () => {
 				</Grid>
 
 				{/* Email */}
-				<Grid item size={{ xs: 6 }}>
+				<Grid size={{ xs: 6 }}>
 					<TextField
 						id='email'
 						label='Email'
@@ -64,7 +64,7 @@ const SubscribeForm = () => {
 				</Grid>
 
 				{/* Date of Birth */}
-				<Grid item size={{ xs: 6 }}>
+				<Grid size={{ xs: 6 }}>
 					<TextField
 						id='dob'
 						label='Date of Birth'
@@ -88,7 +88,7 @@ const SubscribeForm = () => {
 				</Grid>
 
 				{/* Phone */}
-				<Grid item size={{ xs: 6 }}>
+				<Grid size={{ xs: 6 }}>
 					<TextField
 						id='phone'
 						label='Phone Number'
@@ -107,7 +107,7 @@ const SubscribeForm = () => {
 					<ValidationError prefix='Phone' field='phone' errors={state.errors} />
 				</Grid>
 
-				<Grid item size={{ xs: 6 }}>
+				<Grid size={{ xs: 6 }}>
 					<button type='submit' disabled={state.submitting}>
 						Subscribe
 					</button>
