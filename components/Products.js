@@ -22,6 +22,7 @@ import SearchIcon from '@mui/icons-material/Search'
 // hooks
 import { useState, useEffect, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
+import { useSearchParams } from 'next/navigation'
 
 // lib
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
@@ -40,6 +41,12 @@ const Products = ({
 	initialPageInfo = {},
 	productType = ''
 }) => {
+	const params = useSearchParams()
+	const type = params.get('type')
+	const shape = params.get('shape')
+	const setting = params.get('setting')
+	const design = params.get('design')
+
 	const [items, setItems] = useState(products)
 	const [pageInfo, setPageInfo] = useState(initialPageInfo)
 	const [filteredItems, setFilteredItems] = useState(products)
@@ -47,11 +54,13 @@ const Products = ({
 
 	// filters state
 	const [selectedSort, setSelectedSort] = useState(null)
-	const [selectedCategory, setSelectedCategory] = useState('All')
+	const [selectedCategory, setSelectedCategory] = useState(type ? type : 'All')
 	const [selectedMetalType, setSelectedMetalType] = useState('Yellow')
-	const [selectedShape, setSelectedShape] = useState('All')
-	const [selectedSetting, setSelectedSetting] = useState('All')
-	const [selectedDesign, setSelectedDesign] = useState('All')
+	const [selectedShape, setSelectedShape] = useState(shape ? shape : 'All')
+	const [selectedSetting, setSelectedSetting] = useState(
+		setting ? setting : 'All'
+	)
+	const [selectedDesign, setSelectedDesign] = useState(design ? design : 'All')
 	const [searchTerm, setSearchTerm] = useState('')
 
 	const client = useApolloClient()

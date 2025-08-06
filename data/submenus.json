@@ -61,23 +61,23 @@
 	{
 		"columns": [
 			{
-				"title": "Style",
+				"title": "Shape",
 				"rows": [
 					{
 						"title": "Eternity",
-						"url": "/shop/rings?style=eternity"
+						"url": "/shop/rings?design=Eternity"
 					},
 					{
 						"title": "Solitaire",
-						"url": "/shop/rings?style=solitaire"
+						"url": "/shop/rings?design=Solitaire"
 					},
 					{
 						"title": "Single Shank",
-						"url": "/shop/rings?style=single-shank"
+						"url": "/shop/rings?design=Single-Shank"
 					},
 					{
 						"title": "Double Shank",
-						"url": "/shop/rings?style=double-shank"
+						"url": "/shop/rings?design=Double-Shank"
 					}
 				]
 			},
@@ -86,31 +86,31 @@
 				"rows": [
 					{
 						"title": "Radiant",
-						"url": "/shop/rings?style=radiant"
+						"url": "/shop/rings?shape=Radiant"
 					},
 					{
 						"title": "Pear",
-						"url": "/shop/rings?style=pear"
+						"url": "/shop/rings?shape=Pear"
 					},
 					{
 						"title": "Heart",
-						"url": "/shop/rings?style=heart"
+						"url": "/shop/rings?shape=Heart"
 					},
 					{
 						"title": "Round",
-						"url": "/shop/rings?style=round"
+						"url": "/shop/rings?shape=Round"
 					},
 					{
 						"title": "Marquise",
-						"url": "/shop/rings?style=marquise"
+						"url": "/shop/rings?shape=Marquise"
 					},
 					{
 						"title": "Bezel",
-						"url": "/shop/rings?style=bezel"
+						"url": "/shop/rings?setting=Bezel"
 					},
 					{
 						"title": "Prong",
-						"url": "/shop/rings?style=prong"
+						"url": "/shop/rings?setting=Prong"
 					}
 				]
 			},
@@ -119,19 +119,19 @@
 				"rows": [
 					{
 						"title": "Infinity Collection",
-						"url": "/shop/collections/infinity?type=rings"
+						"url": "/shop/collections/infinity?type=Rings"
 					},
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart?type=rings"
+						"url": "/shop/collections/heart?type=Rings"
 					},
 					{
 						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear?type=rings"
+						"url": "/shop/collections/daily-wear?type=Rings"
 					},
 					{
 						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection?type=rings"
+						"url": "/shop/collections/summer-selection?type=Rings"
 					}
 				]
 			}
@@ -140,15 +140,15 @@
 	{
 		"columns": [
 			{
-				"title": "Style",
+				"title": "Shape",
 				"rows": [
 					{
 						"title": "Studs",
-						"url": "/shop/earrings?style=studs"
+						"url": "/shop/earrings?design=Studs"
 					},
 					{
 						"title": "Hoops",
-						"url": "/shop/earrings?style=hoops"
+						"url": "/shop/earrings?design=Hoops"
 					},
 					{
 						"title": "All Earrings",
@@ -161,23 +161,23 @@
 				"rows": [
 					{
 						"title": "Round",
-						"url": "/shop/earrings?style=round"
+						"url": "/shop/earrings?shape=Round"
 					},
 					{
 						"title": "Bezel",
-						"url": "/shop/earrings?style=bezel"
+						"url": "/shop/earrings?setting=Bezel"
 					},
 					{
 						"title": "Prong",
-						"url": "/shop/earrings?style=prong"
+						"url": "/shop/earrings?shape=Prong"
 					},
 					{
 						"title": "Martini",
-						"url": "/shop/earrings?style=martini"
+						"url": "/shop/earrings?shape=Martini"
 					},
 					{
 						"title": "Fishtail",
-						"url": "/shop/earrings?style=fishtail"
+						"url": "/shop/earrings?setting=Fishtail"
 					}
 				]
 			},
@@ -186,11 +186,11 @@
 				"rows": [
 					{
 						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear?type=earrings"
+						"url": "/shop/collections/daily-wear?type=Earrings"
 					},
 					{
 						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection?type=earrings"
+						"url": "/shop/collections/summer-selection?type=Earrings"
 					}
 				]
 			}
@@ -199,19 +199,19 @@
 	{
 		"columns": [
 			{
-				"title": "Style",
+				"title": "Shape",
 				"rows": [
 					{
 						"title": "Pendant Necklaces",
-						"url": "/shop/necklaces?style=pendant-necklaces"
+						"url": "/shop/necklaces?design=Pendant"
 					},
 					{
 						"title": "Fixed Pendant",
-						"url": "/shop/necklaces?style=fixed-pendant"
+						"url": "/shop/necklaces?design=Fixed"
 					},
 					{
 						"title": "Multi - Pendant",
-						"url": "/shop/necklaces?style=multi-pendant"
+						"url": "/shop/necklaces?design=Station"
 					}
 				]
 			},
@@ -220,23 +220,23 @@
 				"rows": [
 					{
 						"title": "Round",
-						"url": "/shop/necklaces?style=round"
+						"url": "/shop/necklaces?shape=Round"
 					},
 					{
 						"title": "Heart",
-						"url": "/shop/necklaces?style=heart"
+						"url": "/shop/necklaces?shape=Heart"
 					},
 					{
 						"title": "Marquise",
-						"url": "/shop/necklaces?style=marquise"
+						"url": "/shop/necklaces?shape=Marquise"
 					},
 					{
 						"title": "Prong",
-						"url": "/shop/necklaces?style=prong"
+						"url": "/shop/necklaces?shape=Prong"
 					},
 					{
 						"title": "Bezel",
-						"url": "/shop/necklaces?style=bezel"
+						"url": "/shop/necklaces?setting=Bezel"
 					}
 				]
 			},
@@ -245,15 +245,15 @@
 				"rows": [
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart?type=necklaces"
+						"url": "/shop/collections/heart?type=Necklaces"
 					},
 					{
 						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear?type=necklaces"
+						"url": "/shop/collections/daily-wear?type=Necklaces"
 					},
 					{
 						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection?type=necklaces"
+						"url": "/shop/collections/summer-selection?type=Necklaces"
 					}
 				]
 			}
@@ -262,15 +262,15 @@
 	{
 		"columns": [
 			{
-				"title": "Style",
+				"title": "Shape",
 				"rows": [
 					{
 						"title": "Pendant",
-						"url": "/shop/bracelets?style=pendant"
+						"url": "/shop/bracelets?design=Pendant"
 					},
 					{
 						"title": "Fixed Pendant",
-						"url": "/shop/bracelets?style=fixed-pendant"
+						"url": "/shop/bracelets?design=Fixed"
 					},
 					{
 						"title": "All Bracelets",
@@ -283,19 +283,19 @@
 				"rows": [
 					{
 						"title": "Round",
-						"url": "/shop/bracelets?style=round"
+						"url": "/shop/bracelets?shape=Round"
 					},
 					{
 						"title": "Heart",
-						"url": "/shop/bracelets?style=heart"
+						"url": "/shop/bracelets?shape=Heart"
 					},
 					{
 						"title": "Bezel",
-						"url": "/shop/bracelets?style=bezel"
+						"url": "/shop/bracelets?setting=Bezel"
 					},
 					{
 						"title": "Prong",
-						"url": "/shop/bracelets?style=prong"
+						"url": "/shop/bracelets?shape=Prong"
 					}
 				]
 			},
@@ -304,15 +304,15 @@
 				"rows": [
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart?type=bracelets"
+						"url": "/shop/collections/heart?type=Bracelets"
 					},
 					{
 						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear?type=bracelets"
+						"url": "/shop/collections/daily-wear?type=Bracelets"
 					},
 					{
 						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection?type=bracelets"
+						"url": "/shop/collections/summer-selection?type=Bracelets"
 					}
 				]
 			}
