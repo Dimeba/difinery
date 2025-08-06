@@ -19,6 +19,9 @@ import { usePathname } from 'next/navigation'
 // context
 import { useCart } from '@/context/CartContext'
 
+// data
+import submenus from '@/data/submenus.json' with { type: 'json' }
+
 const Header = ({ content }) => {
 	// cart
 	const { setShowCart } = useCart()
@@ -28,6 +31,7 @@ const Header = ({ content }) => {
 	const isScreenWide = useIsScreenWide(1024)
 	const [openMenu, setOpenMenu] = useState(false)
 	const [showSubmenu, setShowSubmenu] = useState(false)
+	const [activeSubmenu, setActiveSubmenu] = useState(null)
 	const pathName = usePathname()
 
 	// Check if the current path is homepage, about or education
@@ -43,18 +47,16 @@ const Header = ({ content }) => {
 	// Submenu Items
 	const categories = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
 
-	const quickLinks = content.quickLinks.map(link => link.fields.title)
-	const occasion = []
+	// Show Submenu
+	const loadSubmenu = submenu => {
+		setActiveSubmenu(submenu)
+		setShowSubmenu(true)
+	}
 
 	// Reseting open menu
 	useEffect(() => {
 		isIntersecting && setOpenMenu(false)
-	}, [isIntersecting])
-
-	// Show Submenu
-	const loadSubmenu = () => {
-		setShowSubmenu(true)
-	}
+	}, [isIntersecting])	
 
 	return (
 		<ClickAwayListener
@@ -173,7 +175,7 @@ const Header = ({ content }) => {
 								href='/shop'
 								aria-label='Link to Shop page.'
 								className={styles.mainMenuLink}
-								onMouseEnter={() => loadSubmenu()}
+								onMouseEnter={() => loadSubmenu(submenus[0].columns)}
 								onClick={() => setOpenMenu(false)}
 							>
 								<p>Shop</p>{' '}
@@ -187,6 +189,7 @@ const Header = ({ content }) => {
 									href={`/shop/${title.toLowerCase()}`}
 									aria-label={`Link to ${title} page.`}
 									className={styles.mainMenuLink}
+									onMouseEnter={() => loadSubmenu(submenus[index + 1].columns)}
 									onClick={() => setOpenMenu(false)}
 								>
 									<p>{title}</p>{' '}
@@ -236,46 +239,22 @@ const Header = ({ content }) => {
 					{/* Submenu */}
 					{content.showDropdownMenu && showSubmenu && (
 						<div className={`container ${styles.subMenu}`}>
-							<div className={styles.column2}>
-								{categories.map((title, index) => (
+							{activeSubmenu && activeSubmenu.map((column) => (
+								<div className={styles.column2} key={column.title}>
+								<p style={{ fontWeight: '600' }}>{column.title}</p>
+								{column.rows.map(row => (
 									<Link
-										key={index}
-										href={`/shop/${title.toLowerCase()}`}
-										aria-label={`Link to ${title} page.`}
+										key={row.title}
+										href={row.url}
+										aria-label={`Link to ${row.title} page.`}
 										className={styles.subMenuLink}
 									>
-										<p>{title}</p>{' '}
+										<p>{row.title}</p>{' '}
 									</Link>
 								))}
 							</div>
-
-							<div className={styles.column2}>
-								<p>Quick Links</p>
-								{quickLinks.map(link => (
-									<Link
-										key={link}
-										href={'/' + link.replace(/ /g, '-').toLowerCase()}
-										aria-label={`Link to ${link} page.`}
-										className={styles.subMenuLink}
-									>
-										<p>{link}</p>{' '}
-									</Link>
-								))}
-							</div>
-
-							<div className={styles.column2}>
-								<p>Shop by Occassion</p>
-								{occasion.map(link => (
-									<Link
-										key={link}
-										href={'/' + link.replace(/ /g, '-').toLowerCase()}
-										aria-label={`Link to ${link} page.`}
-										className={styles.subMenuLink}
-									>
-										<p>{link}</p>{' '}
-									</Link>
-								))}
-							</div>
+								))
+							}
 
 							{content.promotions &&
 								content.promotions.map(promo => (

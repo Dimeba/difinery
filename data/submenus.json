@@ -1,0 +1,321 @@
+[
+	{
+		"columns": [
+			{
+				"title": "Categories",
+				"rows": [
+					{
+						"title": "Rings",
+						"url": "/shop/rings"
+					},
+					{
+						"title": "Earrings",
+						"url": "/shop/earrings"
+					},
+					{
+						"title": "Necklaces",
+						"url": "/shop/necklaces"
+					},
+					{
+						"title": "Bracelets",
+						"url": "/shop/bracelets"
+					}
+				]
+			},
+			{
+				"title": "Quick Links",
+				"rows": [
+					{
+						"title": "FAQ",
+						"url": "/faqs"
+					},
+					{
+						"title": "Shipping",
+						"url": "/shipping"
+					},
+					{
+						"title": "Refund Policy",
+						"url": "/refund-policy"
+					}
+				]
+			},
+			{
+				"title": "Collections",
+				"rows": [
+					{
+						"title": "Heart Collection",
+						"url": "/shop/collections/heart"
+					},
+					{
+						"title": "Infinity Collection",
+						"url": "/shop/collections/infinity"
+					},
+					{
+						"title": "Summer Selection",
+						"url": "/shop/collections/summer-selection"
+					}
+				]
+			}
+		]
+	},
+	{
+		"columns": [
+			{
+				"title": "Style",
+				"rows": [
+					{
+						"title": "Eternity",
+						"url": "/shop/rings?style=eternity"
+					},
+					{
+						"title": "Solitaire",
+						"url": "/shop/rings?style=solitaire"
+					},
+					{
+						"title": "Single Shank",
+						"url": "/shop/rings?style=single-shank"
+					},
+					{
+						"title": "Double Shank",
+						"url": "/shop/rings?style=double-shank"
+					}
+				]
+			},
+			{
+				"title": "Cut & Setting",
+				"rows": [
+					{
+						"title": "Radiant",
+						"url": "/shop/rings?style=radiant"
+					},
+					{
+						"title": "Pear",
+						"url": "/shop/rings?style=pear"
+					},
+					{
+						"title": "Heart",
+						"url": "/shop/rings?style=heart"
+					},
+					{
+						"title": "Round",
+						"url": "/shop/rings?style=round"
+					},
+					{
+						"title": "Marquise",
+						"url": "/shop/rings?style=marquise"
+					},
+					{
+						"title": "Bezel",
+						"url": "/shop/rings?style=bezel"
+					},
+					{
+						"title": "Prong",
+						"url": "/shop/rings?style=prong"
+					}
+				]
+			},
+			{
+				"title": "Collections",
+				"rows": [
+					{
+						"title": "Infinity Collection",
+						"url": "/shop/collections/infinity"
+					},
+					{
+						"title": "Heart Collection",
+						"url": "/shop/collections/heart"
+					},
+					{
+						"title": "Daily Wear",
+						"url": "/shop/collections/daily-wear"
+					},
+					{
+						"title": "Summer Selection",
+						"url": "/shop/collections/summer-selection"
+					}
+				]
+			}
+		]
+	},
+	{
+		"columns": [
+			{
+				"title": "Style",
+				"rows": [
+					{
+						"title": "Studs",
+						"url": "/shop/earrings?style=studs"
+					},
+					{
+						"title": "Hoops",
+						"url": "/shop/earrings?style=hoops"
+					},
+					{
+						"title": "All Earrings",
+						"url": "/shop/earrings"
+					}
+				]
+			},
+			{
+				"title": "Cut & Setting",
+				"rows": [
+					{
+						"title": "Round",
+						"url": "/shop/earrings?style=round"
+					},
+					{
+						"title": "Bezel",
+						"url": "/shop/earrings?style=bezel"
+					},
+					{
+						"title": "Prong",
+						"url": "/shop/earrings?style=prong"
+					},
+					{
+						"title": "Martini",
+						"url": "/shop/earrings?style=martini"
+					},
+					{
+						"title": "Fishtail",
+						"url": "/shop/earrings?style=fishtail"
+					}
+				]
+			},
+			{
+				"title": "Collections",
+				"rows": [
+					{
+						"title": "Daily Wear",
+						"url": "/shop/collections/daily-wear"
+					},
+					{
+						"title": "Summer Selection",
+						"url": "/shop/collections/summer-selection"
+					}
+				]
+			}
+		]
+	},
+	{
+		"columns": [
+			{
+				"title": "Style",
+				"rows": [
+					{
+						"title": "Pendant Necklaces",
+						"url": "/shop/necklaces?style=pendant-necklaces"
+					},
+					{
+						"title": "Fixed Pendant",
+						"url": "/shop/necklaces?style=fixed-pendant"
+					},
+					{
+						"title": "Multi - Pendant",
+						"url": "/shop/necklaces?style=multi-pendant"
+					}
+				]
+			},
+			{
+				"title": "Cut & Setting",
+				"rows": [
+					{
+						"title": "Round",
+						"url": "/shop/necklaces?style=round"
+					},
+					{
+						"title": "Heart",
+						"url": "/shop/necklaces?style=heart"
+					},
+					{
+						"title": "Marquise",
+						"url": "/shop/necklaces?style=marquise"
+					},
+					{
+						"title": "Prong",
+						"url": "/shop/necklaces?style=prong"
+					},
+					{
+						"title": "Bezel",
+						"url": "/shop/necklaces?style=bezel"
+					}
+				]
+			},
+			{
+				"title": "Collections",
+				"rows": [
+					{
+						"title": "Heart Collection",
+						"url": "/shop/collections/heart"
+					},
+					{
+						"title": "Daily Wear",
+						"url": "/shop/collections/daily-wear"
+					},
+					{
+						"title": "Summer Selection",
+						"url": "/shop/collections/summer-selection"
+					}
+				]
+			}
+		]
+	},
+	{
+		"columns": [
+			{
+				"title": "Style",
+				"rows": [
+					{
+						"title": "Pendant",
+						"url": "/shop/bracelets?style=pendant"
+					},
+					{
+						"title": "Fixed Pendant",
+						"url": "/shop/bracelets?style=fixed-pendant"
+					},
+					{
+						"title": "All Bracelets",
+						"url": "/shop/bracelets"
+					}
+				]
+			},
+			{
+				"title": "Cut & Setting",
+				"rows": [
+					{
+						"title": "Round",
+						"url": "/shop/bracelets?style=round"
+					},
+					{
+						"title": "Heart",
+						"url": "/shop/bracelets?style=heart"
+					},
+					{
+						"title": "Bezel",
+						"url": "/shop/bracelets?style=bezel"
+					},
+					{
+						"title": "Prong",
+						"url": "/shop/bracelets?style=prong"
+					}
+				]
+			},
+			{
+				"title": "Collections",
+				"rows": [
+					{
+						"title": "Heart Collection",
+						"url": "/shop/collections/heart"
+					},
+					{
+						"title": "Daily Wear",
+						"url": "/shop/collections/daily-wear"
+					},
+					{
+						"title": "Summer Selection",
+						"url": "/shop/collections/summer-selection"
+					}
+				]
+			}
+		]
+	}
+]
