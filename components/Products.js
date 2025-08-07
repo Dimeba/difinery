@@ -46,6 +46,7 @@ const Products = ({
 	const shape = params.get('shape')
 	const setting = params.get('setting')
 	const design = params.get('design')
+	const style = params.get('style')
 
 	const [items, setItems] = useState(products)
 	const [pageInfo, setPageInfo] = useState(initialPageInfo)
@@ -61,6 +62,7 @@ const Products = ({
 		setting ? setting : 'All'
 	)
 	const [selectedDesign, setSelectedDesign] = useState(design ? design : 'All')
+	const [selectedStyle, setSelectedStyle] = useState(style ? style : 'All')
 	const [searchTerm, setSearchTerm] = useState('')
 
 	const client = useApolloClient()
@@ -119,6 +121,11 @@ const Products = ({
 			updated = updated.filter(p => p.tags?.includes(selectedDesign))
 		}
 
+		if (selectedStyle !== 'All') {
+			const normalizedStyle = selectedStyle.replace(/-/g, ' ')
+			updated = updated.filter(p => p.tags?.includes(normalizedStyle))
+		}
+
 		if (searchTerm) {
 			const term = searchTerm.toLowerCase()
 			updated = updated.filter(p => {
@@ -165,8 +172,17 @@ const Products = ({
 		selectedShape,
 		selectedSetting,
 		selectedDesign,
+		selectedStyle,
 		searchTerm
 	])
+
+	useEffect(() => {
+		setSelectedCategory(type ?? 'All')
+		setSelectedShape(shape ?? 'All')
+		setSelectedSetting(setting ?? 'All')
+		setSelectedDesign(design ?? 'All')
+		setSelectedStyle(style ?? 'All')
+	}, [type, shape, setting, design, style])
 
 	return (
 		<section
@@ -316,6 +332,8 @@ const Products = ({
 					setSelectedSetting={setSelectedSetting}
 					selectedDesign={selectedDesign}
 					setSelectedDesign={setSelectedDesign}
+					selectedStyle={selectedStyle}
+					setSelectedStyle={setSelectedStyle}
 					toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
 					productType={productType}
 				/>

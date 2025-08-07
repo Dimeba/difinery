@@ -65,19 +65,19 @@
 				"rows": [
 					{
 						"title": "Eternity",
-						"url": "/shop/rings?design=Eternity"
+						"url": "/shop/rings?style=Eternity"
 					},
 					{
 						"title": "Solitaire",
-						"url": "/shop/rings?design=Solitaire"
+						"url": "/shop/rings?style=Solitaire"
 					},
 					{
 						"title": "Single Shank",
-						"url": "/shop/rings?design=Single-Shank"
+						"url": "/shop/rings?style=Single-Shank"
 					},
 					{
 						"title": "Double Shank",
-						"url": "/shop/rings?design=Double-Shank"
+						"url": "/shop/rings?style=Double-Shank"
 					}
 				]
 			},
@@ -120,7 +120,7 @@
 				"rows": [
 					{
 						"title": "Studs",
-						"url": "/shop/earrings?design=Studs"
+						"url": "/shop/earrings?design=Stud"
 					},
 					{
 						"title": "Hoops",
@@ -168,7 +168,7 @@
 						"url": "/shop/necklaces?design=Fixed"
 					},
 					{
-						"title": "Multi - Pendant",
+						"title": "Multi Pendant",
 						"url": "/shop/necklaces?design=Station"
 					}
 				]

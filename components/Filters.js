@@ -26,6 +26,8 @@ const Filters = ({
 	setSelectedSetting,
 	selectedDesign,
 	setSelectedDesign,
+	selectedStyle,
+	setSelectedStyle,
 	productType = 'All'
 }) => {
 	const sortOptions = ['Lowest Price', 'Highest Price', 'Newest']
@@ -48,6 +50,7 @@ const Filters = ({
 		productType === 'earrings'
 			? ['All', 'Stud', 'Hoops']
 			: ['All', 'Pendant', 'Station', 'Fixed']
+	const style = ['All', 'Eternity', 'Solitaire', 'Single Shank', 'Double Shank']
 
 	const handleFilter = (filter, value) => {
 		if (filter === 'category') {
@@ -60,6 +63,8 @@ const Filters = ({
 			setSelectedSetting(value)
 		} else if (filter === 'design') {
 			setSelectedDesign(value)
+		} else if (filter === 'style') {
+			setSelectedStyle(value)
 		}
 	}
 
@@ -194,6 +199,25 @@ const Filters = ({
 								}`}
 							>
 								<p>{design}</p>
+							</button>
+						))}
+					</div>
+				</Accordion>
+			)}
+
+			{/* Style */}
+			{productType === 'rings' && (
+				<Accordion title='Style' state={true}>
+					<div className={styles.buttons}>
+						{style.map(style => (
+							<button
+								key={style}
+								onClick={() => handleFilter('style', style)}
+								className={`${style === selectedStyle ? styles.active : ''} ${
+									styles.optionButton
+								}`}
+							>
+								<p>{style}</p>
 							</button>
 						))}
 					</div>
