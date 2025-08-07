@@ -61,7 +61,7 @@
 	{
 		"columns": [
 			{
-				"title": "Shape",
+				"title": "Style",
 				"rows": [
 					{
 						"title": "Eternity",
@@ -82,35 +82,19 @@
 				]
 			},
 			{
-				"title": "Cut & Setting",
+				"title": "Quick Links",
 				"rows": [
 					{
-						"title": "Radiant",
-						"url": "/shop/rings?shape=Radiant"
+						"title": "FAQ",
+						"url": "/faqs"
 					},
 					{
-						"title": "Pear",
-						"url": "/shop/rings?shape=Pear"
+						"title": "Shipping",
+						"url": "/shipping"
 					},
 					{
-						"title": "Heart",
-						"url": "/shop/rings?shape=Heart"
-					},
-					{
-						"title": "Round",
-						"url": "/shop/rings?shape=Round"
-					},
-					{
-						"title": "Marquise",
-						"url": "/shop/rings?shape=Marquise"
-					},
-					{
-						"title": "Bezel",
-						"url": "/shop/rings?setting=Bezel"
-					},
-					{
-						"title": "Prong",
-						"url": "/shop/rings?setting=Prong"
+						"title": "Refund Policy",
+						"url": "/refund-policy"
 					}
 				]
 			},
@@ -124,14 +108,6 @@
 					{
 						"title": "Heart Collection",
 						"url": "/shop/collections/heart?type=Rings"
-					},
-					{
-						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear?type=Rings"
-					},
-					{
-						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection?type=Rings"
 					}
 				]
 			}
@@ -140,7 +116,7 @@
 	{
 		"columns": [
 			{
-				"title": "Shape",
+				"title": "Style",
 				"rows": [
 					{
 						"title": "Studs",
@@ -157,49 +133,31 @@
 				]
 			},
 			{
-				"title": "Cut & Setting",
+				"title": "Quick Links",
 				"rows": [
 					{
-						"title": "Round",
-						"url": "/shop/earrings?shape=Round"
+						"title": "FAQ",
+						"url": "/faqs"
 					},
 					{
-						"title": "Bezel",
-						"url": "/shop/earrings?setting=Bezel"
+						"title": "Shipping",
+						"url": "/shipping"
 					},
 					{
-						"title": "Prong",
-						"url": "/shop/earrings?shape=Prong"
-					},
-					{
-						"title": "Martini",
-						"url": "/shop/earrings?shape=Martini"
-					},
-					{
-						"title": "Fishtail",
-						"url": "/shop/earrings?setting=Fishtail"
+						"title": "Refund Policy",
+						"url": "/refund-policy"
 					}
 				]
 			},
 			{
-				"title": "Collections",
-				"rows": [
-					{
-						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear?type=Earrings"
-					},
-					{
-						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection?type=Earrings"
-					}
-				]
+				"title": "none"
 			}
 		]
 	},
 	{
 		"columns": [
 			{
-				"title": "Shape",
+				"title": "Style",
 				"rows": [
 					{
 						"title": "Pendant Necklaces",
@@ -216,44 +174,28 @@
 				]
 			},
 			{
-				"title": "Cut & Setting",
-				"rows": [
-					{
-						"title": "Round",
-						"url": "/shop/necklaces?shape=Round"
-					},
-					{
-						"title": "Heart",
-						"url": "/shop/necklaces?shape=Heart"
-					},
-					{
-						"title": "Marquise",
-						"url": "/shop/necklaces?shape=Marquise"
-					},
-					{
-						"title": "Prong",
-						"url": "/shop/necklaces?shape=Prong"
-					},
-					{
-						"title": "Bezel",
-						"url": "/shop/necklaces?setting=Bezel"
-					}
-				]
-			},
-			{
 				"title": "Collections",
 				"rows": [
 					{
 						"title": "Heart Collection",
 						"url": "/shop/collections/heart?type=Necklaces"
+					}
+				]
+			},
+			{
+				"title": "Quick Links",
+				"rows": [
+					{
+						"title": "FAQ",
+						"url": "/faqs"
 					},
 					{
-						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear?type=Necklaces"
+						"title": "Shipping",
+						"url": "/shipping"
 					},
 					{
-						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection?type=Necklaces"
+						"title": "Refund Policy",
+						"url": "/refund-policy"
 					}
 				]
 			}
@@ -262,7 +204,7 @@
 	{
 		"columns": [
 			{
-				"title": "Shape",
+				"title": "Style",
 				"rows": [
 					{
 						"title": "Pendant",
@@ -279,40 +221,28 @@
 				]
 			},
 			{
-				"title": "Cut & Setting",
-				"rows": [
-					{
-						"title": "Round",
-						"url": "/shop/bracelets?shape=Round"
-					},
-					{
-						"title": "Heart",
-						"url": "/shop/bracelets?shape=Heart"
-					},
-					{
-						"title": "Bezel",
-						"url": "/shop/bracelets?setting=Bezel"
-					},
-					{
-						"title": "Prong",
-						"url": "/shop/bracelets?shape=Prong"
-					}
-				]
-			},
-			{
 				"title": "Collections",
 				"rows": [
 					{
 						"title": "Heart Collection",
 						"url": "/shop/collections/heart?type=Bracelets"
+					}
+				]
+			},
+			{
+				"title": "Quick Links",
+				"rows": [
+					{
+						"title": "FAQ",
+						"url": "/faqs"
 					},
 					{
-						"title": "Daily Wear",
-						"url": "/shop/collections/daily-wear?type=Bracelets"
+						"title": "Shipping",
+						"url": "/shipping"
 					},
 					{
-						"title": "Summer Selection",
-						"url": "/shop/collections/summer-selection?type=Bracelets"
+						"title": "Refund Policy",
+						"url": "/refund-policy"
 					}
 				]
 			}

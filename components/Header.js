@@ -239,22 +239,27 @@ const Header = ({ content }) => {
 					{/* Submenu */}
 					{content.showDropdownMenu && showSubmenu && (
 						<div className={`container ${styles.subMenu}`}>
-							{activeSubmenu && activeSubmenu.map((column) => (
-								<div className={styles.column2} key={column.title}>
-								<p style={{ fontWeight: '600' }}>{column.title}</p>
-								{column.rows.map(row => (
-									<Link
-										key={row.title}
-										href={row.url}
-										aria-label={`Link to ${row.title} page.`}
-										className={styles.subMenuLink}
-									>
-										<p>{row.title}</p>{' '}
-									</Link>
-								))}
-							</div>
-								))
-							}
+							{activeSubmenu &&
+							activeSubmenu.map(column => {
+								if (column.title === 'none') {
+									return <div className={styles.column2} key={column.title} />
+								}
+								return (
+									<div className={styles.column2} key={column.title}>
+										<p style={{ fontWeight: '600' }}>{column.title}</p>
+										{column.rows.map(row => (
+											<Link
+												key={row.title}
+												href={row.url}
+												aria-label={`Link to ${row.title} page.`}
+												className={styles.subMenuLink}
+											>
+												<p>{row.title}</p>
+											</Link>
+										))}
+									</div>
+								)
+							})}
 
 							{content.promotions &&
 								content.promotions.map(promo => (
