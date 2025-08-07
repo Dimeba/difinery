@@ -108,7 +108,11 @@ const SubscribeForm = () => {
 				</Grid>
 
 				<Grid size={{ xs: 6 }}>
-					<button type='submit' disabled={state.submitting}>
+					<button
+						type='submit'
+						disabled={state.submitting}
+						style={{ width: 'fit-content' }}
+					>
 						Subscribe
 					</button>
 				</Grid>

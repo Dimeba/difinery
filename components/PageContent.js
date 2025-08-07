@@ -5,6 +5,7 @@ import RichText from '@/components/RichText'
 import Columns from './Columns'
 import FAQ from './FAQ'
 import MasonryColumns from './MasonryColumns'
+import SubscribeSection from './SubscribeSection'
 
 const PageContent = ({ content }) => {
 	return (
@@ -81,6 +82,9 @@ const PageContent = ({ content }) => {
 						return null
 				}
 			})}
+
+			{/* Subscribe Section */}
+			<SubscribeSection />
 		</main>
 	)
 }
