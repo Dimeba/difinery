@@ -194,6 +194,19 @@
 		p:after {
 			display: none;
 		}
+
+		.mainMenuUnder {
+			display: flex;
+			flex-direction: column;
+			gap: 0.25rem;
+		}
+
+		.mainMenuUnderLink {
+			p {
+				text-transform: none;
+				letter-spacing: normal;
+			}
+		}
 	}
 
 	.mobileIcon {

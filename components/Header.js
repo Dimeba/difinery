@@ -201,11 +201,11 @@ const Header = ({ content }) => {
 							<Link
 								href='/shop/gift-card'
 								aria-label={`Link to Gift Card page.`}
-								className={`${styles.mainMenuLink} ${styles.mobileLink}`}
+								className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
 								onClick={() => setOpenMenu(false)}
 							>
 								<p>Gift Card</p>
-								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
+								
 							</Link>
 
 							{/* Contentful */}
@@ -216,22 +216,22 @@ const Header = ({ content }) => {
 										'/' + link.fields.title.replace(/ /g, '-').toLowerCase()
 									}
 									aria-label={`Link to ${link.fields.title} page.`}
-									className={styles.mainMenuLink}
+									className={styles.mainMenuUnderLink}
 									onClick={() => setOpenMenu(false)}
 								>
 									<p>{link.fields.title}</p>{' '}
-									<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
+									
 								</Link>
 							))}
 
 							<Link
 								href='/customer-service'
 								aria-label={`Link to Customer Service page.`}
-								className={`${styles.mainMenuLink} ${styles.mobileLink}`}
+								className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
 								onClick={() => setOpenMenu(false)}
 							>
 								<p>Customer Service</p>
-								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
+
 							</Link>
 						</nav>
 					)}
