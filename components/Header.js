@@ -39,8 +39,10 @@ const Header = ({ content }) => {
 	const isAbout = pathName == '/our-story' ? true : false
 	const isEducation = pathName == '/education' ? true : false
 	const isBlankCanvas = pathName == '/blank-canvas' ? true : false
+	const isRecycledGold = pathName == '/recycled-gold' ? true : false
+	const isLabGrown = pathName == '/lab-grown' ? true : false
 
-	const isTransparent = isHomepage || isAbout || isEducation || isBlankCanvas ? true : false
+	const isTransparent = isHomepage || isAbout || isEducation || isBlankCanvas || isRecycledGold || isLabGrown ? true : false
 
 	const transparentMenu =
 		isTransparent && isIntersecting && !showSubmenu && !openMenu
