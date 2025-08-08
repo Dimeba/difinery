@@ -38,8 +38,9 @@ const Header = ({ content }) => {
 	const isHomepage = pathName == '/' ? true : false
 	const isAbout = pathName == '/our-story' ? true : false
 	const isEducation = pathName == '/education' ? true : false
+	const isBlankCanvas = pathName == '/blank-canvas' ? true : false
 
-	const isTransparent = isHomepage || isAbout || isEducation ? true : false
+	const isTransparent = isHomepage || isAbout || isEducation || isBlankCanvas ? true : false
 
 	const transparentMenu =
 		isTransparent && isIntersecting && !showSubmenu && !openMenu
