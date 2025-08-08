@@ -53,6 +53,7 @@ const PageContent = ({ content }) => {
 								title={section.fields.title}
 								showTitle={section.fields.showTitle}
 								stylizedTitle={section.fields.stylizedTitle}
+								subtitle={section.fields.subtitle}
 								gap={section.fields.gap}
 								content={section.fields.columns}
 								fullHeight={section.fields.fullHeight}

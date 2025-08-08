@@ -75,9 +75,9 @@ const SubscribeSection = () => {
                                 alt='Bullet point icon'
                                 width={12}
                                 height={12}
-                                style={{ marginTop: '5px' }}
+                                style={{ marginTop: '7px' }}
                             />
-                            <Typography variant='p'  sx={{textWrap: 'balance'}} color='white'>{bullet}</Typography>
+                            <Typography variant='p' fontFamily={'Newsreader'} fontSize={"18px"}  sx={{textWrap: 'balance'}} color='white'>{bullet}</Typography>
                         </Box>
                     ))}
                 </Box>

@@ -2,6 +2,7 @@
 import styles from './Columns.module.scss'
 
 // components
+import { Box, Typography } from '@mui/material'
 import Column from './Column'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
@@ -13,6 +14,7 @@ const Columns = ({
 	title,
 	showTitle,
 	stylizedTitle,
+	subtitle,
 	marginTop,
 	marginBottom,
 	mobileColumns = 1
@@ -36,9 +38,28 @@ const Columns = ({
 								{documentToReactComponents(stylizedTitle)}
 							</div>
 						) : (
-							<h3 className={styles.sectionTitle}>{title}</h3>
+							<Typography
+								variant='h3'
+								fontWeight={300}
+								marginBottom={subtitle ? 0 : '4rem'}
+							>
+								{title}
+							</Typography>
 						)}
 					</>
+				)}
+
+				{subtitle && (
+					<Box
+						marginBottom={'4rem'}
+						sx={{
+							'& *': {
+								textAlign: 'center'
+							}
+						}}
+					>
+						{documentToReactComponents(subtitle)}
+					</Box>
 				)}
 
 				<div
