@@ -57,9 +57,8 @@ const SubscribeSection = () => {
 				<Image
 					src='/subscribe-image.jpg'
 					alt='Description of image'
-					layout='fill'
-					objectFit='cover'
-                    style={{ zIndex: -1 }}
+					fill
+                    style={{ zIndex: -1, objectFit: 'cover' }}
 				/>
 
                 <Box
@@ -76,9 +75,9 @@ const SubscribeSection = () => {
                                 alt='Bullet point icon'
                                 width={12}
                                 height={12}
-                                style={{ marginTop: '7px' }}
+                                style={{ marginTop: '5px' }}
                             />
-                            <Typography variant='p' fontSize="16px" fontFamily={'Newsreader'} sx={{textWrap: 'balance'}} color='white'>{bullet}</Typography>
+                            <Typography variant='p'  sx={{textWrap: 'balance'}} color='white'>{bullet}</Typography>
                         </Box>
                     ))}
                 </Box>
