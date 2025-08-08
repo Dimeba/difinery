@@ -5,6 +5,8 @@ import styles from './Products.module.scss'
 import productStyles from './ProductInfo.module.scss'
 
 // components
+import Image from 'next/image'
+import Video from './Video'
 import ProductCard from './ProductCard'
 import Filters from './Filters'
 import { LuSettings2 } from 'react-icons/lu'
@@ -39,7 +41,8 @@ const Products = ({
 	individual = false,
 	products = [],
 	initialPageInfo = {},
-	productType = ''
+	productType = '',
+	collectionPreview = null
 }) => {
 	const params = useSearchParams()
 	const type = params.get('type')
@@ -268,6 +271,64 @@ const Products = ({
 					<div
 						className={`${styles.products} ${!individual ? styles.gap : ''}`}
 					>
+						{collectionPreview && (
+							<Box
+								gridColumn={{ xs: 'span 12', lg: 'span 6' }}
+								gridRow={'span 2'}
+								position='relative'
+							>
+								{collectionPreview.media.fields.file.contentType.includes(
+									'video'
+								) ? (
+									<Box position='relative' height='100%'>
+										<Video
+											style={{
+												objectFit: 'cover !important',
+												minHeight: '100%',
+												minWidth: '100%'
+											}}
+											video={collectionPreview.media}
+											autoPlay
+										/>
+									</Box>
+								) : (
+									<Image
+										src={'https:' + collectionPreview.media.fields.file.url}
+										alt={collectionPreview.title}
+										fill
+										style={{ objectFit: 'cover' }}
+									/>
+								)}
+
+								<Box
+									position='absolute'
+									top={0}
+									width='100%'
+									padding={{ xs: '2rem', lg: '4rem' }}
+									paddingBottom={{ xs: '4rem', lg: '8rem' }}
+									sx={{
+										background:
+											'linear-gradient(180deg,rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%)'
+									}}
+								>
+									<Typography
+										variant='h2'
+										textAlign={{ xs: 'center', lg: 'left' }}
+										color='white'
+									>
+										{collectionPreview.title}
+									</Typography>
+									<Typography
+										variant='h4'
+										textAlign={{ xs: 'center', lg: 'left' }}
+										color='white'
+									>
+										Collection
+									</Typography>
+								</Box>
+							</Box>
+						)}
+
 						{!recommendedProducts &&
 							filteredItems
 								.filter(item => item.availableForSale)

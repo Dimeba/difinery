@@ -44,11 +44,11 @@
 				"rows": [
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart"
+						"url": "/shop/collections/heart-collection"
 					},
 					{
 						"title": "Infinity Collection",
-						"url": "/shop/collections/infinity"
+						"url": "/shop/collections/infinity-collection"
 					},
 					{
 						"title": "Summer Selection",
@@ -103,11 +103,11 @@
 				"rows": [
 					{
 						"title": "Infinity Collection",
-						"url": "/shop/collections/infinity?type=Rings"
+						"url": "/shop/collections/infinity-collection?type=Rings"
 					},
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart?type=Rings"
+						"url": "/shop/collections/heart-collection?type=Rings"
 					}
 				]
 			}
@@ -178,7 +178,7 @@
 				"rows": [
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart?type=Necklaces"
+						"url": "/shop/collections/heart-collection?type=Necklaces"
 					}
 				]
 			},
@@ -225,7 +225,7 @@
 				"rows": [
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart?type=Bracelets"
+						"url": "/shop/collections/heart-collection?type=Bracelets"
 					}
 				]
 			},

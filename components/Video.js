@@ -13,7 +13,13 @@ import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined'
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { useState } from 'react'
 
-const Video = ({ video, showControls, autoPlay = false, mute = true }) => {
+const Video = ({
+	video,
+	showControls,
+	autoPlay = false,
+	mute = true,
+	style
+}) => {
 	const options = {
 		root: null,
 		rootMargin: '0%',
@@ -50,7 +56,7 @@ const Video = ({ video, showControls, autoPlay = false, mute = true }) => {
 				muted={mute}
 				playsInline
 				preload='auto'
-				style={{ width: '100%' }}
+				style={{ width: '100%', ...style }}
 			>
 				{isIntersecting && (
 					<source src={'https:' + video.fields.file.url} type='video/mp4' />
