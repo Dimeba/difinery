@@ -58,9 +58,7 @@ const Video = ({
 				preload='auto'
 				style={{ width: '100%', ...style }}
 			>
-				{isIntersecting && (
-					<source src={'https:' + video.fields.file.url} type='video/mp4' />
-				)}
+				<source src={'https:' + video.fields.file.url} type='video/mp4' />
 			</video>
 
 			{/* Video Controls */}
