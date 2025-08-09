@@ -102,15 +102,15 @@ const Products = ({
 			updated = updated.filter(p => p.category.name === selectedCategory)
 		}
 
-		if (selectedMetalType) {
-			updated = updated.filter(p =>
-				p.options?.some(opt =>
-					opt.values.some(value =>
-						value.toLowerCase().includes(selectedMetalType.toLowerCase())
-					)
-				)
-			)
-		}
+		// if (selectedMetalType) {
+		// 	updated = updated.filter(p =>
+		// 		p.options?.some(opt =>
+		// 			opt.values.some(value =>
+		// 				value.toLowerCase().includes(selectedMetalType.toLowerCase())
+		// 			)
+		// 		)
+		// 	)
+		// }
 
 		if (selectedShape !== 'All') {
 			updated = updated.filter(p => p.tags?.includes(selectedShape))

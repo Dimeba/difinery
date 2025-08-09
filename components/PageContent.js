@@ -6,6 +6,7 @@ import Columns from './Columns'
 import FAQ from './FAQ'
 import MasonryColumns from './MasonryColumns'
 import SubscribeSection from './SubscribeSection'
+import SplitFeatures from './SplitFeatures'
 
 const PageContent = ({ content }) => {
 	return (
@@ -76,6 +77,19 @@ const PageContent = ({ content }) => {
 							<MasonryColumns
 								key={section.sys.id}
 								content={section.fields.columns}
+							/>
+						)
+					case 'splitFeatures':
+						return (
+							<SplitFeatures
+								key={section.sys.id}
+								title={section.fields.title}
+								row1title={section.fields.row1title}
+								row1={section.fields.row1}
+								row2Title={section.fields.row2Title}
+								row2={section.fields.row2}
+								row3Title={section.fields.row3Title}
+								row3={section.fields.row3}
 							/>
 						)
 
