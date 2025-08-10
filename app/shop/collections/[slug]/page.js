@@ -7,6 +7,7 @@ import { Suspense } from 'react'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
 import { getEntries } from '@/lib/contentful'
+import { notFound } from 'next/navigation'
 
 // Contentful
 const collections = await getEntries('collection')
@@ -30,19 +31,22 @@ export async function generateMetadata(props) {
 	const params = await props.params
 	const { slug } = params
 
-	const content = collections.items.find(
+	const matched = collections.items.find(
 		collection =>
 			collection.fields.title
 				.toLowerCase()
 				.replace(/[^a-zA-Z0-9 ]/g, '')
 				.replace(/&/g, '')
-				.replace(/ /g, '-') == slug
-	).fields
+				.replace(/ /g, '-') === slug
+	)
 
+	if (!matched) {
+		return { title: 'Difinery | Page not found' }
+	}
+
+	const content = matched.fields
 	return {
 		title: 'Difinery | ' + content.title
-		// description: content.description ? content.description : '',
-		// keywords: content.keywords ? content.keywords : ''
 	}
 }
 
@@ -50,14 +54,20 @@ export default async function Page(props) {
 	const params = await props.params
 	const { slug } = params
 
-	const content = collections.items.find(
+	const matched = collections.items.find(
 		collection =>
 			collection.fields.title
 				.toLowerCase()
 				.replace(/[^a-zA-Z0-9 ]/g, '')
 				.replace(/&/g, '')
-				.replace(/ /g, '-') == slug
-	).fields
+				.replace(/ /g, '-') === slug
+	)
+
+	if (!matched) {
+		notFound()
+	}
+
+	const content = matched.fields
 
 	const { data } = await apolloClient.query({
 		query: GET_COLLECTION_BY_HANDLE,

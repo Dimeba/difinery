@@ -5,6 +5,7 @@ import { getEntries } from '@/lib/contentful'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
+import { notFound } from 'next/navigation'
 
 const { data } = await apolloClient.query({
 	query: GET_PRODUCTS,
@@ -33,6 +34,10 @@ export async function generateMetadata(props) {
 	})
 	const product = data.productByHandle
 
+	if (!product) {
+		return { title: 'Difinery | Product not found' }
+	}
+
 	return {
 		title: 'Difinery | ' + product.title,
 		description: product.description ? product.description : ''
@@ -54,13 +59,18 @@ export default async function Product(props) {
 		variables: { handle: slug }
 	})
 	const product = data.productByHandle
+	if (!product) {
+		notFound()
+	}
 
-	// Recommended products
-	const recommendedProductIds = product.metafield.value
-
-	const recommendedProducts = products.filter(item => {
-		return recommendedProductIds.includes(item.id)
-	})
+	// Recommended products (guard metafield)
+	let recommendedProducts = []
+	if (product.metafield?.value) {
+		const recommendedProductIds = product.metafield.value
+		recommendedProducts = products.filter(item =>
+			recommendedProductIds.includes(item.id)
+		)
+	}
 
 	return (
 		<ProductPageLayout
