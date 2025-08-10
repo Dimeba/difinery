@@ -18,6 +18,7 @@ const Video = ({
 	showControls,
 	autoPlay = false,
 	mute = true,
+	placeholder = null,
 	style
 }) => {
 	const options = {
@@ -52,6 +53,9 @@ const Video = ({
 			<video
 				ref={targetRef}
 				autoPlay={autoPlay}
+				poster={
+					placeholder ? 'https:' + placeholder.fields.file.url : undefined
+				}
 				loop
 				muted={mute}
 				playsInline

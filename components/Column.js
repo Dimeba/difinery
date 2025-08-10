@@ -111,6 +111,7 @@ const Column = async ({
 				<Video
 					video={content.fields.media}
 					// showControls={content.fields.showControls}
+					placeholder={content.fields.mediaPlaceholder}
 					showControls={content.fields.showVideoControls || false}
 					autoPlay={content.fields.autoPlay || false}
 					mute={content.fields.mute}
