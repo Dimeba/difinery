@@ -278,12 +278,17 @@ const Products = ({
 										/>
 									</Box>
 								) : (
-									<Image
-										src={'https:' + collectionPreview.media.fields.file.url}
-										alt={collectionPreview.title}
-										fill
-										style={{ objectFit: 'cover' }}
-									/>
+									<Box
+										position='relative'
+										minHeight={{ xs: '60vh', lg: '100%' }}
+									>
+										<Image
+											src={'https:' + collectionPreview.media.fields.file.url}
+											alt={collectionPreview.title}
+											fill
+											style={{ objectFit: 'cover' }}
+										/>
+									</Box>
 								)}
 
 								<Box
