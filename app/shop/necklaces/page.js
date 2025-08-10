@@ -21,7 +21,7 @@ export const metadata = {
 export default async function Home() {
 	const { data } = await apolloClient.query({
 		query: GET_COLLECTION_BY_HANDLE,
-		variables: { handle: 'necklaces', first: 16, after: null }
+		variables: { handle: 'necklaces', first: 250, after: null }
 	})
 
 	const initialEdges = data.collectionByHandle?.products.edges

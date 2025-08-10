@@ -19,9 +19,10 @@ export const metadata = {
 }
 
 export default async function Home() {
+	// Fetch the maximum batch (Shopify cap 250) so filtering works client-side on full dataset
 	const { data } = await apolloClient.query({
 		query: GET_PRODUCTS,
-		variables: { first: 16, after: null }
+		variables: { first: 250, after: null }
 	})
 
 	const initialEdges = data.products.edges

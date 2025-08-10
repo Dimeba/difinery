@@ -61,7 +61,7 @@ export default async function Page(props) {
 
 	const { data } = await apolloClient.query({
 		query: GET_COLLECTION_BY_HANDLE,
-		variables: { handle: content.handle, first: 16, after: null }
+		variables: { handle: content.handle, first: 250, after: null }
 	})
 
 	const initialEdges = data.collectionByHandle?.products.edges

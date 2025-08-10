@@ -26,11 +26,6 @@ import { useState, useEffect, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 
-// lib
-import { GET_PRODUCTS } from '@/lib/queries/getProducts'
-import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
-import { useApolloClient } from '@apollo/client'
-
 const Products = ({
 	title = '',
 	stylizedTitle,
@@ -40,7 +35,6 @@ const Products = ({
 	showFilters = false,
 	individual = false,
 	products = [],
-	initialPageInfo = {},
 	productType = '',
 	collectionPreview = null
 }) => {
@@ -51,8 +45,7 @@ const Products = ({
 	const design = params.get('design')
 	const style = params.get('style')
 
-	const [items, setItems] = useState(products)
-	const [pageInfo, setPageInfo] = useState(initialPageInfo)
+	// All products are already fetched; maintain only filtered + visible slices
 	const [filteredItems, setFilteredItems] = useState(products)
 	const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
@@ -68,35 +61,18 @@ const Products = ({
 	const [selectedStyle, setSelectedStyle] = useState(style ? style : 'All')
 	const [searchTerm, setSearchTerm] = useState('')
 
-	const client = useApolloClient()
 	const isMobile = useMediaQuery('(max-width: 1024px)')
 	const anchorRef = useRef(null)
 
-	const loadMore = async () => {
-		if (!pageInfo.hasNextPage) return
-		const { data } = await client.query({
-			query: productType === 'all' ? GET_PRODUCTS : GET_COLLECTION_BY_HANDLE,
-			variables:
-				productType === 'all'
-					? { first: 16, after: pageInfo.endCursor }
-					: { handle: productType, first: 16, after: pageInfo.endCursor }
-		})
-
-		const newEdges =
-			productType === 'all'
-				? data.products.edges
-				: data.collectionByHandle.products.edges
-		setItems(prev => [...prev, ...newEdges.map(edge => edge.node)])
-		setPageInfo(
-			productType === 'all'
-				? data.products.pageInfo
-				: data.collectionByHandle.products.pageInfo
-		)
+	// client-side pagination count
+	const [visibleCount, setVisibleCount] = useState(16)
+	const loadMore = () => {
+		setVisibleCount(vc => Math.min(vc + 16, filteredItems.length))
 	}
 
 	// Filter & sort
 	useEffect(() => {
-		let updated = [...items]
+		let updated = [...products]
 
 		if (selectedCategory !== 'All') {
 			updated = updated.filter(p => p.category.name === selectedCategory)
@@ -168,7 +144,7 @@ const Products = ({
 
 		setFilteredItems(updated)
 	}, [
-		items,
+		products,
 		selectedSort,
 		selectedCategory,
 		selectedMetalType,
@@ -201,7 +177,7 @@ const Products = ({
 				{showTitle && title && !stylizedTitle && <h3>{title}</h3>}
 
 				{/* Search and Filters toggle */}
-				{showFilters && items.length > 0 && (
+				{showFilters && products.length > 0 && (
 					<Box
 						width='100%'
 						display='flex'
@@ -332,6 +308,7 @@ const Products = ({
 						{!recommendedProducts &&
 							filteredItems
 								.filter(item => item.availableForSale)
+								.slice(0, visibleCount)
 								.map(product => (
 									<ProductCard
 										key={product.id}
@@ -361,8 +338,8 @@ const Products = ({
 				</div>
 			</div>
 
-			{/* “Load more” button */}
-			{pageInfo.hasNextPage && (
+			{/* “Load more” button: determine by filteredItems length vs visibleCount */}
+			{filteredItems.length > visibleCount && (
 				<Box textAlign='center' mt={4}>
 					<button
 						onClick={loadMore}
@@ -380,7 +357,6 @@ const Products = ({
 				anchorEl={anchorRef.current}
 			>
 				<Filters
-					items={items}
 					selectedSort={selectedSort}
 					setSelectedSort={setSelectedSort}
 					selectedCategory={selectedCategory}

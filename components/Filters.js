@@ -8,11 +8,7 @@ import Image from 'next/image'
 import Accordion from './Accordion'
 import { IoClose } from 'react-icons/io5'
 
-// hooks
-import { useState, useEffect } from 'react'
-
 const Filters = ({
-	items,
 	selectedSort,
 	setSelectedSort,
 	selectedCategory,
