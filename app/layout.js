@@ -20,6 +20,7 @@ import MUIProviders from '@/components/MUIProviders'
 
 const header = await getEntries('header')
 const footer = await getEntries('footer')
+const collections = await getEntries('collection')
 
 export const metadata = {
 	icons: {
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
 	// Header
 	const headerContent = header.items[0].fields
 	const footerContent = footer.items[0].fields
+	const collectionsContent = collections.items
 
 	return (
 		<html lang='en'>
@@ -45,7 +47,10 @@ export default function RootLayout({ children }) {
 						<AppRouterCacheProvider>
 							<MUIProviders>
 								<Cart />
-								<Header content={headerContent} />
+								<Header
+									content={headerContent}
+									collectionsContent={collectionsContent}
+								/>
 								{children}
 								<Footer content={footerContent} />
 							</MUIProviders>

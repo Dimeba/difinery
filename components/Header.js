@@ -7,7 +7,7 @@ import styles from './Header.module.scss'
 import { Box, ClickAwayListener, Typography } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
-import { FiShoppingBag, FiUser, FiArrowRight } from 'react-icons/fi'
+import { FiShoppingBag, FiUser, FiArrowRight, FiArrowDown, FiArrowUp } from 'react-icons/fi'
 import { Spin as Hamburger } from 'hamburger-react'
 
 // hooks
@@ -22,7 +22,7 @@ import { useCart } from '@/context/CartContext'
 // data
 import submenus from '@/data/submenus.json' with { type: 'json' }
 
-const Header = ({ content }) => {
+const Header = ({ content, collectionsContent }) => {
 	// cart
 	const { setShowCart } = useCart()
 
@@ -32,6 +32,7 @@ const Header = ({ content }) => {
 	const [openMenu, setOpenMenu] = useState(false)
 	const [showSubmenu, setShowSubmenu] = useState(false)
 	const [activeSubmenu, setActiveSubmenu] = useState(null)
+	const [showCollections, setShowCollections] = useState(false)
 	const pathName = usePathname()
 
 	// Check if the current path is homepage, about or education
@@ -199,6 +200,44 @@ const Header = ({ content }) => {
 									<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
 								</Link>
 							))}
+
+							{/* Collections */}
+							<Box
+								display={{ xs: 'flex', lg: 'none' }}
+								flexDirection='column'
+								gap='1rem'
+								className={styles.mainMenuLink}
+								onClick={() => setShowCollections(!showCollections)}
+							>
+								<Box display='flex' alignItems='center' justifyContent='space-between' width='100%'>
+									<p>Collections</p>
+										{showCollections ? (
+											<FiArrowUp className={styles.mobileIcon} strokeWidth={1} />
+										) : (
+											<FiArrowDown className={styles.mobileIcon} strokeWidth={1} />
+										)}
+								</Box>
+
+								{showCollections && 
+									<Box display='flex' flexDirection='column' gap='0.5rem'>
+										{collectionsContent.map(collection => (
+											<Link
+												key={collection.sys.id}
+												href={`/shop/collections/${collection.fields.title
+													.toLowerCase()
+													.replace(/[^a-zA-Z0-9 ]/g, '')
+													.replace(/&/g, '')
+													.replace(/ /g, '-')}`}
+												aria-label={`Link to ${collection.fields.title} collection.`}
+												className={styles.mainMenuUnderLink}
+												onClick={() => setOpenMenu(false)}
+											>
+												<p>{collection.fields.title}</p>
+											</Link>
+										))}
+									</Box>
+								}
+							</Box>
 
 							{/* Gift Card */}
 							<Link
