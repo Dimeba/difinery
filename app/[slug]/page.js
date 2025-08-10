@@ -1,5 +1,6 @@
 // components
 import PageContent from '@/components/PageContent'
+import { notFound } from 'next/navigation'
 
 // lib
 import { getEntries } from '@/lib/contentful'
@@ -7,31 +8,36 @@ import { getEntries } from '@/lib/contentful'
 // Fetch pages at build time
 const pages = await getEntries('page')
 
+// helper to keep slug generation consistent in one place
+const slugify = title =>
+	title
+		.toLowerCase()
+		.replace(/[^a-z0-9 ]/gi, '') // allow alnum + space only
+		.replace(/&/g, '')
+		.trim()
+		.replace(/ +/g, '-')
+
 // Function to generate static params for dynamic routing
 export async function generateStaticParams() {
 	return pages.items
 		.filter(p => p.fields.dontRender !== true)
-		.map(page => ({
-			slug: page.fields.title
-				.toLowerCase()
-				.replace(/[^a-zA-Z0-9 ]/g, '')
-				.replace(/&/g, '')
-				.replace(/ /g, '-')
-		}))
+		.map(page => ({ slug: slugify(page.fields.title) }))
 }
 
 export async function generateMetadata(props) {
 	const params = await props.params
 	const { slug } = params
 
-	const content = pages.items.find(
-		page =>
-			page.fields.title
-				.toLowerCase()
-				.replace(/[^a-zA-Z0-9 ]/g, '')
-				.replace(/&/g, '')
-				.replace(/ /g, '-') == slug
-	).fields
+	const matchedPage = pages.items.find(
+		page => slugify(page.fields.title) === slug
+	)
+
+	if (!matchedPage) {
+		// let Next render the 404 page metadata
+		return { title: 'Difinery | Page not found' }
+	}
+
+	const content = matchedPage.fields
 
 	return {
 		title: 'Difinery | ' + content.title,
@@ -45,14 +51,15 @@ export default async function Page(props) {
 	const params = await props.params
 	const { slug } = params
 
-	const content = pages.items.find(
-		page =>
-			page.fields.title
-				.toLowerCase()
-				.replace(/[^a-zA-Z0-9 ]/g, '')
-				.replace(/&/g, '')
-				.replace(/ /g, '-') == slug
-	).fields
+	const matchedPage = pages.items.find(
+		page => slugify(page.fields.title) === slug
+	)
+
+	if (!matchedPage) {
+		notFound()
+	}
+
+	const content = matchedPage.fields
 
 	return <PageContent content={content} />
 }
