@@ -26,6 +26,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 
+const EMPTY_PRODUCTS = []
+
 const Products = ({
 	title = '',
 	stylizedTitle,
@@ -34,7 +36,7 @@ const Products = ({
 	recommendedProducts,
 	showFilters = false,
 	individual = false,
-	products = [],
+	products, // allow undefined; avoid new [] each render causing effect loop
 	productType = '',
 	collectionPreview = null
 }) => {
@@ -45,8 +47,16 @@ const Products = ({
 	const design = params.get('design')
 	const style = params.get('style')
 
+	// Stable base products list (empty singleton when undefined)
+	const productsList = products ?? EMPTY_PRODUCTS
+
 	// All products are already fetched; maintain only filtered + visible slices
-	const [filteredItems, setFilteredItems] = useState(products)
+	const [filteredItems, setFilteredItems] = useState(productsList)
+
+	// Sync when incoming products prop first arrives or length changes
+	useEffect(() => {
+		setFilteredItems(productsList)
+	}, [productsList])
 	const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
 	// filters state
@@ -72,7 +82,7 @@ const Products = ({
 
 	// Filter & sort
 	useEffect(() => {
-		let updated = [...products]
+		let updated = [...productsList]
 
 		if (selectedCategory !== 'All') {
 			updated = updated.filter(p => p.category.name === selectedCategory)
@@ -144,7 +154,7 @@ const Products = ({
 
 		setFilteredItems(updated)
 	}, [
-		products,
+		productsList,
 		selectedSort,
 		selectedCategory,
 		selectedMetalType,
@@ -177,7 +187,7 @@ const Products = ({
 				{showTitle && title && !stylizedTitle && <h3>{title}</h3>}
 
 				{/* Search and Filters toggle */}
-				{showFilters && products.length > 0 && (
+				{showFilters && productsList.length > 0 && (
 					<Box
 						width='100%'
 						display='flex'
