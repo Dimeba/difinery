@@ -25,6 +25,8 @@ const ProductOptionsUI = ({
 	isGiftCard = false,
 	selectedColor,
 	setSelectedColor,
+	selectedShape,
+	setSelectedShape,
 	matchingVariant,
 	setMatchingVariant,
 	engraving,
@@ -78,9 +80,11 @@ const ProductOptionsUI = ({
 		// 3) advance to next dropdown
 		setOpenOption(index + 1)
 
-		// 4) set selected color if applicable
+		// 4) set selected color/shape if applicable (to drive image filtering)
 		if (optionName === 'Metal') {
 			setSelectedColor(value)
+		} else if (optionName.toLowerCase() === 'diamond shape') {
+			setSelectedShape(value)
 		}
 	}
 
@@ -93,8 +97,10 @@ const ProductOptionsUI = ({
 		setShowOrderSummary(false)
 
 		if (optionName === 'Metal') {
-			setSelectedColor(null)
-		}
+				setSelectedColor(null)
+			} else if (optionName.toLowerCase() === 'diamond shape') {
+				setSelectedShape(null)
+			}
 	}
 
 	const allOptionsSelected =

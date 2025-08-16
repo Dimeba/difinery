@@ -48,48 +48,73 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const [boxText, setBoxText] = useState('')
 	const [boxVariant, setBoxVariant] = useState(null)
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
+	const [selectedShape, setSelectedShape] = useState(null)
 
 	const images = useMemo(() => {
-		if (!selectedColor) {
-			// No color chosen yet, show all images
-			return allImages.filter(
-				node => !node.url.toLowerCase().includes('-review')
-			)
+		const urlFilter = node => {
+			const url = node.url.toLowerCase()
+			if (url.includes('-review')) return false
+
+			// Color code
+			let matchesColor = true
+			if (selectedColor) {
+				const lc = selectedColor.toLowerCase()
+				const colorCode = lc.includes('white')
+					? 'w'
+					: lc.includes('yellow')
+					? 'y'
+					: ''
+				if (colorCode) {
+					matchesColor = url.includes(`/files/${colorCode}`)
+				}
+			}
+
+			// Shape code
+			let matchesShape = true
+			if (selectedShape) {
+				const sc = selectedShape.toLowerCase()
+				const shapeCode = sc.includes('heart')
+					? '-hr-'
+					: sc.includes('pear')
+					? '-pr-'
+					: ''
+				if (shapeCode) {
+					matchesShape = url.includes(shapeCode)
+				}
+			}
+
+			return matchesColor && matchesShape
 		}
 
-		// Decide code letter based on selection (W for White, Y for Yellow)
-		const lc = selectedColor.toLowerCase()
-		let code = ''
-		if (lc.includes('white')) code = 'w'
-		else if (lc.includes('yellow')) code = 'y'
-
-		// Filter URLs by matching "/files/{code}" case-insensitively
-		return code
-			? allImages.filter(
-					node =>
-						node.url.toLowerCase().includes(`/files/${code}`) &&
-						!node.url.toLowerCase().includes('-review')
-			  )
-			: allImages.filter(node => !node.url.toLowerCase().includes('-review'))
-	}, [allImages, selectedColor])
+		return allImages.filter(urlFilter)
+	}, [allImages, selectedColor, selectedShape])
 
 	const reviewImage = useMemo(() => {
-		if (!selectedColor) {
-			// No color chosen yet, show all images
-			return allImages.find(node => node.url.toLowerCase().includes('-review'))
-		}
+		const url = node => node.url.toLowerCase()
 
-		const lc = selectedColor.toLowerCase()
-		let code = ''
-		if (lc.includes('white')) code = 'w'
-		else if (lc.includes('yellow')) code = 'y'
+		const colorCode = selectedColor
+			? selectedColor.toLowerCase().includes('white')
+				? 'w'
+				: selectedColor.toLowerCase().includes('yellow')
+				? 'y'
+				: ''
+			: ''
+		const shapeCode = selectedShape
+			? selectedShape.toLowerCase().includes('heart')
+				? '-hr-'
+				: selectedShape.toLowerCase().includes('pear')
+				? '-pr-'
+				: ''
+			: ''
 
-		return allImages.find(
-			node =>
-				node.url.toLowerCase().includes(`/files/${code}`) &&
-				node.url.toLowerCase().includes('-review')
-		)
-	}, [allImages])
+		return allImages.find(node => {
+			const u = url(node)
+			if (!u.includes('-review')) return false
+			const colorOk = colorCode ? u.includes(`/files/${colorCode}`) : true
+			const shapeOk = shapeCode ? u.includes(shapeCode) : true
+			return colorOk && shapeOk
+		})
+	}, [allImages, selectedColor, selectedShape])
 
 	const handleAddToCart = async () => {
 		const customFields = []
@@ -158,7 +183,12 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 									alt='Image of the product.'
 									quality={100}
 									sizes='(max-width: 768px) 100vw, 50vw'
-									style={{ objectFit: isGiftCard ? 'cover' : 'contain' }}
+									style={{
+										objectFit:
+											isGiftCard || image.url.includes('.jpg')
+												? 'cover'
+												: 'contain'
+									}}
 								/>
 							</div>
 						)
@@ -170,6 +200,8 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 					isGiftCard={isGiftCard}
 					selectedColor={selectedColor}
 					setSelectedColor={setSelectedColor}
+					selectedShape={selectedShape}
+					setSelectedShape={setSelectedShape}
 					matchingVariant={matchingVariant}
 					setMatchingVariant={setMatchingVariant}
 					engraving={engraving}

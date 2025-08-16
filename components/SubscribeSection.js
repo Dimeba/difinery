@@ -55,13 +55,16 @@ const SubscribeSection = () => {
                 alignItems={ 'center' }
             >
 				<Image
-					src='/subscribe-image.jpg'
+					src='/subscribe-image.png'
 					alt='Description of image'
 					fill
                     style={{ zIndex: -1, objectFit: 'cover' }}
 				/>
 
+				<Box height="100%" width="100%" position='absolute' sx={{backgroundColor: 'rgba(0,0,0,0.25)'}}></Box>
+
                 <Box
+					zIndex={2}
                     maxWidth={1440 / 2}
 					width={{ xs: '90vw', lg: '45vw' }}
 					paddingLeft={{ xs: 0, lg: '4rem' }}
