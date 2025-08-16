@@ -156,16 +156,29 @@
 				"title": "Style",
 				"rows": [
 					{
-						"title": "Pendant Necklaces",
-						"url": "/shop/necklaces?design=Pendant"
+						"title": "Solitaire Pendant Necklaces",
+						"url": "/shop/necklaces?design=Solitaire"
 					},
 					{
-						"title": "Fixed Pendant",
-						"url": "/shop/necklaces?design=Fixed"
+						"title": "Multi-Pendant Necklaces",
+						"url": "/shop/necklaces?design=Multi"
+					}
+				]
+			},
+			{
+				"title": "Quick Links",
+				"rows": [
+					{
+						"title": "FAQ",
+						"url": "/faqs"
 					},
 					{
-						"title": "Multi Pendant",
-						"url": "/shop/necklaces?design=Station"
+						"title": "Shipping",
+						"url": "/shipping"
+					},
+					{
+						"title": "Refund Policy",
+						"url": "/refund-policy"
 					}
 				]
 			},
@@ -177,23 +190,6 @@
 						"url": "/shop/collections/heart-collection?type=Necklaces"
 					}
 				]
-			},
-			{
-				"title": "Quick Links",
-				"rows": [
-					{
-						"title": "FAQ",
-						"url": "/faqs"
-					},
-					{
-						"title": "Shipping",
-						"url": "/shipping"
-					},
-					{
-						"title": "Refund Policy",
-						"url": "/refund-policy"
-					}
-				]
 			}
 		]
 	},
@@ -203,25 +199,12 @@
 				"title": "Style",
 				"rows": [
 					{
-						"title": "Pendant",
-						"url": "/shop/bracelets?design=Pendant"
+						"title": "Solitaire Pendant Bracelets",
+						"url": "/shop/bracelets?design=Solitaire"
 					},
 					{
-						"title": "Fixed Pendant",
-						"url": "/shop/bracelets?design=Fixed"
-					},
-					{
-						"title": "All Bracelets",
-						"url": "/shop/bracelets"
-					}
-				]
-			},
-			{
-				"title": "Collections",
-				"rows": [
-					{
-						"title": "Heart Collection",
-						"url": "/shop/collections/heart-collection?type=Bracelets"
+						"title": "Multi-Pendant Bracelets",
+						"url": "/shop/bracelets?design=Multi"
 					}
 				]
 			},
@@ -239,6 +222,15 @@
 					{
 						"title": "Refund Policy",
 						"url": "/refund-policy"
+					}
+				]
+			},
+			{
+				"title": "Collections",
+				"rows": [
+					{
+						"title": "Heart Collection",
+						"url": "/shop/collections/heart-collection?type=Bracelets"
 					}
 				]
 			}
