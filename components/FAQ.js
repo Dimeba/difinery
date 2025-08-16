@@ -5,16 +5,14 @@ import styles from './FAQ.module.scss'
 import Accordion from './Accordion'
 
 // contentful
-import { getEntry } from '@/lib/contentful'
+import { getEntriesByIds } from '@/lib/contentful'
 
 const FAQ = async ({ title, content, productDetails }) => {
 	const rows = []
-
-	if (content) {
-		for (const item of content) {
-			const entry = await getEntry(item.sys.id)
-			rows.push(entry.fields)
-		}
+	if (content && content.length) {
+		const ids = content.map(c => c.sys.id)
+		const { items } = await getEntriesByIds(ids)
+		items.forEach(entry => rows.push(entry.fields))
 	}
 
 	return (

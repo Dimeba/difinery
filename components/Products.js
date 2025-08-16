@@ -166,11 +166,15 @@ const Products = ({
 	])
 
 	useEffect(() => {
-		setSelectedCategory(type ?? 'All')
-		setSelectedShape(shape ?? 'All')
-		setSelectedSetting(setting ?? 'All')
-		setSelectedDesign(design ?? 'All')
-		setSelectedStyle(style ?? 'All')
+		// debounce sync from URL params to avoid quick successive updates
+		const t = setTimeout(() => {
+			setSelectedCategory(type ?? 'All')
+			setSelectedShape(shape ?? 'All')
+			setSelectedSetting(setting ?? 'All')
+			setSelectedDesign(design ?? 'All')
+			setSelectedStyle(style ?? 'All')
+		}, 0)
+		return () => clearTimeout(t)
 	}, [type, shape, setting, design, style])
 
 	return (

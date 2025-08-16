@@ -6,16 +6,14 @@ import Image from 'next/image'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 // lib
-import { getEntry } from '@/lib/contentful'
+import { getEntriesByIds } from '@/lib/contentful'
 
 const Features = async ({ features, title, stylizedTitle }) => {
-	const content = []
-
-	if (features) {
-		for (let i = 0; i < features.length; i++) {
-			const feature = await getEntry(features[i].sys.id)
-			content.push(feature)
-		}
+	let content = []
+	if (features && features.length) {
+		const ids = features.map(f => f.sys.id)
+		const { items } = await getEntriesByIds(ids)
+		content = items
 	}
 
 	return (

@@ -116,8 +116,22 @@ const ProductCard = ({
 				{coverImages.length > 0 && (
 					<div
 						className={styles.image}
-						onMouseEnter={() => setShowCloseup(true)}
-						onMouseLeave={() => setShowCloseup(false)}
+						onMouseEnter={() => {
+							if (
+								typeof window !== 'undefined' &&
+								window.matchMedia('(hover: hover)').matches
+							) {
+								setShowCloseup(true)
+							}
+						}}
+						onMouseLeave={() => {
+							if (
+								typeof window !== 'undefined' &&
+								window.matchMedia('(hover: hover)').matches
+							) {
+								setShowCloseup(false)
+							}
+						}}
 					>
 						{/* Yellow Gold */}
 						<Image
