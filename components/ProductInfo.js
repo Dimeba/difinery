@@ -55,17 +55,27 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			const url = node.url.toLowerCase()
 			if (url.includes('-review')) return false
 
-			// Color code
-			let matchesColor = true
+			// Color / Stackable logic
+			let matchesColorOrStackable = true
 			if (selectedColor) {
 				const lc = selectedColor.toLowerCase()
-				const colorCode = lc.includes('white')
-					? 'w'
-					: lc.includes('yellow')
-					? 'y'
-					: ''
-				if (colorCode) {
-					matchesColor = url.includes(`/files/${colorCode}`)
+				const isStackable = lc.includes('stackable')
+				const hasWhite = lc.includes('white')
+				const hasYellow = lc.includes('yellow')
+
+				if (isStackable) {
+					// Match explicit stackable codes
+					let stackCode = ''
+					if (hasWhite && hasYellow) stackCode = 'm-stackable'
+					else if (hasWhite) stackCode = 'w-stackable'
+					else if (hasYellow) stackCode = 'y-stackable'
+					matchesColorOrStackable = stackCode ? url.includes(stackCode) : true
+				} else {
+					// Standard metal selection using /files/{w|y}
+					const colorCode = hasWhite ? 'w' : hasYellow ? 'y' : ''
+					if (colorCode) {
+						matchesColorOrStackable = url.includes(`/files/${colorCode}`)
+					}
 				}
 			}
 
@@ -83,20 +93,34 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 				}
 			}
 
-			return matchesColor && matchesShape
+			return matchesColorOrStackable && matchesShape
 		}
 
 		return allImages.filter(urlFilter)
 	}, [allImages, selectedColor, selectedShape])
 
 	const reviewImage = useMemo(() => {
-		const url = node => node.url.toLowerCase()
+		const toLower = node => node.url.toLowerCase()
 
-		const colorCode = selectedColor
-			? selectedColor.toLowerCase().includes('white')
+		// Determine selection codes
+		const lc = selectedColor ? selectedColor.toLowerCase() : ''
+		const isStackable = lc.includes('stackable')
+		const hasWhite = lc.includes('white')
+		const hasYellow = lc.includes('yellow')
+		const colorCode = !isStackable
+			? hasWhite
 				? 'w'
-				: selectedColor.toLowerCase().includes('yellow')
+				: hasYellow
 				? 'y'
+				: ''
+			: ''
+		const stackCode = isStackable
+			? hasWhite && hasYellow
+				? 'm-stackable'
+				: hasWhite
+				? 'w-stackable'
+				: hasYellow
+				? 'y-stackable'
 				: ''
 			: ''
 		const shapeCode = selectedShape
@@ -108,11 +132,12 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			: ''
 
 		return allImages.find(node => {
-			const u = url(node)
+			const u = toLower(node)
 			if (!u.includes('-review')) return false
 			const colorOk = colorCode ? u.includes(`/files/${colorCode}`) : true
+			const stackOk = stackCode ? u.includes(stackCode) : true
 			const shapeOk = shapeCode ? u.includes(shapeCode) : true
-			return colorOk && shapeOk
+			return colorOk && stackOk && shapeOk
 		})
 	}, [allImages, selectedColor, selectedShape])
 
