@@ -88,7 +88,8 @@ export default async function Page(props) {
 					showFilters
 					collectionPreview={{
 						title: content.title,
-						media: content.media
+						media: content.media,
+						mediaLink: content.mediaLink
 					}}
 				/>
 			</Suspense>

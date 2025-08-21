@@ -266,6 +266,14 @@ const Products = ({
 								gridColumn={{ xs: 'span 12', lg: 'span 6' }}
 								gridRow={'span 2'}
 								position='relative'
+								sx={{
+									cursor: collectionPreview.mediaLink ? 'pointer' : 'default'
+								}}
+								onClick={() => {
+									collectionPreview.mediaLink
+										? (window.location.href = collectionPreview.mediaLink)
+										: null
+								}}
 							>
 								{collectionPreview.media.fields.file.contentType.includes(
 									'video'
