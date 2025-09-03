@@ -74,12 +74,37 @@ const ProductCard = ({
 
 	// Function to return the correct URL based on active metal type
 	const returnCorrectURL = () => {
+		// Strip '-collection' and everything after if present in permalink
+		const cleanedPermalink = permalink.includes('-collection')
+			? permalink.split('-collection')[0]
+			: permalink
+
 		if (!activeMetalType) {
-			return `/shop/${product.category.name.toLowerCase()}/${permalink}`
+			const base = {
+				pathname: `/shop/${product.category.name.toLowerCase()}/${cleanedPermalink}`
+			}
+
+			// Only add query if permalink references a collection variant
+			if (permalink.includes('-collection-')) {
+				let gold
+				if (permalink.includes('-collection-yellow')) {
+					gold = 'yellow'
+				} else if (permalink.includes('-collection-white')) {
+					gold = 'white'
+				} else if (permalink.includes('-collection-multi')) {
+					gold = 'yellow-and-white'
+				}
+
+				if (gold) {
+					base.query = { gold }
+				}
+			}
+
+			return base
 		}
 
 		return {
-			pathname: `/shop/${product.category.name.toLowerCase()}/${permalink}`,
+			pathname: `/shop/${product.category.name.toLowerCase()}/${cleanedPermalink}`,
 			query: {
 				gold: activeMetalType.includes('yellow')
 					? 'yellow'
