@@ -60,6 +60,18 @@ const ProductCard = ({
 		)
 	}, [closeupImages])
 
+	const multiGoldImage = useMemo(() => {
+		return coverImages.find(image =>
+			image.node.url.toLowerCase().includes('/files/m')
+		)
+	}, [coverImages])
+
+	const multiGoldImageCloseup = useMemo(() => {
+		return closeupImages.find(image =>
+			image.node.url.toLowerCase().includes('/files/m')
+		)
+	}, [closeupImages])
+
 	// Function to return the correct URL based on active metal type
 	const returnCorrectURL = () => {
 		if (!activeMetalType) {
@@ -69,7 +81,11 @@ const ProductCard = ({
 		return {
 			pathname: `/shop/${product.category.name.toLowerCase()}/${permalink}`,
 			query: {
-				gold: activeMetalType.includes('yellow') ? 'yellow' : 'white'
+				gold: activeMetalType.includes('yellow')
+					? 'yellow'
+					: activeMetalType.includes('multi')
+					? 'yellow-and-white'
+					: 'white'
 			}
 		}
 	}
@@ -181,9 +197,11 @@ const ProductCard = ({
 							fill
 							alt='Category Image.'
 							style={{
-								visibility: !activeMetalType.includes('yellow')
-									? 'visible'
-									: 'hidden',
+								visibility:
+									!activeMetalType.includes('yellow') &&
+									!activeMetalType.includes('multi')
+										? 'visible'
+										: 'hidden',
 								opacity: !showCloseup || !whiteGoldImageCloseup ? 1 : 0,
 								objectFit: 'contain',
 								objectPosition:
@@ -201,7 +219,50 @@ const ProductCard = ({
 								fill
 								alt='Category Image.'
 								style={{
-									visibility: !activeMetalType.includes('yellow')
+									visibility:
+										!activeMetalType.includes('yellow') &&
+										!activeMetalType.includes('multi')
+											? 'visible'
+											: 'hidden',
+									opacity: showCloseup ? 1 : 0,
+									objectFit: 'contain',
+									objectPosition:
+										product.category.name.toLowerCase() === 'necklaces'
+											? 'top'
+											: 'center'
+								}}
+								quality={100}
+								sizes='(max-width: 768px) 100vw, 50vw'
+							/>
+						)}
+
+						{/* Multi Gold */}
+						<Image
+							src={multiGoldImage?.node.url || coverImages[0]?.node.url}
+							fill
+							alt='Category Image.'
+							style={{
+								visibility: activeMetalType.includes('multi')
+									? 'visible'
+									: 'hidden',
+								opacity: !showCloseup || !multiGoldImageCloseup ? 1 : 0,
+								objectFit: 'contain',
+								objectPosition:
+									product.category.name.toLowerCase() === 'necklaces'
+										? 'top'
+										: 'center'
+							}}
+							quality={100}
+							sizes='(max-width: 768px) 100vw, 50vw'
+						/>
+
+						{multiGoldImageCloseup && (
+							<Image
+								src={multiGoldImageCloseup.node.url}
+								fill
+								alt='Category Image.'
+								style={{
+									visibility: activeMetalType.includes('multi')
 										? 'visible'
 										: 'hidden',
 									opacity: showCloseup ? 1 : 0,

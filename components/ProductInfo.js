@@ -29,13 +29,12 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		return metal ? metal.optionValues : []
 	}, [product.options])
 
-	const initialColor = useMemo(
-		() =>
-			metalOptions.find(opt =>
-				opt.name.toLowerCase().includes(gold ? gold.toLowerCase() : '')
-			),
-		[metalOptions, gold]
-	)
+	const initialColor = useMemo(() => {
+		const normalizedGold = gold ? gold.toLowerCase().replace(/-/g, ' ') : ''
+		return metalOptions.find(opt =>
+			opt.name.toLowerCase().includes(normalizedGold)
+		)
+	}, [metalOptions, gold])
 
 	const [matchingVariant, setMatchingVariant] = useState(
 		product.variants.edges[0].node
