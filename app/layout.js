@@ -26,6 +26,9 @@ const collections = await getEntries('collection')
 export const metadata = {
 	icons: {
 		icon: '/favicon.svg'
+	},
+	verification: {
+		google: 'R6Dbld100s-Hn6MF_tTVmwZzsYVaexTKMUynnJl4vCg'
 	}
 }
 
