@@ -1,4 +1,5 @@
 import { Libre_Franklin, Newsreader } from 'next/font/google'
+import Script from 'next/script'
 import './globals.scss'
 
 const libreFranklin = Libre_Franklin({ subsets: ['latin'] })
@@ -34,10 +35,30 @@ export default function RootLayout({ children }) {
 	const footerContent = footer.items[0].fields
 	const collectionsContent = collections.items
 
+	const GA_ID = process.env.googleAnalytics
+
 	return (
 		<html lang='en'>
 			<head>
 				<link rel='icon' href='/favicon.svg' type='image/svg+xml' />
+
+				{GA_ID && (
+					<>
+						<Script
+							src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+							strategy='afterInteractive'
+						/>
+						<Script id='google-analytics' strategy='afterInteractive'>
+							{`
+            				window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);}
+            				gtag('js', new Date());
+            				gtag('config', '${GA_ID}', {
+              				page_path: window.location.pathname,
+            				});
+          				`}
+						</Script>
+					</>
+				)}
 			</head>
 			<ApolloContext>
 				<CartProvider>
