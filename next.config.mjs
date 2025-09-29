@@ -10,7 +10,8 @@ const nextConfig = {
 		// Contenrful API keys
 		space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
 		accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_KEY,
-		googleAnalytics: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS
+		googleAnalytics: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS,
+		gtmId: process.env.NEXT_PUBLIC_GTM_ID
 	},
 	images: {
 		remotePatterns: [
