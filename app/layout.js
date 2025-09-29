@@ -1,4 +1,5 @@
 import { Libre_Franklin, Newsreader } from 'next/font/google'
+import { Suspense } from 'react'
 import Script from 'next/script'
 import './globals.scss'
 
@@ -74,7 +75,9 @@ export default function RootLayout({ children }) {
 								style={{ display: 'none', visibility: 'hidden' }}
 							></iframe>
 						</noscript>
-						<GTMEvents />
+						<Suspense fallback={null}>
+							<GTMEvents />
+						</Suspense>
 						{/* End Google Tag Manager (noscript) */}
 						<AppRouterCacheProvider>
 							<MUIProviders>
