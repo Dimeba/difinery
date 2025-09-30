@@ -32,12 +32,9 @@ const SubscribeSection = () => {
 					gap='1rem'
 				>
 					<Box display='flex' flexDirection='column' gap='0.5rem'>
-						<Typography variant='h2'>Join Difinery Circle.</Typography>
+						<Typography variant='h2'>Join Our Blank Canvas Community</Typography>
 						<Typography variant='p'>
-							Stay in touch, share beautiful things first, and invite you into
-							the creative journey. We respect your inbox. No spam. No discount
-							games. Just timeless jewelry with a clear conscience and
-							meaningful updates you'll want to open.
+							Stay in touch and become a part of the creative journey. We respect your inbox. No spam. No discount games. Just timeless jewelry with meaningful updates. 
 						</Typography>
 					</Box>
 
