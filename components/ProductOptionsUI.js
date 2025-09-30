@@ -12,6 +12,7 @@ import CustomBox from './CustomBox'
 
 // hooks
 import { useState, useEffect } from 'react'
+import { useMediaQuery } from '@mui/material'
 
 // helpers
 import parse from 'html-react-parser'
@@ -39,6 +40,7 @@ const ProductOptionsUI = ({
 	setShowOrderSummary,
 	handleAddToCart
 }) => {
+	const isMobile = useMediaQuery('(max-width: 1024px)')
 	const [openOption, setOpenOption] = useState(selectedColor ? 1 : 0)
 	const [selectedOptions, setSelectedOptions] = useState(() => {
 		const initialOptions = {}
@@ -153,7 +155,7 @@ const ProductOptionsUI = ({
 							option.name === 'carat'
 						}
 						// helpContent={<NeedHelpInfo type={option.name.toLowerCase()} />}
-						helpLink='/Size-Guide-Difinery.pdf'
+						helpLink={isMobile ? '/Size-Guide-Difinery-Mobile.pdf' : '/Size-Guide-Difinery-Desktop.pdf'}
 					>
 						<div
 							className={styles.variantButtonsContainer}
