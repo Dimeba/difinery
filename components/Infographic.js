@@ -85,6 +85,7 @@ const Infographic = async ({ title, stylizedTitle, features, graphic }) => {
 						maxWidth={'100%'}
 						height={'100%'}
 						display={{ xs: 'none', lg: 'block' }}
+						sx={{ pointerEvents: 'none' }}
 					>
 						<Image
 							src={'https:' + graphic.fields.file.url}
