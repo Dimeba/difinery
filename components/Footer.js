@@ -30,6 +30,19 @@ const Footer = ({ content }) => {
 
 	const categories = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
 
+	// Formats a string into a clean, URL-friendly slug path.
+	// Example: "Lab - grown diamonds" => "/lab-grown-diamonds"
+	const formatLink = (str = '') =>
+		'/' +
+		str
+			.toString()
+			.normalize('NFD') // separate diacritics
+			.replace(/[\u0300-\u036f]/g, '') // remove diacritic marks
+			.replace(/&/g, '') // remove ampersands
+			.replace(/[^a-zA-Z0-9]+/g, '-') // replace any group of non-alphanumerics with single hyphen
+			.replace(/^-+|-+$/g, '') // trim leading/trailing hyphens
+			.toLowerCase()
+
 	return (
 		<footer className={styles.footer}>
 			<div className={styles.content}>
@@ -44,13 +57,7 @@ const Footer = ({ content }) => {
 						{content.difinery.map(link => (
 							<Link
 								key={link.sys.id}
-								href={
-									'/' +
-									link.fields.title
-										.replace(/ /g, '-')
-										.replace(/&/g, '')
-										.toLowerCase()
-								}
+								href={formatLink(link.fields.title)}
 								aria-label={`Link to ${link.fields.title} page.`}
 							>
 								<p>{link.fields.title}</p>
@@ -90,13 +97,7 @@ const Footer = ({ content }) => {
 						{content.help.map(link => (
 							<Link
 								key={link.sys.id}
-								href={
-									'/' +
-									link.fields.title
-										.replace(/ /g, '-')
-										.replace(/&/g, '')
-										.toLowerCase()
-								}
+								href={formatLink(link.fields.title)}
 								aria-label={`Link to ${link.fields.title} page.`}
 							>
 								<p>{link.fields.title}</p>
@@ -116,13 +117,7 @@ const Footer = ({ content }) => {
 						{content.legal.map(link => (
 							<Link
 								key={link.sys.id}
-								href={
-									'/' +
-									link.fields.title
-										.replace(/ /g, '-')
-										.replace(/&/g, '')
-										.toLowerCase()
-								}
+								href={formatLink(link.fields.title)}
 								aria-label={`Link to ${link.fields.title} page.`}
 							>
 								<p>{link.fields.title}</p>
@@ -191,13 +186,7 @@ const Footer = ({ content }) => {
 					{content.bottomMenu.map(link => (
 						<Link
 							key={link.sys.id}
-							href={
-								'/' +
-								link.fields.title
-									.replace(/ /g, '-')
-									.replace(/&/g, '')
-									.toLowerCase()
-							}
+							href={formatLink(link.fields.title)}
 							aria-label={`Link to ${link.fields.title} page.`}
 						>
 							<p>{link.fields.title}</p>
