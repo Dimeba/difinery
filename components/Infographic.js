@@ -90,8 +90,8 @@ const Infographic = async ({ title, stylizedTitle, features, graphic }) => {
 						<Image
 							src={'https:' + graphic.fields.file.url}
 							alt={graphic.fields.title}
-							layout='fill'
-							objectFit='contain'
+							fill
+							style={{ objectFit: 'contain' }}
 						/>
 					</Box>
 				</Grid>
