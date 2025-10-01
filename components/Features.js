@@ -14,7 +14,8 @@ const Features = async ({
 	title,
 	stylizedTitle,
 	h4text,
-	description
+	description,
+	borderTop
 }) => {
 	let content = []
 	if (features && features.length) {
@@ -24,7 +25,13 @@ const Features = async ({
 	}
 
 	return (
-		<section>
+		<Box
+			component='section'
+			sx={{
+				borderTop: borderTop ? '1px solid #E8E8E8' : 'none',
+				paddingTop: { xs: '4rem', lg: '6rem' }
+			}}
+		>
 			<div className={`container ${styles.content}`}>
 				<Box
 					sx={{
@@ -80,6 +87,8 @@ const Features = async ({
 								}
 							}}
 						>
+							{item.fields.topText && <h4>{item.fields.topText}</h4>}
+
 							{item.fields.image && (
 								<Image
 									src={'https:' + item.fields.image.fields.file.url}
@@ -95,7 +104,7 @@ const Features = async ({
 					))}
 				</Box>
 			</div>
-		</section>
+		</Box>
 	)
 }
 
