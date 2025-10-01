@@ -51,8 +51,8 @@ const Infographic = async ({ title, stylizedTitle, features, graphic }) => {
 									lg: index % 2 === 0 ? 'left' : 'right'
 								}}
 								sx={{
-									borderBottom: '1px solid black',
-									marginBottom: '1rem',
+									borderBottom: { xs: 'none', lg: '1px solid black' },
+									marginBottom: { xs: 0, lg: '1rem' },
 									width: '100%'
 								}}
 							>

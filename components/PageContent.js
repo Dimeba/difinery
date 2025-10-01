@@ -8,6 +8,7 @@ import MasonryColumns from './MasonryColumns'
 import SubscribeSection from './SubscribeSection'
 import SplitFeatures from './SplitFeatures'
 import Infographic from './Infographic'
+import Timeline from './Timeline'
 
 const PageContent = ({ content }) => {
 	return (
@@ -34,6 +35,16 @@ const PageContent = ({ content }) => {
 									title={section.fields.title}
 									stylizedTitle={section.fields.stylizedTitle}
 									graphic={section.fields.graphic}
+								/>
+							)
+						}
+						if (section.fields.type === 'Timeline') {
+							return (
+								<Timeline
+									key={index}
+									features={section.fields.features}
+									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
 								/>
 							)
 						}
