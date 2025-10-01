@@ -41,7 +41,7 @@ const Header = ({ content, collectionsContent }) => {
 	const isEducation = pathName == '/education' ? true : false
 	const isBlankCanvas = pathName == '/blank-canvas' ? true : false
 	const isRecycledGold = pathName == '/recycled-gold' ? true : false
-	const isLabGrown = pathName == '/lab-grown' ? true : false
+	const isLabGrown = pathName == '/lab-grown-diamonds' ? true : false
 
 	const isTransparent = isHomepage || isAbout || isEducation || isBlankCanvas || isRecycledGold || isLabGrown ? true : false
 

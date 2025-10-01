@@ -7,6 +7,7 @@ import FAQ from './FAQ'
 import MasonryColumns from './MasonryColumns'
 import SubscribeSection from './SubscribeSection'
 import SplitFeatures from './SplitFeatures'
+import Infographic from './Infographic'
 
 const PageContent = ({ content }) => {
 	return (
@@ -15,14 +16,27 @@ const PageContent = ({ content }) => {
 			{content.sections.map((section, index) => {
 				switch (section.sys.contentType.sys.id) {
 					case 'features':
-						return (
-							<Features
-								key={index}
-								features={section.fields.features}
-								title={section.fields.title}
-								stylizedTitle={section.fields.stylizedTitle}
-							/>
-						)
+						if (section.fields.type === 'Standard') {
+							return (
+								<Features
+									key={index}
+									features={section.fields.features}
+									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
+								/>
+							)
+						}
+						if (section.fields.type === 'Infographic') {
+							return (
+								<Infographic
+									key={index}
+									features={section.fields.features}
+									title={section.fields.title}
+									stylizedTitle={section.fields.stylizedTitle}
+									graphic={section.fields.graphic}
+								/>
+							)
+						}
 					case 'products':
 						return (
 							<Products
