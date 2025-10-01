@@ -225,7 +225,7 @@ const ProductOptionsUI = ({
 				{!isGiftCard && (
 					<Accordion
 						// small
-						title='Make Your Box Truly Yours'
+						title='Customize Your Box'
 						extraTitleText={boxText ? `"${boxText}"` : null}
 						state={openOption === product.options.length}
 						product

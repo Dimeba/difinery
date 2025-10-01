@@ -6,6 +6,7 @@ import styles from './ProductInfo.module.scss'
 // components
 import Image from 'next/image'
 import { Grid, Box, Typography, Button } from '@mui/material'
+import Link from 'next/link'
 
 // hooks
 import { useEffect, useState } from 'react'
@@ -44,8 +45,17 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 		<Grid container spacing='1rem'>
 			<Grid size={{ xs: 12, lg: 6 }} display='flex' flexDirection='column'>
 				<Typography variant='p'>
-					Personalize it with a special touch to create a unique and memorable
-					keepsake.
+					<Link href='/blank-canvas' aria-label='Link to Blank Canvas page'>
+						<Typography
+							variant='p'
+							sx={{ textDecoration: 'underline' }}
+							fontWeight={600}
+						>
+							Learn More About Our Blank Canvas Community
+						</Typography>
+					</Link>
+					<br />
+					Complete with a handwritten message from a local artist.
 				</Typography>
 
 				<Typography variant='p'>Message Color:</Typography>
@@ -80,8 +90,12 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 					maxLength={25}
 				/>
 
-				<Typography variant='p' fontStyle='italic' fontSize='10px'>
-					*Additional $50
+				<Typography variant='p' fontSize='10px'>
+					An additional $50 price. May affect shipping time.
+					<br />
+					<Typography variant='p' fontStyle='italic' fontSize='10px'>
+						50% of proceeds to the artist, 50% of proceeds to charity
+					</Typography>
 				</Typography>
 			</Grid>
 
