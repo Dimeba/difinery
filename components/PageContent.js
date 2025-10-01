@@ -24,6 +24,8 @@ const PageContent = ({ content }) => {
 									features={section.fields.features}
 									title={section.fields.title}
 									stylizedTitle={section.fields.stylizedTitle}
+									h4text={section.fields.h4text}
+									description={section.fields.description}
 								/>
 							)
 						}

@@ -2,13 +2,20 @@
 import styles from './Features.module.scss'
 
 // components
+import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 // lib
 import { getEntriesByIds } from '@/lib/contentful'
 
-const Features = async ({ features, title, stylizedTitle }) => {
+const Features = async ({
+	features,
+	title,
+	stylizedTitle,
+	h4text,
+	description
+}) => {
 	let content = []
 	if (features && features.length) {
 		const ids = features.map(f => f.sys.id)
@@ -19,17 +26,60 @@ const Features = async ({ features, title, stylizedTitle }) => {
 	return (
 		<section>
 			<div className={`container ${styles.content}`}>
-				{stylizedTitle ? (
-					<div className={`stylizedH3 ${styles.sectionTitle}`}>
-						{documentToReactComponents(stylizedTitle)}
-					</div>
-				) : (
-					<h3>{title}</h3>
-				)}
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						gap: '1rem',
+						alignItems: 'center'
+					}}
+				>
+					{stylizedTitle ? (
+						<div className={`stylizedH3 ${styles.sectionTitle}`}>
+							{documentToReactComponents(stylizedTitle)}
+						</div>
+					) : (
+						<h3>{title}</h3>
+					)}
 
-				<div className={styles.columns}>
+					{description && (
+						<Typography
+							variant='p'
+							textAlign='center'
+							maxWidth={{ xs: '100%', lg: '60%' }}
+						>
+							{description}
+						</Typography>
+					)}
+				</Box>
+
+				<Box
+					display='flex'
+					justifyContent='center'
+					flexWrap='wrap'
+					width='100%'
+					rowGap='4rem'
+					columnGap='2rem'
+					flexDirection={{
+						xs: content.length > 8 ? 'row' : 'column',
+						lg: 'row'
+					}}
+				>
 					{content.map(item => (
-						<div key={item.sys.id} className={styles.column}>
+						<Box
+							key={item.sys.id}
+							className={styles.column}
+							sx={{
+								minWidth: {
+									xs: 'calc(50% - 2rem)',
+									lg: content.length > 8 ? 'calc(16.6% - 2rem)' : ''
+								},
+								maxWidth: {
+									xs: '100%',
+									lg: 'calc(20% - 2rem)'
+								}
+							}}
+						>
 							{item.fields.image && (
 								<Image
 									src={'https:' + item.fields.image.fields.file.url}
@@ -40,10 +90,10 @@ const Features = async ({ features, title, stylizedTitle }) => {
 								/>
 							)}
 							{item.fields.number && <h2>{item.fields.number}</h2>}
-							<p>{item.fields.text}</p>
-						</div>
+							{h4text ? <h4>{item.fields.text}</h4> : <p>{item.fields.text}</p>}
+						</Box>
 					))}
-				</div>
+				</Box>
 			</div>
 		</section>
 	)
