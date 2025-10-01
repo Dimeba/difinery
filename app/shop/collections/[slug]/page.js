@@ -88,6 +88,7 @@ export default async function Page(props) {
 					showFilters
 					collectionPreview={{
 						title: content.title,
+						description: content.description,
 						media: content.media,
 						mediaLink: content.mediaLink
 					}}

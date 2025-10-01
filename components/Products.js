@@ -267,7 +267,8 @@ const Products = ({
 								gridRow={'span 2'}
 								position='relative'
 								sx={{
-									cursor: collectionPreview.mediaLink ? 'pointer' : 'default'
+									cursor: collectionPreview.mediaLink ? 'pointer' : 'default',
+									backgroundColor: '#f7f7f7'
 								}}
 								onClick={() => {
 									collectionPreview.mediaLink
@@ -278,10 +279,14 @@ const Products = ({
 								{collectionPreview.media.fields.file.contentType.includes(
 									'video'
 								) ? (
-									<Box position='relative' height='100%'>
+									<Box
+										position='relative'
+										height='100%'
+										paddingTop={{ xs: '25%', lg: 0 }}
+									>
 										<Video
 											style={{
-												objectFit: 'cover !important',
+												objectFit: 'contain !important',
 												minHeight: '100%',
 												minWidth: '100%'
 											}}
@@ -311,23 +316,21 @@ const Products = ({
 									paddingBottom={{ xs: '4rem', lg: '8rem' }}
 									sx={{
 										background:
-											'linear-gradient(180deg,rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%)'
+											'linear-gradient(180deg,rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0) 100%)'
 									}}
 								>
-									<Typography
-										variant='h2'
-										textAlign={{ xs: 'center', lg: 'left' }}
-										color='white'
-									>
+									<Typography variant='h2' textAlign='center' color='white'>
 										{collectionPreview.title}
 									</Typography>
-									<Typography
-										variant='h4'
-										textAlign={{ xs: 'center', lg: 'left' }}
-										color='white'
+									<p
+										style={{
+											textAlign: 'center',
+											marginTop: '0.5rem',
+											color: 'white'
+										}}
 									>
-										Collection
-									</Typography>
+										{collectionPreview.description}
+									</p>
 								</Box>
 							</Box>
 						)}
