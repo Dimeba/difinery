@@ -29,7 +29,7 @@ const Features = async ({
 			component='section'
 			sx={{
 				borderTop: borderTop ? '1px solid #E8E8E8' : 'none',
-				paddingTop: { xs: '4rem', lg: '6rem' }
+				paddingTop: borderTop ? { xs: '4rem', lg: '6rem' } : 0
 			}}
 		>
 			<div className={`container ${styles.content}`}>
