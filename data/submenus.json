@@ -36,6 +36,10 @@
 					{
 						"title": "Refund Policy",
 						"url": "/refund-policy"
+					},
+					{
+						"title": "Blank Canvas",
+						"url": "/blank-canvas"
 					}
 				]
 			},
@@ -68,12 +72,12 @@
 						"url": "/shop/rings?style=Solitaire"
 					},
 					{
-						"title": "Single Shank",
-						"url": "/shop/rings?style=Single-Shank"
+						"title": "Stackable",
+						"url": "/shop/rings?style=Stackable"
 					},
 					{
-						"title": "Double Shank",
-						"url": "/shop/rings?style=Double-Shank"
+						"title": "Open Rings",
+						"url": "/shop/rings?style=Open-Rings"
 					}
 				]
 			},
@@ -85,12 +89,16 @@
 						"url": "/faqs"
 					},
 					{
-						"title": "Shipping",
-						"url": "/shipping"
+						"title": "Lab Grown Diamonds",
+						"url": "/lab-grown-diamonds"
 					},
 					{
-						"title": "Refund Policy",
-						"url": "/refund-policy"
+						"title": "Recycled Gold",
+						"url": "/recycled-gold"
+					},
+					{
+						"title": "Blank Canvas",
+						"url": "/blank-canvas"
 					}
 				]
 			},
@@ -136,17 +144,43 @@
 						"url": "/faqs"
 					},
 					{
-						"title": "Shipping",
-						"url": "/shipping"
+						"title": "Lab Grown Diamonds",
+						"url": "/lab-grown-diamonds"
 					},
 					{
-						"title": "Refund Policy",
-						"url": "/refund-policy"
+						"title": "Recycled Gold",
+						"url": "/recycled-gold"
+					},
+					{
+						"title": "Blank Canvas",
+						"url": "/blank-canvas"
 					}
 				]
 			},
 			{
-				"title": "none"
+				"title": "Setting",
+				"rows": [
+					{
+						"title": "Bezel",
+						"url": "/shop/earrings?setting=Bezel"
+					},
+					{
+						"title": "Prong",
+						"url": "/shop/earrings?setting=Prong"
+					},
+					{
+						"title": "4-Prong",
+						"url": "/shop/earrings?setting=4-Prong"
+					},
+					{
+						"title": "Martini",
+						"url": "/shop/earrings?setting=Martini"
+					},
+					{
+						"title": "Fishtail",
+						"url": "/shop/earrings?setting=Fishtail"
+					}
+				]
 			}
 		]
 	},
@@ -156,11 +190,11 @@
 				"title": "Style",
 				"rows": [
 					{
-						"title": "Solitaire Pendant Necklaces",
+						"title": "Solitaire",
 						"url": "/shop/necklaces?design=Solitaire"
 					},
 					{
-						"title": "Multi-Pendant Necklaces",
+						"title": "Multi-Pendant",
 						"url": "/shop/necklaces?design=Multi"
 					}
 				]
@@ -173,12 +207,16 @@
 						"url": "/faqs"
 					},
 					{
-						"title": "Shipping",
-						"url": "/shipping"
+						"title": "Lab Grown Diamonds",
+						"url": "/lab-grown-diamonds"
 					},
 					{
-						"title": "Refund Policy",
-						"url": "/refund-policy"
+						"title": "Recycled Gold",
+						"url": "/recycled-gold"
+					},
+					{
+						"title": "Blank Canvas",
+						"url": "/blank-canvas"
 					}
 				]
 			},
@@ -199,11 +237,11 @@
 				"title": "Style",
 				"rows": [
 					{
-						"title": "Solitaire Pendant Bracelets",
+						"title": "Solitaire",
 						"url": "/shop/bracelets?design=Solitaire"
 					},
 					{
-						"title": "Multi-Pendant Bracelets",
+						"title": "Multi-Pendant",
 						"url": "/shop/bracelets?design=Multi"
 					}
 				]
@@ -216,12 +254,16 @@
 						"url": "/faqs"
 					},
 					{
-						"title": "Shipping",
-						"url": "/shipping"
+						"title": "Lab Grown Diamonds",
+						"url": "/lab-grown-diamonds"
 					},
 					{
-						"title": "Refund Policy",
-						"url": "/refund-policy"
+						"title": "Recycled Gold",
+						"url": "/recycled-gold"
+					},
+					{
+						"title": "Blank Canvas",
+						"url": "/blank-canvas"
 					}
 				]
 			},
