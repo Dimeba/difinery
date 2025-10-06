@@ -49,7 +49,7 @@ const Filters = ({
 	// 		: ['All', 'Pendant', 'Station', 'Fixed']
 	const style =
 		productType === 'rings'
-			? ['All', 'Eternity', 'Solitaire', 'Stackable', 'Open Rings']
+			? ['All', 'Eternity', 'Solitaire', 'Statement', 'Stackable', 'Open Rings']
 			: productType === 'earrings'
 			? ['All', 'Studs', 'Hoops']
 			: ['All', 'Solitaire', 'Multi-Pendant']

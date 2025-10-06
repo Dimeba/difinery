@@ -72,6 +72,10 @@
 						"url": "/shop/rings?style=Solitaire"
 					},
 					{
+						"title": "Statement",
+						"url": "/shop/rings?style=Statement"
+					},
+					{
 						"title": "Stackable",
 						"url": "/shop/rings?style=Stackable"
 					},
