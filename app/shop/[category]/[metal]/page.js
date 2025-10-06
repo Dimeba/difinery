@@ -18,32 +18,43 @@ const ALLOWED_CATEGORIES = [
 	'all'
 ]
 
+const ALLOWED_METALS = ['yellow-gold', 'white-gold', 'rose-gold']
+
 // Contentful
 const pages = await getEntries('page')
 const content =
 	pages.items.find(page => page.fields.title == 'Shop')?.fields || {}
 
 export async function generateStaticParams() {
-	return ALLOWED_CATEGORIES.map(category => ({ category }))
+	// Pre-render combinations of category and metal
+	return ALLOWED_CATEGORIES.flatMap(category =>
+		ALLOWED_METALS.map(metal => ({ category, metal }))
+	)
 }
 
 export async function generateMetadata(props) {
 	const params = await props.params
-	const { category } = params
+	const { category, metal } = params
 	if (!ALLOWED_CATEGORIES.includes(category))
 		return { title: 'Difinery | Shop' }
-	const titleCase = category.charAt(0).toUpperCase() + category.slice(1)
-	return {
-		title: `Difinery | ${titleCase}`,
-		description: '',
-		keywords: ''
-	}
+	const catTitle = category.charAt(0).toUpperCase() + category.slice(1)
+	const metalTitle = metal
+		? metal
+				.split('-')
+				.map(s => s.charAt(0).toUpperCase() + s.slice(1))
+				.join(' ')
+		: ''
+	const title = metalTitle
+		? `Difinery | ${catTitle} | ${metalTitle}`
+		: `Difinery | ${catTitle}`
+	return { title, description: '', keywords: '' }
 }
 
 export default async function CategoryPage(props) {
 	const params = await props.params
-	const { category } = params
+	const { category, metal } = params
 	if (!ALLOWED_CATEGORIES.includes(category)) notFound()
+	if (!ALLOWED_METALS.includes(metal)) notFound()
 
 	const { data } = await apolloClient.query({
 		query: category === 'all' ? GET_PRODUCTS : GET_COLLECTION_BY_HANDLE,
@@ -62,6 +73,14 @@ export default async function CategoryPage(props) {
 		? data.products?.pageInfo
 		: data.collectionByHandle?.products?.pageInfo
 
+	// Map metal slug to readable label for ProductCard/Products expectations
+	const metalLabel =
+		metal === 'yellow-gold'
+			? 'Yellow Gold'
+			: metal === 'white-gold'
+			? 'White Gold'
+			: 'Rose Gold'
+
 	return (
 		<main>
 			<Suspense fallback={<div>Loading…</div>}>
@@ -69,6 +88,7 @@ export default async function CategoryPage(props) {
 					products={initialItems}
 					initialPageInfo={initialPageInfo}
 					productType={category}
+					selectedMetalType={metalLabel}
 					showFilters
 				/>
 			</Suspense>

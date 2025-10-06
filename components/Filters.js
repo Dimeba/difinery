@@ -7,14 +7,13 @@ import styles from './Filters.module.scss'
 import Image from 'next/image'
 import Accordion from './Accordion'
 import { IoClose } from 'react-icons/io5'
+import Link from 'next/link'
 
 const Filters = ({
 	selectedSort,
 	setSelectedSort,
-	selectedCategory,
-	setSelectedCategory,
-	selectedMetalType,
-	setSelectedMetalType,
+	selectedCategory = 'all',
+	selectedMetalType = 'Yellow Gold',
 	selectedShape,
 	setSelectedShape,
 	toggleFilters,
@@ -27,7 +26,7 @@ const Filters = ({
 	productType = 'all'
 }) => {
 	const sortOptions = ['Lowest Price', 'Highest Price', 'Newest']
-	const metalTypes = ['Yellow', 'White']
+	const metalTypes = ['Yellow Gold', 'White Gold']
 	const productTypes = ['All', 'Rings', 'Earrings', 'Necklaces', 'Bracelets']
 	const shapes = [
 		'All',
@@ -55,10 +54,8 @@ const Filters = ({
 			: ['All', 'Solitaire', 'Multi-Pendant']
 
 	const handleFilter = (filter, value) => {
-		if (filter === 'category') {
-			setSelectedCategory(value)
-		} else if (filter === 'metalType') {
-			setSelectedMetalType(value)
+		if (filter === 'metalType') {
+			console.log(value)
 		} else if (filter === 'shape') {
 			setSelectedShape(value)
 		} else if (filter === 'setting') {
@@ -106,24 +103,16 @@ const Filters = ({
 				<Accordion title='Category' state={true}>
 					<div className={styles.buttons}>
 						{productTypes.map(type => (
-							<button
-								key={type}
-								onClick={() => handleFilter('category', type)}
-								className={`${selectedCategory === type ? styles.active : ''} ${
-									styles.optionButton
-								}`}
-							>
-								<p>{type}</p>
-							</button>
+							<Link key={type} href={`/shop/${type.toLowerCase()}`}>
+								<button
+									className={`${
+										selectedCategory === type.toLowerCase() ? styles.active : ''
+									} ${styles.optionButton}`}
+								>
+									<p>{type}</p>
+								</button>
+							</Link>
 						))}
-						{selectedCategory !== 'All' && (
-							<button
-								className={styles.resetButton}
-								onClick={() => setSelectedCategory('All')}
-							>
-								Reset Category
-							</button>
-						)}
 					</div>
 				</Accordion>
 			)}
@@ -132,22 +121,27 @@ const Filters = ({
 			<Accordion title='Metal' state={true}>
 				<div className={styles.buttons}>
 					{metalTypes.map(type => (
-						<button
+						<Link
 							key={type}
-							onClick={() => handleFilter('metalType', type)}
-							className={`${selectedMetalType === type ? styles.active : ''} ${
-								styles.optionButton
-							}`}
+							href={`/shop/${productType}/${type
+								.replace(' ', '-')
+								.toLowerCase()}`}
 						>
-							<Image
-								src={`/${type.toLowerCase()}-gold.png`}
-								width={16}
-								height={16}
-								alt={`${type} material icon.`}
-								sizes='(max-width: 768px) 100vw, 50vw'
-							/>
-							<p>{type} Gold</p>
-						</button>
+							<button
+								className={`${
+									selectedMetalType === type ? styles.active : ''
+								} ${styles.optionButton}`}
+							>
+								<Image
+									src={`/${type.split(' ')[0].toLowerCase()}-gold.png`}
+									width={16}
+									height={16}
+									alt={`${type} material icon.`}
+									sizes='(max-width: 768px) 100vw, 50vw'
+								/>
+								<p>{type}</p>
+							</button>
+						</Link>
 					))}
 				</div>
 			</Accordion>

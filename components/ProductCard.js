@@ -106,9 +106,9 @@ const ProductCard = ({
 		return {
 			pathname: `/shop/${product.category.name.toLowerCase()}/product/${permalink}`,
 			query: {
-				gold: activeMetalType.includes('yellow')
+				gold: activeMetalType.toLocaleLowerCase().includes('yellow')
 					? 'yellow'
-					: activeMetalType.includes('multi')
+					: activeMetalType.toLocaleLowerCase().includes('multi')
 					? 'yellow-and-white'
 					: 'white'
 			}
@@ -135,7 +135,7 @@ const ProductCard = ({
 	useEffect(() => {
 		if (metalTypes.length > 0) {
 			setActiveMetalType(
-				selectedMetalType === 'Yellow' ? metalTypes[0] : metalTypes[1]
+				selectedMetalType === 'Yellow Gold' ? metalTypes[0] : metalTypes[1]
 			)
 		}
 	}, [metalTypes, selectedMetalType])

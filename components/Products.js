@@ -38,10 +38,11 @@ const Products = ({
 	individual = false,
 	products, // allow undefined; avoid new [] each render causing effect loop
 	productType = '',
-	collectionPreview = null
+	collectionPreview = null,
+	selectedMetalType = 'Yellow Gold',
+	selectedCategory = 'all'
 }) => {
 	const params = useSearchParams()
-	const type = params.get('type')
 	const shape = params.get('shape')
 	const setting = params.get('setting')
 	const design = params.get('design')
@@ -61,8 +62,6 @@ const Products = ({
 
 	// filters state
 	const [selectedSort, setSelectedSort] = useState(null)
-	const [selectedCategory, setSelectedCategory] = useState(type ? type : 'All')
-	const [selectedMetalType, setSelectedMetalType] = useState('Yellow')
 	const [selectedShape, setSelectedShape] = useState(shape ? shape : 'All')
 	const [selectedSetting, setSelectedSetting] = useState(
 		setting ? setting : 'All'
@@ -84,7 +83,7 @@ const Products = ({
 	useEffect(() => {
 		let updated = [...productsList]
 
-		if (selectedCategory !== 'All') {
+		if (selectedCategory !== 'all') {
 			updated = updated.filter(p => p.category.name === selectedCategory)
 		}
 
@@ -164,18 +163,6 @@ const Products = ({
 		selectedStyle,
 		searchTerm
 	])
-
-	useEffect(() => {
-		// debounce sync from URL params to avoid quick successive updates
-		const t = setTimeout(() => {
-			setSelectedCategory(type ?? 'All')
-			setSelectedShape(shape ?? 'All')
-			setSelectedSetting(setting ?? 'All')
-			setSelectedDesign(design ?? 'All')
-			setSelectedStyle(style ?? 'All')
-		}, 0)
-		return () => clearTimeout(t)
-	}, [type, shape, setting, design, style])
 
 	return (
 		<section
@@ -390,9 +377,7 @@ const Products = ({
 					selectedSort={selectedSort}
 					setSelectedSort={setSelectedSort}
 					selectedCategory={selectedCategory}
-					setSelectedCategory={setSelectedCategory}
 					selectedMetalType={selectedMetalType}
-					setSelectedMetalType={setSelectedMetalType}
 					selectedShape={selectedShape}
 					setSelectedShape={setSelectedShape}
 					selectedSetting={selectedSetting}
