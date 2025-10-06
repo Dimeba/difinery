@@ -9,20 +9,10 @@ import { notFound } from 'next/navigation'
 
 const { data } = await apolloClient.query({
 	query: GET_PRODUCTS,
-	variables: {
-		first: 250,
-		after: null
-	}
+	variables: { first: 250, after: null }
 })
 
 const products = data.products.edges.map(edge => edge.node)
-
-// Products
-export async function generateStaticParams() {
-	return products.map(item => ({
-		slug: item.handle
-	}))
-}
 
 export async function generateMetadata(props) {
 	const params = await props.params
@@ -63,7 +53,7 @@ export default async function Product(props) {
 		notFound()
 	}
 
-	// Recommended products
+	// Recommended products (guard metafield)
 	let recommendedProducts = []
 	if (product.metafield?.value) {
 		const recommendedProductIds = product.metafield.value
