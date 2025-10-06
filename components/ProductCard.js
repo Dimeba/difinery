@@ -81,7 +81,7 @@ const ProductCard = ({
 
 		if (!activeMetalType) {
 			const base = {
-				pathname: `/shop/${product.category.name.toLowerCase()}/${permalink}`
+				pathname: `/shop/${product.category.name.toLowerCase()}/product/${permalink}`
 			}
 
 			// Only add query if permalink references a collection variant
@@ -104,7 +104,7 @@ const ProductCard = ({
 		}
 
 		return {
-			pathname: `/shop/${product.category.name.toLowerCase()}/${permalink}`,
+			pathname: `/shop/${product.category.name.toLowerCase()}/product/${permalink}`,
 			query: {
 				gold: activeMetalType.includes('yellow')
 					? 'yellow'
