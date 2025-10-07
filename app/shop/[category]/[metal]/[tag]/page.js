@@ -20,6 +20,29 @@ const ALLOWED_CATEGORIES = [
 
 const ALLOWED_METALS = ['yellow-gold', 'white-gold', 'rose-gold']
 
+const ALLOWED_TAGS = [
+	'marquise',
+	'round',
+	'pear',
+	'heart',
+	'radiant',
+	'oval',
+	'emerald',
+	'prong',
+	'4-prong',
+	'bezel',
+	'martini',
+	'fishtail',
+	'eternity',
+	'solitaires',
+	'statement',
+	'stackable',
+	'open-rings',
+	'studs',
+	'hoops',
+	'multi-pendant'
+]
+
 // Contentful
 const pages = await getEntries('page')
 const content =
@@ -28,7 +51,9 @@ const content =
 export async function generateStaticParams() {
 	// Pre-render combinations of category and metal
 	return ALLOWED_CATEGORIES.flatMap(category =>
-		ALLOWED_METALS.map(metal => ({ category, metal }))
+		ALLOWED_METALS.flatMap(metal =>
+			ALLOWED_TAGS.map(tag => ({ category, metal, tag }))
+		)
 	)
 }
 
@@ -47,9 +72,10 @@ export async function generateMetadata(props) {
 
 export default async function CategoryPage(props) {
 	const params = await props.params
-	const { category, metal } = params
+	const { category, metal, tag } = params
 	if (!ALLOWED_CATEGORIES.includes(category)) notFound()
 	if (!ALLOWED_METALS.includes(metal)) notFound()
+	if (!ALLOWED_TAGS.includes(tag)) notFound()
 
 	const { data } = await apolloClient.query({
 		query: category === 'all' ? GET_PRODUCTS : GET_COLLECTION_BY_HANDLE,
@@ -84,6 +110,7 @@ export default async function CategoryPage(props) {
 					initialPageInfo={initialPageInfo}
 					productType={category}
 					selectedMetalType={metalLabel}
+					selectedTag={tag}
 					showFilters
 				/>
 			</Suspense>

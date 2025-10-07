@@ -15,21 +15,16 @@ const Filters = ({
 	selectedCategory = 'all',
 	selectedMetalType = 'Yellow Gold',
 	selectedShape,
-	setSelectedShape,
 	toggleFilters,
 	selectedSetting,
-	setSelectedSetting,
-	selectedDesign,
-	setSelectedDesign,
 	selectedStyle,
-	setSelectedStyle,
-	productType = 'all'
+	productType = 'all',
+	selectedTag = 'all'
 }) => {
 	const sortOptions = ['Lowest Price', 'Highest Price', 'Newest']
 	const metalTypes = ['Yellow Gold', 'White Gold']
-	const productTypes = ['All', 'Rings', 'Earrings', 'Necklaces', 'Bracelets']
+	const productTypes = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
 	const shapes = [
-		'All',
 		'Marquise',
 		'Round',
 		'Pear',
@@ -40,32 +35,14 @@ const Filters = ({
 	]
 	const setting =
 		productType === 'earrings'
-			? ['All', 'Prong', '4 Prong', 'Bezel', 'Martini', 'Fishtail']
-			: ['All', 'Prong', 'Bezel', 'Fishtail']
-	// const design =
-	// 	productType === 'earrings'
-	// 		? ['All', 'Stud', 'Hoops']
-	// 		: ['All', 'Pendant', 'Station', 'Fixed']
+			? ['Prong', '4 Prong', 'Bezel', 'Martini', 'Fishtail']
+			: ['Prong', 'Bezel', 'Fishtail']
 	const style =
 		productType === 'rings'
-			? ['All', 'Eternity', 'Solitaire', 'Statement', 'Stackable', 'Open Rings']
+			? ['Eternity', 'Solitaire', 'Statement', 'Stackable', 'Open Rings']
 			: productType === 'earrings'
-			? ['All', 'Studs', 'Hoops']
-			: ['All', 'Solitaire', 'Multi-Pendant']
-
-	const handleFilter = (filter, value) => {
-		if (filter === 'metalType') {
-			console.log(value)
-		} else if (filter === 'shape') {
-			setSelectedShape(value)
-		} else if (filter === 'setting') {
-			setSelectedSetting(value)
-		} else if (filter === 'design') {
-			setSelectedDesign(value)
-		} else if (filter === 'style') {
-			setSelectedStyle(value)
-		}
-	}
+			? ['Studs', 'Hoops']
+			: ['Solitaire', 'Multi-Pendant']
 
 	const handleSort = sortOption => {
 		setSelectedSort(sortOption)
@@ -150,15 +127,20 @@ const Filters = ({
 			<Accordion title='Shape' state={true}>
 				<div className={styles.buttons}>
 					{shapes.map(shape => (
-						<button
+						<Link
 							key={shape}
-							onClick={() => handleFilter('shape', shape)}
-							className={`${shape === selectedShape ? styles.active : ''} ${
-								styles.optionButton
-							}`}
+							href={`/shop/${productType}/${selectedMetalType
+								.replace(' ', '-')
+								.toLowerCase()}/${shape.replace(' ', '-').toLowerCase()}`}
 						>
-							<p>{shape}</p>
-						</button>
+							<button
+								className={`${shape === selectedShape ? styles.active : ''} ${
+									styles.optionButton
+								}`}
+							>
+								<p>{shape}</p>
+							</button>
+						</Link>
 					))}
 				</div>
 			</Accordion>
@@ -167,52 +149,43 @@ const Filters = ({
 			<Accordion title='Setting' state={true}>
 				<div className={styles.buttons}>
 					{setting.map(setting => (
-						<button
+						<Link
 							key={setting}
-							onClick={() => handleFilter('setting', setting)}
-							className={`${setting === selectedSetting ? styles.active : ''} ${
-								styles.optionButton
-							}`}
+							href={`/shop/${productType}/${selectedMetalType
+								.replace(' ', '-')
+								.toLowerCase()}/${setting.replace(' ', '-').toLowerCase()}`}
 						>
-							<p>{setting}</p>
-						</button>
+							<button
+								className={`${
+									setting === selectedSetting ? styles.active : ''
+								} ${styles.optionButton}`}
+							>
+								<p>{setting}</p>
+							</button>
+						</Link>
 					))}
 				</div>
 			</Accordion>
-
-			{/* Design */}
-			{/* {productType !== 'all' && productType !== 'rings' && (
-				<Accordion title='Design' state={true}>
-					<div className={styles.buttons}>
-						{design.map(design => (
-							<button
-								key={design}
-								onClick={() => handleFilter('design', design)}
-								className={`${design === selectedDesign ? styles.active : ''} ${
-									styles.optionButton
-								}`}
-							>
-								<p>{design}</p>
-							</button>
-						))}
-					</div>
-				</Accordion>
-			)} */}
 
 			{/* Style */}
 			{productType !== 'all' && (
 				<Accordion title='Style' state={true}>
 					<div className={styles.buttons}>
 						{style.map(style => (
-							<button
+							<Link
 								key={style}
-								onClick={() => handleFilter('style', style)}
-								className={`${style === selectedStyle ? styles.active : ''} ${
-									styles.optionButton
-								}`}
+								href={`/shop/${productType}/${selectedMetalType
+									.replace(' ', '-')
+									.toLowerCase()}/${style.replace(' ', '-').toLowerCase()}`}
 							>
-								<p>{style}</p>
-							</button>
+								<button
+									className={`${style === selectedStyle ? styles.active : ''} ${
+										styles.optionButton
+									}`}
+								>
+									<p>{style}</p>
+								</button>
+							</Link>
 						))}
 					</div>
 				</Accordion>

@@ -40,7 +40,8 @@ const Products = ({
 	productType = '',
 	collectionPreview = null,
 	selectedMetalType = 'Yellow Gold',
-	selectedCategory = 'all'
+	selectedCategory = 'all',
+	selectedTag = 'all'
 }) => {
 	const params = useSearchParams()
 	const shape = params.get('shape')
@@ -82,37 +83,6 @@ const Products = ({
 	// Filter & sort
 	useEffect(() => {
 		let updated = [...productsList]
-
-		if (selectedCategory !== 'all') {
-			updated = updated.filter(p => p.category.name === selectedCategory)
-		}
-
-		// if (selectedMetalType) {
-		// 	updated = updated.filter(p =>
-		// 		p.options?.some(opt =>
-		// 			opt.values.some(value =>
-		// 				value.toLowerCase().includes(selectedMetalType.toLowerCase())
-		// 			)
-		// 		)
-		// 	)
-		// }
-
-		if (selectedShape !== 'All') {
-			updated = updated.filter(p => p.tags?.includes(selectedShape))
-		}
-
-		if (selectedSetting !== 'All') {
-			updated = updated.filter(p => p.tags?.includes(selectedSetting))
-		}
-
-		if (selectedDesign !== 'All') {
-			updated = updated.filter(p => p.tags?.includes(selectedDesign))
-		}
-
-		if (selectedStyle !== 'All') {
-			const normalizedStyle = selectedStyle.replace(/-/g, ' ')
-			updated = updated.filter(p => p.tags?.includes(normalizedStyle))
-		}
 
 		if (searchTerm) {
 			const term = searchTerm.toLowerCase()
@@ -388,6 +358,7 @@ const Products = ({
 					setSelectedStyle={setSelectedStyle}
 					toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
 					productType={productType}
+					selectedTag={selectedTag}
 				/>
 			</Popper>
 		</section>
