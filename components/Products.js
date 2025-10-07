@@ -24,7 +24,6 @@ import SearchIcon from '@mui/icons-material/Search'
 // hooks
 import { useState, useEffect, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
-import { useSearchParams } from 'next/navigation'
 
 const EMPTY_PRODUCTS = []
 
@@ -43,12 +42,6 @@ const Products = ({
 	selectedCategory = 'all',
 	selectedTag = 'all'
 }) => {
-	const params = useSearchParams()
-	const shape = params.get('shape')
-	const setting = params.get('setting')
-	const design = params.get('design')
-	const style = params.get('style')
-
 	// Stable base products list (empty singleton when undefined)
 	const productsList = products ?? EMPTY_PRODUCTS
 
@@ -63,12 +56,6 @@ const Products = ({
 
 	// filters state
 	const [selectedSort, setSelectedSort] = useState(null)
-	const [selectedShape, setSelectedShape] = useState(shape ? shape : 'All')
-	const [selectedSetting, setSelectedSetting] = useState(
-		setting ? setting : 'All'
-	)
-	const [selectedDesign, setSelectedDesign] = useState(design ? design : 'All')
-	const [selectedStyle, setSelectedStyle] = useState(style ? style : 'All')
 	const [searchTerm, setSearchTerm] = useState('')
 
 	const isMobile = useMediaQuery('(max-width: 1024px)')
@@ -83,6 +70,15 @@ const Products = ({
 	// Filter & sort
 	useEffect(() => {
 		let updated = [...productsList]
+
+		if (selectedTag) {
+			const normalizedTag = selectedTag
+				.split('-')
+				.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+				.join(' ')
+
+			updated = updated.filter(p => p.tags?.includes(normalizedTag))
+		}
 
 		if (searchTerm) {
 			const term = searchTerm.toLowerCase()
@@ -127,10 +123,7 @@ const Products = ({
 		selectedSort,
 		selectedCategory,
 		selectedMetalType,
-		selectedShape,
-		selectedSetting,
-		selectedDesign,
-		selectedStyle,
+		selectedTag,
 		searchTerm
 	])
 
@@ -348,14 +341,6 @@ const Products = ({
 					setSelectedSort={setSelectedSort}
 					selectedCategory={selectedCategory}
 					selectedMetalType={selectedMetalType}
-					selectedShape={selectedShape}
-					setSelectedShape={setSelectedShape}
-					selectedSetting={selectedSetting}
-					setSelectedSetting={setSelectedSetting}
-					selectedDesign={selectedDesign}
-					setSelectedDesign={setSelectedDesign}
-					selectedStyle={selectedStyle}
-					setSelectedStyle={setSelectedStyle}
 					toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
 					productType={productType}
 					selectedTag={selectedTag}

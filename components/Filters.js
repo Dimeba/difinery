@@ -14,10 +14,7 @@ const Filters = ({
 	setSelectedSort,
 	selectedCategory = 'all',
 	selectedMetalType = 'Yellow Gold',
-	selectedShape,
 	toggleFilters,
-	selectedSetting,
-	selectedStyle,
 	productType = 'all',
 	selectedTag = 'all'
 }) => {
@@ -134,9 +131,9 @@ const Filters = ({
 								.toLowerCase()}/${shape.replace(' ', '-').toLowerCase()}`}
 						>
 							<button
-								className={`${shape === selectedShape ? styles.active : ''} ${
-									styles.optionButton
-								}`}
+								className={`${
+									shape.toLowerCase() === selectedTag ? styles.active : ''
+								} ${styles.optionButton}`}
 							>
 								<p>{shape}</p>
 							</button>
@@ -157,7 +154,7 @@ const Filters = ({
 						>
 							<button
 								className={`${
-									setting === selectedSetting ? styles.active : ''
+									setting.toLowerCase() === selectedTag ? styles.active : ''
 								} ${styles.optionButton}`}
 							>
 								<p>{setting}</p>
@@ -179,9 +176,9 @@ const Filters = ({
 									.toLowerCase()}/${style.replace(' ', '-').toLowerCase()}`}
 							>
 								<button
-									className={`${style === selectedStyle ? styles.active : ''} ${
-										styles.optionButton
-									}`}
+									className={`${
+										style.toLowerCase() === selectedTag ? styles.active : ''
+									} ${styles.optionButton}`}
 								>
 									<p>{style}</p>
 								</button>
