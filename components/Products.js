@@ -71,6 +71,18 @@ const Products = ({
 	useEffect(() => {
 		let updated = [...productsList]
 
+		if (selectedMetalType) {
+			updated = updated.filter(p =>
+				p.options?.some(opt =>
+					opt.values.some(value =>
+						value
+							.toLowerCase()
+							.includes(selectedMetalType.split(' ')[0].toLowerCase())
+					)
+				)
+			)
+		}
+
 		if (selectedTag) {
 			const normalizedTag = selectedTag
 				.split('-')
