@@ -40,7 +40,7 @@ const Products = ({
 	collectionPreview = null,
 	selectedMetalType = 'Yellow Gold',
 	selectedCategory = 'all',
-	selectedTag = 'all'
+	selectedTag = null
 }) => {
 	// Stable base products list (empty singleton when undefined)
 	const productsList = products ?? EMPTY_PRODUCTS
