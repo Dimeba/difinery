@@ -85,7 +85,7 @@ export default async function Page(props) {
 					products={initialItems}
 					initialPageInfo={initialPageInfo}
 					productType='all'
-					showFilters
+					// showFilters
 					collectionPreview={{
 						title: content.title,
 						description: content.description,
