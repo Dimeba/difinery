@@ -111,11 +111,11 @@
 				"rows": [
 					{
 						"title": "Infinity Collection",
-						"url": "/shop/collections/infinity-collection?type=Rings"
+						"url": "/shop/collections/infinity-collection"
 					},
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart-collection?type=Rings"
+						"url": "/shop/collections/heart-collection"
 					}
 				]
 			}
@@ -229,7 +229,7 @@
 				"rows": [
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart-collection?type=Necklaces"
+						"url": "/shop/collections/heart-collection"
 					}
 				]
 			}
@@ -276,7 +276,7 @@
 				"rows": [
 					{
 						"title": "Heart Collection",
-						"url": "/shop/collections/heart-collection?type=Bracelets"
+						"url": "/shop/collections/heart-collection"
 					}
 				]
 			}
