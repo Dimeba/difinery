@@ -33,14 +33,17 @@ const ALLOWED_TAGS = [
 	'bezel',
 	'martini',
 	'fishtail',
-	'eternity',
-	'solitaire',
-	'statement',
-	'stackable',
+	'eternity-rings',
+	'solitaire-rings',
+	'statement-rings',
+	'stackable-rings',
 	'open-rings',
 	'studs',
 	'hoops',
-	'multi-pendant'
+	'multi-pendant-necklaces',
+	'pendant-necklaces',
+	'multi-pendant-bracelets',
+	'pendant-bracelets'
 ]
 
 // Contentful

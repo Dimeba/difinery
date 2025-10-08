@@ -36,10 +36,20 @@ const Filters = ({
 			: ['Prong', 'Bezel', 'Fishtail']
 	const style =
 		productType === 'rings'
-			? ['Eternity', 'Solitaire', 'Statement', 'Stackable', 'Open Rings']
+			? [
+					'Eternity Rings',
+					'Solitaire Rings',
+					'Statement Rings',
+					'Stackable Rings',
+					'Open Rings'
+			  ]
 			: productType === 'earrings'
 			? ['Studs', 'Hoops']
-			: ['Solitaire', 'Multi-Pendant']
+			: productType === 'necklaces'
+			? ['Pendant Necklaces', 'Multi-Pendant Necklaces']
+			: productType === 'bracelets'
+			? ['Pendant Bracelets', 'Multi-Pendant Bracelets']
+			: []
 
 	const handleSort = sortOption => {
 		setSelectedSort(sortOption)

@@ -64,20 +64,20 @@
 				"title": "Style",
 				"rows": [
 					{
-						"title": "Eternity",
-						"url": "/shop/rings/yellow-gold/eternity"
+						"title": "Eternity Rings",
+						"url": "/shop/rings/yellow-gold/eternity-rings"
 					},
 					{
-						"title": "Solitaire",
-						"url": "/shop/rings/yellow-gold/solitaire"
+						"title": "Solitaire Rings",
+						"url": "/shop/rings/yellow-gold/solitaire-rings"
 					},
 					{
-						"title": "Statement",
-						"url": "/shop/rings/yellow-gold/statement"
+						"title": "Statement Rings",
+						"url": "/shop/rings/yellow-gold/statement-rings"
 					},
 					{
-						"title": "Stackable",
-						"url": "/shop/rings/yellow-gold/stackable"
+						"title": "Stackable Rings",
+						"url": "/shop/rings/yellow-gold/stackable-rings"
 					},
 					{
 						"title": "Open Rings",
@@ -194,12 +194,16 @@
 				"title": "Style",
 				"rows": [
 					{
-						"title": "Solitaire",
-						"url": "/shop/necklaces/yellow-gold/solitaire"
+						"title": "Pendant Necklaces",
+						"url": "/shop/necklaces/yellow-gold/pendant-necklaces"
 					},
 					{
-						"title": "Multi-Pendant",
-						"url": "/shop/necklaces/yellow-gold/multi-pendant"
+						"title": "Multi-Pendant Necklaces",
+						"url": "/shop/necklaces/yellow-gold/multi-pendant-necklaces"
+					},
+					{
+						"title": "All Necklaces",
+						"url": "/shop/necklaces"
 					}
 				]
 			},
@@ -241,12 +245,16 @@
 				"title": "Style",
 				"rows": [
 					{
-						"title": "Solitaire",
-						"url": "/shop/bracelets/yellow-gold/solitaire"
+						"title": "Pendant Bracelets",
+						"url": "/shop/bracelets/yellow-gold/pendant-bracelets"
 					},
 					{
-						"title": "Multi-Pendant",
-						"url": "/shop/bracelets/yellow-gold/multi-pendant"
+						"title": "Multi-Pendant Bracelets",
+						"url": "/shop/bracelets/yellow-gold/multi-pendant-bracelets"
+					},
+					{
+						"title": "All Bracelets",
+						"url": "/shop/bracelets"
 					}
 				]
 			},
