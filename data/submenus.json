@@ -65,23 +65,23 @@
 				"rows": [
 					{
 						"title": "Eternity",
-						"url": "/shop/rings?style=Eternity"
+						"url": "/shop/rings/yellow-gold/eternity"
 					},
 					{
 						"title": "Solitaire",
-						"url": "/shop/rings?style=Solitaire"
+						"url": "/shop/rings/yellow-gold/solitaire"
 					},
 					{
 						"title": "Statement",
-						"url": "/shop/rings?style=Statement"
+						"url": "/shop/rings/yellow-gold/statement"
 					},
 					{
 						"title": "Stackable",
-						"url": "/shop/rings?style=Stackable"
+						"url": "/shop/rings/yellow-gold/stackable"
 					},
 					{
 						"title": "Open Rings",
-						"url": "/shop/rings?style=Open-Rings"
+						"url": "/shop/rings/yellow-gold/open-rings"
 					}
 				]
 			},
@@ -128,11 +128,11 @@
 				"rows": [
 					{
 						"title": "Studs",
-						"url": "/shop/earrings?design=Stud"
+						"url": "/shop/earrings/yellow-gold/studs"
 					},
 					{
 						"title": "Hoops",
-						"url": "/shop/earrings?design=Hoops"
+						"url": "/shop/earrings/yellow-gold/hoops"
 					},
 					{
 						"title": "All Earrings",
@@ -166,23 +166,23 @@
 				"rows": [
 					{
 						"title": "Bezel",
-						"url": "/shop/earrings?setting=Bezel"
+						"url": "/shop/earrings/yellow-gold/bezel"
 					},
 					{
 						"title": "Prong",
-						"url": "/shop/earrings?setting=Prong"
+						"url": "/shop/earrings/yellow-gold/prong"
 					},
 					{
 						"title": "4-Prong",
-						"url": "/shop/earrings?setting=4-Prong"
+						"url": "/shop/earrings/yellow-gold/4-prong"
 					},
 					{
 						"title": "Martini",
-						"url": "/shop/earrings?setting=Martini"
+						"url": "/shop/earrings/yellow-gold/martini"
 					},
 					{
 						"title": "Fishtail",
-						"url": "/shop/earrings?setting=Fishtail"
+						"url": "/shop/earrings/yellow-gold/fishtail"
 					}
 				]
 			}
@@ -195,11 +195,11 @@
 				"rows": [
 					{
 						"title": "Solitaire",
-						"url": "/shop/necklaces?design=Solitaire"
+						"url": "/shop/necklaces/yellow-gold/solitaire"
 					},
 					{
 						"title": "Multi-Pendant",
-						"url": "/shop/necklaces?design=Multi"
+						"url": "/shop/necklaces/yellow-gold/multi-pendant"
 					}
 				]
 			},
@@ -242,11 +242,11 @@
 				"rows": [
 					{
 						"title": "Solitaire",
-						"url": "/shop/bracelets?design=Solitaire"
+						"url": "/shop/bracelets/yellow-gold/solitaire"
 					},
 					{
 						"title": "Multi-Pendant",
-						"url": "/shop/bracelets?design=Multi"
+						"url": "/shop/bracelets/yellow-gold/multi-pendant"
 					}
 				]
 			},

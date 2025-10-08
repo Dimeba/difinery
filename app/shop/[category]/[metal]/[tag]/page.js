@@ -34,7 +34,7 @@ const ALLOWED_TAGS = [
 	'martini',
 	'fishtail',
 	'eternity',
-	'solitaires',
+	'solitaire',
 	'statement',
 	'stackable',
 	'open-rings',
