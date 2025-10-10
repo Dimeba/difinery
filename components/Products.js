@@ -88,8 +88,11 @@ const Products = ({
 				.split('-')
 				.map(word => word.charAt(0).toUpperCase() + word.slice(1))
 			let normalizedTag
-			if (selectedTag.startsWith('multi-') && words.length > 1) {
-				// checking if tag starts with 'multi-' and has more words
+			if (
+				(selectedTag.startsWith('multi-') ||
+					selectedTag.startsWith('4-prong')) &&
+				words.length > 1
+			) {
 				const [first, second, ...rest] = words
 				const tail = [second, ...rest].filter(Boolean).join(' ')
 				normalizedTag = tail ? `${first}-${tail}` : first
