@@ -271,18 +271,18 @@ const ProductOptionsUI = ({
 					<Accordion title='Product Details'>
 						<div className={styles.productDetails}>
 							<p>
-								<span style={{ fontWeight: '700' }}>Product Name: </span>
+								<span>Product Name: </span>
 								{product.title}
 							</p>
 							{matchingVariant && (
 								<p>
-									<span style={{ fontWeight: '700' }}>ID / SKU: </span>
+									<span>ID / SKU: </span>
 									{matchingVariant.sku}
 								</p>
 							)}
 							{selectedColor && (
 								<p>
-									<span style={{ fontWeight: '700' }}>Metal: </span>
+									<span>Metal: </span>
 									{selectedColor.toLowerCase().includes('yellow') ? (
 										<span>Yellow Gold</span>
 									) : (
