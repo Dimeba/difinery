@@ -84,10 +84,18 @@ const Products = ({
 		}
 
 		if (selectedTag) {
-			const normalizedTag = selectedTag
+			const words = selectedTag
 				.split('-')
 				.map(word => word.charAt(0).toUpperCase() + word.slice(1))
-				.join(' ')
+			let normalizedTag
+			if (selectedTag.startsWith('multi-') && words.length > 1) {
+				// checking if tag starts with 'multi-' and has more words
+				const [first, second, ...rest] = words
+				const tail = [second, ...rest].filter(Boolean).join(' ')
+				normalizedTag = tail ? `${first}-${tail}` : first
+			} else {
+				normalizedTag = words.join(' ')
+			}
 
 			updated = updated.filter(p => p.tags?.includes(normalizedTag))
 		}
