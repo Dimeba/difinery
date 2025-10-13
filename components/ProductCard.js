@@ -135,7 +135,9 @@ const ProductCard = ({
 	useEffect(() => {
 		if (metalTypes.length > 0) {
 			setActiveMetalType(
-				selectedMetalType === 'Yellow Gold' ? metalTypes[0] : metalTypes[1]
+				selectedMetalType === 'Yellow Gold'
+					? metalTypes[0]
+					: metalTypes[1] || metalTypes[0]
 			)
 		}
 	}, [metalTypes, selectedMetalType])
