@@ -41,7 +41,8 @@ const Filters = ({
 					'Solitaire Rings',
 					'Statement Rings',
 					'Stackable Rings',
-					'Open Rings'
+					'Open Rings',
+					'Everyday Diamond Rings'
 			  ]
 			: productType === 'earrings'
 			? ['Studs', 'Hoops']
@@ -108,7 +109,7 @@ const Filters = ({
 						<Link
 							key={type}
 							href={`/shop/${productType}/${type
-								.replace(' ', '-')
+								.replace(/\s+/g, '-')
 								.toLowerCase()}`}
 						>
 							<button
@@ -137,8 +138,8 @@ const Filters = ({
 						<Link
 							key={shape}
 							href={`/shop/${productType}/${selectedMetalType
-								.replace(' ', '-')
-								.toLowerCase()}/${shape.replace(' ', '-').toLowerCase()}`}
+								.replace(/\s+/g, '-')
+								.toLowerCase()}/${shape.replace(/\s+/g, '-').toLowerCase()}`}
 						>
 							<button
 								className={`${
@@ -159,8 +160,8 @@ const Filters = ({
 						<Link
 							key={setting}
 							href={`/shop/${productType}/${selectedMetalType
-								.replace(' ', '-')
-								.toLowerCase()}/${setting.replace(' ', '-').toLowerCase()}`}
+								.replace(/\s+/g, '-')
+								.toLowerCase()}/${setting.replace(/\s+/g, '-').toLowerCase()}`}
 						>
 							<button
 								className={`${
@@ -182,8 +183,8 @@ const Filters = ({
 							<Link
 								key={style}
 								href={`/shop/${productType}/${selectedMetalType
-									.replace(' ', '-')
-									.toLowerCase()}/${style.replace(' ', '-').toLowerCase()}`}
+									.replace(/\s+/g, '-')
+									.toLowerCase()}/${style.replace(/\s+/g, '-').toLowerCase()}`}
 							>
 								<button
 									className={`${

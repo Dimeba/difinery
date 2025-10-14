@@ -38,6 +38,7 @@ const ALLOWED_TAGS = [
 	'statement-rings',
 	'stackable-rings',
 	'open-rings',
+	'everyday-diamond-rings',
 	'studs',
 	'hoops',
 	'multi-pendant-necklaces',
