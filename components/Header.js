@@ -176,7 +176,7 @@ const Header = ({ content, collectionsContent }) => {
 						<nav className={`container ${styles.headerBot}`}>
 							{/* Shop Page */}
 							<Link
-								href='/shop'
+								href='/shop/all/yellow-gold/all'
 								aria-label='Link to Shop page.'
 								className={styles.mainMenuLink}
 								onMouseEnter={() => loadSubmenu(submenus[0].columns)}
