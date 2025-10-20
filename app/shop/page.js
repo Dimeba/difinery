@@ -1,16 +1,4 @@
-// components
-import Products from '@/components/Products'
-import PageContent from '@/components/PageContent'
-import { Suspense } from 'react'
-
-// lib
-import { apolloClient } from '@/lib/apolloClient'
-import { GET_PRODUCTS } from '@/lib/queries/getProducts'
-import { getEntries } from '@/lib/contentful'
-
-// Contentful
-const pages = await getEntries('page')
-const content = pages.items.find(page => page.fields.title == 'Shop').fields
+import ProductsPlaceholder from '@/components/ProductsPlaceholder'
 
 export const metadata = {
 	title: 'Difinery | Shop',
@@ -18,8 +6,6 @@ export const metadata = {
 	keywords: ''
 }
 
-export default async function Home() {
-	// Redirect to yellow-gold/all by default for SEO-friendly URLs
-	const { redirect } = await import('next/navigation')
-	redirect('/shop/all/yellow-gold/all')
+export default function Home() {
+	return <ProductsPlaceholder />
 }
