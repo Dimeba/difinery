@@ -20,31 +20,24 @@ const ALLOWED_CATEGORIES = [
 
 const ALLOWED_METALS = ['yellow-gold', 'white-gold', 'rose-gold']
 
-const ALLOWED_TAGS = [
-	'marquise',
-	'round',
-	'pear',
-	'heart',
-	'radiant',
-	'oval',
-	'emerald',
-	'prong',
-	'4-prong',
-	'bezel',
-	'martini',
-	'fishtail',
+const ALLOWED_STYLES = [
+	'all',
+	// Rings
 	'eternity-rings',
 	'solitaire-rings',
 	'statement-rings',
 	'stackable-rings',
 	'open-rings',
 	'everyday-diamond-rings',
+	// Earrings
 	'studs',
 	'hoops',
-	'multi-pendant-necklaces',
+	// Necklaces
 	'pendant-necklaces',
-	'multi-pendant-bracelets',
-	'pendant-bracelets'
+	'multi-pendant-necklaces',
+	// Bracelets
+	'pendant-bracelets',
+	'multi-pendant-bracelets'
 ]
 
 // Contentful
@@ -53,10 +46,10 @@ const content =
 	pages.items.find(page => page.fields.title == 'Shop')?.fields || {}
 
 export async function generateStaticParams() {
-	// Pre-render combinations of category and metal
+	// Pre-render combinations of category, metal, and style
 	return ALLOWED_CATEGORIES.flatMap(category =>
 		ALLOWED_METALS.flatMap(metal =>
-			ALLOWED_TAGS.map(tag => ({ category, metal, tag }))
+			ALLOWED_STYLES.map(style => ({ category, metal, style }))
 		)
 	)
 }
@@ -74,12 +67,14 @@ export async function generateMetadata(props) {
 	}
 }
 
-export default async function CategoryPage(props) {
+export default async function CategoryMetalStylePage(props) {
 	const params = await props.params
-	const { category, metal, tag } = params
+	const searchParams = await props.searchParams
+	const { category, metal, style } = params
+
 	if (!ALLOWED_CATEGORIES.includes(category)) notFound()
 	if (!ALLOWED_METALS.includes(metal)) notFound()
-	if (!ALLOWED_TAGS.includes(tag)) notFound()
+	if (!ALLOWED_STYLES.includes(style)) notFound()
 
 	const { data } = await apolloClient.query({
 		query: category === 'all' ? GET_PRODUCTS : GET_COLLECTION_BY_HANDLE,
@@ -98,13 +93,21 @@ export default async function CategoryPage(props) {
 		? data.products?.pageInfo
 		: data.collectionByHandle?.products?.pageInfo
 
-	// Map metal slug to readable label for ProductCard/Products expectations
+	// Map metal slug to readable label
 	const metalLabel =
 		metal === 'yellow-gold'
 			? 'Yellow Gold'
 			: metal === 'white-gold'
 			? 'White Gold'
 			: 'Rose Gold'
+
+	// Extract filters from URL path and query parameters
+	const filters = {
+		metal: metal, // Metal comes from URL path
+		style: style !== 'all' ? style : null, // Style from URL path (null if 'all')
+		shape: searchParams?.shape || null,
+		setting: searchParams?.setting || null
+	}
 
 	return (
 		<main>
@@ -114,8 +117,8 @@ export default async function CategoryPage(props) {
 					initialPageInfo={initialPageInfo}
 					productType={category}
 					selectedMetalType={metalLabel}
-					selectedTag={tag}
 					showFilters
+					filters={filters}
 				/>
 			</Suspense>
 			<PageContent content={content} />

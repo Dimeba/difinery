@@ -7,17 +7,19 @@ import styles from './Filters.module.scss'
 import Image from 'next/image'
 import Accordion from './Accordion'
 import { IoClose } from 'react-icons/io5'
-import Link from 'next/link'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
 const Filters = ({
 	selectedSort,
 	setSelectedSort,
 	selectedCategory = 'all',
-	selectedMetalType = 'Yellow Gold',
 	toggleFilters,
-	productType = 'all',
-	selectedTag = 'all'
+	productType = 'all'
 }) => {
+	const router = useRouter()
+	const pathname = usePathname()
+	const searchParams = useSearchParams()
+
 	const sortOptions = ['Lowest Price', 'Highest Price', 'Newest']
 	const metalTypes = ['Yellow Gold', 'White Gold']
 	const productTypes = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
@@ -56,6 +58,57 @@ const Filters = ({
 		setSelectedSort(sortOption)
 	}
 
+	// Extract current metal and style from pathname (e.g., /shop/rings/yellow-gold/studs)
+	const pathParts = pathname.split('/')
+	const currentMetalFromPath = pathParts[3] || 'yellow-gold' // default to yellow-gold
+	const currentStyleFromPath = pathParts[4] || 'all' // default to 'all'
+
+	// Get current tag filter values from URL query params
+	const currentShape = searchParams.get('shape')
+	const currentSetting = searchParams.get('setting')
+
+	// Helper to update metal (changes URL path and preserves style + query params)
+	const updateMetal = metalSlug => {
+		const params = new URLSearchParams(searchParams)
+		const queryString = params.toString()
+		const newPath = `/shop/${productType}/${metalSlug}/${currentStyleFromPath}`
+		router.push(`${newPath}${queryString ? `?${queryString}` : ''}`)
+	}
+
+	// Helper to update style (changes URL path and preserves query params)
+	const updateStyle = styleSlug => {
+		const params = new URLSearchParams(searchParams)
+		const queryString = params.toString()
+		const newPath = `/shop/${productType}/${currentMetalFromPath}/${styleSlug}`
+		router.push(`${newPath}${queryString ? `?${queryString}` : ''}`)
+	}
+
+	// Helper to update tag filters (only updates query params, keeps metal and style in path)
+	const updateFilter = (filterType, value) => {
+		const params = new URLSearchParams(searchParams)
+
+		if (params.get(filterType) === value) {
+			// If clicking the same value, remove the filter
+			params.delete(filterType)
+		} else {
+			// Otherwise set the new value
+			params.set(filterType, value)
+		}
+
+		const queryString = params.toString()
+		router.push(`${pathname}${queryString ? `?${queryString}` : ''}`)
+	}
+
+	// Helper to check if a filter is active
+	const isFilterActive = (filterType, value) => {
+		return searchParams.get(filterType) === value
+	}
+
+	// Helper to check if style is active (from URL path)
+	const isStyleActive = styleSlug => {
+		return currentStyleFromPath === styleSlug
+	}
+
 	return (
 		<div className={styles.filters}>
 			{/* Sort */}
@@ -88,15 +141,19 @@ const Filters = ({
 				<Accordion title='Category' state={true}>
 					<div className={styles.buttons}>
 						{productTypes.map(type => (
-							<Link key={type} href={`/shop/${type.toLowerCase()}`}>
-								<button
-									className={`${
-										selectedCategory === type.toLowerCase() ? styles.active : ''
-									} ${styles.optionButton}`}
-								>
-									<p>{type}</p>
-								</button>
-							</Link>
+							<button
+								key={type}
+								onClick={() =>
+									router.push(
+										`/shop/${type.toLowerCase()}/${currentMetalFromPath}/all`
+									)
+								}
+								className={`${
+									selectedCategory === type.toLowerCase() ? styles.active : ''
+								} ${styles.optionButton}`}
+							>
+								<p>{type}</p>
+							</button>
 						))}
 					</div>
 				</Accordion>
@@ -105,16 +162,14 @@ const Filters = ({
 			{/* Metal */}
 			<Accordion title='Metal' state={true}>
 				<div className={styles.buttons}>
-					{metalTypes.map(type => (
-						<Link
-							key={type}
-							href={`/shop/${productType}/${type
-								.replace(/\s+/g, '-')
-								.toLowerCase()}`}
-						>
+					{metalTypes.map(type => {
+						const metalSlug = type.toLowerCase().replace(/\s+/g, '-')
+						return (
 							<button
+								key={type}
+								onClick={() => updateMetal(metalSlug)}
 								className={`${
-									selectedMetalType === type ? styles.active : ''
+									currentMetalFromPath === metalSlug ? styles.active : ''
 								} ${styles.optionButton}`}
 							>
 								<Image
@@ -126,8 +181,8 @@ const Filters = ({
 								/>
 								<p>{type}</p>
 							</button>
-						</Link>
-					))}
+						)
+					})}
 				</div>
 			</Accordion>
 
@@ -135,20 +190,22 @@ const Filters = ({
 			<Accordion title='Shape' state={true}>
 				<div className={styles.buttons}>
 					{shapes.map(shape => (
-						<Link
+						<button
 							key={shape}
-							href={`/shop/${productType}/${selectedMetalType
-								.replace(/\s+/g, '-')
-								.toLowerCase()}/${shape.replace(/\s+/g, '-').toLowerCase()}`}
+							onClick={() =>
+								updateFilter('shape', shape.toLowerCase().replace(/\s+/g, '-'))
+							}
+							className={`${
+								isFilterActive(
+									'shape',
+									shape.toLowerCase().replace(/\s+/g, '-')
+								)
+									? styles.active
+									: ''
+							} ${styles.optionButton}`}
 						>
-							<button
-								className={`${
-									shape.toLowerCase() === selectedTag ? styles.active : ''
-								} ${styles.optionButton}`}
-							>
-								<p>{shape}</p>
-							</button>
-						</Link>
+							<p>{shape}</p>
+						</button>
 					))}
 				</div>
 			</Accordion>
@@ -156,21 +213,26 @@ const Filters = ({
 			{/* Setting */}
 			<Accordion title='Setting' state={true}>
 				<div className={styles.buttons}>
-					{setting.map(setting => (
-						<Link
-							key={setting}
-							href={`/shop/${productType}/${selectedMetalType
-								.replace(/\s+/g, '-')
-								.toLowerCase()}/${setting.replace(/\s+/g, '-').toLowerCase()}`}
+					{setting.map(settingOption => (
+						<button
+							key={settingOption}
+							onClick={() =>
+								updateFilter(
+									'setting',
+									settingOption.toLowerCase().replace(/\s+/g, '-')
+								)
+							}
+							className={`${
+								isFilterActive(
+									'setting',
+									settingOption.toLowerCase().replace(/\s+/g, '-')
+								)
+									? styles.active
+									: ''
+							} ${styles.optionButton}`}
 						>
-							<button
-								className={`${
-									setting.toLowerCase() === selectedTag ? styles.active : ''
-								} ${styles.optionButton}`}
-							>
-								<p>{setting}</p>
-							</button>
-						</Link>
+							<p>{settingOption}</p>
+						</button>
 					))}
 				</div>
 			</Accordion>
@@ -179,22 +241,31 @@ const Filters = ({
 			{productType !== 'all' && (
 				<Accordion title='Style' state={true}>
 					<div className={styles.buttons}>
-						{style.map(style => (
-							<Link
-								key={style}
-								href={`/shop/${productType}/${selectedMetalType
-									.replace(/\s+/g, '-')
-									.toLowerCase()}/${style.replace(/\s+/g, '-').toLowerCase()}`}
-							>
+						{/* Add "All" option */}
+						<button
+							onClick={() => updateStyle('all')}
+							className={`${isStyleActive('all') ? styles.active : ''} ${
+								styles.optionButton
+							}`}
+						>
+							<p>All {productType}</p>
+						</button>
+
+						{/* Style options */}
+						{style.map(styleOption => {
+							const styleSlug = styleOption.toLowerCase().replace(/\s+/g, '-')
+							return (
 								<button
+									key={styleOption}
+									onClick={() => updateStyle(styleSlug)}
 									className={`${
-										style.toLowerCase() === selectedTag ? styles.active : ''
+										isStyleActive(styleSlug) ? styles.active : ''
 									} ${styles.optionButton}`}
 								>
-									<p>{style}</p>
+									<p>{styleOption}</p>
 								</button>
-							</Link>
-						))}
+							)
+						})}
 					</div>
 				</Accordion>
 			)}

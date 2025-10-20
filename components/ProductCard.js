@@ -134,11 +134,19 @@ const ProductCard = ({
 
 	useEffect(() => {
 		if (metalTypes.length > 0) {
-			setActiveMetalType(
-				selectedMetalType === 'Yellow Gold'
-					? metalTypes[0]
-					: metalTypes[1] || metalTypes[0]
-			)
+			// Find the metal type that matches the selectedMetalType
+			const matchingType = metalTypes.find(type => {
+				if (selectedMetalType === 'Yellow Gold') {
+					return type.includes('yellow')
+				} else if (selectedMetalType === 'White Gold') {
+					return type.includes('white') && !type.includes('yellow')
+				} else if (selectedMetalType === 'Multi Gold') {
+					return type.includes('multi')
+				}
+				return false
+			})
+
+			setActiveMetalType(matchingType || metalTypes[0])
 		}
 	}, [metalTypes, selectedMetalType])
 

@@ -48,46 +48,11 @@ export async function generateMetadata(props) {
 export default async function CategoryPage(props) {
 	const params = await props.params
 	const { category, metal } = params
+
 	if (!ALLOWED_CATEGORIES.includes(category)) notFound()
 	if (!ALLOWED_METALS.includes(metal)) notFound()
 
-	const { data } = await apolloClient.query({
-		query: category === 'all' ? GET_PRODUCTS : GET_COLLECTION_BY_HANDLE,
-		variables:
-			category === 'all'
-				? { first: 250, after: null }
-				: { handle: category, first: 250, after: null }
-	})
-
-	const isAll = category === 'all'
-	const initialEdges = isAll
-		? data.products?.edges || []
-		: data.collectionByHandle?.products?.edges || []
-	const initialItems = initialEdges.map(edge => edge.node)
-	const initialPageInfo = isAll
-		? data.products?.pageInfo
-		: data.collectionByHandle?.products?.pageInfo
-
-	// Map metal slug to readable label for ProductCard/Products expectations
-	const metalLabel =
-		metal === 'yellow-gold'
-			? 'Yellow Gold'
-			: metal === 'white-gold'
-			? 'White Gold'
-			: 'Rose Gold'
-
-	return (
-		<main>
-			<Suspense fallback={<div>Loading…</div>}>
-				<Products
-					products={initialItems}
-					initialPageInfo={initialPageInfo}
-					productType={category}
-					selectedMetalType={metalLabel}
-					showFilters
-				/>
-			</Suspense>
-			<PageContent content={content} />
-		</main>
-	)
+	// Redirect to 'all' style by default for SEO-friendly URLs
+	const { redirect } = await import('next/navigation')
+	redirect(`/shop/${category}/${metal}/all`)
 }

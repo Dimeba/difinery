@@ -40,7 +40,8 @@ const Products = ({
 	collectionPreview = null,
 	selectedMetalType = 'Yellow Gold',
 	selectedCategory = 'all',
-	selectedTag = null
+	selectedTag = null,
+	filters = null // New prop for query parameter filters
 }) => {
 	// Stable base products list (empty singleton when undefined)
 	const productsList = products ?? EMPTY_PRODUCTS
@@ -71,7 +72,57 @@ const Products = ({
 	useEffect(() => {
 		let updated = [...productsList]
 
-		if (selectedMetalType) {
+		// Helper function to normalize tag strings
+		const normalizeTag = tag => {
+			const words = tag
+				.split('-')
+				.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+
+			if (
+				(tag.startsWith('multi-') || tag.startsWith('4-prong')) &&
+				words.length > 1
+			) {
+				const [first, second, ...rest] = words
+				const tail = [second, ...rest].filter(Boolean).join(' ')
+				return tail ? `${first}-${tail}` : first
+			}
+			return words.join(' ')
+		}
+
+		// Apply filters from query parameters
+		if (filters) {
+			// Metal filter
+			if (filters.metal) {
+				const metalWords = filters.metal.split('-')
+				const metalTerm = metalWords[0] // e.g., "yellow" from "yellow-gold"
+				updated = updated.filter(p =>
+					p.options?.some(opt =>
+						opt.values.some(value => value.toLowerCase().includes(metalTerm))
+					)
+				)
+			}
+
+			// Shape filter
+			if (filters.shape) {
+				const normalizedShape = normalizeTag(filters.shape)
+				updated = updated.filter(p => p.tags?.includes(normalizedShape))
+			}
+
+			// Setting filter
+			if (filters.setting) {
+				const normalizedSetting = normalizeTag(filters.setting)
+				updated = updated.filter(p => p.tags?.includes(normalizedSetting))
+			}
+
+			// Style filter
+			if (filters.style) {
+				const normalizedStyle = normalizeTag(filters.style)
+				updated = updated.filter(p => p.tags?.includes(normalizedStyle))
+			}
+		}
+
+		// Legacy support for old props (if still used elsewhere)
+		if (selectedMetalType && !filters) {
 			updated = updated.filter(p =>
 				p.options?.some(opt =>
 					opt.values.some(value =>
@@ -83,26 +134,12 @@ const Products = ({
 			)
 		}
 
-		if (selectedTag) {
-			const words = selectedTag
-				.split('-')
-				.map(word => word.charAt(0).toUpperCase() + word.slice(1))
-			let normalizedTag
-			if (
-				(selectedTag.startsWith('multi-') ||
-					selectedTag.startsWith('4-prong')) &&
-				words.length > 1
-			) {
-				const [first, second, ...rest] = words
-				const tail = [second, ...rest].filter(Boolean).join(' ')
-				normalizedTag = tail ? `${first}-${tail}` : first
-			} else {
-				normalizedTag = words.join(' ')
-			}
-
+		if (selectedTag && !filters) {
+			const normalizedTag = normalizeTag(selectedTag)
 			updated = updated.filter(p => p.tags?.includes(normalizedTag))
 		}
 
+		// Search filter
 		if (searchTerm) {
 			const term = searchTerm.toLowerCase()
 			updated = updated.filter(p => {
@@ -116,6 +153,7 @@ const Products = ({
 			})
 		}
 
+		// Sort
 		if (selectedSort) {
 			switch (selectedSort) {
 				case 'Lowest Price':
@@ -147,7 +185,8 @@ const Products = ({
 		selectedCategory,
 		selectedMetalType,
 		selectedTag,
-		searchTerm
+		searchTerm,
+		filters
 	])
 
 	return (
@@ -363,10 +402,8 @@ const Products = ({
 					selectedSort={selectedSort}
 					setSelectedSort={setSelectedSort}
 					selectedCategory={selectedCategory}
-					selectedMetalType={selectedMetalType}
 					toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
 					productType={productType}
-					selectedTag={selectedTag}
 				/>
 			</Popper>
 		</section>

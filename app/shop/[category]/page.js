@@ -43,36 +43,10 @@ export async function generateMetadata(props) {
 export default async function CategoryPage(props) {
 	const params = await props.params
 	const { category } = params
+
 	if (!ALLOWED_CATEGORIES.includes(category)) notFound()
 
-	const { data } = await apolloClient.query({
-		query: category === 'all' ? GET_PRODUCTS : GET_COLLECTION_BY_HANDLE,
-		variables:
-			category === 'all'
-				? { first: 250, after: null }
-				: { handle: category, first: 250, after: null }
-	})
-
-	const isAll = category === 'all'
-	const initialEdges = isAll
-		? data.products?.edges || []
-		: data.collectionByHandle?.products?.edges || []
-	const initialItems = initialEdges.map(edge => edge.node)
-	const initialPageInfo = isAll
-		? data.products?.pageInfo
-		: data.collectionByHandle?.products?.pageInfo
-
-	return (
-		<main>
-			<Suspense fallback={<div>Loading…</div>}>
-				<Products
-					products={initialItems}
-					initialPageInfo={initialPageInfo}
-					productType={category}
-					showFilters
-				/>
-			</Suspense>
-			<PageContent content={content} />
-		</main>
-	)
+	// Redirect to yellow-gold/all by default for SEO-friendly URLs
+	const { redirect } = await import('next/navigation')
+	redirect(`/shop/${category}/yellow-gold/all`)
 }

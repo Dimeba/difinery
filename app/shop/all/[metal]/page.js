@@ -7,10 +7,17 @@ import { Suspense } from 'react'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { getEntries } from '@/lib/contentful'
+import { notFound } from 'next/navigation'
+
+const ALLOWED_METALS = ['yellow-gold', 'white-gold', 'rose-gold']
 
 // Contentful
 const pages = await getEntries('page')
 const content = pages.items.find(page => page.fields.title == 'Shop').fields
+
+export async function generateStaticParams() {
+	return ALLOWED_METALS.map(metal => ({ metal }))
+}
 
 export const metadata = {
 	title: 'Difinery | Shop',
@@ -18,8 +25,13 @@ export const metadata = {
 	keywords: ''
 }
 
-export default async function Home() {
-	// Redirect to yellow-gold/all by default for SEO-friendly URLs
+export default async function ShopAllPage(props) {
+	const params = await props.params
+	const { metal } = params
+
+	if (!ALLOWED_METALS.includes(metal)) notFound()
+
+	// Redirect to 'all' style by default for SEO-friendly URLs
 	const { redirect } = await import('next/navigation')
-	redirect('/shop/all/yellow-gold/all')
+	redirect(`/shop/all/${metal}/all`)
 }

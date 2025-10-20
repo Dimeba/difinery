@@ -6,19 +6,19 @@
 				"rows": [
 					{
 						"title": "Rings",
-						"url": "/shop/rings"
+						"url": "/shop/rings/yellow-gold/all"
 					},
 					{
 						"title": "Earrings",
-						"url": "/shop/earrings"
+						"url": "/shop/earrings/yellow-gold/all"
 					},
 					{
 						"title": "Necklaces",
-						"url": "/shop/necklaces"
+						"url": "/shop/necklaces/yellow-gold/all"
 					},
 					{
 						"title": "Bracelets",
-						"url": "/shop/bracelets"
+						"url": "/shop/bracelets/yellow-gold/all"
 					}
 				]
 			},
@@ -140,7 +140,7 @@
 					},
 					{
 						"title": "All Earrings",
-						"url": "/shop/earrings"
+						"url": "/shop/earrings/yellow-gold/all"
 					}
 				]
 			},
@@ -170,23 +170,23 @@
 				"rows": [
 					{
 						"title": "Bezel",
-						"url": "/shop/earrings/yellow-gold/bezel"
+						"url": "/shop/earrings/yellow-gold/all?setting=bezel"
 					},
 					{
 						"title": "Prong",
-						"url": "/shop/earrings/yellow-gold/prong"
+						"url": "/shop/earrings/yellow-gold/all?setting=prong"
 					},
 					{
 						"title": "4-Prong",
-						"url": "/shop/earrings/yellow-gold/4-prong"
+						"url": "/shop/earrings/yellow-gold/all?setting=4-prong"
 					},
 					{
 						"title": "Martini",
-						"url": "/shop/earrings/yellow-gold/martini"
+						"url": "/shop/earrings/yellow-gold/all?setting=martini"
 					},
 					{
 						"title": "Fishtail",
-						"url": "/shop/earrings/yellow-gold/fishtail"
+						"url": "/shop/earrings/yellow-gold/all?setting=fishtail"
 					}
 				]
 			}
@@ -207,7 +207,7 @@
 					},
 					{
 						"title": "All Necklaces",
-						"url": "/shop/necklaces"
+						"url": "/shop/necklaces/yellow-gold/all"
 					}
 				]
 			},
@@ -258,7 +258,7 @@
 					},
 					{
 						"title": "All Bracelets",
-						"url": "/shop/bracelets"
+						"url": "/shop/bracelets/yellow-gold/all"
 					}
 				]
 			},
