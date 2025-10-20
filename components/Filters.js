@@ -109,8 +109,29 @@ const Filters = ({
 		return currentStyleFromPath === styleSlug
 	}
 
+	// Helper to check if any filters are active (excluding defaults)
+	const hasActiveFilters = () => {
+		const hasQueryFilters = currentShape || currentSetting
+		const hasNonDefaultMetal = currentMetalFromPath !== 'yellow-gold'
+		const hasNonDefaultStyle = currentStyleFromPath !== 'all'
+		return hasQueryFilters || hasNonDefaultMetal || hasNonDefaultStyle
+	}
+
+	// Reset all filters to category default
+	const resetAllFilters = () => {
+		setSelectedSort(null)
+		router.push(`/shop/${productType}/yellow-gold/all`)
+	}
+
 	return (
 		<div className={styles.filters}>
+			{/* Reset All Button */}
+			{hasActiveFilters() && (
+				<button className={styles.resetButton} onClick={resetAllFilters}>
+					Reset All Filters
+				</button>
+			)}
+
 			{/* Sort */}
 			<Accordion title='Sort' state={true}>
 				<div className={styles.buttons}>
