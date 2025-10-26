@@ -25,6 +25,9 @@ import SearchIcon from '@mui/icons-material/Search'
 import { useState, useEffect, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
 
+// analytics
+import { trackViewItemList } from '@/lib/gaEvents'
+
 const EMPTY_PRODUCTS = []
 
 const Products = ({
@@ -189,6 +192,46 @@ const Products = ({
 		filters
 	])
 
+	// Track view_item_list when filtered items change
+	useEffect(() => {
+		if (filteredItems.length > 0) {
+			// Build list name from current filters
+			let listName = 'Shop'
+			if (filters?.category && filters.category !== 'all') {
+				listName = `Category: ${filters.category}`
+			}
+			if (filters?.metal) {
+				listName += ` - ${filters.metal}`
+			}
+			if (filters?.style && filters.style !== 'all') {
+				listName += ` - ${filters.style}`
+			}
+			if (searchTerm) {
+				listName = `Search: ${searchTerm}`
+			}
+
+			trackViewItemList(filteredItems.slice(0, visibleCount), listName)
+		}
+	}, [filteredItems, visibleCount, filters, searchTerm])
+
+	// Build list name for ProductCard
+	const getListName = () => {
+		let listName = 'Shop'
+		if (filters?.category && filters.category !== 'all') {
+			listName = `Category: ${filters.category}`
+		}
+		if (filters?.metal) {
+			listName += ` - ${filters.metal}`
+		}
+		if (filters?.style && filters.style !== 'all') {
+			listName += ` - ${filters.style}`
+		}
+		if (searchTerm) {
+			listName = `Search: ${searchTerm}`
+		}
+		return listName
+	}
+
 	return (
 		<section
 			className='topSection'
@@ -351,7 +394,7 @@ const Products = ({
 							filteredItems
 								.filter(item => item.availableForSale)
 								.slice(0, visibleCount)
-								.map(product => (
+								.map((product, index) => (
 									<ProductCard
 										key={product.id}
 										id={product.id}
@@ -360,12 +403,14 @@ const Products = ({
 										discount={discount}
 										individual={individual}
 										selectedMetalType={selectedMetalType}
+										index={index}
+										listName={getListName()}
 									/>
 								))}
 
 						{recommendedProducts &&
 							recommendedProducts.length > 0 &&
-							recommendedProducts.map(product => (
+							recommendedProducts.map((product, index) => (
 								<ProductCard
 									key={product.id}
 									id={product.id}
@@ -373,6 +418,8 @@ const Products = ({
 									permalink={product.handle}
 									discount={discount}
 									selectedMetalType={selectedMetalType}
+									index={index}
+									listName='Recommended Products'
 									// individual={individual}
 								/>
 							))}

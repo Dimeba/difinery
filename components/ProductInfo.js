@@ -9,11 +9,14 @@ import ProductOptionsUI from './ProductOptionsUI'
 import OrderReview from './OrderReview'
 
 // hooks
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 // context
 import { useCart } from '@/context/CartContext'
+
+// analytics
+import { trackViewItem, trackAddToCart } from '@/lib/gaEvents'
 
 const ProductInfo = ({ product, isGiftCard = false }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
@@ -48,6 +51,13 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const [boxVariant, setBoxVariant] = useState(null)
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 	const [selectedShape, setSelectedShape] = useState(null)
+
+	// Track view_item event when product loads or variant changes
+	useEffect(() => {
+		if (product && matchingVariant) {
+			trackViewItem(product, matchingVariant)
+		}
+	}, [product, matchingVariant])
 
 	const images = useMemo(() => {
 		const urlFilter = node => {
@@ -177,6 +187,9 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 				1,
 				customFields.length ? customFields : []
 			)
+
+			// Track add_to_cart event
+			trackAddToCart(product, matchingVariant, 1)
 
 			// advance your UI steps
 			// setOpenOption(prev => prev + 1)

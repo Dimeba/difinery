@@ -11,10 +11,21 @@ import Link from 'next/link'
 
 // hooks
 import { useCart } from '@/context/CartContext'
+import { useEffect } from 'react'
+
+// analytics
+import { trackViewCart, trackBeginCheckout } from '@/lib/gaEvents'
 
 const Cart = () => {
 	const { showCart, setShowCart, cart, updateQuantity, removeFromCart } =
 		useCart()
+
+	// Track view_cart event when cart is opened
+	useEffect(() => {
+		if (showCart && cart) {
+			trackViewCart(cart)
+		}
+	}, [showCart, cart])
 
 	if (!showCart || !cart) return null
 
@@ -47,6 +58,11 @@ const Cart = () => {
 		for (const id of [lineId, ...relatedIds]) {
 			await removeFromCart(id)
 		}
+	}
+
+	const handleCheckout = () => {
+		// Track begin_checkout event
+		trackBeginCheckout(cart)
 	}
 
 	return (
@@ -132,6 +148,7 @@ const Cart = () => {
 						style={{
 							pointerEvents: cart.lines?.edges?.length > 0 ? 'auto' : 'none'
 						}}
+						onClick={handleCheckout}
 					>
 						<button
 							className={productStyles.cartButton}

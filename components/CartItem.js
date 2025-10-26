@@ -5,6 +5,9 @@ import styles from './Cart.module.scss'
 import Image from 'next/image'
 import { MdDeleteForever } from 'react-icons/md'
 
+// analytics
+import { trackRemoveFromCart } from '@/lib/gaEvents'
+
 const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 	// Guard against undefined node or merchandise
 	if (!node) return null
@@ -20,6 +23,12 @@ const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 	const unitRaw = variant.priceV2?.amount
 	const unitPrice = unitRaw ? parseFloat(unitRaw).toFixed(2) : '0.00'
 
+	const handleRemove = (lineId, productTitle) => {
+		// Track remove_from_cart event
+		trackRemoveFromCart(node)
+		removeAllrelatedItems(lineId, productTitle)
+	}
+
 	return (
 		<div className={styles.item}>
 			<div className={styles.itemContent}>
@@ -33,7 +42,7 @@ const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 					{(title === 'Engraving' || title == 'Custom Box') && (
 						<MdDeleteForever
 							size='1rem'
-							onClick={() => removeAllrelatedItems(lineId)}
+							onClick={() => handleRemove(lineId, title)}
 							cursor='pointer'
 						/>
 					)}
@@ -69,7 +78,7 @@ const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 					<div className={styles.removeIcon}>
 						<MdDeleteForever
 							size='1rem'
-							onClick={() => removeAllrelatedItems(lineId, title)}
+							onClick={() => handleRemove(lineId, title)}
 							cursor='pointer'
 						/>
 					</div>
