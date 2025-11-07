@@ -9,8 +9,12 @@ import { Grid, TextField } from '@mui/material'
 // formspree
 import { useForm, ValidationError } from '@formspree/react'
 
-const SubscribeForm = () => {
+const SubscribeForm = ({ isFooter }) => {
 	const [state, handleSubmit] = useForm(process.env.NEXT_PUBLIC_FORMSPREE)
+
+	const textColor = isFooter ? 'black' : 'white'
+	const borderColor = isFooter ? 'rgba(0, 0, 0, 0.42)' : 'white'
+
 	if (state.succeeded) {
 		return <p>Thanks for joining!</p>
 	}
@@ -24,38 +28,40 @@ const SubscribeForm = () => {
 				maxWidth={'90vw'}
 			>
 				{/* Full Name */}
-				<Grid size={{ xs: 6 }}>
-					<TextField
-						id='name'
-						label='Full Name'
-						name='name'
-						variant='standard'
-						sx={{
-							width: '100%',
-							'& .MuiInputBase-input': {
-								fontSize: '14px',
-								color: 'white'
-							},
-							'& .MuiInputLabel-root': {
-								fontSize: '14px',
-								color: 'white'
-							},
-							'& .MuiInput-underline:before': {
-								borderBottomColor: 'white'
-							},
-							'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-								borderBottomColor: 'white'
-							},
-							'& .MuiInput-underline:after': {
-								borderBottomColor: 'white'
-							}
-						}}
-					/>
-					<ValidationError prefix='Name' field='name' errors={state.errors} />
-				</Grid>
+				{!isFooter && (
+					<Grid size={{ xs: 6 }}>
+						<TextField
+							id='name'
+							label='Full Name'
+							name='name'
+							variant='standard'
+							sx={{
+								width: '100%',
+								'& .MuiInputBase-input': {
+									fontSize: '14px',
+									color: textColor
+								},
+								'& .MuiInputLabel-root': {
+									fontSize: '14px',
+									color: textColor
+								},
+								'& .MuiInput-underline:before': {
+									borderBottomColor: borderColor
+								},
+								'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+									borderBottomColor: textColor
+								},
+								'& .MuiInput-underline:after': {
+									borderBottomColor: textColor
+								}
+							}}
+						/>
+						<ValidationError prefix='Name' field='name' errors={state.errors} />
+					</Grid>
+				)}
 
 				{/* Email */}
-				<Grid size={{ xs: 6 }}>
+				<Grid size={{ xs: isFooter ? 12 : 6 }}>
 					<TextField
 						id='email'
 						label='Email'
@@ -65,20 +71,20 @@ const SubscribeForm = () => {
 							width: '100%',
 							'& .MuiInputBase-input': {
 								fontSize: '14px',
-								color: 'white'
+								color: textColor
 							},
 							'& .MuiInputLabel-root': {
 								fontSize: '14px',
-								color: 'white'
+								color: textColor
 							},
 							'& .MuiInput-underline:before': {
-								borderBottomColor: 'white'
+								borderBottomColor: borderColor
 							},
 							'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-								borderBottomColor: 'white'
+								borderBottomColor: textColor
 							},
 							'& .MuiInput-underline:after': {
-								borderBottomColor: 'white'
+								borderBottomColor: textColor
 							}
 						}}
 					/>
@@ -86,70 +92,78 @@ const SubscribeForm = () => {
 				</Grid>
 
 				{/* Date of Birth */}
-				<Grid size={{ xs: 6 }}>
-					<TextField
-						id='dob'
-						label='Date of Birth'
-						name='dob'
-						variant='standard'
-						sx={{
-							width: '100%',
-							'& .MuiInputBase-input': {
-								fontSize: '14px',
-								color: 'white'
-							},
-							'& .MuiInputLabel-root': {
-								fontSize: '14px',
-								color: 'white'
-							},
-							'& .MuiInput-underline:before': {
-								borderBottomColor: 'white'
-							},
-							'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-								borderBottomColor: 'white'
-							},
-							'& .MuiInput-underline:after': {
-								borderBottomColor: 'white'
-							}
-						}}
-					/>
-					<ValidationError
-						prefix='Date of Birth'
-						field='dob'
-						errors={state.errors}
-					/>
-				</Grid>
+				{!isFooter && (
+					<Grid size={{ xs: 6 }}>
+						<TextField
+							id='dob'
+							label='Date of Birth'
+							name='dob'
+							variant='standard'
+							sx={{
+								width: '100%',
+								'& .MuiInputBase-input': {
+									fontSize: '14px',
+									color: textColor
+								},
+								'& .MuiInputLabel-root': {
+									fontSize: '14px',
+									color: textColor
+								},
+								'& .MuiInput-underline:before': {
+									borderBottomColor: borderColor
+								},
+								'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+									borderBottomColor: textColor
+								},
+								'& .MuiInput-underline:after': {
+									borderBottomColor: textColor
+								}
+							}}
+						/>
+						<ValidationError
+							prefix='Date of Birth'
+							field='dob'
+							errors={state.errors}
+						/>
+					</Grid>
+				)}
 
 				{/* Phone */}
-				<Grid size={{ xs: 6 }}>
-					<TextField
-						id='phone'
-						label='Phone Number'
-						name='phone'
-						variant='standard'
-						sx={{
-							width: '100%',
-							'& .MuiInputBase-input': {
-								fontSize: '14px',
-								color: 'white'
-							},
-							'& .MuiInputLabel-root': {
-								fontSize: '14px',
-								color: 'white'
-							},
-							'& .MuiInput-underline:before': {
-								borderBottomColor: 'white'
-							},
-							'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-								borderBottomColor: 'white'
-							},
-							'& .MuiInput-underline:after': {
-								borderBottomColor: 'white'
-							}
-						}}
-					/>
-					<ValidationError prefix='Phone' field='phone' errors={state.errors} />
-				</Grid>
+				{!isFooter && (
+					<Grid size={{ xs: 6 }}>
+						<TextField
+							id='phone'
+							label='Phone Number'
+							name='phone'
+							variant='standard'
+							sx={{
+								width: '100%',
+								'& .MuiInputBase-input': {
+									fontSize: '14px',
+									color: textColor
+								},
+								'& .MuiInputLabel-root': {
+									fontSize: '14px',
+									color: textColor
+								},
+								'& .MuiInput-underline:before': {
+									borderBottomColor: borderColor
+								},
+								'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+									borderBottomColor: textColor
+								},
+								'& .MuiInput-underline:after': {
+									borderBottomColor: textColor
+								}
+							}}
+						/>
+						<ValidationError
+							prefix='Phone'
+							field='phone'
+							errors={state.errors}
+						/>
+					</Grid>
+				)}
 
 				<Grid size={{ xs: 6 }}>
 					<button
@@ -158,8 +172,8 @@ const SubscribeForm = () => {
 						style={{
 							width: 'fit-content',
 							backgroundColor: 'transparent',
-							color: 'white',
-							border: '1px solid white'
+							color: textColor,
+							border: `1px solid ${textColor}`
 						}}
 					>
 						Subscribe

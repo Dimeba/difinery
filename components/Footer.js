@@ -1,5 +1,6 @@
 // styles
 import styles from './Footer.module.scss'
+import SubscribeForm from './SubscribeForm'
 
 // components
 import Link from 'next/link'
@@ -66,7 +67,7 @@ const Footer = ({ content }) => {
 					</div>
 				</Accordion>
 
-				<Accordion
+				{/* <Accordion
 					title='Shop'
 					state={true}
 					hideBorder={true}
@@ -84,7 +85,7 @@ const Footer = ({ content }) => {
 							</Link>
 						))}
 					</div>
-				</Accordion>
+				</Accordion> */}
 
 				<Accordion
 					title='Help'
@@ -125,23 +126,37 @@ const Footer = ({ content }) => {
 						))}
 					</div>
 				</Accordion>
+
+				<Accordion
+					title='Subscribe'
+					state={true}
+					hideBorder={true}
+					disabled={true}
+					extraClass={styles.column3}
+				>
+					<p style={{ marginBottom: '1rem' }}>
+						No spam. Just meaningful updates on timeless pieces, artist stories,
+						and sustainability insights.
+					</p>
+					<SubscribeForm isFooter />
+				</Accordion>
 			</div>
 
 			{/* Second Row */}
 
 			<div className={styles.secondRow}>
 				<div className={styles.iconsSection}>
-					<div className={styles.column4}>
-						<h4>Certified Diamonds</h4>
+					<div className={styles.column6}>
+						{/* <h4>Certified Diamonds</h4> */}
 						<div className={styles.logos}>
 							{content.certifications.map(certification => (
 								<div className={styles.logo} key={certification.sys.id}>
 									<Image
 										src={'https:' + certification.fields.file.url}
-										height={60}
+										height={40}
 										width={
 											certification.fields.file.details.image.width /
-											(certification.fields.file.details.image.height / 60)
+											(certification.fields.file.details.image.height / 40)
 										}
 										// fill
 										alt='Certification Logo'
@@ -151,7 +166,7 @@ const Footer = ({ content }) => {
 						</div>
 					</div>
 
-					<div className={styles.column4}>
+					{/* <div className={styles.column6}>
 						<h4>Handcrafted in USA</h4>
 						<Image
 							src='/m-i-usa.png'
@@ -160,9 +175,9 @@ const Footer = ({ content }) => {
 							// fill
 							alt='made in usa icon'
 						/>
-					</div>
-					<div className={styles.column4}>
-						<h4>Follow Us</h4>
+					</div> */}
+					<div className={styles.column6}>
+						{/* <h4>Follow Us</h4> */}
 						<div className={styles.logos}>
 							{content.social.map((link, index) => (
 								<Link

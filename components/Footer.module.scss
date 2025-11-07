@@ -46,8 +46,8 @@
 	grid-column: span 3;
 }
 
-.column4 {
-	grid-column: span 4;
+.column6 {
+	grid-column: span 6;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
@@ -57,13 +57,11 @@
 	}
 }
 
-.column4:nth-child(1) {
+.column6:nth-child(1) {
 	align-items: flex-start;
 }
-.column4:nth-child(2) {
-	align-items: center;
-}
-.column4:nth-child(3) {
+
+.column6:nth-child(2) {
 	align-items: flex-end;
 }
 
@@ -140,17 +138,17 @@
 		gap: 3rem;
 	}
 
-	.column4 {
+	.column6 {
 		grid-column: span 12;
 	}
 
-	.column4:nth-child(1) {
+	.column6:nth-child(1) {
 		align-items: center;
 	}
-	.column4:nth-child(2) {
+	.column6:nth-child(2) {
 		align-items: center;
 	}
-	.column4:nth-child(3) {
+	.column6:nth-child(3) {
 		align-items: center;
 	}
 
