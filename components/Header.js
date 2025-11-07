@@ -202,13 +202,14 @@ const Header = ({ content, collectionsContent }) => {
 							))}
 
 							{/* Collections */}
-							<Box
-								display={{ xs: 'flex', lg: 'none' }}
-								flexDirection='column'
-								gap='1rem'
-								className={styles.mainMenuLink}
-								onClick={() => setShowCollections(!showCollections)}
-							>
+							{!isScreenWide && (
+								<Box
+									display='flex'
+									flexDirection='column'
+									gap='1rem'
+									className={styles.mainMenuLink}
+									onClick={() => setShowCollections(!showCollections)}
+								>
 								<Box display='flex' alignItems='center' justifyContent='space-between' width='100%'>
 									<p>Collections</p>
 										{showCollections ? (
@@ -237,7 +238,8 @@ const Header = ({ content, collectionsContent }) => {
 										))}
 									</Box>
 								}
-							</Box>
+								</Box>
+							)}
 
 							{/* Gift Card */}
 							<Link
