@@ -225,7 +225,7 @@ const ProductOptionsUI = ({
 				{!isGiftCard && (
 					<Accordion
 						// small
-						title='Customize Your Box'
+						title='Customize Your Canvas Box'
 						extraTitleText={boxText ? `"${boxText}"` : null}
 						state={openOption === product.options.length}
 						product

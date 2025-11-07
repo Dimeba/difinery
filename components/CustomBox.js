@@ -17,6 +17,7 @@ import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 
 const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 	const [boxProduct, setBoxProduct] = useState(null)
+	const [showHover, setShowHover] = useState(false)
 
 	const client = useApolloClient()
 
@@ -45,22 +46,14 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 		<Grid container spacing='1rem'>
 			<Grid size={{ xs: 12, lg: 6 }} display='flex' flexDirection='column'>
 				<Typography variant='p'>
-					<Link href='/blank-canvas' aria-label='Link to Blank Canvas page'>
-						<Typography
-							variant='p'
-							sx={{ textDecoration: 'underline' }}
-							fontWeight={600}
-						>
-							Learn More About Our Blank Canvas Community
-						</Typography>
-					</Link>
+					Make your packaging part of the story.
 					<br />
-					Complete with a handwritten message from a local artist.
+					Each message is handwritten by a local artist.
 				</Typography>
 
 				<Typography variant='p'>Message Color:</Typography>
 
-				<Box display='flex' gap='0.5rem'>
+				<Box display='flex' gap='0.5rem' marginBottom='1rem'>
 					{boxProduct?.variants.edges.map((option, index) => (
 						<Button
 							key={index}
@@ -82,19 +75,21 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 					))}
 				</Box>
 
+				<Typography variant='p'>Your Message:</Typography>
+
 				<textarea
 					className={styles.boxInput}
 					value={boxText}
 					onChange={e => setBoxText(e.target.value)}
-					placeholder='Type up to 25 characters'
+					placeholder='Up to 25 characters'
 					maxLength={25}
 				/>
 
 				<Typography variant='p' fontSize='10px'>
-					An additional $50 price. May affect shipping time.
+					<b>Personalization: $50</b> (may extend shipping time)
 					<br />
 					<Typography variant='p' fontStyle='italic' fontSize='10px'>
-						50% of proceeds to the artist, 50% of proceeds to charity
+						50% supports the artist, 50% supports women-focused causes.
 					</Typography>
 				</Typography>
 			</Grid>
@@ -105,13 +100,37 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 					position='relative'
 					// width='100%'
 					sx={{ aspectRatio: '16/10' }}
+					onMouseEnter={() => setShowHover(true)}
+					onMouseLeave={() => setShowHover(false)}
 				>
-					<Image
-						src={boxVariant?.image.url}
-						alt='Box Image'
-						fill
-						style={{ objectFit: 'cover' }}
-					/>
+					<Link href='/blank-canvas' aria-label='Link to Blank Canvas page'>
+						<Typography
+							variant='p'
+							fontWeight={600}
+							position='absolute'
+							zIndex={2}
+							bottom={0}
+							left={0}
+							padding='2rem'
+							sx={{
+								textWrap: 'balance',
+								backgroundColor: 'rgba(0, 0, 0, 0.5)'
+							}}
+							width='100%'
+							height='100%'
+							color='white'
+							display={showHover ? 'flex' : 'none'}
+							alignItems='flex-end'
+						>
+							Learn more about artists and the Blank Canvas Community.
+						</Typography>
+						<Image
+							src={boxVariant?.image.url}
+							alt='Box Image'
+							fill
+							style={{ objectFit: 'cover' }}
+						/>
+					</Link>
 				</Grid>
 			)}
 		</Grid>
