@@ -33,10 +33,21 @@ const SubscribeForm = () => {
 						sx={{
 							width: '100%',
 							'& .MuiInputBase-input': {
-								fontSize: '14px'
+								fontSize: '14px',
+								color: 'white'
 							},
 							'& .MuiInputLabel-root': {
-								fontSize: '14px'
+								fontSize: '14px',
+								color: 'white'
+							},
+							'& .MuiInput-underline:before': {
+								borderBottomColor: 'white'
+							},
+							'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+								borderBottomColor: 'white'
+							},
+							'& .MuiInput-underline:after': {
+								borderBottomColor: 'white'
 							}
 						}}
 					/>
@@ -53,10 +64,21 @@ const SubscribeForm = () => {
 						sx={{
 							width: '100%',
 							'& .MuiInputBase-input': {
-								fontSize: '14px'
+								fontSize: '14px',
+								color: 'white'
 							},
 							'& .MuiInputLabel-root': {
-								fontSize: '14px'
+								fontSize: '14px',
+								color: 'white'
+							},
+							'& .MuiInput-underline:before': {
+								borderBottomColor: 'white'
+							},
+							'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+								borderBottomColor: 'white'
+							},
+							'& .MuiInput-underline:after': {
+								borderBottomColor: 'white'
 							}
 						}}
 					/>
@@ -73,10 +95,21 @@ const SubscribeForm = () => {
 						sx={{
 							width: '100%',
 							'& .MuiInputBase-input': {
-								fontSize: '14px'
+								fontSize: '14px',
+								color: 'white'
 							},
 							'& .MuiInputLabel-root': {
-								fontSize: '14px'
+								fontSize: '14px',
+								color: 'white'
+							},
+							'& .MuiInput-underline:before': {
+								borderBottomColor: 'white'
+							},
+							'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+								borderBottomColor: 'white'
+							},
+							'& .MuiInput-underline:after': {
+								borderBottomColor: 'white'
 							}
 						}}
 					/>
@@ -97,10 +130,21 @@ const SubscribeForm = () => {
 						sx={{
 							width: '100%',
 							'& .MuiInputBase-input': {
-								fontSize: '14px'
+								fontSize: '14px',
+								color: 'white'
 							},
 							'& .MuiInputLabel-root': {
-								fontSize: '14px'
+								fontSize: '14px',
+								color: 'white'
+							},
+							'& .MuiInput-underline:before': {
+								borderBottomColor: 'white'
+							},
+							'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+								borderBottomColor: 'white'
+							},
+							'& .MuiInput-underline:after': {
+								borderBottomColor: 'white'
 							}
 						}}
 					/>
@@ -111,7 +155,12 @@ const SubscribeForm = () => {
 					<button
 						type='submit'
 						disabled={state.submitting}
-						style={{ width: 'fit-content' }}
+						style={{
+							width: 'fit-content',
+							backgroundColor: 'transparent',
+							color: 'white',
+							border: '1px solid white'
+						}}
 					>
 						Subscribe
 					</button>
