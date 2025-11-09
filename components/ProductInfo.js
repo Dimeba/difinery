@@ -76,9 +76,9 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 				if (hasWhite && hasYellow) {
 					metalPrefix = 'mr-' // mixed stackable
 				} else if (hasWhite) {
-					metalPrefix = 'wr-' // white gold
+					metalPrefix = 'w' // white gold
 				} else if (hasYellow) {
-					metalPrefix = 'yr-' // yellow gold
+					metalPrefix = 'y' // yellow gold
 				}
 
 				if (metalPrefix) {
