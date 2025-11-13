@@ -188,7 +188,7 @@ const ProductOptionsUI = ({
 									: selectedOptions[option.name]
 								: null
 						}
-						state={index === openOption}
+						state={isGiftCard ? true : index === openOption}
 						setOpenOption={() => setOpenOption(index)}
 						product
 						display

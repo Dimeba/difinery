@@ -26,48 +26,37 @@ const GiftCardInput = ({
 		const value = e.target.value.replace(/[^0-9]/g, '') // Only allow numbers
 		setInputValue(value)
 
-		// Update display text immediately only if value is in valid range
-		if (value && onDisplayUpdate) {
-			const numValue = parseInt(value)
-
-			// Only update if within valid range
-			if (numValue >= minValue && numValue <= maxValue) {
-				onDisplayUpdate(`$${numValue}`)
-			} else {
-				// Clear selection if value is out of range
+		if (!value) {
+			// Clear selection if input is empty
+			if (onDisplayUpdate) {
 				onDisplayUpdate(null)
 			}
-		} else if (!value && onDisplayUpdate) {
-			// Clear selection if input is empty
-			onDisplayUpdate(null)
+			return
 		}
-	}
 
-	const handleInputBlur = async () => {
-		if (!inputValue) return
-
-		const numValue = parseInt(inputValue)
-
-		// Only proceed if value is in valid range
-		if (numValue < minValue || numValue > maxValue) {
-			return // Don't select invalid values
-		}
+		const numValue = parseInt(value)
 
 		// Round to nearest valid value (multiples of 10)
 		const roundedValue = Math.round(numValue / 10) * 10
 		const finalValue = Math.max(minValue, Math.min(maxValue, roundedValue))
-		const formattedValue = `$${finalValue}`
 
-		// Update display first and wait for state to settle
-		if (onDisplayUpdate) {
-			onDisplayUpdate(formattedValue)
-			// Give React time to process the state update
-			await new Promise(resolve => setTimeout(resolve, 0))
+		// Only select if within valid range
+		if (numValue >= minValue && numValue <= maxValue) {
+			const formattedValue = `$${finalValue}`
+
+			// Update display
+			if (onDisplayUpdate) {
+				onDisplayUpdate(formattedValue)
+			}
+
+			// Select the value
+			onSelect(formattedValue)
+		} else {
+			// Clear selection if out of range
+			if (onDisplayUpdate) {
+				onDisplayUpdate(null)
+			}
 		}
-
-		// Then finalize selection
-		onSelect(formattedValue)
-		setInputValue(finalValue.toString())
 	}
 
 	// Format display value with comma
@@ -96,7 +85,6 @@ const GiftCardInput = ({
 					type='text'
 					value={displayValue}
 					onChange={handleInputChange}
-					onBlur={handleInputBlur}
 					placeholder={`${minValue.toLocaleString()}`}
 					className={styles.engravingInput}
 				/>
