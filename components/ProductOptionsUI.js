@@ -9,6 +9,7 @@ import Accordion from './Accordion'
 import NeedHelpInfo from './NeedHelpInfo'
 import Engraving from './Engraving'
 import CustomBox from './CustomBox'
+import GiftCardInput from './GiftCardInput'
 
 // hooks
 import { useState, useEffect } from 'react'
@@ -60,8 +61,13 @@ const ProductOptionsUI = ({
 		)
 		if (matchingEdge) {
 			setMatchingVariant(matchingEdge.node)
+			return true
 		} else {
-			console.error('No matching variant found')
+			// Only log error if all required options are selected
+			if (Object.keys(options).length === product.options.length) {
+				console.error('No matching variant found')
+			}
+			return false
 		}
 	}
 
@@ -90,6 +96,36 @@ const ProductOptionsUI = ({
 		}
 	}
 
+	// Update display without advancing accordion (for gift card input)
+	const handleDisplayUpdate = (optionName, value) => {
+		if (value === null) {
+			// Remove the option to unselect variant
+			const newSelected = { ...selectedOptions }
+			delete newSelected[optionName]
+			setSelectedOptions(newSelected)
+			// Don't clear matchingVariant - keep the first variant as default
+			return
+		}
+		
+		const newSelected = { ...selectedOptions, [optionName]: value }
+		
+		// Check if variant exists for this value
+		const variantExists = product.variants.edges.some(({ node }) =>
+			node.selectedOptions.some(so => so.name === optionName && so.value === value)
+		)
+		
+		if (variantExists) {
+			setSelectedOptions(newSelected)
+			// Only try to match variant if all required options are present
+			if (Object.keys(newSelected).length === product.options.length) {
+				getMatchingVariant(newSelected)
+			}
+		} else {
+			// Still update selectedOptions for display, but don't try to match variant
+			setSelectedOptions(newSelected)
+		}
+	}
+
 	// Reset a single option
 	const handleOptionReset = optionName => {
 		const newSelected = { ...selectedOptions }
@@ -106,7 +142,7 @@ const ProductOptionsUI = ({
 	}
 
 	const allOptionsSelected =
-		Object.keys(selectedOptions).length === product.options.length
+		Object.keys(selectedOptions).length === product.options.length && matchingVariant !== null
 
 	const details = product.descriptionHtml.replace(
 		/<p\s+id=(["'])description\1[^>]*>[\s\S]*?<\/p>/i,
@@ -130,10 +166,12 @@ const ProductOptionsUI = ({
 				<h3>{product.title}</h3>
 			</div>
 
-			<p>
-				{' '}
-				${Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
-			</p>
+			{matchingVariant && (
+				<p>
+					{' '}
+					${Number(matchingVariant.price.amount.slice(0, -2)).toLocaleString()}
+				</p>
+			)}
 
 			<div className={styles.description}>{isGiftCard ? parse(product.descriptionHtml) : parse(description)}</div>
 
@@ -144,7 +182,11 @@ const ProductOptionsUI = ({
 						// small
 						title={option.name}
 						extraTitleText={
-							selectedOptions[option.name] ? selectedOptions[option.name] : null
+							selectedOptions[option.name] 
+								? isGiftCard 
+									? selectedOptions[option.name].replace(/^(\$)(\d)(\d{3})$/, '$1$2,$3')
+									: selectedOptions[option.name]
+								: null
 						}
 						state={index === openOption}
 						setOpenOption={() => setOpenOption(index)}
@@ -159,45 +201,49 @@ const ProductOptionsUI = ({
 					>
 						<div
 							className={styles.variantButtonsContainer}
-							style={{
-								flexDirection: isGiftCard ? 'column' : '',
-								alignItems: isGiftCard ? 'flex-start' : '',
-								marginTop: isGiftCard ? '2rem' : '0'
-							}}
 						>
-							{option.optionValues.map(value => (
-								<button
-									key={value.name}
-									onClick={() =>
-										handleOptionSelection(option.name, value.name, index)
-									}
-									style={{
-										fontWeight:
-											selectedOptions[option.name] === value.name
-												? 'bold'
-												: 'normal'
-									}}
-								>
-									{option.name.toLowerCase() === 'metal' && (
-										<Image
-											src={`/${returnMetalType(value.name)}`}
-											width={32}
-											height={32}
-											alt={`${value.name} ${option.name}`}
-										/>
-									)}
+							{isGiftCard ? (
+								<GiftCardInput
+									options={option.optionValues}
+									selectedValue={selectedOptions[option.name] || null}
+									onSelect={(value) => handleOptionSelection(option.name, value, index)}
+									onDisplayUpdate={(value) => handleDisplayUpdate(option.name, value)}
+								/>
+							) : (
+								option.optionValues.map(value => (
+									<button
+										key={value.name}
+										onClick={() =>
+											handleOptionSelection(option.name, value.name, index)
+										}
+										style={{
+											fontWeight:
+												selectedOptions[option.name] === value.name
+													? 'bold'
+													: 'normal'
+										}}
+									>
+										{option.name.toLowerCase() === 'metal' && (
+											<Image
+												src={`/${returnMetalType(value.name)}`}
+												width={32}
+												height={32}
+												alt={`${value.name} ${option.name}`}
+											/>
+										)}
 
-									{option.name.toLowerCase() === 'diamond shape' && (
-										<Image
-											src={`/${returnDiamondShape(value.name)}`}
-											width={32}
-											height={32}
-											alt={`${value.name} ${option.name}`}
-										/>
-									)}
-									{isGiftCard ? value.name.slice(0, -3) : value.name}
-								</button>
-							))}
+										{option.name.toLowerCase() === 'diamond shape' && (
+											<Image
+												src={`/${returnDiamondShape(value.name)}`}
+												width={32}
+												height={32}
+												alt={`${value.name} ${option.name}`}
+											/>
+										)}
+										{value.name}
+									</button>
+								))
+							)}
 						</div>
 					</Accordion>
 				))}

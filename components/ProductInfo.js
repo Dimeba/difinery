@@ -183,9 +183,10 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			// Track add_to_cart event
 			trackAddToCart(product, matchingVariant, 1)
 
-			// advance your UI steps
-			// setOpenOption(prev => prev + 1)
-			if (product.title === 'Difinery Gift Card') setShowCart(true)
+			// Show cart for gift cards
+			if (isGiftCard) {
+				setShowCart(true)
+			}
 		} catch (err) {
 			console.error('Add to cart mutation failed', err)
 		}

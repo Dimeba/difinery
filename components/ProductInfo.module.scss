@@ -324,6 +324,51 @@
 	}
 }
 
+.giftCardInput {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.inputWrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.dollarSign {
+	font-size: 0.8rem;
+	font-weight: 500;
+	color: base.$gray;
+}
+
+.quickSelectButtons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+
+	button {
+		padding: 0.5rem 1rem;
+		border: 1px solid base.$gray;
+		background-color: transparent;
+		cursor: pointer;
+		font-size: 0.875rem;
+		transition: all 0.2s;
+		border-radius: 5px;
+
+		&:hover {
+			background-color: rgba(base.$gray, 0.1);
+		}
+
+		&.selected {
+			background-color: black;
+			color: white;
+			border-color: black;
+		}
+	}
+}
+
 @media screen and (max-width: 768px) {
 	.cartButton {
 		background-image: none;
