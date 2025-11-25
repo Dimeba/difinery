@@ -7,7 +7,10 @@ import { Suspense } from 'react'
 // lib
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
-import { getCachedCollections, getCachedShopPageContent } from '@/lib/cachedContentful'
+import {
+	getCachedCollections,
+	getCachedShopPageContent
+} from '@/lib/cachedContentful'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 3600 // Revalidate every hour
