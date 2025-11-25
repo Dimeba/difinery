@@ -28,7 +28,12 @@ export async function GET(request, { params }) {
 			)
 		}
 
-		return NextResponse.json(data.collectionByHandle)
+		return NextResponse.json({
+			products: {
+				edges: data.collectionByHandle.products.edges,
+				pageInfo: data.collectionByHandle.products.pageInfo
+			}
+		})
 	} catch (error) {
 		console.error('Error fetching collection:', error)
 		return NextResponse.json(

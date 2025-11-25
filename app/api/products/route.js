@@ -20,7 +20,10 @@ export async function GET(request) {
 			}
 		})
 
-		return NextResponse.json(data.products)
+		return NextResponse.json({
+			edges: data.products.edges,
+			pageInfo: data.products.pageInfo
+		})
 	} catch (error) {
 		console.error('Error fetching products:', error)
 		return NextResponse.json(

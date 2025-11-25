@@ -29,7 +29,8 @@ export default async function ShopAllPage(props) {
 
 	if (!ALLOWED_METALS.includes(metal)) notFound()
 
-	// Redirect to 'all' style by default for SEO-friendly URLs
+	// This should never be reached due to middleware redirect
+	// Keeping as fallback
 	const { redirect } = await import('next/navigation')
 	redirect(`/shop/all/${metal}/all`)
 }

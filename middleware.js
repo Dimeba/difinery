@@ -1,7 +1,59 @@
 // middleware.js
 import { NextResponse } from 'next/server'
 
+const ALLOWED_CATEGORIES = [
+	'bracelets',
+	'earrings',
+	'rings',
+	'necklaces',
+	'all'
+]
+
+const ALLOWED_METALS = ['yellow-gold', 'white-gold', 'rose-gold']
+
 export function middleware(request) {
+	const { pathname } = request.nextUrl
+
+	// Handle /shop -> /shop/all/yellow-gold/all redirect
+	if (pathname === '/shop') {
+		const url = request.nextUrl.clone()
+		url.pathname = '/shop/all/yellow-gold/all'
+		return NextResponse.redirect(url)
+	}
+
+	// Handle /shop/[category] -> /shop/[category]/yellow-gold/all redirects
+	const categoryMatch = pathname.match(
+		/^\/shop\/(bracelets|earrings|rings|necklaces|all)$/
+	)
+	if (categoryMatch) {
+		const category = categoryMatch[1]
+		const url = request.nextUrl.clone()
+		url.pathname = `/shop/${category}/yellow-gold/all`
+		return NextResponse.redirect(url)
+	}
+
+	// Handle /shop/[category]/[metal] -> /shop/[category]/[metal]/all redirects
+	const metalMatch = pathname.match(
+		/^\/shop\/(bracelets|earrings|rings|necklaces|all)\/(yellow-gold|white-gold|rose-gold)$/
+	)
+	if (metalMatch) {
+		const [, category, metal] = metalMatch
+		const url = request.nextUrl.clone()
+		url.pathname = `/shop/${category}/${metal}/all`
+		return NextResponse.redirect(url)
+	}
+
+	// Handle /shop/all/[metal] -> /shop/all/[metal]/all redirects
+	const allMetalMatch = pathname.match(
+		/^\/shop\/all\/(yellow-gold|white-gold|rose-gold)$/
+	)
+	if (allMetalMatch) {
+		const metal = allMetalMatch[1]
+		const url = request.nextUrl.clone()
+		url.pathname = `/shop/all/${metal}/all`
+		return NextResponse.redirect(url)
+	}
+
 	return NextResponse.next({
 		headers: {
 			'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',

@@ -49,7 +49,8 @@ export default async function CategoryPage(props) {
 	if (!ALLOWED_CATEGORIES.includes(category)) notFound()
 	if (!ALLOWED_METALS.includes(metal)) notFound()
 
-	// Redirect to 'all' style by default for SEO-friendly URLs
+	// This should never be reached due to middleware redirect
+	// Keeping as fallback
 	const { redirect } = await import('next/navigation')
 	redirect(`/shop/${category}/${metal}/all`)
 }

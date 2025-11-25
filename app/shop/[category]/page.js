@@ -43,7 +43,8 @@ export default async function CategoryPage(props) {
 
 	if (!ALLOWED_CATEGORIES.includes(category)) notFound()
 
-	// Redirect to yellow-gold/all by default for SEO-friendly URLs
+	// This should never be reached due to middleware redirect
+	// Keeping as fallback
 	const { redirect } = await import('next/navigation')
 	redirect(`/shop/${category}/yellow-gold/all`)
 }

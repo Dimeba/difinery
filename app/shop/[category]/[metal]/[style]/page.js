@@ -1,12 +1,10 @@
 // components
-import Products from '@/components/Products'
+import SmartProducts from '@/components/SmartProducts'
 import PageContent from '@/components/PageContent'
 import { Suspense } from 'react'
 
 // lib
-import { apolloClient } from '@/lib/apolloClient'
-import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
-import { GET_PRODUCTS } from '@/lib/queries/getProducts'
+import { fetchProductsSmart } from '@/lib/smartFetch'
 import { getEntries } from '@/lib/contentful'
 import { notFound } from 'next/navigation'
 
@@ -78,27 +76,19 @@ export default async function CategoryMetalStylePage(props) {
 	const content =
 		pages.items.find(page => page.fields.title == 'Shop')?.fields || {}
 
-	const { data } = await apolloClient.query({
-		query: category === 'all' ? GET_PRODUCTS : GET_COLLECTION_BY_HANDLE,
-		variables:
-			category === 'all'
-				? { first: 250, after: null }
-				: { handle: category, first: 250, after: null },
-		context: {
-			fetchOptions: {
-				next: { revalidate: 3600 } // Cache for 1 hour
-			}
-		}
-	})
+	// Extract filters from URL path and query parameters
+	const currentFilters = {
+		metal: metal, // Metal comes from URL path
+		style: style !== 'all' ? style : null, // Style from URL path (null if 'all')
+		shape: searchParams?.shape || null,
+		setting: searchParams?.setting || null
+	}
 
-	const isAll = category === 'all'
-	const initialEdges = isAll
-		? data.products?.edges || []
-		: data.collectionByHandle?.products?.edges || []
-	const initialItems = initialEdges.map(edge => edge.node)
-	const initialPageInfo = isAll
-		? data.products?.pageInfo
-		: data.collectionByHandle?.products?.pageInfo
+	// Smart fetch: 20 products if no filters, 250 if filters active
+	const { edges, pageInfo } = await fetchProductsSmart(currentFilters, category)
+
+	const initialItems = edges.map(edge => edge.node)
+	const initialPageInfo = pageInfo
 
 	// Map metal slug to readable label
 	const metalLabel =
@@ -108,24 +98,17 @@ export default async function CategoryMetalStylePage(props) {
 			? 'White Gold'
 			: 'Rose Gold'
 
-	// Extract filters from URL path and query parameters
-	const filters = {
-		metal: metal, // Metal comes from URL path
-		style: style !== 'all' ? style : null, // Style from URL path (null if 'all')
-		shape: searchParams?.shape || null,
-		setting: searchParams?.setting || null
-	}
-
 	return (
 		<main>
 			<Suspense fallback={<div>Loading…</div>}>
-				<Products
-					products={initialItems}
+				<SmartProducts
+					initialProducts={initialItems}
 					initialPageInfo={initialPageInfo}
 					productType={category}
 					selectedMetalType={metalLabel}
 					showFilters
-					filters={filters}
+					filters={currentFilters}
+					category={category}
 				/>
 			</Suspense>
 			<PageContent content={content} />

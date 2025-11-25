@@ -10,8 +10,6 @@ import { getEntries } from '@/lib/contentful'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 3600 // Revalidate every hour
-
-// Function to generate static params for dynamic routing
 export async function generateStaticParams() {
 	const collections = await getEntries('collection')
 	return collections.items
@@ -74,9 +72,10 @@ export default async function Page(props) {
 
 	const content = matched.fields
 
+	// Fetch only 20 products initially for collections (no filters)
 	const { data } = await apolloClient.query({
 		query: GET_COLLECTION_BY_HANDLE,
-		variables: { handle: content.handle, first: 250, after: null },
+		variables: { handle: content.handle, first: 20, after: null },
 		context: {
 			fetchOptions: {
 				next: { revalidate: 3600 } // Cache for 1 hour
