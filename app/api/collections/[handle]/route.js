@@ -3,13 +3,14 @@ import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
 import { NextResponse } from 'next/server'
 
 export const revalidate = 3600 // Revalidate every hour
+export const dynamic = 'force-dynamic' // Force dynamic rendering
 
 export async function GET(request, { params }) {
 	try {
 		const { handle } = await params
-		const { searchParams } = new URL(request.url)
-		const first = parseInt(searchParams.get('first') || '250')
-		const after = searchParams.get('after') || null
+		const url = new URL(request.url)
+		const first = parseInt(url.searchParams.get('first') || '250')
+		const after = url.searchParams.get('after') || null
 
 		const { data } = await apolloClient.query({
 			query: GET_COLLECTION_BY_HANDLE,

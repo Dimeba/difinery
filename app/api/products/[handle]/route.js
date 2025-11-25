@@ -3,6 +3,7 @@ import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 import { NextResponse } from 'next/server'
 
 export const revalidate = 3600 // Revalidate every hour
+export const dynamic = 'force-dynamic' // Force dynamic rendering
 
 export async function GET(request, { params }) {
 	try {

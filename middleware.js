@@ -54,14 +54,22 @@ export function middleware(request) {
 		return NextResponse.redirect(url)
 	}
 
-	return NextResponse.next({
-		headers: {
-			'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-			'Pragma': 'no-cache',
-			'Expires': '0',
-			'Surrogate-Control': 'no-store'
-		}
-	})
+	// Only add no-cache headers in development
+	const isDev = process.env.NODE_ENV === 'development'
+
+	if (isDev) {
+		return NextResponse.next({
+			headers: {
+				'Cache-Control':
+					'no-store, no-cache, must-revalidate, proxy-revalidate',
+				'Pragma': 'no-cache',
+				'Expires': '0',
+				'Surrogate-Control': 'no-store'
+			}
+		})
+	}
+
+	return NextResponse.next()
 }
 
 // Optional: limit to paths like "/api/*" or your CMS pages

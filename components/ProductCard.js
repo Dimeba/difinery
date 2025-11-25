@@ -25,8 +25,42 @@ const ProductCard = ({
 	index = 0,
 	listName = 'Shop'
 }) => {
-	const [metalTypes, setMetalTypes] = useState([])
-	const [activeMetalType, setActiveMetalType] = useState('')
+	// Initialize metal types and active type immediately
+	const initialMetalTypes = useMemo(() => {
+		const types = new Set()
+		product.options?.forEach(option => {
+			if (option.name === 'Metal') {
+				option.values.forEach(value => {
+					const image = returnMetalType(value.toLowerCase())
+					if (image) {
+						types.add(image)
+					}
+				})
+			}
+		})
+		return [...types]
+	}, [product])
+
+	// Find the matching metal type based on selectedMetalType immediately
+	const initialActiveType = useMemo(() => {
+		if (initialMetalTypes.length === 0) return ''
+
+		const matchingType = initialMetalTypes.find(type => {
+			if (selectedMetalType === 'Yellow Gold') {
+				return type.includes('yellow')
+			} else if (selectedMetalType === 'White Gold') {
+				return type.includes('white') && !type.includes('yellow')
+			} else if (selectedMetalType === 'Multi Gold') {
+				return type.includes('multi')
+			}
+			return false
+		})
+
+		return matchingType || initialMetalTypes[0]
+	}, [initialMetalTypes, selectedMetalType])
+
+	const [metalTypes, setMetalTypes] = useState(initialMetalTypes)
+	const [activeMetalType, setActiveMetalType] = useState(initialActiveType)
 	const [showCloseup, setShowCloseup] = useState(false)
 
 	const coverImages = useMemo(() => {
@@ -120,9 +154,9 @@ const ProductCard = ({
 		}
 	}
 
+	// Sync if product changes (rarely happens)
 	useEffect(() => {
 		const types = new Set()
-
 		product.options?.forEach(option => {
 			if (option.name === 'Metal') {
 				option.values.forEach(value => {
@@ -134,13 +168,12 @@ const ProductCard = ({
 			}
 		})
 
-		setMetalTypes([...types])
-	}, [product])
+		const newTypes = [...types]
+		if (JSON.stringify(newTypes) !== JSON.stringify(metalTypes)) {
+			setMetalTypes(newTypes)
 
-	useEffect(() => {
-		if (metalTypes.length > 0) {
-			// Find the metal type that matches the selectedMetalType
-			const matchingType = metalTypes.find(type => {
+			// Update active type if needed
+			const matchingType = newTypes.find(type => {
 				if (selectedMetalType === 'Yellow Gold') {
 					return type.includes('yellow')
 				} else if (selectedMetalType === 'White Gold') {
@@ -151,9 +184,9 @@ const ProductCard = ({
 				return false
 			})
 
-			setActiveMetalType(matchingType || metalTypes[0])
+			setActiveMetalType(matchingType || newTypes[0])
 		}
-	}, [metalTypes, selectedMetalType])
+	}, [product, selectedMetalType, metalTypes])
 
 	if (!product) {
 		return (

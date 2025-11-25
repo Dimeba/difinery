@@ -28,12 +28,16 @@ export async function generateMetadata(props) {
 	const params = await props.params
 	const { category } = params
 	if (!ALLOWED_CATEGORIES.includes(category))
-		return { title: 'Difinery | Shop' }
+		return {
+			title: 'Difinery | Shop',
+			description:
+				'Shop elegant, ethical lab-grown diamond jewelry at Difinery.'
+		}
 	const titleCase = category.charAt(0).toUpperCase() + category.slice(1)
 	return {
 		title: `Difinery | ${titleCase}`,
-		description: '',
-		keywords: ''
+		description: `Shop ${titleCase} in yellow gold, white gold, and rose gold. Elegant, ethical lab-grown diamond jewelry by Difinery.`,
+		keywords: `lab-grown diamonds, ${category}, ethical jewelry, difinery`
 	}
 }
 

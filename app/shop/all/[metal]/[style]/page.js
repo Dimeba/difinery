@@ -38,10 +38,33 @@ export async function generateStaticParams() {
 	)
 }
 
-export const metadata = {
-	title: 'Difinery | Shop',
-	description: '',
-	keywords: ''
+export async function generateMetadata(props) {
+	const params = await props.params
+	const { metal, style } = params
+
+	const metalLabel =
+		metal === 'yellow-gold'
+			? 'Yellow Gold'
+			: metal === 'white-gold'
+			? 'White Gold'
+			: 'Rose Gold'
+	const styleLabel =
+		style !== 'all'
+			? style
+					.split('-')
+					.map(w => w.charAt(0).toUpperCase() + w.slice(1))
+					.join(' ')
+			: ''
+
+	const description = styleLabel
+		? `Shop ${styleLabel} in ${metalLabel}. Elegant, ethical lab-grown diamond jewelry by Difinery.`
+		: `Shop ${metalLabel} jewelry. Elegant, ethical lab-grown diamond jewelry by Difinery.`
+
+	return {
+		title: 'Difinery | Shop',
+		description,
+		keywords: `lab-grown diamonds, ${metalLabel.toLowerCase()}, ethical jewelry, difinery`
+	}
 }
 
 export default async function ShopAllMetalStylePage(props) {

@@ -51,14 +51,37 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props) {
 	const params = await props.params
-	const { category } = params
+	const { category, metal, style } = params
 	if (!ALLOWED_CATEGORIES.includes(category))
-		return { title: 'Difinery | Shop' }
+		return {
+			title: 'Difinery | Shop',
+			description:
+				'Shop elegant, ethical lab-grown diamond jewelry at Difinery.'
+		}
+
 	const titleCase = category.charAt(0).toUpperCase() + category.slice(1)
+	const metalLabel =
+		metal === 'yellow-gold'
+			? 'Yellow Gold'
+			: metal === 'white-gold'
+			? 'White Gold'
+			: 'Rose Gold'
+	const styleLabel =
+		style !== 'all'
+			? style
+					.split('-')
+					.map(w => w.charAt(0).toUpperCase() + w.slice(1))
+					.join(' ')
+			: ''
+
+	const description = styleLabel
+		? `Shop ${styleLabel} ${titleCase} in ${metalLabel}. Elegant, ethical lab-grown diamond jewelry by Difinery.`
+		: `Shop ${metalLabel} ${titleCase}. Elegant, ethical lab-grown diamond jewelry by Difinery.`
+
 	return {
 		title: `Difinery | ${titleCase}`,
-		description: '',
-		keywords: ''
+		description,
+		keywords: `lab-grown diamonds, ${titleCase.toLowerCase()}, ${metalLabel.toLowerCase()}, ethical jewelry`
 	}
 }
 
