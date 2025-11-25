@@ -1,0 +1,39 @@
+import { apolloClient } from '@/lib/apolloClient'
+import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
+import { NextResponse } from 'next/server'
+
+export const revalidate = 3600 // Revalidate every hour
+
+export async function GET(request, { params }) {
+	try {
+		const { handle } = await params
+		const { searchParams } = new URL(request.url)
+		const first = parseInt(searchParams.get('first') || '250')
+		const after = searchParams.get('after') || null
+
+		const { data } = await apolloClient.query({
+			query: GET_COLLECTION_BY_HANDLE,
+			variables: { handle, first, after },
+			context: {
+				fetchOptions: {
+					next: { revalidate: 3600 } // Cache for 1 hour
+				}
+			}
+		})
+
+		if (!data.collectionByHandle) {
+			return NextResponse.json(
+				{ error: 'Collection not found' },
+				{ status: 404 }
+			)
+		}
+
+		return NextResponse.json(data.collectionByHandle)
+	} catch (error) {
+		console.error('Error fetching collection:', error)
+		return NextResponse.json(
+			{ error: 'Failed to fetch collection' },
+			{ status: 500 }
+		)
+	}
+}

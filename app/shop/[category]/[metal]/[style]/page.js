@@ -40,10 +40,7 @@ const ALLOWED_STYLES = [
 	'multi-pendant-bracelets'
 ]
 
-// Contentful
-const pages = await getEntries('page')
-const content =
-	pages.items.find(page => page.fields.title == 'Shop')?.fields || {}
+export const revalidate = 3600 // Revalidate every hour
 
 export async function generateStaticParams() {
 	// Pre-render combinations of category, metal, and style
@@ -76,12 +73,22 @@ export default async function CategoryMetalStylePage(props) {
 	if (!ALLOWED_METALS.includes(metal)) notFound()
 	if (!ALLOWED_STYLES.includes(style)) notFound()
 
+	// Fetch Contentful data inside the function
+	const pages = await getEntries('page')
+	const content =
+		pages.items.find(page => page.fields.title == 'Shop')?.fields || {}
+
 	const { data } = await apolloClient.query({
 		query: category === 'all' ? GET_PRODUCTS : GET_COLLECTION_BY_HANDLE,
 		variables:
 			category === 'all'
 				? { first: 250, after: null }
-				: { handle: category, first: 250, after: null }
+				: { handle: category, first: 250, after: null },
+		context: {
+			fetchOptions: {
+				next: { revalidate: 3600 } // Cache for 1 hour
+			}
+		}
 	})
 
 	const isAll = category === 'all'

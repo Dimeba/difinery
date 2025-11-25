@@ -5,6 +5,8 @@ import ProductInfo from '@/components/ProductInfo'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 
+export const revalidate = 3600 // Revalidate every hour
+
 export const metadata = {
 	title: 'Difinery | Gift Card',
 	description:
@@ -15,7 +17,12 @@ export const metadata = {
 export default async function GiftCard() {
 	const { data } = await apolloClient.query({
 		query: GET_PRODUCT_BY_HANDLE,
-		variables: { handle: 'difinery-gift-card' }
+		variables: { handle: 'difinery-gift-card' },
+		context: {
+			fetchOptions: {
+				next: { revalidate: 3600 } // Cache for 1 hour
+			}
+		}
 	})
 
 	const product = data.productByHandle

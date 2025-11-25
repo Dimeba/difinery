@@ -9,13 +9,11 @@ import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
 import { getEntries } from '@/lib/contentful'
 import { notFound } from 'next/navigation'
 
-// Contentful
-const collections = await getEntries('collection')
-const pages = await getEntries('page')
-const pageContent = pages.items.find(page => page.fields.title == 'Shop').fields
+export const revalidate = 3600 // Revalidate every hour
 
 // Function to generate static params for dynamic routing
 export async function generateStaticParams() {
+	const collections = await getEntries('collection')
 	return collections.items
 		.filter(c => c.fields.dontRender !== true)
 		.map(collection => ({
@@ -31,6 +29,7 @@ export async function generateMetadata(props) {
 	const params = await props.params
 	const { slug } = params
 
+	const collections = await getEntries('collection')
 	const matched = collections.items.find(
 		collection =>
 			collection.fields.title
@@ -54,6 +53,11 @@ export default async function Page(props) {
 	const params = await props.params
 	const { slug } = params
 
+	const collections = await getEntries('collection')
+	const pages = await getEntries('page')
+	const pageContent = pages.items.find(page => page.fields.title == 'Shop')
+		.fields
+
 	const matched = collections.items.find(
 		collection =>
 			collection.fields.title
@@ -71,7 +75,12 @@ export default async function Page(props) {
 
 	const { data } = await apolloClient.query({
 		query: GET_COLLECTION_BY_HANDLE,
-		variables: { handle: content.handle, first: 250, after: null }
+		variables: { handle: content.handle, first: 250, after: null },
+		context: {
+			fetchOptions: {
+				next: { revalidate: 3600 } // Cache for 1 hour
+			}
+		}
 	})
 
 	const initialEdges = data.collectionByHandle?.products.edges

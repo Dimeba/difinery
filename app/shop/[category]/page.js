@@ -18,10 +18,7 @@ const ALLOWED_CATEGORIES = [
 	'all'
 ]
 
-// Contentful
-const pages = await getEntries('page')
-const content =
-	pages.items.find(page => page.fields.title == 'Shop')?.fields || {}
+export const revalidate = 3600 // Revalidate every hour
 
 export async function generateStaticParams() {
 	return ALLOWED_CATEGORIES.map(category => ({ category }))

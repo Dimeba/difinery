@@ -31,9 +31,7 @@ const ALLOWED_STYLES = [
 	'multi-pendant-bracelets'
 ]
 
-// Contentful
-const pages = await getEntries('page')
-const content = pages.items.find(page => page.fields.title == 'Shop').fields
+export const revalidate = 3600 // Revalidate every hour
 
 export async function generateStaticParams() {
 	return ALLOWED_METALS.flatMap(metal =>
@@ -55,10 +53,19 @@ export default async function ShopAllMetalStylePage(props) {
 	if (!ALLOWED_METALS.includes(metal)) notFound()
 	if (!ALLOWED_STYLES.includes(style)) notFound()
 
+	// Fetch Contentful data inside the function
+	const pages = await getEntries('page')
+	const content = pages.items.find(page => page.fields.title == 'Shop').fields
+
 	// Fetch the maximum batch (Shopify cap 250) so filtering works client-side on full dataset
 	const { data } = await apolloClient.query({
 		query: GET_PRODUCTS,
-		variables: { first: 250, after: null }
+		variables: { first: 250, after: null },
+		context: {
+			fetchOptions: {
+				next: { revalidate: 3600 } // Cache for 1 hour
+			}
+		}
 	})
 
 	const initialEdges = data.products.edges
