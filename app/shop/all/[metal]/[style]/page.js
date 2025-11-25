@@ -1,11 +1,12 @@
 // components
 import SmartProducts from '@/components/SmartProducts'
 import PageContent from '@/components/PageContent'
+import ProductsSkeleton from '@/components/ProductsSkeleton'
 import { Suspense } from 'react'
 
 // lib
 import { fetchProductsSmart } from '@/lib/smartFetch'
-import { getEntries } from '@/lib/contentful'
+import { getCachedShopPageContent } from '@/lib/cachedContentful'
 import { notFound } from 'next/navigation'
 
 const ALLOWED_METALS = ['yellow-gold', 'white-gold', 'rose-gold']
@@ -75,9 +76,8 @@ export default async function ShopAllMetalStylePage(props) {
 	if (!ALLOWED_METALS.includes(metal)) notFound()
 	if (!ALLOWED_STYLES.includes(style)) notFound()
 
-	// Fetch Contentful data inside the function
-	const pages = await getEntries('page')
-	const content = pages.items.find(page => page.fields.title == 'Shop').fields
+	// Fetch Contentful data with caching
+	const content = await getCachedShopPageContent()
 
 	// Extract filters from URL path and query parameters
 	const currentFilters = {
@@ -103,7 +103,7 @@ export default async function ShopAllMetalStylePage(props) {
 
 	return (
 		<main>
-			<Suspense fallback={<div>Loading…</div>}>
+			<Suspense fallback={<ProductsSkeleton count={20} />}>
 				<SmartProducts
 					initialProducts={initialItems}
 					initialPageInfo={initialPageInfo}

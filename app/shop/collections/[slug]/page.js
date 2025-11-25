@@ -1,17 +1,18 @@
 // components
 import Products from '@/components/Products'
 import PageContent from '@/components/PageContent'
+import ProductsSkeleton from '@/components/ProductsSkeleton'
 import { Suspense } from 'react'
 
 // lib
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
-import { getEntries } from '@/lib/contentful'
+import { getCachedCollections, getCachedShopPageContent } from '@/lib/cachedContentful'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 3600 // Revalidate every hour
 export async function generateStaticParams() {
-	const collections = await getEntries('collection')
+	const collections = await getCachedCollections()
 	return collections.items
 		.filter(c => c.fields.dontRender !== true)
 		.map(collection => ({
@@ -27,7 +28,7 @@ export async function generateMetadata(props) {
 	const params = await props.params
 	const { slug } = params
 
-	const collections = await getEntries('collection')
+	const collections = await getCachedCollections()
 	const matched = collections.items.find(
 		collection =>
 			collection.fields.title
@@ -51,11 +52,8 @@ export default async function Page(props) {
 	const params = await props.params
 	const { slug } = params
 
-	const collections = await getEntries('collection')
-	const pages = await getEntries('page')
-	const pageContent = pages.items.find(
-		page => page.fields.title == 'Shop'
-	).fields
+	const collections = await getCachedCollections()
+	const pageContent = await getCachedShopPageContent()
 
 	const matched = collections.items.find(
 		collection =>
@@ -89,7 +87,7 @@ export default async function Page(props) {
 
 	return (
 		<main>
-			<Suspense fallback={<div>Loading…</div>}>
+			<Suspense fallback={<ProductsSkeleton count={20} />}>
 				<Products
 					products={initialItems}
 					initialPageInfo={initialPageInfo}

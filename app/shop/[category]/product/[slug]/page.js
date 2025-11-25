@@ -1,7 +1,7 @@
 import ProductPageLayout from '@/components/ProductPageLayout'
 
 // lib
-import { getEntries } from '@/lib/contentful'
+import { getCachedProductFAQs } from '@/lib/cachedContentful'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
@@ -62,13 +62,8 @@ export default async function Product(props) {
 	const params = await props.params
 	const { slug } = params
 
-	// FAQs
-	const allFaqs = await getEntries('accordion')
-	const faqs = allFaqs.items.find(
-		item => item.fields.productPage === 'Yes'
-	) || {
-		fields: { rows: [] }
-	}
+	// FAQs with caching
+	const faqs = await getCachedProductFAQs()
 
 	const { data } = await apolloClient.query({
 		query: GET_PRODUCT_BY_HANDLE,
