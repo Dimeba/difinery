@@ -64,6 +64,9 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			const url = node.url.toLowerCase()
 			if (url.includes('-review')) return false
 
+			// Extract filename from URL
+			const filename = url.split('/').pop()
+
 			// Color / Stackable logic
 			let matchesColorOrStackable = true
 			if (selectedColor) {
@@ -82,7 +85,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 				}
 
 				if (metalPrefix) {
-					matchesColorOrStackable = url.includes(metalPrefix)
+					matchesColorOrStackable = filename.startsWith(metalPrefix)
 				}
 			}
 
@@ -135,8 +138,9 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 
 		return allImages.find(node => {
 			const u = toLower(node)
+			const filename = u.split('/').pop()
 			if (!u.includes('-review')) return false
-			const metalOk = metalPrefix ? u.includes(metalPrefix) : true
+			const metalOk = metalPrefix ? filename.startsWith(metalPrefix) : true
 			const shapeOk = shapeCode ? u.includes(shapeCode) : true
 			return metalOk && shapeOk
 		})
