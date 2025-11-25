@@ -19,10 +19,7 @@ export async function GET(request, { params }) {
 		})
 
 		if (!data.productByHandle) {
-			return NextResponse.json(
-				{ error: 'Product not found' },
-				{ status: 404 }
-			)
+			return NextResponse.json({ error: 'Product not found' }, { status: 404 })
 		}
 
 		return NextResponse.json(data.productByHandle)

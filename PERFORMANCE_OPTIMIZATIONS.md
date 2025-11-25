@@ -3,16 +3,20 @@
 ## Changes Made
 
 ### 1. API Routes Created
+
 - **`/app/api/products/route.js`** - Fetch all products with caching
 - **`/app/api/products/[handle]/route.js`** - Fetch single product by handle with caching
 - **`/app/api/collections/[handle]/route.js`** - Fetch collection by handle with caching
 
 All API routes include:
+
 - 1-hour revalidation (`revalidate = 3600`)
 - Next.js automatic caching via `next: { revalidate: 3600 }`
 
 ### 2. Data Fetching Helper (`lib/dataCache.js`)
+
 Created centralized data fetching functions with built-in caching:
+
 - `fetchProducts()`
 - `fetchProductByHandle()`
 - `fetchCollectionByHandle()`
@@ -21,7 +25,9 @@ Created centralized data fetching functions with built-in caching:
 - `fetchContentfulCollections()`
 
 ### 3. Apollo Client Optimization
+
 Enhanced `lib/apolloClient.js` with:
+
 - In-memory caching configuration
 - Type policies for better cache management
 - Default `cache-first` fetch policy
@@ -30,13 +36,16 @@ Enhanced `lib/apolloClient.js` with:
 ### 4. Page-Level Optimizations
 
 #### All Shop Pages
+
 - Added `export const revalidate = 3600` (1-hour cache)
 - Moved Contentful data fetching from module-level to function-level
 - Added caching context to all Apollo queries
 - Removed blocking module-level data fetches
 
 #### Product Pages (`/shop/[category]/product/[slug]/page.js`)
+
 **Critical fixes:**
+
 - ✅ Removed module-level fetch of ALL products (250 items)
 - ✅ Added `generateStaticParams()` for pre-rendering product pages
 - ✅ Moved data fetching inside component functions
@@ -44,20 +53,24 @@ Enhanced `lib/apolloClient.js` with:
 - ✅ Conditional fetching for recommended products only when needed
 
 #### Category Pages
+
 - Added revalidation to all category/metal/style combinations
 - Optimized data fetching with proper caching
 
 #### Collections Page
+
 - Moved Contentful fetches to function-level
 - Added caching to collection queries
 - Improved `generateStaticParams()` performance
 
 #### Gift Card Page
+
 - Added revalidation and caching
 
 ## Performance Impact
 
 ### Before:
+
 - ❌ Product pages fetched 250 products on EVERY request
 - ❌ No caching strategy
 - ❌ Module-level data fetches blocked all pages
@@ -65,6 +78,7 @@ Enhanced `lib/apolloClient.js` with:
 - ❌ Contentful data fetched at build time for every page
 
 ### After:
+
 - ✅ Data cached for 1 hour across all pages
 - ✅ Product pages only fetch what they need
 - ✅ Apollo client uses cache-first strategy
@@ -83,6 +97,7 @@ Enhanced `lib/apolloClient.js` with:
 ## Recommendations
 
 ### Further Optimizations:
+
 1. Consider using `unstable_cache` for Contentful data
 2. Implement Incremental Static Regeneration (ISR) for less frequently updated pages
 3. Add database caching layer (Redis) for high-traffic scenarios
@@ -90,6 +105,7 @@ Enhanced `lib/apolloClient.js` with:
 5. Add loading skeletons for better perceived performance
 
 ### Monitoring:
+
 - Monitor cache hit rates
 - Track page load times in production
 - Watch for memory usage with Apollo cache
@@ -100,6 +116,7 @@ Enhanced `lib/apolloClient.js` with:
 The optimizations are automatic. No code changes needed in components or other parts of the application.
 
 For manual data fetching with caching:
+
 ```javascript
 import { fetchProducts, fetchProductByHandle } from '@/lib/dataCache'
 

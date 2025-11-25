@@ -55,8 +55,9 @@ export default async function Page(props) {
 
 	const collections = await getEntries('collection')
 	const pages = await getEntries('page')
-	const pageContent = pages.items.find(page => page.fields.title == 'Shop')
-		.fields
+	const pageContent = pages.items.find(
+		page => page.fields.title == 'Shop'
+	).fields
 
 	const matched = collections.items.find(
 		collection =>
