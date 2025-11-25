@@ -1,8 +1,10 @@
 import ProductPageLayout from '@/components/ProductPageLayout'
+import ProductInfoSkeleton from '@/components/ProductInfoSkeleton'
 
 // lib
 import { getCachedProductFAQs } from '@/lib/cachedContentful'
 import { apolloClient } from '@/lib/apolloClient'
+import { Suspense } from 'react'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 import { notFound } from 'next/navigation'
@@ -79,7 +81,7 @@ export default async function Product(props) {
 		notFound()
 	}
 
-	// Fetch all products to get recommended products
+	// Fetch recommended products if they exist
 	let recommendedProducts = []
 	if (product.metafield?.value) {
 		const recommendedProductIds = product.metafield.value
@@ -88,7 +90,7 @@ export default async function Product(props) {
 			variables: { first: 250, after: null },
 			context: {
 				fetchOptions: {
-					next: { revalidate: 3600 } // Cache for 1 hour
+					next: { revalidate: 3600 }
 				}
 			}
 		})

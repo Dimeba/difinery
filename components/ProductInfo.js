@@ -215,7 +215,9 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 									src={image.url}
 									fill
 									alt='Image of the product.'
-									quality={100}
+									priority={index === 0}
+									loading={index === 0 ? undefined : 'lazy'}
+									quality={75}
 									sizes='(max-width: 768px) 100vw, 50vw'
 									style={{
 										objectFit:

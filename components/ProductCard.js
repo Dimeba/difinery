@@ -232,7 +232,7 @@ const ProductCard = ({
 						<Image
 							src={yellowGoldImage?.node.url || coverImages[0]?.node.url}
 							fill
-							priority={true}
+							priority={index < 4}
 							alt='Category Image.'
 							style={{
 								visibility: activeMetalType.includes('yellow')
@@ -245,14 +245,15 @@ const ProductCard = ({
 										? 'top'
 										: 'center'
 							}}
-							quality={100}
-							sizes='(max-width: 768px) 100vw, 50vw'
+							quality={75}
+							sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
 						/>
 
 						{yellowGoldImageCloseup && (
 							<Image
 								src={yellowGoldImageCloseup.node.url}
 								fill
+								loading='lazy'
 								alt='Category Image.'
 								style={{
 									visibility: activeMetalType.includes('yellow')
@@ -265,8 +266,8 @@ const ProductCard = ({
 											? 'top'
 											: 'center'
 								}}
-								quality={100}
-								sizes='(max-width: 768px) 100vw, 50vw'
+								quality={75}
+								sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
 							/>
 						)}
 
@@ -274,6 +275,7 @@ const ProductCard = ({
 						<Image
 							src={whiteGoldImage?.node.url || coverImages[0]?.node.url}
 							fill
+							loading='lazy'
 							alt='Category Image.'
 							style={{
 								visibility:
@@ -288,14 +290,15 @@ const ProductCard = ({
 										? 'top'
 										: 'center'
 							}}
-							quality={100}
-							sizes='(max-width: 768px) 100vw, 50vw'
+							quality={75}
+							sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
 						/>
 
 						{whiteGoldImageCloseup && (
 							<Image
 								src={whiteGoldImageCloseup.node.url}
 								fill
+								loading='lazy'
 								alt='Category Image.'
 								style={{
 									visibility:
@@ -310,8 +313,8 @@ const ProductCard = ({
 											? 'top'
 											: 'center'
 								}}
-								quality={100}
-								sizes='(max-width: 768px) 100vw, 50vw'
+								quality={75}
+								sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
 							/>
 						)}
 
@@ -319,6 +322,7 @@ const ProductCard = ({
 						<Image
 							src={multiGoldImage?.node.url || coverImages[0]?.node.url}
 							fill
+							loading='lazy'
 							alt='Category Image.'
 							style={{
 								visibility: activeMetalType.includes('multi')
@@ -331,14 +335,15 @@ const ProductCard = ({
 										? 'top'
 										: 'center'
 							}}
-							quality={100}
-							sizes='(max-width: 768px) 100vw, 50vw'
+							quality={75}
+							sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
 						/>
 
 						{multiGoldImageCloseup && (
 							<Image
 								src={multiGoldImageCloseup.node.url}
 								fill
+								loading='lazy'
 								alt='Category Image.'
 								style={{
 									visibility: activeMetalType.includes('multi')
@@ -402,7 +407,7 @@ const ProductCard = ({
 										src={`/${option}`}
 										fill
 										alt={`${option} material icon.`}
-										sizes='(max-width: 768px) 100vw, 50vw'
+										sizes='30px'
 									/>
 
 									{activeMetalType === option && (
