@@ -14,7 +14,11 @@ import { useCart } from '@/context/CartContext'
 import { useEffect } from 'react'
 
 // analytics
-import { trackViewCart, trackBeginCheckout } from '@/lib/gaEvents'
+import {
+	trackViewCart,
+	trackBeginCheckout,
+	getStoredGclid
+} from '@/lib/gaEvents'
 
 const Cart = () => {
 	const { showCart, setShowCart, cart, updateQuantity, removeFromCart } =
@@ -63,6 +67,19 @@ const Cart = () => {
 	const handleCheckout = () => {
 		// Track begin_checkout event
 		trackBeginCheckout(cart)
+	}
+
+	// Preserve GCLID when redirecting to Shopify checkout
+	const getCheckoutUrl = () => {
+		if (!cart?.checkoutUrl) return '#'
+
+		const gclid = getStoredGclid()
+		if (gclid) {
+			const separator = cart.checkoutUrl.includes('?') ? '&' : '?'
+			return `${cart.checkoutUrl}${separator}gclid=${gclid}`
+		}
+
+		return cart.checkoutUrl
 	}
 
 	return (
@@ -144,7 +161,7 @@ const Cart = () => {
 					</div>
 
 					<Link
-						href={cart.checkoutUrl}
+						href={getCheckoutUrl()}
 						style={{
 							pointerEvents: cart.lines?.edges?.length > 0 ? 'auto' : 'none'
 						}}
