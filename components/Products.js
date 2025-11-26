@@ -44,18 +44,17 @@ const Products = ({
 	selectedMetalType = 'Yellow Gold',
 	selectedCategory = 'all',
 	selectedTag = null,
-	filters = null // New prop for query parameter filters
+	filters = null, // New prop for query parameter filters
+	onLoadMore = null, // Callback to load more products from API
+	canLoadMore = false, // Whether more products can be loaded
+	onSearch = null, // Callback when search is performed
+	isSearching = false // Whether search is currently loading
 }) => {
 	// Stable base products list (empty singleton when undefined)
 	const productsList = products ?? EMPTY_PRODUCTS
 
 	// All products are already fetched; maintain only filtered + visible slices
 	const [filteredItems, setFilteredItems] = useState(productsList)
-
-	// Sync when incoming products prop first arrives or length changes
-	useEffect(() => {
-		setFilteredItems(productsList)
-	}, [productsList])
 	const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
 	// filters state
@@ -67,12 +66,47 @@ const Products = ({
 
 	// client-side pagination count
 	const [visibleCount, setVisibleCount] = useState(16)
+
+	// Sync when incoming products prop first arrives or length changes
+	useEffect(() => {
+		setFilteredItems(productsList)
+		// If products list grew (e.g., from API load more), increase visible count
+		if (productsList.length > visibleCount) {
+			setVisibleCount(productsList.length)
+		}
+	}, [productsList, visibleCount])
+
+	// Increase visible count when searching to show all results
+	useEffect(() => {
+		if (searchTerm && filteredItems.length > visibleCount) {
+			setVisibleCount(filteredItems.length)
+		}
+	}, [searchTerm, filteredItems.length, visibleCount])
+
+	// Notify parent when search term changes
+	useEffect(() => {
+		if (onSearch && searchTerm) {
+			onSearch(searchTerm)
+		}
+	}, [searchTerm])
+
 	const loadMore = () => {
-		setVisibleCount(vc => Math.min(vc + 16, filteredItems.length))
+		// If we have a callback to load more from API, use it
+		if (onLoadMore && canLoadMore) {
+			onLoadMore()
+		} else {
+			// Otherwise, just show more of the filtered items
+			setVisibleCount(vc => Math.min(vc + 16, filteredItems.length))
+		}
 	}
 
 	// Filter & sort
 	useEffect(() => {
+		// Skip filtering while search is actively loading
+		if (isSearching) {
+			return
+		}
+
 		let updated = [...productsList]
 
 		// Helper function to normalize tag strings
@@ -189,7 +223,8 @@ const Products = ({
 		selectedMetalType,
 		selectedTag,
 		searchTerm,
-		filters
+		filters,
+		isSearching
 	])
 
 	// Track view_item_list when filtered items change
@@ -427,8 +462,8 @@ const Products = ({
 				</div>
 			</div>
 
-			{/* “Load more” button: determine by filteredItems length vs visibleCount */}
-			{filteredItems.length > visibleCount && (
+			{/* "Load more" button: show if more filtered items to display OR if can load more from API, but hide when searching */}
+			{!searchTerm && (filteredItems.length > visibleCount || canLoadMore) && (
 				<Box textAlign='center' mt={4}>
 					<button
 						onClick={loadMore}
