@@ -21,6 +21,7 @@ import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 
 // data
 import materialInfo from '@/data/materialInfo.json' with { type: 'json' }
+import customProductData from '@/data/customProductData.json' with { type: 'json' }
 
 const ProductOptionsUI = ({
 	product,
@@ -314,19 +315,20 @@ const ProductOptionsUI = ({
 
 			{!isGiftCard && (
 				<div>
-					<Accordion title='Product Details'>
-						<div className={styles.productDetails}>
+				<Accordion title='Product Details'>
+					<div className={styles.productDetails}>
+						<p>
+							<span>Product Name: </span>
+							{product.title}
+						</p>
+						{matchingVariant && (
 							<p>
-								<span>Product Name: </span>
-								{product.title}
+								<span>ID / SKU: </span>
+								{matchingVariant.sku}
 							</p>
-							{matchingVariant && (
-								<p>
-									<span>ID / SKU: </span>
-									{matchingVariant.sku}
-								</p>
-							)}
-							{selectedColor && (
+						)}
+						{selectedColor && (
+							<>
 								<p>
 									<span>Metal: </span>
 									{selectedColor.toLowerCase().includes('yellow') ? (
@@ -335,12 +337,31 @@ const ProductOptionsUI = ({
 										<span>White Gold</span>
 									)}
 								</p>
-							)}
-							{parse(details)}
-						</div>
-					</Accordion>
+							</>
+						)}
+						{parse(details)}
 
-					<Accordion title='Material'>
+						<>	{matchingVariant && (() => {
+									const customData = customProductData.find(
+										item => item.SKU === matchingVariant.sku
+									)
+									return customData ? (
+										<>
+											<p>
+												<span>Total Weight: </span>
+												{customData['Total Weight']}
+											</p>
+											<p>
+												<span>Dimensions: </span>
+												{customData.Dimensions}
+											</p>
+										</>
+									) : null
+								})()}</>
+					</div>
+				</Accordion>
+
+				<Accordion title='Material'>
 						<div
 							style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
 						>
