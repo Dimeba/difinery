@@ -22,6 +22,7 @@ import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 // data
 import materialInfo from '@/data/materialInfo.json' with { type: 'json' }
 import customProductData from '@/data/customProductData.json' with { type: 'json' }
+import customShapes from '@/data/shapes.json' with { type: 'json' }
 
 const ProductOptionsUI = ({
 	product,
@@ -159,7 +160,7 @@ const ProductOptionsUI = ({
 		if (selectedColor) {
 			getMatchingVariant({ ...selectedOptions, Metal: selectedColor })
 		}
-	}, [])
+	}, [])	
 
 	return (
 		<div className={styles.content}>
@@ -177,6 +178,64 @@ const ProductOptionsUI = ({
 			<div className={styles.description}>{isGiftCard ? parse(product.descriptionHtml) : parse(description)}</div>
 
 			<div className={styles.accordion}>
+				{/* Custom Shapes */}
+				{product.tags.includes("CustomShape") && <Accordion
+						title="Diamond Shape"
+						extraTitleText={
+							customShapes.find(shape => 
+								product.title.toLowerCase().includes(shape.title.toLowerCase())
+							)?.title || null
+						}
+						state={true}
+						setOpenOption={() => setOpenOption(0)}
+						product
+						display
+					>
+						<div
+							className={styles.variantButtonsContainer}
+						>
+						{customShapes.filter(shape => 
+							!(product.title.toLowerCase().includes("promise") && shape.title.toLowerCase() === "heart")
+						).map(shape => (
+								<button
+									key={shape.title}
+									onClick={() => {
+										// Find current shape in product title
+										const currentShape = customShapes.find(s => 
+											product.title.toLowerCase().includes(s.title.toLowerCase())
+										)
+										
+										if (currentShape && typeof window !== 'undefined') {
+											// Get current pathname
+											const currentPath = window.location.pathname
+											
+											// Replace the current shape with the new shape in the URL
+											const newPath = currentPath.replace(
+												new RegExp(currentShape.title.toLowerCase(), 'i'),
+												shape.title.toLowerCase()
+											)
+											
+											// Navigate to the new URL with existing query params
+											window.location.href = newPath + window.location.search
+										}
+									}}
+								>
+									<Image
+										src={shape.path}
+										width={48 * shape.width / shape.height}
+										height={48}
+										alt={`${shape.title} Diamond Shape`}
+										style={{
+											opacity: product.title.toLowerCase().includes(shape.title.toLowerCase()) ? 1 : 0.25
+										}}
+									/>
+									</button>
+								)
+							)}
+						</div>
+					</Accordion>}
+
+				{/* Options */}
 				{product.options.map((option, index) => (
 					<Accordion
 						key={option.name}
@@ -189,7 +248,7 @@ const ProductOptionsUI = ({
 									: selectedOptions[option.name]
 								: null
 						}
-						state={isGiftCard ? true : index === openOption}
+						state={isGiftCard || product.tags.includes("CustomShape") ? true : index === openOption}
 						setOpenOption={() => setOpenOption(index)}
 						product
 						display

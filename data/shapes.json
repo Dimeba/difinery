@@ -1,0 +1,50 @@
+[
+	{
+		"title": "Round",
+		"path": "/shape-icons/round.png",
+		"width": 48,
+		"height": 48
+	},
+	{
+		"title": "Oval",
+		"path": "/shape-icons/oval.png",
+		"width": 28,
+		"height": 40
+	},
+	{
+		"title": "Pear",
+		"path": "/shape-icons/pear.png",
+		"width": 28,
+		"height": 40
+	},
+	{
+		"title": "Marquise",
+		"path": "/shape-icons/marquise.png",
+		"width": 23,
+		"height": 42
+	},
+	{
+		"title": "Radiant",
+		"path": "/shape-icons/radiant.png",
+		"width": 29,
+		"height": 40
+	},
+	{
+		"title": "Heart",
+		"path": "/shape-icons/heart.png",
+		"width": 38,
+		"height": 36
+	},
+	{
+		"title": "Emerald",
+		"path": "/shape-icons/emerald.png",
+		"width": 26,
+		"height": 40
+	},
+	{
+		"title": "Princess",
+		"path": "/shape-icons/princess.png",
+		"width": 48,
+		"height": 48
+	}
+]
