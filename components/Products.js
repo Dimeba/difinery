@@ -351,7 +351,7 @@ const Products = ({
 					<div
 						className={`${styles.products} ${!individual ? styles.gap : ''}`}
 					>
-						{collectionPreview && (
+						{collectionPreview?.media && (
 							<Box
 								gridColumn={{ xs: 'span 12', lg: 'span 6' }}
 								gridRow={'span 2'}

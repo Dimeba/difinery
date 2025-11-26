@@ -120,6 +120,18 @@
 					{
 						"title": "Heart Collection",
 						"url": "/shop/collections/heart-collection"
+					},
+					{
+						"title": "Engagement Rings",
+						"url": "/shop/collections/engagement-rings"
+					},
+					{
+						"title": "Ever After Collection",
+						"url": "/shop/collections/ever-after-collection"
+					},
+					{
+						"title": "Orbit Collection",
+						"url": "/shop/collections/orbit-collection"
 					}
 				]
 			}
