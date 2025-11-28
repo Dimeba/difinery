@@ -158,15 +158,16 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		}
 
 		try {
-			if (engraving !== '') {
-				await addToCart(engravingVariant.id, 1, [
-					{ key: 'text', value: engraving },
-					{
-						key: 'product',
-						value: product.title
-					}
-				])
-			}
+			// Engraving is now added as custom field only, not as separate product
+			// if (engraving !== '') {
+			// 	await addToCart(engravingVariant.id, 1, [
+			// 		{ key: 'text', value: engraving },
+			// 		{
+			// 			key: 'product',
+			// 			value: product.title
+			// 		}
+			// 	])
+			// }
 
 			if (boxText !== '') {
 				await addToCart(boxVariant.id, 1, [
