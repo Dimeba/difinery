@@ -31,7 +31,8 @@ const OrderReview = ({
 }) => {
 	const { addToCart, setShowCart } = useCart()
 
-	const [engravingProduct, setEngravingProduct] = useState(null)
+	// Engraving is now added as custom field only, not as separate product
+	// const [engravingProduct, setEngravingProduct] = useState(null)
 	const [boxProduct, setBoxProduct] = useState(null)
 
 	const client = useApolloClient()
@@ -39,15 +40,15 @@ const OrderReview = ({
 	useEffect(() => {
 		const loadOrClear = async () => {
 			// ENGRAVING
-			if (customOptions.engraving) {
-				const { data } = await client.query({
-					query: GET_PRODUCT_BY_HANDLE,
-					variables: { handle: 'engraving' }
-				})
-				setEngravingProduct(data.productByHandle)
-			} else {
-				setEngravingProduct(null)
-			}
+			// if (customOptions.engraving) {
+			// 	const { data } = await client.query({
+			// 		query: GET_PRODUCT_BY_HANDLE,
+			// 		variables: { handle: 'engraving' }
+			// 	})
+			// 	setEngravingProduct(data.productByHandle)
+			// } else {
+			// 	setEngravingProduct(null)
+			// }
 
 			// CUSTOM BOX
 			if (customOptions.boxText) {
@@ -70,9 +71,9 @@ const OrderReview = ({
 	const description = match ? match[0] : ''
 
 	const basePrice = Number(matchingVariant.price.amount.slice(0, -2))
-	const engravingFee = engravingProduct ? 20 : 0
+	// const engravingFee = engravingProduct ? 20 : 0
 	const boxFee = boxProduct ? 50 : 0
-	const totalPrice = basePrice + engravingFee + boxFee
+	const totalPrice = basePrice + boxFee // + engravingFee
 
 	return (
 		<Box sx={{ backgroundColor: '#f4f4f4' }} id='order-review'>
