@@ -93,7 +93,8 @@ const ProductOptionsUI = ({
 		setOpenOption(index + 1)
 
 		// 4) set selected color/shape if applicable (to drive image filtering)
-		if (optionName === 'Metal') {
+		// Don't override selectedColor for stackable rings (handled by ProductOptionAccordion)
+		if (optionName === 'Metal' && !product.tags.includes('Stackable Rings')) {
 			setSelectedColor(value)
 		} else if (optionName.toLowerCase() === 'diamond shape') {
 			setSelectedShape(value)

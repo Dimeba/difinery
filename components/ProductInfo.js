@@ -67,6 +67,11 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			// Extract filename from URL
 			const filename = url.split('/').pop()
 
+			// Log all images for stackable rings
+			if (selectedColor?.toLowerCase().startsWith('stackable-')) {
+				console.log('Checking image:', filename)
+			}
+
 			// Color / Stackable logic
 			let matchesColorOrStackable = true
 			if (selectedColor) {
@@ -74,19 +79,34 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 
 				// Check if this is a stackable ring with color codes (e.g., "Stackable-WYR")
 				if (lc.startsWith('stackable-')) {
-					const colorCodes = lc.replace('stackable-', '')
-					const stackablePattern = `stackable-${colorCodes}`
+					const colorCodes = lc.replace('stackable-', '').toLowerCase()
 
+					// Match pattern like "stackable-yr" or "Stackable-YR" in the filename
 					// Try both the original order and reversed order for 2-ring combinations
 					const reversedCodes = colorCodes.split('').reverse().join('')
-					const reversedPattern = `stackable-${reversedCodes}`
 
-					matchesColorOrStackable =
-						filename.toLowerCase().includes(stackablePattern) ||
-						filename.toLowerCase().includes(reversedPattern)
+					// Since url is already lowercase, just check lowercase patterns
+					const matches =
+						url.includes(`stackable-${colorCodes}`) ||
+						url.includes(`stackable-${reversedCodes}`)
+
+					if (!matches) {
+						console.log(
+							'Image filtered out:',
+							filename,
+							'Looking for:',
+							colorCodes.toUpperCase(),
+							'or',
+							reversedCodes.toUpperCase()
+						)
+					} else {
+						console.log('IMAGE MATCHED:', filename)
+					}
+					matchesColorOrStackable = matches
 				} else {
 					const hasWhite = lc.includes('white')
 					const hasYellow = lc.includes('yellow')
+					const hasRose = lc.includes('rose')
 
 					// Determine the metal prefix
 					let metalPrefix = ''
@@ -96,6 +116,8 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 						metalPrefix = 'w' // white gold
 					} else if (hasYellow) {
 						metalPrefix = 'y' // yellow gold
+					} else if (hasRose) {
+						metalPrefix = 'r' // rose gold
 					}
 
 					if (metalPrefix) {

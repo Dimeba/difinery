@@ -45,10 +45,11 @@ const ProductOptionAccordion = ({
 		const colors = []
 		const value = metalValue.toLowerCase()
 
-		// Count occurrences of each color
+		// Count occurrences of each color (check for various naming conventions)
 		const whiteMatches = (value.match(/white/g) || []).length
 		const yellowMatches = (value.match(/yellow/g) || []).length
-		const roseMatches = (value.match(/rose/g) || []).length
+		const roseMatches =
+			(value.match(/rose/g) || []).length + (value.match(/pink/g) || []).length
 
 		// Build array with the colors
 		for (let i = 0; i < whiteMatches; i++) colors.push('White')
@@ -58,14 +59,18 @@ const ProductOptionAccordion = ({
 		return colors
 	}
 
-	// Get unique color options (White, Yellow, Rose)
+	// Get unique color options (White, Yellow, Rose) from actual variants
 	const getStackableColorOptions = () => {
 		const colorSet = new Set()
-		option.optionValues.forEach(value => {
-			const colors = parseMetalColors(value.name)
-			colors.forEach(color => colorSet.add(color))
-		})
-		return Array.from(colorSet)
+		if (option?.optionValues) {
+			option.optionValues.forEach(value => {
+				const colors = parseMetalColors(value.name)
+				colors.forEach(color => colorSet.add(color))
+			})
+		}
+		// Sort in specific order: Yellow, White, Rose
+		const colorOrder = { 'Yellow': 1, 'White': 2, 'Rose': 3 }
+		return Array.from(colorSet).sort((a, b) => colorOrder[a] - colorOrder[b])
 	}
 
 	// Get maximum number of rings available based on variants
@@ -108,9 +113,11 @@ const ProductOptionAccordion = ({
 			const availableColors = getStackableColorOptions()
 
 			console.log('Init with maxRings:', maxRings)
-			const initialColors = new Array(maxRings).fill(
-				availableColors[0] || 'White'
-			)
+			// Default to Yellow (first in order), or first available color
+			const defaultColor = availableColors.includes('Yellow')
+				? 'Yellow'
+				: availableColors[0] || 'White'
+			const initialColors = new Array(maxRings).fill(defaultColor)
 			setStackableColors(initialColors)
 		}
 	}, [isStackableRings, isMetalOption])
@@ -133,23 +140,20 @@ const ProductOptionAccordion = ({
 
 		console.log('Matching variant:', matchingValue?.name)
 
-		if (matchingValue) {
-			// Update image filter based on stackable color codes
-			const colorCodes = newColors.map(c => c[0].toUpperCase()).join('')
-			if (colorCodes && setSelectedColor) {
-				// Create a special color string for image filtering
-				setSelectedColor(`Stackable-${colorCodes}`)
-			}
+		// Update image filter based on stackable color codes FIRST
+		const colorCodes = newColors.map(c => c[0].toUpperCase()).join('')
+		console.log('Setting selectedColor to:', `Stackable-${colorCodes}`)
+		if (colorCodes && setSelectedColor) {
+			// Create a special color string for image filtering
+			setSelectedColor(`Stackable-${colorCodes}`)
+		}
 
+		if (matchingValue) {
 			// Advance to next accordion after selection
+			console.log('Calling handleOptionSelection with:', matchingValue.name)
 			handleOptionSelection(option.name, matchingValue.name, index)
 		} else {
 			console.warn('No matching variant found for:', newColors)
-			// Still update the image filter even if no exact variant match
-			const colorCodes = newColors.map(c => c[0].toUpperCase()).join('')
-			if (colorCodes && setSelectedColor) {
-				setSelectedColor(`Stackable-${colorCodes}`)
-			}
 		}
 	}
 
