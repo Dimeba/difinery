@@ -10,6 +10,7 @@ import NeedHelpInfo from './NeedHelpInfo'
 import Engraving from './Engraving'
 import CustomBox from './CustomBox'
 import GiftCardInput from './GiftCardInput'
+import { Typography } from '@mui/material'
 
 // hooks
 import { useState, useEffect } from 'react'
@@ -222,8 +223,8 @@ const ProductOptionsUI = ({
 								>
 									<Image
 										src={shape.path}
-										width={48 * shape.width / shape.height}
-										height={48}
+										width={isMobile ?  32 * shape.width / shape.height : 48 * shape.width / shape.height}
+										height={isMobile ? 32 : 48}
 										alt={`${shape.title} Diamond Shape`}
 										style={{
 											opacity: product.title.toLowerCase().includes(shape.title.toLowerCase()) ? 1 : 0.25
@@ -305,6 +306,10 @@ const ProductOptionsUI = ({
 								))
 							)}
 						</div>
+
+						{option.name.toLowerCase() === 'total carat weight' &&<Typography variant='p' fontStyle='italic' fontSize='10px' mt={"1rem"}>
+						*All images are represented in 2.00 carat weight.
+					</Typography>}
 					</Accordion>
 				))}
 
