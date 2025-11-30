@@ -279,10 +279,13 @@ const ProductOptionAccordion = ({
 													handleStackableColorChange(ringIndex, color)
 												}
 												style={{
+													borderRadius: '50%',
+													border:
+														selectedColor === color ? '1px solid black' : '',
 													display: 'flex',
 													alignItems: 'center',
-													justifyContent: 'center',
-													opacity: selectedColor === color ? 1 : 0.4
+													justifyContent: 'center'
+													// opacity: selectedColor === color ? 1 : 0.6
 												}}
 											>
 												<Image
