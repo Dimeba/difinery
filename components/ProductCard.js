@@ -13,9 +13,6 @@ import { useState, useEffect, useMemo } from 'react'
 // helpers
 import { returnMetalType } from '@/lib/helpers'
 
-// analytics
-import { trackSelectItem } from '@/lib/gaEvents'
-
 const ProductCard = ({
 	permalink,
 	discount,
@@ -196,17 +193,11 @@ const ProductCard = ({
 		)
 	}
 
-	const handleProductClick = () => {
-		// Track select_item event when product is clicked
-		trackSelectItem(product, listName, index)
-	}
-
 	return (
 		<div className={`${!individual ? styles.product : styles.productNoGap}`}>
 			<Link
 				href={returnCorrectURL()}
 				aria-label={`Link to ${product.title} page.`}
-				onClick={handleProductClick}
 			>
 				{coverImages.length > 0 && (
 					<div

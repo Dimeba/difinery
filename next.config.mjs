@@ -9,9 +9,7 @@ const nextConfig = {
 		token: process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN,
 		// Contenrful API keys
 		space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
-		accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_KEY,
-		googleAnalytics: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS,
-		gtmId: process.env.NEXT_PUBLIC_GTM_ID
+		accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_KEY
 	},
 	images: {
 		remotePatterns: [

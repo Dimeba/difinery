@@ -25,9 +25,6 @@ import SearchIcon from '@mui/icons-material/Search'
 import { useState, useEffect, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
 
-// analytics
-import { trackViewItemList } from '@/lib/gaEvents'
-
 const EMPTY_PRODUCTS = []
 
 const Products = ({
@@ -226,28 +223,6 @@ const Products = ({
 		filters,
 		isSearching
 	])
-
-	// Track view_item_list when filtered items change
-	useEffect(() => {
-		if (filteredItems.length > 0) {
-			// Build list name from current filters
-			let listName = 'Shop'
-			if (filters?.category && filters.category !== 'all') {
-				listName = `Category: ${filters.category}`
-			}
-			if (filters?.metal) {
-				listName += ` - ${filters.metal}`
-			}
-			if (filters?.style && filters.style !== 'all') {
-				listName += ` - ${filters.style}`
-			}
-			if (searchTerm) {
-				listName = `Search: ${searchTerm}`
-			}
-
-			trackViewItemList(filteredItems.slice(0, visibleCount), listName)
-		}
-	}, [filteredItems, visibleCount, filters, searchTerm])
 
 	// Build list name for ProductCard
 	const getListName = () => {

@@ -9,9 +9,6 @@ import Accordion from './Accordion'
 import { IoClose } from 'react-icons/io5'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
-// analytics
-import { trackFilterInteraction } from '@/lib/gaEvents'
-
 const Filters = ({
 	selectedSort,
 	setSelectedSort,
@@ -76,9 +73,6 @@ const Filters = ({
 		const queryString = params.toString()
 		const newPath = `/shop/${productType}/${metalSlug}/${currentStyleFromPath}`
 		router.push(`${newPath}${queryString ? `?${queryString}` : ''}`)
-
-		// Track filter interaction
-		trackFilterInteraction('metal', metalSlug)
 	}
 
 	// Helper to update style (changes URL path and preserves query params)
@@ -87,9 +81,6 @@ const Filters = ({
 		const queryString = params.toString()
 		const newPath = `/shop/${productType}/${currentMetalFromPath}/${styleSlug}`
 		router.push(`${newPath}${queryString ? `?${queryString}` : ''}`)
-
-		// Track filter interaction
-		trackFilterInteraction('style', styleSlug)
 	}
 
 	// Helper to update tag filters (only updates query params, keeps metal and style in path)
@@ -106,9 +97,6 @@ const Filters = ({
 
 		const queryString = params.toString()
 		router.push(`${pathname}${queryString ? `?${queryString}` : ''}`)
-
-		// Track filter interaction
-		trackFilterInteraction(filterType, value)
 	}
 
 	// Helper to check if a filter is active
