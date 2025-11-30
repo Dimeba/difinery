@@ -71,21 +71,36 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			let matchesColorOrStackable = true
 			if (selectedColor) {
 				const lc = selectedColor.toLowerCase()
-				const hasWhite = lc.includes('white')
-				const hasYellow = lc.includes('yellow')
 
-				// Determine the metal prefix
-				let metalPrefix = ''
-				if (hasWhite && hasYellow) {
-					metalPrefix = 'mr-' // mixed stackable
-				} else if (hasWhite) {
-					metalPrefix = 'w' // white gold
-				} else if (hasYellow) {
-					metalPrefix = 'y' // yellow gold
-				}
+				// Check if this is a stackable ring with color codes (e.g., "Stackable-WYR")
+				if (lc.startsWith('stackable-')) {
+					const colorCodes = lc.replace('stackable-', '')
+					const stackablePattern = `stackable-${colorCodes}`
 
-				if (metalPrefix) {
-					matchesColorOrStackable = filename.startsWith(metalPrefix)
+					// Try both the original order and reversed order for 2-ring combinations
+					const reversedCodes = colorCodes.split('').reverse().join('')
+					const reversedPattern = `stackable-${reversedCodes}`
+
+					matchesColorOrStackable =
+						filename.toLowerCase().includes(stackablePattern) ||
+						filename.toLowerCase().includes(reversedPattern)
+				} else {
+					const hasWhite = lc.includes('white')
+					const hasYellow = lc.includes('yellow')
+
+					// Determine the metal prefix
+					let metalPrefix = ''
+					if (hasWhite && hasYellow) {
+						metalPrefix = 'mr-' // mixed stackable
+					} else if (hasWhite) {
+						metalPrefix = 'w' // white gold
+					} else if (hasYellow) {
+						metalPrefix = 'y' // yellow gold
+					}
+
+					if (metalPrefix) {
+						matchesColorOrStackable = filename.startsWith(metalPrefix)
+					}
 				}
 			}
 

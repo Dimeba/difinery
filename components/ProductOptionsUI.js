@@ -212,6 +212,7 @@ const ProductOptionsUI = ({
 						setOpenOption={setOpenOption}
 						isGiftCard={isGiftCard}
 						isMobile={isMobile}
+						setSelectedColor={setSelectedColor}
 					/>
 				))}
 

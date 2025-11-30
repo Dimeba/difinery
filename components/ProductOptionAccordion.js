@@ -13,7 +13,7 @@ import { Typography } from '@mui/material'
 import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 
 // hooks
-import { useMediaQuery } from '@mui/material'
+import { useState, useEffect } from 'react'
 
 const ProductOptionAccordion = ({
 	option,
@@ -29,8 +29,130 @@ const ProductOptionAccordion = ({
 	// Custom shape props
 	isCustomShape = false,
 	customShapes = [],
-	extraTitleText = null
+	extraTitleText = null,
+	// For stackable rings image filtering
+	setSelectedColor = null
 }) => {
+	const isStackableRings = product.tags.includes('Stackable Rings')
+	const isMetalOption = option?.name?.toLowerCase() === 'metal'
+
+	// State for stackable ring color selections
+	const [stackableColors, setStackableColors] = useState([])
+
+	// Parse the metal option value to determine number of rings
+	const parseMetalColors = metalValue => {
+		if (!metalValue) return []
+		const colors = []
+		const value = metalValue.toLowerCase()
+
+		// Count occurrences of each color
+		const whiteMatches = (value.match(/white/g) || []).length
+		const yellowMatches = (value.match(/yellow/g) || []).length
+		const roseMatches = (value.match(/rose/g) || []).length
+
+		// Build array with the colors
+		for (let i = 0; i < whiteMatches; i++) colors.push('White')
+		for (let i = 0; i < yellowMatches; i++) colors.push('Yellow')
+		for (let i = 0; i < roseMatches; i++) colors.push('Rose')
+
+		return colors
+	}
+
+	// Get unique color options (White, Yellow, Rose)
+	const getStackableColorOptions = () => {
+		const colorSet = new Set()
+		option.optionValues.forEach(value => {
+			const colors = parseMetalColors(value.name)
+			colors.forEach(color => colorSet.add(color))
+		})
+		return Array.from(colorSet)
+	}
+
+	// Get maximum number of rings available based on variants
+	const getMaxRings = () => {
+		let maxRings = 1
+		option.optionValues.forEach(value => {
+			const colors = parseMetalColors(value.name)
+			maxRings = Math.max(maxRings, colors.length)
+		})
+		return maxRings
+	}
+
+	// Check if two color arrays match (order-independent for mirrored variants)
+	const colorsMatch = (colors1, colors2) => {
+		if (colors1.length !== colors2.length) return false
+
+		// First try exact order match
+		const exactMatch = colors1.every((c, i) => c === colors2[i])
+		if (exactMatch) return true
+
+		// Then try reversed order for 2-ring combinations only
+		if (colors1.length === 2) {
+			const reversed = [...colors2].reverse()
+			return colors1.every((c, i) => c === reversed[i])
+		}
+
+		return false
+	}
+
+	// Initialize stackable colors automatically on mount
+	useEffect(() => {
+		if (
+			isStackableRings &&
+			isMetalOption &&
+			option?.optionValues &&
+			stackableColors.length === 0
+		) {
+			// Always initialize with max number of rings available
+			const maxRings = getMaxRings()
+			const availableColors = getStackableColorOptions()
+
+			console.log('Init with maxRings:', maxRings)
+			const initialColors = new Array(maxRings).fill(
+				availableColors[0] || 'White'
+			)
+			setStackableColors(initialColors)
+		}
+	}, [isStackableRings, isMetalOption])
+
+	// Handle individual ring color selection for stackable rings
+	const handleStackableColorChange = (ringIndex, color) => {
+		const newColors = [...stackableColors]
+		newColors[ringIndex] = color
+		setStackableColors(newColors)
+
+		console.log('Selected colors:', newColors)
+
+		// Find matching variant based on selected colors (handle mirrored order)
+		const matchingValue = option.optionValues.find(value => {
+			const valueColors = parseMetalColors(value.name)
+			console.log('Checking variant:', value.name, 'colors:', valueColors)
+			// Check if colors match (order-independent)
+			return colorsMatch(valueColors, newColors)
+		})
+
+		console.log('Matching variant:', matchingValue?.name)
+
+		if (matchingValue) {
+			// Update image filter based on stackable color codes
+			const colorCodes = newColors.map(c => c[0].toUpperCase()).join('')
+			if (colorCodes && setSelectedColor) {
+				// Create a special color string for image filtering
+				setSelectedColor(`Stackable-${colorCodes}`)
+			}
+
+			// Advance to next accordion after selection
+			handleOptionSelection(option.name, matchingValue.name, index)
+		} else {
+			console.warn('No matching variant found for:', newColors)
+			// Still update the image filter even if no exact variant match
+			const colorCodes = newColors.map(c => c[0].toUpperCase()).join('')
+			if (colorCodes && setSelectedColor) {
+				setSelectedColor(`Stackable-${colorCodes}`)
+			}
+		}
+	}
+
 	return (
 		<Accordion
 			key={option?.name || 'custom-shape'}
@@ -122,6 +244,62 @@ const ProductOptionAccordion = ({
 								/>
 							</button>
 						))
+				) : isStackableRings && isMetalOption ? (
+					// Stackable Rings - Select color for each ring in rows
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: '1rem',
+							width: '100%'
+						}}
+					>
+						{console.log('Rendering stackableColors:', stackableColors)}
+						{stackableColors.length > 0 ? (
+							stackableColors.map((selectedColor, ringIndex) => (
+								<div
+									key={ringIndex}
+									style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}
+								>
+									<Typography
+										variant='p'
+										fontWeight='bold'
+										fontSize='12px'
+										style={{ minWidth: '60px' }}
+									>
+										Ring {ringIndex + 1}
+									</Typography>
+									<div
+										style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}
+									>
+										{getStackableColorOptions().map(color => (
+											<button
+												key={color}
+												onClick={() =>
+													handleStackableColorChange(ringIndex, color)
+												}
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													justifyContent: 'center',
+													opacity: selectedColor === color ? 1 : 0.4
+												}}
+											>
+												<Image
+													src={`/${returnMetalType(color)}`}
+													width={24}
+													height={24}
+													alt={`${color} Gold`}
+												/>
+											</button>
+										))}
+									</div>
+								</div>
+							))
+						) : (
+							<div>Loading...</div>
+						)}
+					</div>
 				) : isGiftCard ? (
 					// Gift Card Input
 					<GiftCardInput
