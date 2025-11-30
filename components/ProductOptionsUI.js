@@ -10,6 +10,7 @@ import NeedHelpInfo from './NeedHelpInfo'
 import Engraving from './Engraving'
 import CustomBox from './CustomBox'
 import GiftCardInput from './GiftCardInput'
+import ProductOptionAccordion from './ProductOptionAccordion'
 import { Typography } from '@mui/material'
 
 // hooks
@@ -180,137 +181,38 @@ const ProductOptionsUI = ({
 
 			<div className={styles.accordion}>
 				{/* Custom Shapes */}
-				{product.tags.includes("CustomShape") && <Accordion
-						title="Diamond Shape"
+				{product.tags.includes("CustomShape") && (
+					<ProductOptionAccordion
+						product={product}
+						selectedOptions={selectedOptions}
+						openOption={openOption}
+						setOpenOption={setOpenOption}
+						isMobile={isMobile}
+						isCustomShape={true}
+						customShapes={customShapes}
 						extraTitleText={
 							customShapes.find(shape => 
 								product.title.toLowerCase().includes(shape.title.toLowerCase())
 							)?.title || null
 						}
-						state={true}
-						setOpenOption={() => setOpenOption(0)}
-						product
-						display
-					>
-						<div
-							className={styles.variantButtonsContainer}
-						>
-						{customShapes.filter(shape => 
-							!(product.title.toLowerCase().includes("promise") && shape.title.toLowerCase() === "heart")
-						).map(shape => (
-								<button
-									key={shape.title}
-									onClick={() => {
-										// Find current shape in product title
-										const currentShape = customShapes.find(s => 
-											product.title.toLowerCase().includes(s.title.toLowerCase())
-										)
-										
-										if (currentShape && typeof window !== 'undefined') {
-											// Get current pathname
-											const currentPath = window.location.pathname
-											
-											// Replace the current shape with the new shape in the URL
-											const newPath = currentPath.replace(
-												new RegExp(currentShape.title.toLowerCase(), 'i'),
-												shape.title.toLowerCase()
-											)
-											
-											// Navigate to the new URL with existing query params
-											window.location.href = newPath + window.location.search
-										}
-									}}
-								>
-									<Image
-										src={shape.path}
-										width={isMobile ?  32 * shape.width / shape.height : 48 * shape.width / shape.height}
-										height={isMobile ? 32 : 48}
-										alt={`${shape.title} Diamond Shape`}
-										style={{
-											opacity: product.title.toLowerCase().includes(shape.title.toLowerCase()) ? 1 : 0.25
-										}}
-									/>
-									</button>
-								)
-							)}
-						</div>
-					</Accordion>}
+					/>
+				)}
 
 				{/* Options */}
 				{product.options.map((option, index) => (
-					<Accordion
+					<ProductOptionAccordion
 						key={option.name}
-						// small
-						title={option.name}
-						extraTitleText={
-							selectedOptions[option.name] 
-								? isGiftCard 
-									? selectedOptions[option.name].replace(/^(\$)(\d)(\d{3})$/, '$1$2,$3')
-									: selectedOptions[option.name]
-								: null
-						}
-						state={isGiftCard || product.tags.includes("CustomShape") ? true : index === openOption}
-						setOpenOption={() => setOpenOption(index)}
-						product
-						display
-						showHelp={
-							option.name.toLowerCase() === 'ring size' ||
-							option.name === 'carat'
-						}
-						// helpContent={<NeedHelpInfo type={option.name.toLowerCase()} />}
-						helpLink={isMobile ? '/Size-Guide-Difinery-Mobile.pdf' : '/Size-Guide-Difinery-Desktop.pdf'}
-					>
-						<div
-							className={styles.variantButtonsContainer}
-						>
-							{isGiftCard ? (
-								<GiftCardInput
-									options={option.optionValues}
-									selectedValue={selectedOptions[option.name] || null}
-									onSelect={(value) => handleOptionSelection(option.name, value, index)}
-									onDisplayUpdate={(value) => handleDisplayUpdate(option.name, value)}
-								/>
-							) : (
-								option.optionValues.map(value => (
-									<button
-										key={value.name}
-										onClick={() =>
-											handleOptionSelection(option.name, value.name, index)
-										}
-										style={{
-											fontWeight:
-												selectedOptions[option.name] === value.name
-													? 'bold'
-													: 'normal'
-										}}
-									>
-										{option.name.toLowerCase() === 'metal' && (
-											<Image
-												src={`/${returnMetalType(value.name)}`}
-												width={32}
-												height={32}
-												alt={`${value.name} ${option.name}`}
-											/>
-										)}
-
-										{option.name.toLowerCase() === 'diamond shape' && (
-											<Image
-												src={`/${returnDiamondShape(value.name)}`}
-												width={32}
-												height={32}
-												alt={`${value.name} ${option.name}`}
-											/>
-										)}
-										{value.name}
-									</button>
-								))
-							)}
-						</div>
-
-						{option.name.toLowerCase() === 'total carat weight' &&<Typography variant='p' fontStyle='italic' fontSize='10px' mt={"1rem"}>
-						*All images are represented in 2.00 carat weight.
-					</Typography>}
-					</Accordion>
+						option={option}
+						index={index}
+						product={product}
+						selectedOptions={selectedOptions}
+						handleOptionSelection={handleOptionSelection}
+						handleDisplayUpdate={handleDisplayUpdate}
+						openOption={openOption}
+						setOpenOption={setOpenOption}
+						isGiftCard={isGiftCard}
+						isMobile={isMobile}
+					/>
 				))}
 
 				{product.category.name !== 'Earrings' && !isGiftCard && (
