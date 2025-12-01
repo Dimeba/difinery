@@ -13,7 +13,7 @@ import { Typography } from '@mui/material'
 import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 
 // hooks
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 const ProductOptionAccordion = ({
 	option,
@@ -39,28 +39,32 @@ const ProductOptionAccordion = ({
 	// State for stackable ring color selections
 	const [stackableColors, setStackableColors] = useState([])
 
-	// Parse the metal option value to determine number of rings
+	// Parse the metal option value to determine colors in order
 	const parseMetalColors = metalValue => {
 		if (!metalValue) return []
-		const colors = []
 		const value = metalValue.toLowerCase()
+		const colors = []
 
-		// Count occurrences of each color (check for various naming conventions)
-		const whiteMatches = (value.match(/white/g) || []).length
-		const yellowMatches = (value.match(/yellow/g) || []).length
-		const roseMatches =
-			(value.match(/rose/g) || []).length + (value.match(/pink/g) || []).length
+		// Handle both "Yellow & White" and "Yellow/White/Yellow" formats
+		// Split by both spaces and slashes to get individual color tokens
+		const tokens = value.split(/[\s/]+/)
 
-		// Build array with the colors
-		for (let i = 0; i < whiteMatches; i++) colors.push('White')
-		for (let i = 0; i < yellowMatches; i++) colors.push('Yellow')
-		for (let i = 0; i < roseMatches; i++) colors.push('Rose')
+		for (let i = 0; i < tokens.length; i++) {
+			const token = tokens[i]
+			if (token.includes('white')) {
+				colors.push('White')
+			} else if (token.includes('yellow')) {
+				colors.push('Yellow')
+			} else if (token.includes('rose') || token.includes('pink')) {
+				colors.push('Rose')
+			}
+		}
 
 		return colors
 	}
 
 	// Get unique color options (White, Yellow, Rose) from actual variants
-	const getStackableColorOptions = () => {
+	const getStackableColorOptions = useMemo(() => {
 		const colorSet = new Set()
 		if (option?.optionValues) {
 			option.optionValues.forEach(value => {
@@ -71,27 +75,30 @@ const ProductOptionAccordion = ({
 		// Sort in specific order: Yellow, White, Rose
 		const colorOrder = { 'Yellow': 1, 'White': 2, 'Rose': 3 }
 		return Array.from(colorSet).sort((a, b) => colorOrder[a] - colorOrder[b])
-	}
+	}, [option?.optionValues])
 
 	// Get maximum number of rings available based on variants
-	const getMaxRings = () => {
+	const getMaxRings = useMemo(() => {
 		let maxRings = 1
-		option.optionValues.forEach(value => {
-			const colors = parseMetalColors(value.name)
-			maxRings = Math.max(maxRings, colors.length)
-		})
+		if (option?.optionValues) {
+			option.optionValues.forEach(value => {
+				const colors = parseMetalColors(value.name)
+				maxRings = Math.max(maxRings, colors.length)
+			})
+		}
 		return maxRings
-	}
+	}, [option?.optionValues])
 
-	// Check if two color arrays match (order-independent for mirrored variants)
+	// Check if two color arrays match (prioritize exact order, then try reversed)
 	const colorsMatch = (colors1, colors2) => {
 		if (colors1.length !== colors2.length) return false
 
-		// First try exact order match
+		// ALWAYS try exact order match first (RY should match RY before trying YR)
 		const exactMatch = colors1.every((c, i) => c === colors2[i])
 		if (exactMatch) return true
 
-		// Then try reversed order for 2-ring combinations only
+		// Only try reversed order if no exact match found
+		// This ensures user selection order (Ring 1 -> Last Ring) is prioritized
 		if (colors1.length === 2) {
 			const reversed = [...colors2].reverse()
 			return colors1.every((c, i) => c === reversed[i])
@@ -108,52 +115,88 @@ const ProductOptionAccordion = ({
 			option?.optionValues &&
 			stackableColors.length === 0
 		) {
-			// Always initialize with max number of rings available
-			const maxRings = getMaxRings()
-			const availableColors = getStackableColorOptions()
-
-			console.log('Init with maxRings:', maxRings)
 			// Default to Yellow (first in order), or first available color
-			const defaultColor = availableColors.includes('Yellow')
+			const defaultColor = getStackableColorOptions.includes('Yellow')
 				? 'Yellow'
-				: availableColors[0] || 'White'
-			const initialColors = new Array(maxRings).fill(defaultColor)
+				: getStackableColorOptions[0] || 'White'
+			const initialColors = new Array(getMaxRings).fill(defaultColor)
 			setStackableColors(initialColors)
 		}
-	}, [isStackableRings, isMetalOption])
+	}, [
+		isStackableRings,
+		isMetalOption,
+		getMaxRings,
+		getStackableColorOptions,
+		stackableColors.length
+	])
 
 	// Handle individual ring color selection for stackable rings
 	const handleStackableColorChange = (ringIndex, color) => {
+		// Update the color for the selected ring
 		const newColors = [...stackableColors]
 		newColors[ringIndex] = color
 		setStackableColors(newColors)
 
-		console.log('Selected colors:', newColors)
+		console.log('User selected 3 rings:', newColors)
 
-		// Find matching variant based on selected colors (handle mirrored order)
-		const matchingValue = option.optionValues.find(value => {
+		// Try to find exact match first (user's ring order)
+		let matchingValue = option.optionValues.find(value => {
 			const valueColors = parseMetalColors(value.name)
-			console.log('Checking variant:', value.name, 'colors:', valueColors)
-			// Check if colors match (order-independent)
-			return colorsMatch(valueColors, newColors)
+			console.log('Checking variant:', value.name, '-> parsed:', valueColors)
+			return (
+				valueColors.length === newColors.length &&
+				valueColors.every((c, i) => c === newColors[i])
+			)
 		})
 
-		console.log('Matching variant:', matchingValue?.name)
+		console.log('Exact match:', matchingValue?.name)
 
-		// Update image filter based on stackable color codes FIRST
-		const colorCodes = newColors.map(c => c[0].toUpperCase()).join('')
-		console.log('Setting selectedColor to:', `Stackable-${colorCodes}`)
-		if (colorCodes && setSelectedColor) {
-			// Create a special color string for image filtering
-			setSelectedColor(`Stackable-${colorCodes}`)
+		// If no exact match, try other permutations
+		if (!matchingValue) {
+			// For 2 rings, just try reversed
+			if (newColors.length === 2) {
+				const flippedColors = [...newColors].reverse()
+				matchingValue = option.optionValues.find(value => {
+					const valueColors = parseMetalColors(value.name)
+					return (
+						valueColors.length === flippedColors.length &&
+						valueColors.every((c, i) => c === flippedColors[i])
+					)
+				})
+			} else {
+				// For 3+ rings, check if any permutation matches
+				console.log('Trying permutation match for 3+ rings')
+				matchingValue = option.optionValues.find(value => {
+					const valueColors = parseMetalColors(value.name)
+					if (valueColors.length !== newColors.length) return false
+
+					// Check if arrays contain same colors (order-independent)
+					const sortedUser = [...newColors].sort()
+					const sortedVariant = [...valueColors].sort()
+					const matches = sortedUser.every((c, i) => c === sortedVariant[i])
+					console.log(
+						'Permutation check:',
+						value.name,
+						sortedUser,
+						'vs',
+						sortedVariant,
+						'-> matches:',
+						matches
+					)
+					return matches
+				})
+			}
 		}
 
+		console.log('Final matched variant:', matchingValue?.name)
+
+		// Use the matched variant's color order for images (images are named after variants)
 		if (matchingValue) {
-			// Advance to next accordion after selection
-			console.log('Calling handleOptionSelection with:', matchingValue.name)
+			const variantColors = parseMetalColors(matchingValue.name)
+			const colorCodes = variantColors.map(c => c[0].toUpperCase()).join('')
+			console.log('Setting image filter to:', `Stackable-${colorCodes}`)
+			setSelectedColor(`Stackable-${colorCodes}`)
 			handleOptionSelection(option.name, matchingValue.name, index)
-		} else {
-			console.warn('No matching variant found for:', newColors)
 		}
 	}
 
@@ -258,7 +301,6 @@ const ProductOptionAccordion = ({
 							width: '100%'
 						}}
 					>
-						{console.log('Rendering stackableColors:', stackableColors)}
 						{stackableColors.length > 0 ? (
 							stackableColors.map((selectedColor, ringIndex) => (
 								<div
@@ -276,7 +318,7 @@ const ProductOptionAccordion = ({
 									<div
 										style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}
 									>
-										{getStackableColorOptions().map(color => (
+										{getStackableColorOptions.map(color => (
 											<button
 												key={color}
 												onClick={() =>

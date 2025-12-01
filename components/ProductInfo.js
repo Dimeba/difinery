@@ -67,41 +67,18 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			// Extract filename from URL
 			const filename = url.split('/').pop()
 
-			// Log all images for stackable rings
-			if (selectedColor?.toLowerCase().startsWith('stackable-')) {
-				console.log('Checking image:', filename)
-			}
-
 			// Color / Stackable logic
 			let matchesColorOrStackable = true
 			if (selectedColor) {
 				const lc = selectedColor.toLowerCase()
 
-				// Check if this is a stackable ring with color codes (e.g., "Stackable-WYR")
+				// Check if this is a stackable ring with color codes (e.g., "Stackable-YR")
 				if (lc.startsWith('stackable-')) {
 					const colorCodes = lc.replace('stackable-', '').toLowerCase()
 
-					// Match pattern like "stackable-yr" or "Stackable-YR" in the filename
-					// Try both the original order and reversed order for 2-ring combinations
-					const reversedCodes = colorCodes.split('').reverse().join('')
+					// Match exact color code pattern only
+					const matches = url.includes(`stackable-${colorCodes}`)
 
-					// Since url is already lowercase, just check lowercase patterns
-					const matches =
-						url.includes(`stackable-${colorCodes}`) ||
-						url.includes(`stackable-${reversedCodes}`)
-
-					if (!matches) {
-						console.log(
-							'Image filtered out:',
-							filename,
-							'Looking for:',
-							colorCodes.toUpperCase(),
-							'or',
-							reversedCodes.toUpperCase()
-						)
-					} else {
-						console.log('IMAGE MATCHED:', filename)
-					}
 					matchesColorOrStackable = matches
 				} else {
 					const hasWhite = lc.includes('white')
@@ -143,7 +120,43 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			return matchesColorOrStackable && matchesShape
 		}
 
-		return allImages.filter(urlFilter)
+		let filteredImages = allImages.filter(urlFilter)
+
+		// If stackable and no exact matches found, try reversed order
+		if (
+			filteredImages.length === 0 &&
+			selectedColor?.toLowerCase().startsWith('stackable-')
+		) {
+			const colorCodes = selectedColor.toLowerCase().replace('stackable-', '')
+			const reversedCodes = colorCodes.split('').reverse().join('')
+
+			const reversedFilter = node => {
+				const url = node.url.toLowerCase()
+				if (url.includes('-review')) return false
+
+				const matches = url.includes(`stackable-${reversedCodes}`)
+
+				// Shape matching
+				let matchesShape = true
+				if (selectedShape) {
+					const sc = selectedShape.toLowerCase()
+					const shapeCode = sc.includes('heart')
+						? '-hr-'
+						: sc.includes('pear')
+						? '-pr-'
+						: ''
+					if (shapeCode) {
+						matchesShape = url.includes(shapeCode)
+					}
+				}
+
+				return matches && matchesShape
+			}
+
+			filteredImages = allImages.filter(reversedFilter)
+		}
+
+		return filteredImages
 	}, [allImages, selectedColor, selectedShape])
 
 	const reviewImage = useMemo(() => {
