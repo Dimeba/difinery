@@ -24,6 +24,12 @@ export default async function sitemap() {
 			lastModified: new Date(),
 			changeFrequency: 'daily',
 			priority: 0.8
+		},
+		{
+			url: `${baseUrl}/shop/gift-card`,
+			lastModified: new Date(),
+			changeFrequency: 'monthly',
+			priority: 0.7
 		}
 	]
 
@@ -93,9 +99,17 @@ export default async function sitemap() {
 				priority: 0.6
 			}))
 
-		// Fetch dynamic pages from Contentful
-		const pagesResponse = await getEntries('page')
+		// Fetch all Contentful page types
+		const [pagesResponse, blogPostsResponse, policiesResponse] =
+			await Promise.all([
+				getEntries('page'),
+				getEntries('blogPost').catch(() => ({ items: [] })),
+				getEntries('policy').catch(() => ({ items: [] }))
+			])
+
 		const pages = pagesResponse.items || []
+		const blogPosts = blogPostsResponse.items || []
+		const policies = policiesResponse.items || []
 
 		const dynamicPages = pages
 			.filter(page => page.fields?.slug)
@@ -106,6 +120,24 @@ export default async function sitemap() {
 				priority: 0.5
 			}))
 
+		const blogPages = blogPosts
+			.filter(post => post.fields?.slug)
+			.map(post => ({
+				url: `${baseUrl}/blog/${post.fields.slug}`,
+				lastModified: new Date(post.sys.updatedAt),
+				changeFrequency: 'monthly',
+				priority: 0.6
+			}))
+
+		const policyPages = policies
+			.filter(policy => policy.fields?.slug)
+			.map(policy => ({
+				url: `${baseUrl}/${policy.fields.slug}`,
+				lastModified: new Date(policy.sys.updatedAt),
+				changeFrequency: 'yearly',
+				priority: 0.4
+			}))
+
 		// Combine all URLs
 		return [
 			...staticPages,
@@ -113,7 +145,9 @@ export default async function sitemap() {
 			...shopAllPages,
 			...productPages,
 			...collectionPages,
-			...dynamicPages
+			...dynamicPages,
+			...blogPages,
+			...policyPages
 		]
 	} catch (error) {
 		console.error('Error generating sitemap:', error)

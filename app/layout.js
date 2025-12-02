@@ -26,12 +26,22 @@ const footer = await getEntries('footer')
 const collections = await getEntries('collection')
 
 export const metadata = {
+	title: 'Difinery | Fine Jewelry',
+	description: 'Discover timeless fine jewelry crafted with care',
 	icons: {
-		icon: '/favicon.svg'
+		icon: [
+			{ url: '/favicon.svg', type: 'image/svg+xml' },
+			{ url: '/favicon.ico', sizes: '32x32' }
+		],
+		shortcut: '/favicon.svg',
+		apple: '/favicon.svg'
 	},
 	verification: {
 		google: 'R6Dbld100s-Hn6MF_tTVmwZzsYVaexTKMUynnJl4vCg'
-	}
+	},
+	metadataBase: new URL(
+		process.env.NEXT_PUBLIC_SITE_URL || 'https://difinery.com'
+	)
 }
 
 export default function RootLayout({ children }) {
@@ -45,7 +55,6 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang='en'>
 			<head>
-				<link rel='icon' href='/favicon.svg' type='image/svg+xml' />
 				{/* Google Tag Manager */}
 				<Script id='gtm-init' strategy='afterInteractive'>
 					{`// Pre-initialize dataLayer and optional default consent (adjust as needed)
