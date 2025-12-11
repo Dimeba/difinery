@@ -40,7 +40,7 @@ const nextConfig = {
 		deviceSizes: [640, 768, 1024, 1280, 1600]
 	},
 	experimental: {
-		middlewarePrefetch: isDev ? 'flexible' : 'strict' // Disable route prefetch cache in dev
+		proxyPrefetch: isDev ? 'flexible' : 'strict' // Disable route prefetch cache in dev
 	},
 
 	// Apply no-cache headers during development

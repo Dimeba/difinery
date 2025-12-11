@@ -1,4 +1,4 @@
-// middleware.js
+// proxy.js
 import { NextResponse } from 'next/server'
 
 const ALLOWED_CATEGORIES = [
@@ -11,7 +11,7 @@ const ALLOWED_CATEGORIES = [
 
 const ALLOWED_METALS = ['yellow-gold', 'white-gold', 'rose-gold']
 
-export function middleware(request) {
+export function proxy(request) {
 	const { pathname } = request.nextUrl
 
 	// Handle /shop -> /shop/all/yellow-gold/all redirect
