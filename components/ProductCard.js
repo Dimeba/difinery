@@ -61,6 +61,7 @@ const ProductCard = ({
 
 	const [metalTypes, setMetalTypes] = useState(initialMetalTypes)
 	const [activeMetalType, setActiveMetalType] = useState(initialActiveType)
+
 	const [showCloseup, setShowCloseup] = useState(false)
 
 	const coverImages = useMemo(() => {
