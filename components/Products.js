@@ -356,6 +356,7 @@ const Products = ({
 								gridColumn={{ xs: 'span 12', lg: 'span 6' }}
 								gridRow={'span 2'}
 								position='relative'
+								overflow='hidden'
 								sx={{
 									cursor: collectionPreview.mediaLink ? 'pointer' : 'default',
 									backgroundColor: '#f7f7f7'
@@ -369,16 +370,13 @@ const Products = ({
 								{collectionPreview.media.fields.file.contentType.includes(
 									'video'
 								) ? (
-									<Box
-										position='relative'
-										height='100%'
-										paddingTop={{ xs: '25%', lg: 0 }}
-									>
+									<Box position='relative' height='100%' width='100%'>
 										<Video
 											style={{
-												objectFit: 'contain !important',
-												minHeight: '100%',
-												minWidth: '100%'
+												objectFit: 'cover',
+												width: '100%',
+												height: '100%',
+												display: 'block'
 											}}
 											video={collectionPreview.media}
 											autoPlay

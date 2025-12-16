@@ -60,7 +60,7 @@ const Video = ({
 				muted={mute}
 				playsInline
 				preload='auto'
-				style={{ width: '100%', ...style }}
+				style={{ minWidth: '100%', minHeight: '100%', ...style }}
 			>
 				<source src={'https:' + video.fields.file.url} type='video/mp4' />
 			</video>
