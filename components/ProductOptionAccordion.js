@@ -137,19 +137,14 @@ const ProductOptionAccordion = ({
 		newColors[ringIndex] = color
 		setStackableColors(newColors)
 
-		console.log('User selected 3 rings:', newColors)
-
 		// Try to find exact match first (user's ring order)
 		let matchingValue = option.optionValues.find(value => {
 			const valueColors = parseMetalColors(value.name)
-			console.log('Checking variant:', value.name, '-> parsed:', valueColors)
 			return (
 				valueColors.length === newColors.length &&
 				valueColors.every((c, i) => c === newColors[i])
 			)
 		})
-
-		console.log('Exact match:', matchingValue?.name)
 
 		// If no exact match, try other permutations
 		if (!matchingValue) {
@@ -165,7 +160,6 @@ const ProductOptionAccordion = ({
 				})
 			} else {
 				// For 3+ rings, check if any permutation matches
-				console.log('Trying permutation match for 3+ rings')
 				matchingValue = option.optionValues.find(value => {
 					const valueColors = parseMetalColors(value.name)
 					if (valueColors.length !== newColors.length) return false
@@ -174,29 +168,17 @@ const ProductOptionAccordion = ({
 					const sortedUser = [...newColors].sort()
 					const sortedVariant = [...valueColors].sort()
 					const matches = sortedUser.every((c, i) => c === sortedVariant[i])
-					console.log(
-						'Permutation check:',
-						value.name,
-						sortedUser,
-						'vs',
-						sortedVariant,
-						'-> matches:',
-						matches
-					)
 					return matches
 				})
 			}
 		}
 
-		console.log('Final matched variant:', matchingValue?.name)
-
 		// Use the matched variant's color order for images (images are named after variants)
 		if (matchingValue) {
 			const variantColors = parseMetalColors(matchingValue.name)
 			const colorCodes = variantColors.map(c => c[0].toUpperCase()).join('')
-			console.log('Setting image filter to:', `Stackable-${colorCodes}`)
 			setSelectedColor(`Stackable-${colorCodes}`)
-			handleOptionSelection(option.name, matchingValue.name, index)
+			handleOptionSelection(option.name, matchingValue.name, null)
 		}
 	}
 

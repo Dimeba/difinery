@@ -6,12 +6,9 @@ import styles from './ProductInfo.module.scss'
 // components
 import Image from 'next/image'
 import Accordion from './Accordion'
-import NeedHelpInfo from './NeedHelpInfo'
 import Engraving from './Engraving'
 import CustomBox from './CustomBox'
-import GiftCardInput from './GiftCardInput'
 import ProductOptionAccordion from './ProductOptionAccordion'
-import { Typography } from '@mui/material'
 
 // hooks
 import { useState, useEffect } from 'react'
@@ -19,7 +16,6 @@ import { useMediaQuery } from '@mui/material'
 
 // helpers
 import parse from 'html-react-parser'
-import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 
 // data
 import materialInfo from '@/data/materialInfo.json' with { type: 'json' }
@@ -31,7 +27,6 @@ const ProductOptionsUI = ({
 	isGiftCard = false,
 	selectedColor,
 	setSelectedColor,
-	selectedShape,
 	setSelectedShape,
 	matchingVariant,
 	setMatchingVariant,
@@ -76,7 +71,7 @@ const ProductOptionsUI = ({
 	}
 
 	// User selects an option value
-	const handleOptionSelection = (optionName, value, index) => {
+	const handleOptionSelection = (optionName, value, index = null) => {
 		// If user clicks the same value again, clear it
 		if (selectedOptions[optionName] === value) {
 			return handleOptionReset(optionName)
@@ -90,7 +85,7 @@ const ProductOptionsUI = ({
 		getMatchingVariant(newSelected)
 
 		// 3) advance to next dropdown
-		setOpenOption(index + 1)
+		index !== null && setOpenOption(index + 1)
 
 		// 4) set selected color/shape if applicable (to drive image filtering)
 		// Don't override selectedColor for stackable rings (handled by ProductOptionAccordion)
