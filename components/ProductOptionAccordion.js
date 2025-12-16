@@ -309,11 +309,18 @@ const ProductOptionAccordion = ({
 								>
 									<Typography
 										variant='p'
-										fontWeight='bold'
+										fontWeight='500'
 										fontSize='12px'
-										style={{ minWidth: '60px' }}
+										style={{ minWidth: '90px' }}
+										color='#9b9b9b'
 									>
-										Ring {ringIndex + 1}
+										{ringIndex + 1 === 1
+											? 'First Ring'
+											: ringIndex + 1 === 2
+											? 'Second Ring'
+											: ringIndex + 1 === 3
+											? 'Third Ring'
+											: `Ring ${ringIndex + 1}`}
 									</Typography>
 									<div
 										style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}
@@ -327,17 +334,18 @@ const ProductOptionAccordion = ({
 												style={{
 													borderRadius: '50%',
 													border:
-														selectedColor === color ? '1px solid black' : '',
+														selectedColor === color ? '1px solid #9b9b9b' : '',
 													display: 'flex',
 													alignItems: 'center',
-													justifyContent: 'center'
-													// opacity: selectedColor === color ? 1 : 0.6
+													justifyContent: 'center',
+													padding: '2px',
+													opacity: selectedColor === color ? 1 : 0.6
 												}}
 											>
 												<Image
 													src={`/${returnMetalType(color)}`}
-													width={24}
-													height={24}
+													width={20}
+													height={20}
 													alt={`${color} Gold`}
 												/>
 											</button>
