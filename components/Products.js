@@ -48,7 +48,8 @@ const Products = ({
 	onLoadMore = null, // Callback to load more products from API
 	canLoadMore = false, // Whether more products can be loaded
 	onSearch = null, // Callback when search is performed
-	isSearching = false // Whether search is currently loading
+	isSearching = false, // Whether search is currently loading
+	collectionHandle = null
 }) => {
 	// Stable base products list (empty singleton when undefined)
 	const productsList = products ?? EMPTY_PRODUCTS
@@ -438,6 +439,7 @@ const Products = ({
 										selectedMetalType={selectedMetalType}
 										index={index}
 										listName={getListName()}
+										collectionHandle={collectionHandle}
 									/>
 								))}
 
@@ -453,6 +455,7 @@ const Products = ({
 									selectedMetalType={selectedMetalType}
 									index={index}
 									listName='Recommended Products'
+									collectionHandle={collectionHandle}
 									// individual={individual}
 								/>
 							))}

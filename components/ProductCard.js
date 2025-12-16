@@ -21,6 +21,7 @@ const ProductCard = ({
 	discount,
 	product,
 	individual,
+	collectionHandle,
 	selectedMetalType,
 	index = 0,
 	listName = 'Shop'
@@ -155,17 +156,23 @@ const ProductCard = ({
 			return base
 		}
 
+		const query = {
+			gold: activeMetalType.toLocaleLowerCase().includes('yellow')
+				? 'yellow'
+				: activeMetalType.toLocaleLowerCase().includes('multi')
+				? 'yellow-and-white'
+				: activeMetalType.toLocaleLowerCase().includes('rose')
+				? 'rose'
+				: 'white'
+		}
+
+		if (collectionHandle) {
+			query.collection = collectionHandle
+		}
+
 		return {
 			pathname: `/shop/${product.category.name.toLowerCase()}/product/${permalink}`,
-			query: {
-				gold: activeMetalType.toLocaleLowerCase().includes('yellow')
-					? 'yellow'
-					: activeMetalType.toLocaleLowerCase().includes('multi')
-					? 'yellow-and-white'
-					: activeMetalType.toLocaleLowerCase().includes('rose')
-					? 'rose'
-					: 'white'
-			}
+			query
 		}
 	}
 
