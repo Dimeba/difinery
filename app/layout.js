@@ -82,6 +82,18 @@ export default function RootLayout({ children }) {
 					fbq('init', '801044746115457');
 					fbq('track', 'PageView');`}
 				</Script>
+				{/* Klaviyo Onsite */}
+				<Script
+					id='klaviyo-onsite'
+					src='https://static.klaviyo.com/onsite/js/SV87h3/klaviyo.js?company_id=SV87h3'
+					strategy='afterInteractive'
+					async
+				/>
+				<Script id='klaviyo-init' strategy='afterInteractive'>
+					{`// Initialize Klaviyo object on page load
+!function(){if(!window.klaviyo){window._klOnsite=window._klOnsite||[];try{window.klaviyo=new Proxy({},{get:function(n,i){return"push"===i?function(){var n;(n=window._klOnsite).push.apply(n,arguments)}:function(){for(var n=arguments.length,o=new Array(n),w=0;w<n;w++)o[w]=arguments[w];var t="function"==typeof o[o.length-1]?o.pop():void 0,e=new Promise((function(n){window._klOnsite.push([i].concat(o,[function(i){t&&t(i),n(i)}]))}));return e}}})}catch(n){window.klaviyo=window.klaviyo||[],window.klaviyo.push=function(){var n;(n=window._klOnsite).push.apply(n,arguments)}}}}();`}
+				</Script>
+				{/* End Klaviyo Onsite */}
 				<noscript>
 					<img
 						height='1'
