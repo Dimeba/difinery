@@ -31,12 +31,17 @@ const ProductOptionAccordion = ({
 	isMobile = false,
 	// Custom shape props
 	isCustomShape = false,
+	// Stackable option props
+	isStackableOption = false,
 	extraTitleText = null,
 	// For stackable rings image filtering
 	setSelectedColor = null
 }) => {
 	const isStackableRings = product.tags.includes('Stackable Rings')
 	const isMetalOption = option?.name?.toLowerCase() === 'metal'
+	const isSingleStackable =
+		(product.handle || '').toLowerCase().includes('single') ||
+		(product.title || '').toLowerCase().includes('single')
 
 	// State for stackable ring color selections
 	const [stackableColors, setStackableColors] = useState([])
@@ -95,6 +100,7 @@ const ProductOptionAccordion = ({
 	useEffect(() => {
 		if (
 			isStackableRings &&
+			!isSingleStackable &&
 			isMetalOption &&
 			option?.optionValues &&
 			stackableColors.length === 0
@@ -108,6 +114,7 @@ const ProductOptionAccordion = ({
 		}
 	}, [
 		isStackableRings,
+		isSingleStackable,
 		isMetalOption,
 		getMaxRings,
 		getStackableColorOptions,
@@ -202,17 +209,32 @@ const ProductOptionAccordion = ({
 	const relatedStacks = useMemo(() => {
 		return relatedColectionProducts
 			.filter(product => product.tags.includes('Stackable Rings'))
-			.map(p => p.handle)
+			.map(p => ({
+				title: p.title,
+				handle: p.handle,
+				// Fallback label when title is missing
+				name: p.title ||
+					p.handle
+						.split('-')
+						.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+						.join(' ')
+			}))
 	}, [relatedColectionProducts])	
 
 	return (
 		<Accordion
-			key={option?.name || 'custom-shape'}
-			title={isCustomShape ? 'Diamond Shape' : option.name}
-			extraTitleText={
+			key={option?.name || (isCustomShape ? 'custom-shape' : 'stackable-option')}
+			title={
 				isCustomShape
+					? 'Diamond Shape'
+					: isStackableOption
+					? 'Stackable'
+					: option.name
+			}
+			extraTitleText={
+				isCustomShape || isStackableOption
 					? extraTitleText
-					: selectedOptions[option.name]
+					: selectedOptions[option?.name]
 					? isGiftCard
 						? selectedOptions[option.name].replace(
 								/^(\$)(\d)(\d{3})$/,
@@ -224,17 +246,21 @@ const ProductOptionAccordion = ({
 			state={
 				isGiftCard ||
 				product.tags.includes('CustomShape') ||
-				(isCustomShape ? true : index === openOption)
+				(isCustomShape || isStackableOption ? true : index === openOption)
 			}
-			setOpenOption={() => setOpenOption(isCustomShape ? 0 : index)}
+			setOpenOption={() => setOpenOption(isCustomShape || isStackableOption ? 0 : index)}
 			product
 			display
 			showHelp={
 				!isCustomShape &&
+				!isStackableOption &&
+				option?.name &&
 				(option.name.toLowerCase() === 'ring size' || option.name === 'carat')
 			}
 			helpLink={
 				!isCustomShape &&
+				!isStackableOption &&
+				option?.name &&
 				(option.name.toLowerCase() === 'ring size' || option.name === 'carat')
 					? isMobile
 						? '/Size-Guide-Difinery-Mobile.pdf'
@@ -243,7 +269,47 @@ const ProductOptionAccordion = ({
 			}
 		>
 			<div className={styles.variantButtonsContainer}>
-				{isCustomShape ? (
+				{isStackableOption ? (
+					// Stackable rings options
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'stretch',
+							gap: '1rem',
+							width: '100%'
+						}}
+					>
+						{relatedStacks.map(stack => {
+							const isSelected = !!stack.title && stack.title === product.title
+							return (
+								<button
+									key={stack.handle}
+									onClick={() => {
+										if (!isSelected && typeof window !== 'undefined') {
+											// Navigate to the selected stackable product
+											const currentPath = window.location.pathname
+											const basePath = currentPath.split('/').slice(0, -1).join('/')
+											window.location.href = `${basePath}/${stack.handle}${window.location.search}`
+										}
+									}}
+									style={{
+										display: 'flex',
+										justifyContent: 'flex-start',
+										width: '100%',
+										textAlign: 'left',
+										padding: 0,
+										margin: 0,
+										fontWeight: isSelected ? 'bold' : 'normal',
+										opacity: isSelected ? 1 : 0.7
+									}}
+								>
+									{stack.title || stack.name}
+								</button>
+							)
+						})}
+					</div>
+				) : isCustomShape ? (
 					// Custom Shape buttons
 					availableShapes
 						.map(shape => (
@@ -285,7 +351,7 @@ const ProductOptionAccordion = ({
 								/>
 							</button>
 						))
-				) : isStackableRings && isMetalOption ? (
+				) : isStackableRings && isMetalOption && !isSingleStackable ? (
 					// Stackable Rings - Select color for each ring in rows
 					<div
 						style={{
@@ -377,8 +443,8 @@ const ProductOptionAccordion = ({
 							{option.name.toLowerCase() === 'metal' && (
 								<Image
 									src={`/${returnMetalType(value.name)}`}
-									width={32}
-									height={32}
+									width={24}
+									height={24}
 									alt={`${value.name} ${option.name}`}
 								/>
 							)}
@@ -397,7 +463,7 @@ const ProductOptionAccordion = ({
 				)}
 			</div>
 
-			{!isCustomShape && option.name.toLowerCase() === 'total carat weight' && (
+			{!isCustomShape && !isStackableOption && option?.name?.toLowerCase() === 'total carat weight' && (
 				<Typography variant='p' fontStyle='italic' fontSize='10px' mt={'1rem'}>
 					*All images are represented in 2.00 carat weight.
 				</Typography>

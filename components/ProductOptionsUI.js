@@ -90,7 +90,15 @@ const ProductOptionsUI = ({
 
 		// 4) set selected color/shape if applicable (to drive image filtering)
 		// Don't override selectedColor for stackable rings (handled by ProductOptionAccordion)
-		if (optionName === 'Metal' && !product.tags.includes('Stackable Rings')) {
+		// ...except when it's a "single" stackable, which should behave like a normal metal option.
+		const isSingleStackable =
+			(product.handle || '').toLowerCase().includes('single') ||
+			(product.title || '').toLowerCase().includes('single')
+
+		if (
+			optionName === 'Metal' &&
+			(!product.tags.includes('Stackable Rings') || isSingleStackable)
+		) {
 			setSelectedColor(value)
 		} else if (optionName.toLowerCase() === 'diamond shape') {
 			setSelectedShape(value)
@@ -177,7 +185,19 @@ const ProductOptionsUI = ({
 			<div className={styles.description}>{isGiftCard ? parse(product.descriptionHtml) : parse(description)}</div>
 
 			<div className={styles.accordion}>
-				{/* Custom Shapes */}
+			{/* Stackable Rings Selection */}
+			{product.tags.includes("Stackable Rings") && product.collections?.edges && (
+				<ProductOptionAccordion
+					product={product}
+					selectedOptions={selectedOptions}
+					openOption={openOption}
+					setOpenOption={setOpenOption}
+					isMobile={isMobile}
+					isStackableOption={true}
+					extraTitleText={product?.title || null}
+				/>
+			)}
+
 				{product.tags.includes("CustomShape") && (
 					<ProductOptionAccordion
 						product={product}
