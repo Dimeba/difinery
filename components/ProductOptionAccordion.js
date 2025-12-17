@@ -246,9 +246,19 @@ const ProductOptionAccordion = ({
 			state={
 				isGiftCard ||
 				product.tags.includes('CustomShape') ||
+				product.tags.includes('Stackable Rings') ||
 				(isCustomShape || isStackableOption ? true : index === openOption)
 			}
-			setOpenOption={() => setOpenOption(isCustomShape || isStackableOption ? 0 : index)}
+			setOpenOption={() =>
+				setOpenOption(
+					isCustomShape ||
+						isStackableOption ||
+						product.tags.includes('CustomShape') ||
+						product.tags.includes('Stackable Rings')
+						? 0
+						: index
+				)
+			}
 			product
 			display
 			showHelp={
@@ -414,7 +424,7 @@ const ProductOptionAccordion = ({
 								</div>
 							))
 						) : (
-							<div>Loading...</div>
+							<p style={{color: "#9b9b9b", fontSize: "12px" }}>Loading...</p>
 						)}
 					</div>
 				) : isGiftCard ? (
@@ -427,39 +437,63 @@ const ProductOptionAccordion = ({
 					/>
 				) : (
 					// Standard Product Options
-					option.optionValues.map(value => (
-						<button
-							key={value.name}
-							onClick={() =>
-								handleOptionSelection(option.name, value.name, index)
-							}
-							style={{
-								fontWeight:
-									selectedOptions[option.name] === value.name
-										? 'bold'
-										: 'normal'
-							}}
-						>
-							{option.name.toLowerCase() === 'metal' && (
-								<Image
-									src={`/${returnMetalType(value.name)}`}
-									width={24}
-									height={24}
-									alt={`${value.name} ${option.name}`}
-								/>
-							)}
-
-							{option.name.toLowerCase() === 'diamond shape' && (
-								<Image
-									src={`/${returnDiamondShape(value.name)}`}
-									width={32}
-									height={32}
-									alt={`${value.name} ${option.name}`}
-								/>
-							)}
-							{value.name}
-						</button>
-					))
+					option?.name?.toLowerCase() === 'metal' ? (
+						<div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+							{option.optionValues.map(value => {
+								const isSelected = selectedOptions[option.name] === value.name
+								return (
+									<button
+										key={value.name}
+										onClick={() =>
+											handleOptionSelection(option.name, value.name, index)
+										}
+										style={{
+											borderRadius: '50%',
+											border: isSelected ? '1px solid #9b9b9b' : '',
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+											padding: '2px',
+											margin: 0,
+											opacity: isSelected ? 1 : 0.6
+										}}
+									>
+										<Image
+											src={`/${returnMetalType(value.name)}`}
+											width={20}
+											height={20}
+											alt={`${value.name} ${option.name}`}
+										/>
+									</button>
+								)
+							})}
+						</div>
+					) : (
+						option.optionValues.map(value => (
+							<button
+								key={value.name}
+								onClick={() =>
+									handleOptionSelection(option.name, value.name, index)
+								}
+								style={{
+									fontWeight:
+										selectedOptions[option.name] === value.name
+											? 'bold'
+											: 'normal'
+								}}
+							>
+								{option.name.toLowerCase() === 'diamond shape' && (
+									<Image
+										src={`/${returnDiamondShape(value.name)}`}
+										width={32}
+										height={32}
+										alt={`${value.name} ${option.name}`}
+									/>
+								)}
+								{value.name}
+							</button>
+						))
+					)
 				)}
 			</div>
 
