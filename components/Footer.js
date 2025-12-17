@@ -138,7 +138,8 @@ const Footer = ({ content }) => {
 						No spam. Just meaningful updates on timeless pieces, artist stories,
 						and sustainability insights.
 					</p>
-					<SubscribeForm isFooter />
+					{/* <SubscribeForm isFooter /> */}
+					<div className='klaviyo-form-WFTGLX'></div>
 				</Accordion>
 			</div>
 
