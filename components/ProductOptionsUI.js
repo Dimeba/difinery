@@ -49,6 +49,7 @@ const ProductOptionsUI = ({
 		}
 		return initialOptions
 	})
+	
 
 	// Find the Shopify variant node matching the selected options
 	const getMatchingVariant = options => {
