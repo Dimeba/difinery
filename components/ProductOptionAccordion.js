@@ -12,6 +12,9 @@ import { Typography } from '@mui/material'
 // helpers
 import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 
+// data
+import customShapes from '@/data/shapes.json' with { type: 'json' }
+
 // hooks
 import { useState, useEffect, useMemo } from 'react'
 
@@ -28,7 +31,6 @@ const ProductOptionAccordion = ({
 	isMobile = false,
 	// Custom shape props
 	isCustomShape = false,
-	customShapes = [],
 	extraTitleText = null,
 	// For stackable rings image filtering
 	setSelectedColor = null
@@ -88,24 +90,6 @@ const ProductOptionAccordion = ({
 		}
 		return maxRings
 	}, [option?.optionValues])
-
-	// Check if two color arrays match (prioritize exact order, then try reversed)
-	const colorsMatch = (colors1, colors2) => {
-		if (colors1.length !== colors2.length) return false
-
-		// ALWAYS try exact order match first (RY should match RY before trying YR)
-		const exactMatch = colors1.every((c, i) => c === colors2[i])
-		if (exactMatch) return true
-
-		// Only try reversed order if no exact match found
-		// This ensures user selection order (Ring 1 -> Last Ring) is prioritized
-		if (colors1.length === 2) {
-			const reversed = [...colors2].reverse()
-			return colors1.every((c, i) => c === reversed[i])
-		}
-
-		return false
-	}
 
 	// Initialize stackable colors automatically on mount
 	useEffect(() => {
@@ -182,6 +166,45 @@ const ProductOptionAccordion = ({
 		}
 	}
 
+	const productCollection = useMemo(() => {
+		const edges = product?.collections?.edges || []
+		return edges.filter(
+			collection =>
+				collection.node.title !== 'Rings' &&
+				collection.node.title !== 'Necklaces' &&
+				collection.node.title !== 'Earrings' &&
+				collection.node.title !== 'Bracelets'
+		)[0]?.node
+	}, [product?.collections?.edges])
+
+	const relatedColectionProducts = useMemo(() => {
+		const edges = productCollection?.products?.edges || []
+		return edges.map(edge => edge.node)
+	}, [productCollection])
+
+	// related shapes
+
+	const relatedShapes = useMemo(() => {
+		return relatedColectionProducts
+			.filter(product => product.tags.includes('CustomShape'))
+			.map(p => p.handle)
+	}, [relatedColectionProducts])
+
+	const availableShapes = useMemo(() => {
+		return customShapes.filter(shape =>
+			relatedShapes.some(handle =>
+				handle.toLowerCase().includes(shape.title.toLowerCase())
+			)
+		)
+	}, [customShapes, relatedShapes])
+
+	// related stacks
+	const relatedStacks = useMemo(() => {
+		return relatedColectionProducts
+			.filter(product => product.tags.includes('Stackable Rings'))
+			.map(p => p.handle)
+	}, [relatedColectionProducts])	
+
 	return (
 		<Accordion
 			key={option?.name || 'custom-shape'}
@@ -222,14 +245,7 @@ const ProductOptionAccordion = ({
 			<div className={styles.variantButtonsContainer}>
 				{isCustomShape ? (
 					// Custom Shape buttons
-					customShapes
-						.filter(
-							shape =>
-								!(
-									product.title.toLowerCase().includes('promise') &&
-									shape.title.toLowerCase() === 'heart'
-								)
-						)
+					availableShapes
 						.map(shape => (
 							<button
 								key={shape.title}
