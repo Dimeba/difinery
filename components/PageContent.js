@@ -6,6 +6,7 @@ import Columns from './Columns'
 import FAQ from './FAQ'
 import MasonryColumns from './MasonryColumns'
 import SubscribeSection from './SubscribeSection'
+import SpecialRequestBanner from './SpecialRequestBanner'
 import SplitFeatures from './SplitFeatures'
 import Infographic from './Infographic'
 import Timeline from './Timeline'
@@ -14,6 +15,8 @@ const PageContent = ({ content }) => {
 	return (
 		<main>
 			{/* Content */}
+			<SpecialRequestBanner />
+
 			{content.sections.map((section, index) => {
 				switch (section.sys.contentType.sys.id) {
 					case 'features':

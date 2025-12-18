@@ -2,6 +2,7 @@
 import Products from '@/components/Products'
 import PageContent from '@/components/PageContent'
 import ProductsSkeleton from '@/components/ProductsSkeleton'
+
 import { Suspense } from 'react'
 
 // lib
