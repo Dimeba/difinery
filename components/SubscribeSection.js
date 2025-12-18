@@ -57,7 +57,8 @@ const SubscribeSection = () => {
 								</Typography>
 							</Box>
 
-							<SubscribeForm />
+							{/* <SubscribeForm /> */}
+							<div className='klaviyo-form-RmsYWx'></div>
 
 							<Link href='/blank-canvas'>
 								<Typography
