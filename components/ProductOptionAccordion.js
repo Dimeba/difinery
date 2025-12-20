@@ -347,17 +347,12 @@ const ProductOptionAccordion = ({
 								}}
 							>
 								<Image
-									src={shape.path}
-									width={(32 * shape.width) / shape.height}
-									height={32}
-									alt={`${shape.title} Diamond Shape`}
-									style={{
-										opacity: product.title
+									src={product.title
 											.toLowerCase()
-											.includes(shape.title.toLowerCase())
-											? 1
-											: 0.25
-									}}
+											.includes(shape.title.toLowerCase()) ? shape.path : shape.pathBase}
+									width={isMobile ? (24 * shape.width) / shape.height : (32 * shape.width) / shape.height}
+									height={isMobile ? 24 : 32}
+									alt={`${shape.title} Diamond Shape`}
 								/>
 							</button>
 						))
