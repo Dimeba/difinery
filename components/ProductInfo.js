@@ -21,29 +21,38 @@ import { trackViewItem, trackAddToCart } from '@/lib/gaEvents'
 const ProductInfo = ({ product, isGiftCard = false }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
-	const allImages = product.images.edges.map(edge => edge.node)
+	// Product can be temporarily undefined during navigation/loading.
+	const allImages = useMemo(() => {
+		return product?.images?.edges
+			? product.images.edges.map(edge => edge.node)
+			: []
+	}, [product?.images?.edges])
 
 	// Getting the default metal type
 	const searchParams = useSearchParams()
 	const gold = searchParams.get('gold')
 
 	const metalOptions = useMemo(() => {
-		const metal = product.options.find(opt => opt.name === 'Metal')
-		return metal ? metal.optionValues : []
-	}, [product.options])
+		const options = product?.options || []
+		const metal = options.find(opt => opt?.name === 'Metal')
+		return metal?.optionValues || []
+	}, [product?.options])
 
 	const initialColor = useMemo(() => {
 		const normalizedGold = gold ? gold.toLowerCase().replace(/-/g, ' ') : ''
-		return metalOptions.find(opt =>
-			opt.name.toLowerCase().includes(normalizedGold)
+		if (!normalizedGold) return null
+		return (
+			metalOptions.find(opt =>
+				(opt?.name || '').toLowerCase().includes(normalizedGold)
+			) || null
 		)
 	}, [metalOptions, gold])
 
 	const [matchingVariant, setMatchingVariant] = useState(
-		product.variants.edges[0].node
+		product?.variants?.edges?.[0]?.node || null
 	)
 	const [selectedColor, setSelectedColor] = useState(
-		gold ? initialColor.name : null
+		gold ? initialColor?.name || null : null
 	)
 	const [engraving, setEngraving] = useState('')
 	const [engravingVariant, setEngravingVariant] = useState(null)
@@ -56,6 +65,12 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	useEffect(() => {
 		if (product && matchingVariant) {
 			trackViewItem(product, matchingVariant)
+		}
+	}, [product, matchingVariant])
+
+	useEffect(() => {
+		if (!matchingVariant && product?.variants?.edges?.[0]?.node) {
+			setMatchingVariant(product.variants.edges[0].node)
 		}
 	}, [product, matchingVariant])
 
@@ -282,25 +297,27 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 					})}
 				</div>
 
-				<ProductOptionsUI
-					product={product}
-					isGiftCard={isGiftCard}
-					selectedColor={selectedColor}
-					setSelectedColor={setSelectedColor}
-					selectedShape={selectedShape}
-					setSelectedShape={setSelectedShape}
-					matchingVariant={matchingVariant}
-					setMatchingVariant={setMatchingVariant}
-					engraving={engraving}
-					setEngraving={setEngraving}
-					setEngravingVariant={setEngravingVariant}
-					boxText={boxText}
-					setBoxText={setBoxText}
-					boxVariant={boxVariant}
-					setBoxVariant={setBoxVariant}
-					setShowOrderSummary={setShowOrderSummary}
-					handleAddToCart={handleAddToCart}
-				/>
+				{product && (
+					<ProductOptionsUI
+						product={product}
+						isGiftCard={isGiftCard}
+						selectedColor={selectedColor}
+						setSelectedColor={setSelectedColor}
+						selectedShape={selectedShape}
+						setSelectedShape={setSelectedShape}
+						matchingVariant={matchingVariant}
+						setMatchingVariant={setMatchingVariant}
+						engraving={engraving}
+						setEngraving={setEngraving}
+						setEngravingVariant={setEngravingVariant}
+						boxText={boxText}
+						setBoxText={setBoxText}
+						boxVariant={boxVariant}
+						setBoxVariant={setBoxVariant}
+						setShowOrderSummary={setShowOrderSummary}
+						handleAddToCart={handleAddToCart}
+					/>
+				)}
 			</div>
 
 			{showOrderSummary && (
