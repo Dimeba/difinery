@@ -42,8 +42,48 @@ const ProductOptionAccordion = ({
 		(product.title || '').toLowerCase().includes('single')
 	const isSideDiamond = !!product?.tags?.includes('SideDiamond')
 
+	const collectionHandleFromUrl = useMemo(() => {
+		if (typeof window === 'undefined') return null
+		try {
+			const params = new URLSearchParams(window.location.search)
+			return params.get('collection')
+		} catch {
+			return null
+		}
+	}, [])
+
+	const goldFromUrl = useMemo(() => {
+		if (typeof window === 'undefined') return null
+		try {
+			const params = new URLSearchParams(window.location.search)
+			return params.get('gold')
+		} catch {
+			return null
+		}
+	}, [])
+
+	const normalizedGoldFromUrl = useMemo(() => {
+		const raw = (goldFromUrl || '').toLowerCase().trim()
+		if (!raw) return null
+		if (raw.includes('yellow')) return 'Yellow'
+		if (raw.includes('white')) return 'White'
+		if (raw.includes('rose') || raw.includes('pink')) return 'Rose'
+		return null
+	}, [goldFromUrl])
+
+	const isSingleGoldParam = useMemo(() => {
+		const raw = (goldFromUrl || '').toLowerCase()
+		if (!raw) return false
+		// treat "yellow-and-white" (multi) as not a single-color override
+		return !raw.includes('and')
+	}, [goldFromUrl])
+
 	const productCollection = useMemo(() => {
 		const edges = product?.collections?.edges || []
+		if (collectionHandleFromUrl) {
+			const match = edges.find(e => e?.node?.handle === collectionHandleFromUrl)
+			if (match?.node) return match.node
+		}
 		return edges.filter(
 			collection =>
 				collection.node.title !== 'Rings' &&
@@ -51,12 +91,12 @@ const ProductOptionAccordion = ({
 				collection.node.title !== 'Earrings' &&
 				collection.node.title !== 'Bracelets'
 		)[0]?.node
-	}, [product?.collections?.edges])
+	}, [product?.collections?.edges, collectionHandleFromUrl])
 
 	const relatedColectionProducts = useMemo(() => {
 		const edges = productCollection?.products?.edges || []
 		return edges.map(edge => edge.node)
-	}, [productCollection])
+	}, [productCollection?.products?.edges])
 
 	// State for stackable ring color selections
 	const [stackableColors, setStackableColors] = useState([])
@@ -126,6 +166,13 @@ const ProductOptionAccordion = ({
 				maxRings = Math.max(maxRings, parseMetalColors(v?.name).length)
 			})
 		})
+		// Fallback: if related products don't include options (or options are empty),
+		// infer at least 2/3 by how many stackable products are present.
+		if (maxRings <= 1) {
+			const count = stackableProductsInCollection.length
+			if (count >= 3) maxRings = 3
+			else if (count >= 2) maxRings = 2
+		}
 		return Math.min(3, Math.max(1, maxRings))
 	}, [stackableProductsInCollection, currentMaxRings])
 
@@ -146,9 +193,14 @@ const ProductOptionAccordion = ({
 	])
 
 	const stackableStorageKey = useMemo(() => {
-		const collectionHandle = productCollection?.handle || 'unknown'
+		const collectionHandle = collectionHandleFromUrl || productCollection?.handle || 'unknown'
 		return `stackableColors:${collectionHandle}`
-	}, [productCollection?.handle])
+	}, [collectionHandleFromUrl, productCollection?.handle])
+
+	const stackablePendingKey = useMemo(() => {
+		const collectionHandle = collectionHandleFromUrl || productCollection?.handle || 'unknown'
+		return `stackablePending:${collectionHandle}`
+	}, [collectionHandleFromUrl, productCollection?.handle])
 
 	const defaultStackableColor = useMemo(() => {
 		return getStackableColorOptions.includes('Yellow')
@@ -166,6 +218,40 @@ const ProductOptionAccordion = ({
 			return parsed.colors
 		} catch {
 			return null
+		}
+	}
+
+	const readPendingStackable = () => {
+		if (typeof window === 'undefined') return null
+		try {
+			const raw = window.sessionStorage.getItem(stackablePendingKey)
+			if (!raw) return null
+			const parsed = JSON.parse(raw)
+			if (!parsed || typeof parsed !== 'object') return null
+			return parsed
+		} catch {
+			return null
+		}
+	}
+
+	const writePendingStackable = pending => {
+		if (typeof window === 'undefined') return
+		try {
+			window.sessionStorage.setItem(
+				stackablePendingKey,
+				JSON.stringify({ ...pending, ts: Date.now() })
+			)
+		} catch {
+			// ignore
+		}
+	}
+
+	const clearPendingStackable = () => {
+		if (typeof window === 'undefined') return
+		try {
+			window.sessionStorage.removeItem(stackablePendingKey)
+		} catch {
+			// ignore
 		}
 	}
 
@@ -219,7 +305,11 @@ const ProductOptionAccordion = ({
 			const variantColors = parseMetalColors(matchingValue.name)
 			const colorCodes = variantColors.map(c => c[0].toUpperCase()).join('')
 			setSelectedColor && setSelectedColor(`Stackable-${colorCodes}`)
-			handleOptionSelection && handleOptionSelection(option.name, matchingValue.name, null)
+			// Important: don't "re-select" the same value, because ProductOptionsUI
+			// treats clicking the same option again as a reset.
+			if (handleOptionSelection && selectedOptions?.[option.name] !== matchingValue.name) {
+				handleOptionSelection(option.name, matchingValue.name, null)
+			}
 		}
 	}
 
@@ -233,12 +323,96 @@ const ProductOptionAccordion = ({
 		return max
 	}
 
-	const findTargetHandle = (targetRings, targetSideDiamond) => {
+	const getProductMetalOptionValues = p => {
+		const metal = (p?.options || []).find(o => (o?.name || '').toLowerCase() === 'metal')
+		return metal?.optionValues || []
+	}
+
+	const findMatchingMetalValueName = (p, desiredColors) => {
+		const optionValues = getProductMetalOptionValues(p)
+		if (!optionValues.length) return null
+		if (!desiredColors || desiredColors.some(c => !c)) return null
+
+		let match = optionValues.find(v => {
+			const valueColors = parseMetalColors(v?.name)
+			return (
+				valueColors.length === desiredColors.length &&
+				valueColors.every((c, i) => c === desiredColors[i])
+			)
+		})
+		if (match?.name) return match.name
+
+		if (desiredColors.length === 2) {
+			const flipped = [...desiredColors].reverse()
+			match = optionValues.find(v => {
+				const valueColors = parseMetalColors(v?.name)
+				return (
+					valueColors.length === flipped.length &&
+					valueColors.every((c, i) => c === flipped[i])
+				)
+			})
+			if (match?.name) return match.name
+		}
+
+		if (desiredColors.length >= 3) {
+			match = optionValues.find(v => {
+				const valueColors = parseMetalColors(v?.name)
+				if (valueColors.length !== desiredColors.length) return false
+				const sortedUser = [...desiredColors].sort()
+				const sortedVariant = [...valueColors].sort()
+				return sortedUser.every((c, i) => c === sortedVariant[i])
+			})
+			if (match?.name) return match.name
+		}
+
+		return null
+	}
+
+	const productHasMatchingMetalVariant = (p, desiredColors) => {
+		const optionValues = getProductMetalOptionValues(p)
+		if (!optionValues.length) return false
+		if (!desiredColors || desiredColors.some(c => !c)) return false
+
+		const matchesExact = optionValues.some(v => {
+			const valueColors = parseMetalColors(v?.name)
+			return (
+				valueColors.length === desiredColors.length &&
+				valueColors.every((c, i) => c === desiredColors[i])
+			)
+		})
+		if (matchesExact) return true
+
+		if (desiredColors.length === 2) {
+			const flipped = [...desiredColors].reverse()
+			return optionValues.some(v => {
+				const valueColors = parseMetalColors(v?.name)
+				return (
+					valueColors.length === flipped.length &&
+					valueColors.every((c, i) => c === flipped[i])
+				)
+			})
+		}
+
+		// 3+ rings: allow order-independent match
+		return optionValues.some(v => {
+			const valueColors = parseMetalColors(v?.name)
+			if (valueColors.length !== desiredColors.length) return false
+			const sortedUser = [...desiredColors].sort()
+			const sortedVariant = [...valueColors].sort()
+			return sortedUser.every((c, i) => c === sortedVariant[i])
+		})
+	}
+
+	const findTargetHandle = (targetRings, targetSideDiamond, desiredColorsForTarget) => {
 		const candidates = [product, ...stackableProductsInCollection]
 		let list = candidates.filter(p => getProductRingCount(p) === targetRings)
 		if ((targetRings === 1 || targetRings === 2) && typeof targetSideDiamond === 'boolean') {
 			const filtered = list.filter(p => (p?.tags || []).includes('SideDiamond') === targetSideDiamond)
 			if (filtered.length) list = filtered
+		}
+		if (desiredColorsForTarget?.length) {
+			const withVariant = list.find(p => productHasMatchingMetalVariant(p, desiredColorsForTarget))
+			if (withVariant?.handle) return withVariant.handle
 		}
 		return list[0]?.handle || null
 	}
@@ -256,6 +430,22 @@ const ProductOptionAccordion = ({
 		if (!option?.optionValues || !activeRingPositions) return
 		if (stackableColors.length) return
 
+		// If we just navigated here from another stackable product, apply the exact target
+		// Metal option value string (prevents "metal not selected" + wrong images).
+		const pending = readPendingStackable()
+		if (pending?.handle && pending.handle === product?.handle && pending?.metalValueName) {
+			const base = new Array(collectionMaxRings).fill(null)
+			const colors = parseMetalColors(pending.metalValueName)
+			activeRingPositions.forEach((pos, i) => {
+				base[pos] = colors[i] || null
+			})
+			setStackableColors(base)
+			// Apply metal + images
+			applyColorsToThisProduct(base)
+			clearPendingStackable()
+			return
+		}
+
 		const stored = readStoredStackableColors()
 		const base = new Array(collectionMaxRings).fill(null)
 
@@ -272,7 +462,23 @@ const ProductOptionAccordion = ({
 				null
 			const colors = parseMetalColors(initialMetal)
 			activeRingPositions.forEach((pos, i) => {
-				base[pos] = colors[i] || defaultStackableColor
+				base[pos] = colors[i] || normalizedGoldFromUrl || defaultStackableColor
+			})
+		}
+
+		// Ensure all required positions for this product are selected,
+		// otherwise Metal won't match any variant (blocks "Review your order").
+		activeRingPositions.forEach(pos => {
+			if (!base[pos]) {
+				base[pos] = normalizedGoldFromUrl || defaultStackableColor
+			}
+		})
+
+		// Direct landing override: if the URL specifies a single metal (e.g. gold=yellow),
+		// force all active rings to that color.
+		if (isSingleGoldParam && normalizedGoldFromUrl) {
+			activeRingPositions.forEach(pos => {
+				base[pos] = normalizedGoldFromUrl
 			})
 		}
 
@@ -285,6 +491,7 @@ const ProductOptionAccordion = ({
 		option?.optionValues,
 		activeRingPositions,
 		collectionMaxRings,
+		normalizedGoldFromUrl,
 		defaultStackableColor,
 		stackableColors.length
 	])
@@ -309,28 +516,48 @@ const ProductOptionAccordion = ({
 
 		let targetRings = null
 		let targetSideDiamond = null
+		let desiredForTarget = null
 
 		if (hasFirst && hasSecond && hasThird) {
 			targetRings = 3
+			desiredForTarget = [next[0], next[1], next[2]]
 		} else if (hasFirst && !hasSecond && hasThird) {
 			targetRings = 2
 			targetSideDiamond = true
+			desiredForTarget = [next[0], next[2]]
 		} else if (hasFirst && hasSecond && !hasThird) {
 			targetRings = 2
 			targetSideDiamond = false
+			desiredForTarget = [next[0], next[1]]
 		} else if (hasFirst && !hasSecond && !hasThird) {
 			targetRings = 1
 			targetSideDiamond = true
+			desiredForTarget = [next[0]]
 		} else if (!hasFirst && hasSecond && !hasThird) {
 			targetRings = 1
 			targetSideDiamond = false
+			desiredForTarget = [next[1]]
 		}
 
 		if (!targetRings) return
 		if (targetRings > collectionMaxRings) return
 
-		const targetHandle = findTargetHandle(targetRings, targetSideDiamond)
+		const targetHandle = findTargetHandle(targetRings, targetSideDiamond, desiredForTarget)
 		if (targetHandle && targetHandle !== product?.handle) {
+			// Persist the exact target Metal option value name so the destination page can
+			// apply a valid variant immediately (fixes First+Second sometimes not selecting Metal).
+			const candidates = [product, ...stackableProductsInCollection]
+			const targetProduct = candidates.find(p => p?.handle === targetHandle) || null
+			const targetMetalValueName =
+				targetProduct && desiredForTarget
+					? findMatchingMetalValueName(targetProduct, desiredForTarget)
+					: null
+			if (targetMetalValueName) {
+				writePendingStackable({
+					handle: targetHandle,
+					metalValueName: targetMetalValueName
+				})
+			}
 			return navigateToHandle(targetHandle)
 		}
 
