@@ -267,6 +267,30 @@ const ProductOptionAccordion = ({
 		}
 	}
 
+	// Keep UI state as-is, but normalize for routing/variant logic.
+	// - only Third => treat as only First
+	// - Second + Third => treat as First + Second
+	const normalizeStackableForLogic = colors => {
+		const next = Array.isArray(colors) ? [...colors] : []
+		if (!next.length) return next
+
+		if (!next[0] && !next[1] && next[2]) {
+			next[0] = next[2]
+			next[2] = null
+		} else if (!next[0] && next[1] && next[2]) {
+			next[0] = next[1]
+			next[1] = next[2]
+			next[2] = null
+		}
+
+		// Enforce "first" exists when "third" is set (logic-only; UI can still show only Third)
+		if (next[2] && !next[0]) {
+			next[0] = next[1] || defaultStackableColor
+		}
+
+		return next
+	}
+
 	const applyColorsToThisProduct = colorsByPosition => {
 		if (!option?.optionValues || !activeRingPositions) return
 		const desired = activeRingPositions.map(pos => colorsByPosition[pos]).filter(Boolean)
@@ -437,30 +461,56 @@ const ProductOptionAccordion = ({
 		if (!option?.optionValues || !activeRingPositions) return
 		if (stackableColors.length) return
 
+		const stored = readStoredStackableColors()
+		const hasStored = Array.isArray(stored) && stored.length
+		const displayBase = new Array(collectionMaxRings).fill(null)
+		if (hasStored) {
+			for (let i = 0; i < Math.min(collectionMaxRings, stored.length); i++) {
+				displayBase[i] = stored[i] || null
+			}
+		}
+
 		// If we just navigated here from another stackable product, apply the exact target
 		// Metal option value string (prevents "metal not selected" + wrong images).
 		const pending = readPendingStackable()
 		if (pending?.handle && pending.handle === product?.handle && pending?.metalValueName) {
-			const base = new Array(collectionMaxRings).fill(null)
-			const colors = parseMetalColors(pending.metalValueName)
-			activeRingPositions.forEach((pos, i) => {
-				base[pos] = colors[i] || null
-			})
-			setStackableColors(base)
-			// Apply metal + images
-			applyColorsToThisProduct(base)
+			// Prefer keeping the user's UI selection (stored) if present.
+			const baseForUI = hasStored ? displayBase : new Array(collectionMaxRings).fill(null)
+			if (!hasStored) {
+				const colors = parseMetalColors(pending.metalValueName)
+				activeRingPositions.forEach((pos, i) => {
+					baseForUI[pos] = colors[i] || null
+				})
+			}
+			setStackableColors(baseForUI)
+
+			// Apply the exact metal value (avoid relying on matching heuristics).
+			const exists = option.optionValues.some(v => v?.name === pending.metalValueName)
+			if (exists) {
+				const variantColors = parseMetalColors(pending.metalValueName)
+				const colorCodes = variantColors.map(c => c[0].toUpperCase()).join('')
+				if (setSelectedColor) {
+					if (variantColors.length <= 1) setSelectedColor(pending.metalValueName)
+					else setSelectedColor(`Stackable-${colorCodes}`)
+				}
+				if (
+					handleOptionSelection &&
+					selectedOptions?.[option.name] !== pending.metalValueName
+				) {
+					handleOptionSelection(option.name, pending.metalValueName, null)
+				}
+			} else {
+				// Fallback: apply via canonical colors.
+				const canonical = normalizeStackableForLogic(baseForUI)
+				applyColorsToThisProduct(canonical)
+			}
+
 			clearPendingStackable()
 			return
 		}
 
-		const stored = readStoredStackableColors()
-		const base = new Array(collectionMaxRings).fill(null)
-
-		if (Array.isArray(stored) && stored.length) {
-			for (let i = 0; i < Math.min(collectionMaxRings, stored.length); i++) {
-				base[i] = stored[i] || null
-			}
-		} else {
+		const base = hasStored ? displayBase : new Array(collectionMaxRings).fill(null)
+		if (!hasStored) {
 			const initialMetal =
 				selectedOptions?.[option.name] ||
 				product?.variants?.edges?.[0]?.node?.selectedOptions?.find(
@@ -473,16 +523,8 @@ const ProductOptionAccordion = ({
 			})
 		}
 
-		// Ensure all required positions for this product are selected,
-		// otherwise Metal won't match any variant (blocks "Review your order").
-		activeRingPositions.forEach(pos => {
-			if (!base[pos]) {
-				base[pos] = normalizedGoldFromUrl || defaultStackableColor
-			}
-		})
-
 		// Direct landing override: if the URL specifies a single metal (e.g. gold=yellow),
-		// force all active rings to that color.
+		// force all active rings to that color (UI + logic).
 		if (isSingleGoldParam && normalizedGoldFromUrl) {
 			activeRingPositions.forEach(pos => {
 				base[pos] = normalizedGoldFromUrl
@@ -490,8 +532,17 @@ const ProductOptionAccordion = ({
 		}
 
 		setStackableColors(base)
-		// If we restored a full selection for this product's active rings, apply it.
-		applyColorsToThisProduct(base)
+
+		// Apply canonical (logic) selection without mutating what UI shows.
+		const canonical = normalizeStackableForLogic(base)
+		// Ensure all required positions for this product are selected in logic,
+		// otherwise Metal won't match any variant (blocks "Review your order").
+		activeRingPositions.forEach(pos => {
+			if (!canonical[pos]) {
+				canonical[pos] = normalizedGoldFromUrl || defaultStackableColor
+			}
+		})
+		applyColorsToThisProduct(canonical)
 	}, [
 		isStackableRings,
 		isMetalOption,
@@ -509,17 +560,16 @@ const ProductOptionAccordion = ({
 		// Toggle: click same color again to deselect that ring
 		next[ringIndex] = next[ringIndex] === color ? null : color
 
-		// Enforce "first" ring exists when selecting "third" (required by 1/2/3 ring products)
-		if (next[2] && !next[0]) {
-			next[0] = next[1] || defaultStackableColor
-		}
-
+		// Persist/display exactly what the user clicked (UI correctness).
 		setStackableColors(next)
 		writeStoredStackableColors(next)
 
-		const hasFirst = !!next[0]
-		const hasSecond = !!next[1]
-		const hasThird = !!next[2]
+		// Use a canonical selection for logic (routing + variant matching).
+		const canonical = normalizeStackableForLogic(next)
+
+		const hasFirst = !!canonical[0]
+		const hasSecond = !!canonical[1]
+		const hasThird = !!canonical[2]
 
 		let targetRings = null
 		let targetSideDiamond = null
@@ -527,23 +577,23 @@ const ProductOptionAccordion = ({
 
 		if (hasFirst && hasSecond && hasThird) {
 			targetRings = 3
-			desiredForTarget = [next[0], next[1], next[2]]
+			desiredForTarget = [canonical[0], canonical[1], canonical[2]]
 		} else if (hasFirst && !hasSecond && hasThird) {
 			targetRings = 2
 			targetSideDiamond = true
-			desiredForTarget = [next[0], next[2]]
+			desiredForTarget = [canonical[0], canonical[2]]
 		} else if (hasFirst && hasSecond && !hasThird) {
 			targetRings = 2
 			targetSideDiamond = false
-			desiredForTarget = [next[0], next[1]]
+			desiredForTarget = [canonical[0], canonical[1]]
 		} else if (hasFirst && !hasSecond && !hasThird) {
 			targetRings = 1
 			targetSideDiamond = true
-			desiredForTarget = [next[0]]
+			desiredForTarget = [canonical[0]]
 		} else if (!hasFirst && hasSecond && !hasThird) {
 			targetRings = 1
 			targetSideDiamond = false
-			desiredForTarget = [next[1]]
+			desiredForTarget = [canonical[1]]
 		}
 
 		if (!targetRings) return
@@ -569,7 +619,7 @@ const ProductOptionAccordion = ({
 		}
 
 		// Same product: apply selection to metal variant + images
-		applyColorsToThisProduct(next)
+		applyColorsToThisProduct(canonical)
 	}
 
 	// related shapes
