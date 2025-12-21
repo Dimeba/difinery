@@ -155,7 +155,7 @@ const Cart = () => {
 							*Please note that any special request affecting weight or
 							dimensions may impact the final price and extend the standard
 							production timeline by 2-3 business days (in addition to the 7-day
-							shipping window). If this applies, we'll follow up via email with
+							shipping window). If this applies, we&apos;ll follow up via email with
 							an updated quote before proceeding with payment.
 						</p>
 					</div>

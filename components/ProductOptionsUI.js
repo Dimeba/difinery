@@ -11,7 +11,7 @@ import CustomBox from './CustomBox'
 import ProductOptionAccordion from './ProductOptionAccordion'
 
 // hooks
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useMediaQuery } from '@mui/material'
 
 // helpers
@@ -52,7 +52,7 @@ const ProductOptionsUI = ({
 	
 
 	// Find the Shopify variant node matching the selected options
-	const getMatchingVariant = options => {
+	const getMatchingVariant = useCallback(options => {
 		const selectedEntries = Object.entries(options)
 		const matchingEdge = product.variants.edges.find(({ node }) =>
 			selectedEntries.every(([name, value]) =>
@@ -69,7 +69,7 @@ const ProductOptionsUI = ({
 			}
 			return false
 		}
-	}
+	}, [product, setMatchingVariant])
 
 	// User selects an option value
 	const handleOptionSelection = (optionName, value, index = null) => {
@@ -161,7 +161,7 @@ const ProductOptionsUI = ({
 		if (selectedColor) {
 			getMatchingVariant({ ...selectedOptions, Metal: selectedColor })
 		}
-	}, [])	
+	}, [getMatchingVariant, selectedColor, selectedOptions])
 
 	const metalOption = product?.options?.find(
 		o => (o?.name || '').toLowerCase() === 'metal'
@@ -378,7 +378,7 @@ const ProductOptionsUI = ({
 
 					<Accordion title='Handcrafted in USA'>
 						<p>
-							Each one of our pieces are handcrafted in New York's Diamond
+							Each one of our pieces are handcrafted in New York&apos;s Diamond
 							District using only ethical lab-grown diamonds of the highest
 							standards and 100% certified recycled solid gold. We honor
 							timeless design and exceptional craftsmanship, creating

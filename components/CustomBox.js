@@ -40,7 +40,7 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 		}
 
 		fetchData()
-	}, [client])
+	}, [client, setBoxVariant])
 
 	return (
 		<Grid container spacing='1rem'>

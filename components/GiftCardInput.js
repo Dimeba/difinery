@@ -64,13 +64,13 @@ const GiftCardInput = ({
 		? inputValue.replace(/^(\d)(\d{3,})$/, '$1,$2')
 		: ''
 
-	// Update input when selectedValue changes externally (only on mount)
+	// Update input when selectedValue changes externally
 	useEffect(() => {
 		if (selectedValue && !inputValue) {
 			const numValue = selectedValue.replace(/[$,]/g, '')
 			setInputValue(numValue)
 		}
-	}, [])
+	}, [selectedValue, inputValue])
 
 	return (
 		<div className={styles.giftCardInput}>

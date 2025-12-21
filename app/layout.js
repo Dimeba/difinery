@@ -95,9 +95,11 @@ export default function RootLayout({ children }) {
 				</Script>
 				{/* End Klaviyo Onsite */}
 				<noscript>
+					{/* eslint-disable-next-line @next/next/no-img-element */}
 					<img
 						height='1'
 						width='1'
+						alt=''
 						style={{ display: 'none' }}
 						src='https://www.facebook.com/tr?id=801044746115457&ev=PageView&noscript=1'
 					/>

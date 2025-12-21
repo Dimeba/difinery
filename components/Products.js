@@ -89,7 +89,7 @@ const Products = ({
 		if (onSearch && searchTerm) {
 			onSearch(searchTerm)
 		}
-	}, [searchTerm])
+	}, [onSearch, searchTerm])
 
 	const loadMore = () => {
 		// If we have a callback to load more from API, use it

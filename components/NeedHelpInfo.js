@@ -9,7 +9,7 @@ const NeedHelpInfo = ({ type }) => {
 					<p>
 						A well-fitted ring should slide smoothly over your knuckle and feel
 						snug enough to stay in place without causing discomfort. It
-						shouldn't be too tight or too loose. If the ring spins easily, it's
+						shouldn&apos;t be too tight or too loose. If the ring spins easily, it&apos;s
 						likely too big. If it feels tight or leaves a mark, it might be too
 						small.
 					</p>
