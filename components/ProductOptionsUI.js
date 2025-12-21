@@ -163,6 +163,14 @@ const ProductOptionsUI = ({
 		}
 	}, [])	
 
+	const metalOption = product?.options?.find(
+		o => (o?.name || '').toLowerCase() === 'metal'
+	)
+	const nonMetalOptions = (product?.options || []).filter(
+		o => (o?.name || '').toLowerCase() !== 'metal'
+	)
+	const nonMetalStartIndex = metalOption ? 1 : 0
+
 	return (
 		<div className={styles.content}>
 			<div className={styles.versionInfo}>
@@ -180,6 +188,25 @@ const ProductOptionsUI = ({
 
 			<div className={styles.accordion}>
 
+				{/* Metal (always first when present) */}
+				{metalOption && (
+					<ProductOptionAccordion
+						key={metalOption.name}
+						option={metalOption}
+						index={0}
+						product={product}
+						selectedOptions={selectedOptions}
+						handleOptionSelection={handleOptionSelection}
+						handleDisplayUpdate={handleDisplayUpdate}
+						openOption={openOption}
+						setOpenOption={setOpenOption}
+						isGiftCard={isGiftCard}
+						isMobile={isMobile}
+						setSelectedColor={setSelectedColor}
+					/>
+				)}
+
+				{/* Custom Shape (always after Metal) */}
 				{product.tags.includes("CustomShape") && (
 					<ProductOptionAccordion
 						product={product}
@@ -190,19 +217,19 @@ const ProductOptionsUI = ({
 						isCustomShape={true}
 						customShapes={customShapes}
 						extraTitleText={
-							customShapes.find(shape => 
+							customShapes.find(shape =>
 								product.title.toLowerCase().includes(shape.title.toLowerCase())
 							)?.title || null
 						}
 					/>
 				)}
 
-				{/* Options */}
-				{product.options.map((option, index) => (
+				{/* Remaining Shopify options */}
+				{nonMetalOptions.map((option, i) => (
 					<ProductOptionAccordion
 						key={option.name}
 						option={option}
-						index={index}
+						index={nonMetalStartIndex + i}
 						product={product}
 						selectedOptions={selectedOptions}
 						handleOptionSelection={handleOptionSelection}
