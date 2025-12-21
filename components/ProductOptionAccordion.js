@@ -304,7 +304,14 @@ const ProductOptionAccordion = ({
 		if (matchingValue) {
 			const variantColors = parseMetalColors(matchingValue.name)
 			const colorCodes = variantColors.map(c => c[0].toUpperCase()).join('')
-			setSelectedColor && setSelectedColor(`Stackable-${colorCodes}`)
+			// Single-ring stackables don't have Stackable-* images; use the Metal value string.
+			if (setSelectedColor) {
+				if (variantColors.length <= 1) {
+					setSelectedColor(matchingValue.name)
+				} else {
+					setSelectedColor(`Stackable-${colorCodes}`)
+				}
+			}
 			// Important: don't "re-select" the same value, because ProductOptionsUI
 			// treats clicking the same option again as a reset.
 			if (handleOptionSelection && selectedOptions?.[option.name] !== matchingValue.name) {

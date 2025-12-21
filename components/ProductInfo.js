@@ -171,6 +171,11 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			filteredImages = allImages.filter(reversedFilter)
 		}
 
+		// Final fallback: never return an empty image list.
+		if (filteredImages.length === 0) {
+			return allImages
+		}
+
 		return filteredImages
 	}, [allImages, selectedColor, selectedShape])
 
@@ -182,6 +187,26 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		const isStackable = lc.includes('stackable')
 		const hasWhite = lc.includes('white')
 		const hasYellow = lc.includes('yellow')
+		const hasRose = lc.includes('rose')
+
+		// Stackable codes: prefer exact Review-Stackable-<codes> match
+		if (lc.startsWith('stackable-')) {
+			const codes = lc.replace('stackable-', '')
+			let img = allImages.find(node => {
+				const u = toLower(node)
+				return u.includes('-review') && u.includes(`review-stackable-${codes}`)
+			})
+			if (!img && codes.length === 2) {
+				const reversed = codes.split('').reverse().join('')
+				img = allImages.find(node => {
+					const u = toLower(node)
+					return (
+						u.includes('-review') && u.includes(`review-stackable-${reversed}`)
+					)
+				})
+			}
+			return img || null
+		}
 
 		// Determine the metal prefix
 		let metalPrefix = ''
@@ -191,6 +216,8 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			metalPrefix = 'wr-' // white gold
 		} else if (hasYellow) {
 			metalPrefix = 'yr-' // yellow gold
+		} else if (hasRose) {
+			metalPrefix = 'rr-' // rose gold
 		}
 
 		const shapeCode = selectedShape
