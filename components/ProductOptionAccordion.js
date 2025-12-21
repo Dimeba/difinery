@@ -16,7 +16,7 @@ import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 import customShapes from '@/data/shapes.json' with { type: 'json' }
 
 // hooks
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 
 const ProductOptionAccordion = ({
 	option,
@@ -102,7 +102,7 @@ const ProductOptionAccordion = ({
 	const [stackableColors, setStackableColors] = useState([])
 
 	// Parse the metal option value to determine colors in order
-	const parseMetalColors = metalValue => {
+	const parseMetalColors = useCallback(metalValue => {
 		if (!metalValue) return []
 		const value = metalValue.toLowerCase()
 		const colors = []
@@ -123,7 +123,7 @@ const ProductOptionAccordion = ({
 		}
 
 		return colors
-	}
+	}, [])
 
 	// Get unique color options (White, Yellow, Rose) from actual variants
 	const getStackableColorOptions = useMemo(() => {
@@ -137,7 +137,7 @@ const ProductOptionAccordion = ({
 		// Sort in specific order: Yellow, White, Rose
 		const colorOrder = { 'Yellow': 1, 'White': 2, 'Rose': 3 }
 		return Array.from(colorSet).sort((a, b) => colorOrder[a] - colorOrder[b])
-	}, [option?.optionValues])
+	}, [option?.optionValues, parseMetalColors])
 
 	// Get maximum number of rings available based on variants
 	const currentMaxRings = useMemo(() => {
@@ -149,7 +149,7 @@ const ProductOptionAccordion = ({
 			})
 		}
 		return Math.min(3, maxRings)
-	}, [option?.optionValues])
+	}, [option?.optionValues, parseMetalColors])
 
 	const stackableProductsInCollection = useMemo(() => {
 		return relatedColectionProducts.filter(p => p?.tags?.includes('Stackable Rings'))
@@ -174,7 +174,7 @@ const ProductOptionAccordion = ({
 			else if (count >= 2) maxRings = 2
 		}
 		return Math.min(3, Math.max(1, maxRings))
-	}, [stackableProductsInCollection, currentMaxRings])
+	}, [stackableProductsInCollection, currentMaxRings, parseMetalColors])
 
 	const activeRingPositions = useMemo(() => {
 		if (!isStackableRings || !isMetalOption) return null
@@ -208,7 +208,7 @@ const ProductOptionAccordion = ({
 			: getStackableColorOptions[0] || 'White'
 	}, [getStackableColorOptions])
 
-	const readStoredStackableColors = () => {
+	const readStoredStackableColors = useCallback(() => {
 		if (typeof window === 'undefined') return null
 		try {
 			const raw = window.sessionStorage.getItem(stackableStorageKey)
@@ -219,9 +219,9 @@ const ProductOptionAccordion = ({
 		} catch {
 			return null
 		}
-	}
+	}, [stackableStorageKey])
 
-	const readPendingStackable = () => {
+	const readPendingStackable = useCallback(() => {
 		if (typeof window === 'undefined') return null
 		try {
 			const raw = window.sessionStorage.getItem(stackablePendingKey)
@@ -232,9 +232,9 @@ const ProductOptionAccordion = ({
 		} catch {
 			return null
 		}
-	}
+	}, [stackablePendingKey])
 
-	const writePendingStackable = pending => {
+	const writePendingStackable = useCallback(pending => {
 		if (typeof window === 'undefined') return
 		try {
 			window.sessionStorage.setItem(
@@ -244,18 +244,18 @@ const ProductOptionAccordion = ({
 		} catch {
 			// ignore
 		}
-	}
+	}, [stackablePendingKey])
 
-	const clearPendingStackable = () => {
+	const clearPendingStackable = useCallback(() => {
 		if (typeof window === 'undefined') return
 		try {
 			window.sessionStorage.removeItem(stackablePendingKey)
 		} catch {
 			// ignore
 		}
-	}
+	}, [stackablePendingKey])
 
-	const writeStoredStackableColors = colors => {
+	const writeStoredStackableColors = useCallback(colors => {
 		if (typeof window === 'undefined') return
 		try {
 			window.sessionStorage.setItem(
@@ -265,12 +265,12 @@ const ProductOptionAccordion = ({
 		} catch {
 			// ignore
 		}
-	}
+	}, [stackableStorageKey])
 
 	// Keep UI state as-is, but normalize for routing/variant logic.
 	// - only Third => treat as only First
 	// - Second + Third => treat as First + Second
-	const normalizeStackableForLogic = colors => {
+	const normalizeStackableForLogic = useCallback(colors => {
 		const next = Array.isArray(colors) ? [...colors] : []
 		if (!next.length) return next
 
@@ -289,9 +289,9 @@ const ProductOptionAccordion = ({
 		}
 
 		return next
-	}
+	}, [defaultStackableColor])
 
-	const applyColorsToThisProduct = colorsByPosition => {
+	const applyColorsToThisProduct = useCallback(colorsByPosition => {
 		if (!option?.optionValues || !activeRingPositions) return
 		const desired = activeRingPositions.map(pos => colorsByPosition[pos]).filter(Boolean)
 		if (desired.length !== activeRingPositions.length) return
@@ -342,7 +342,15 @@ const ProductOptionAccordion = ({
 				handleOptionSelection(option.name, matchingValue.name, null)
 			}
 		}
-	}
+	}, [
+		activeRingPositions,
+		handleOptionSelection,
+		option?.name,
+		option?.optionValues,
+		parseMetalColors,
+		selectedOptions,
+		setSelectedColor
+	])
 
 	const getProductRingCount = p => {
 		const metal = (p?.options || []).find(o => (o?.name || '').toLowerCase() === 'metal')
@@ -544,21 +552,41 @@ const ProductOptionAccordion = ({
 		})
 		applyColorsToThisProduct(canonical)
 	}, [
+		activeRingPositions,
+		applyColorsToThisProduct,
+		clearPendingStackable,
+		collectionMaxRings,
+		defaultStackableColor,
+		handleOptionSelection,
 		isStackableRings,
 		isMetalOption,
+		isSingleGoldParam,
+		normalizeStackableForLogic,
+		option?.name,
 		option?.optionValues,
-		activeRingPositions,
-		collectionMaxRings,
 		normalizedGoldFromUrl,
-		defaultStackableColor,
+		parseMetalColors,
+		product?.handle,
+		product?.variants?.edges,
+		readPendingStackable,
+		readStoredStackableColors,
+		selectedOptions,
+		setSelectedColor,
 		stackableColors.length
 	])
 
 	// Handle individual ring color selection for stackable rings
 	const handleStackableColorChange = (ringIndex, color) => {
 		const next = [...stackableColors]
-		// Toggle: click same color again to deselect that ring
-		next[ringIndex] = next[ringIndex] === color ? null : color
+		// Toggle: click same color again to deselect that ring.
+		// But never allow the entire selection to become empty (e.g. single ring should
+		// not be able to toggle off to "none selected", even if the selected one is Third).
+		const isDeselecting = next[ringIndex] === color
+		const selectedCount = next.filter(Boolean).length
+		if (isDeselecting && selectedCount <= 1) {
+			return
+		}
+		next[ringIndex] = isDeselecting ? null : color
 
 		// Persist/display exactly what the user clicked (UI correctness).
 		setStackableColors(next)
