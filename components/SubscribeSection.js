@@ -8,9 +8,11 @@ import Link from 'next/link'
 
 // hooks
 import { usePathname } from 'next/navigation'
+import { useMediaQuery } from '@mui/material'
 
 const SubscribeSection = () => {
 	const pathName = usePathname()
+	const isMobile = useMediaQuery('(max-width: 1024px)')
 
 	return (
 		(pathName === '/' ||
@@ -27,7 +29,11 @@ const SubscribeSection = () => {
 						src='/sub-banner.jpg'
 						alt='Description of image'
 						fill
-						style={{ zIndex: -1, objectFit: 'cover' }}
+						style={{
+							zIndex: -1,
+							objectFit: 'cover',
+							objectPosition: isMobile ? 'left' : 'center'
+						}}
 						quality={100}
 					/>
 

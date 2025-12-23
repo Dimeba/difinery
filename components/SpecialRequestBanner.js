@@ -2,30 +2,37 @@
 
 // components
 import { Box, Grid, Typography } from '@mui/material'
-import SubscribeForm from './SubscribeForm'
 import Image from 'next/image'
-import Link from 'next/link'
 
 // hooks
 import { usePathname } from 'next/navigation'
+import { useMediaQuery } from '@mui/material'
 
 const SpecialRequestBanner = () => {
 	const pathName = usePathname()
+	const isMobile = useMediaQuery('(max-width: 1024px)')
 
 	return (
-		pathName === '/shop/collections/engagement-rings' && (
+		(pathName === '/shop/collections/engagement-rings' ||
+			pathName.includes('engagement-ring')) && (
 			<>
 				<Grid
 					container
 					direction={{ xs: 'column-reverse', lg: 'row' }}
 					position='relative'
-					style={{ backgroundColor: 'rgba(0,0,0,0.25)' }}
+					sx={{ backgroundColor: 'rgba(0,0,0,0.25)' }}
+					minHeight={{ xs: 'auto', lg: '800px' }}
+					alignItems='center'
 				>
 					<Image
 						src='/sr-banner.jpg'
 						alt='Description of image'
 						fill
-						style={{ zIndex: -1, objectFit: 'cover' }}
+						style={{
+							zIndex: -1,
+							objectFit: 'cover',
+							objectPosition: isMobile ? 'left' : 'center'
+						}}
 						quality={100}
 					/>
 

@@ -1,5 +1,4 @@
 import ProductPageLayout from '@/components/ProductPageLayout'
-import ProductInfoSkeleton from '@/components/ProductInfoSkeleton'
 
 // lib
 import { getCachedProductFAQs } from '@/lib/cachedContentful'
