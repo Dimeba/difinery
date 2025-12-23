@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
 function hasKlaviyoEmbeds() {
@@ -15,7 +15,9 @@ function hasKlaviyoEmbeds() {
 function getKlaviyoEmbedNodes() {
 	if (typeof document === 'undefined') return []
 	return Array.from(
-		document.querySelectorAll('[class*="klaviyo-form-"] , [class^="klaviyo-form-"]')
+		document.querySelectorAll(
+			'[class*="klaviyo-form-"] , [class^="klaviyo-form-"]'
+		)
 	)
 }
 
@@ -54,6 +56,16 @@ function softResetKlaviyoRuntime() {
 	return
 }
 
+function trackKlaviyoPageview() {
+	if (typeof window === 'undefined') return
+	try {
+		window._learnq = window._learnq || []
+		window._learnq.push(['track', '$pageview'])
+	} catch (_) {
+		// no-op
+	}
+}
+
 export default function KlaviyoRefresh() {
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
@@ -61,7 +73,7 @@ export default function KlaviyoRefresh() {
 	const reinjectAttemptsRef = useRef(0)
 	const ensureTimerRef = useRef(null)
 
-	const ensureEmbedsRender = () => {
+	const ensureEmbedsRender = useCallback(() => {
 		if (typeof window === 'undefined') return
 		if (!hasKlaviyoEmbeds()) return
 
@@ -74,14 +86,15 @@ export default function KlaviyoRefresh() {
 
 		softResetKlaviyoRuntime()
 		reinjectKlaviyoOnsiteScript()
-	}
+	}, [])
 
-	const scheduleEnsure = () => {
+	const scheduleEnsure = useCallback(() => {
 		if (ensureTimerRef.current) clearTimeout(ensureTimerRef.current)
 		ensureTimerRef.current = setTimeout(ensureEmbedsRender, 250)
-	}
+	}, [ensureEmbedsRender])
 
 	useEffect(() => {
+		trackKlaviyoPageview()
 		reinjectAttemptsRef.current = 0
 		scheduleEnsure()
 		const t1 = setTimeout(ensureEmbedsRender, 600)
@@ -91,7 +104,7 @@ export default function KlaviyoRefresh() {
 			clearTimeout(t2)
 			if (ensureTimerRef.current) clearTimeout(ensureTimerRef.current)
 		}
-	}, [pathname, searchParams])
+	}, [pathname, searchParams, ensureEmbedsRender, scheduleEnsure])
 
 	useEffect(() => {
 		if (typeof window === 'undefined' || typeof document === 'undefined') return
@@ -102,6 +115,7 @@ export default function KlaviyoRefresh() {
 			const now = Date.now()
 			if (now - lastEnsureAtRef.current < throttleMs) return
 			lastEnsureAtRef.current = now
+			trackKlaviyoPageview()
 			scheduleEnsure()
 		})
 
@@ -111,7 +125,7 @@ export default function KlaviyoRefresh() {
 		})
 
 		return () => observer.disconnect()
-	}, [])
+	}, [scheduleEnsure])
 
 	return null
 }
