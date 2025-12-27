@@ -24,7 +24,15 @@ import submenus from '@/data/submenus.json' with { type: 'json' }
 
 const Header = ({ content, collectionsContent }) => {
 	// cart
-	const { setShowCart } = useCart()
+	const { setShowCart, cart } = useCart()
+	
+	// Track if component has mounted to prevent hydration mismatch
+	const [isMounted, setIsMounted] = useState(false)
+	
+	// Calculate total number of items in cart
+	const cartItemCount = cart?.lines?.edges?.reduce((total, { node }) => {
+		return total + (node.quantity || 0)
+	}, 0) || 0
 
 	// header
 	const [targetRef, isIntersecting] = useIntersectionObserver()
@@ -34,6 +42,11 @@ const Header = ({ content, collectionsContent }) => {
 	const [activeSubmenu, setActiveSubmenu] = useState(null)
 	const [showCollections, setShowCollections] = useState(false)
 	const pathName = usePathname()
+
+	// Set mounted state after hydration
+	useEffect(() => {
+		setIsMounted(true)
+	}, [])
 
 	// Check if the current path is homepage, about or education
 	const isHomepage = pathName == '/' ? true : false
@@ -161,13 +174,36 @@ const Header = ({ content, collectionsContent }) => {
 							cursor={'pointer'}
 						/> */}
 
-							<FiShoppingBag
-								size={'1.2rem'}
-								stroke={transparentMenu ? 'white' : 'black'}
-								strokeWidth={1}
+							<Box
+								position='relative'
+								sx={{ cursor: 'pointer' }}
 								onClick={() => setShowCart(true)}
-								cursor={'pointer'}
-							/>
+							>
+								<FiShoppingBag
+									size={'1.2rem'}
+									stroke={transparentMenu ? 'white' : 'black'}
+									strokeWidth={1}
+								/>
+								{isMounted && cartItemCount > 0 && (
+									<Box
+										sx={{
+											position: 'absolute',
+											top: '-8px',
+											right: '-8px',
+											backgroundColor: '#dc2626',
+											color: 'white',
+											borderRadius: '50%',
+											width: '18px',
+											height: '18px',
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+										}}
+									>
+										<Typography color='white' sx={{ fontSize: '10px', fontWeight: '600', width: "100%", textAlign: "center" }}>{cartItemCount > 99 ? '99+' : cartItemCount}</Typography>
+									</Box>
+								)}
+							</Box>
 						</Box>
 					</Box>
 
