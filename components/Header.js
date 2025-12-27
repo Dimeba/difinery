@@ -58,8 +58,13 @@ const Header = ({ content, collectionsContent }) => {
 
 	const isTransparent = isHomepage || isAbout || isEducation || isBlankCanvas || isRecycledGold || isLabGrown ? true : false
 
+	// Initialize isIntersecting as true for transparent pages to avoid flash
+	// This assumes the page starts at the top, which is usually the case
+	const [initialIntersecting] = useState(isTransparent)
+	const effectiveIntersecting = isMounted ? isIntersecting : initialIntersecting
+
 	const transparentMenu =
-		isTransparent && isIntersecting && !showSubmenu && !openMenu
+		isTransparent && effectiveIntersecting && !showSubmenu && !openMenu
 
 	// Submenu Items
 	const categories = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
@@ -81,8 +86,10 @@ const Header = ({ content, collectionsContent }) => {
 				setShowSubmenu(false)
 			}}
 		>
-			<Box ref={targetRef}>
+			<Box ref={targetRef} suppressHydrationWarning>
 				<Box
+					suppressHydrationWarning
+					className={isTransparent && !isMounted ? styles.initialTransparent : ''}
 					sx={{
 						position: 'fixed',
 						top: 0,
@@ -90,12 +97,14 @@ const Header = ({ content, collectionsContent }) => {
 						width: '100%',
 						backgroundColor: transparentMenu ? 'transparent' : 'white',
 						'& *': {
-							color: transparentMenu ? 'white' : ''
+							color: transparentMenu ? 'white' : '',
+							transition: 'color 0.2s ease'
 						},
 						filter:
-							!isIntersecting || showSubmenu
+							!effectiveIntersecting || showSubmenu
 								? 'drop-shadow(0 0.25rem 2rem rgba(0, 0, 0, 0.1))'
-								: 'none'
+								: 'none',
+						transition: 'background-color 0.2s ease, filter 0.2s ease'
 					}}
 					onMouseLeave={() => setShowSubmenu(false)}
 					onWheel={() => {
@@ -115,7 +124,7 @@ const Header = ({ content, collectionsContent }) => {
 						padding='2rem 0'
 						position='relative'
 					>
-						{isIntersecting && isScreenWide ? (
+						{effectiveIntersecting && isScreenWide ? (
 							<Link
 								href={
 									'/' +
@@ -163,6 +172,7 @@ const Header = ({ content, collectionsContent }) => {
 								width={150}
 								height={150 / 7.5}
 								style={{ objectFit: 'contain', objectPosition: 'center' }}
+								suppressHydrationWarning
 							/>
 						</Link>
 
@@ -208,7 +218,7 @@ const Header = ({ content, collectionsContent }) => {
 					</Box>
 
 					{/* Main Menu */}
-					{((isIntersecting && isScreenWide) || openMenu) && (
+					{((effectiveIntersecting && isScreenWide) || openMenu) && (
 						<nav className={`container ${styles.headerBot}`}>
 							{/* Shop Page */}
 							<Link

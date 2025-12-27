@@ -16,6 +16,14 @@
 	}
 }
 
+.initialTransparent {
+	background-color: transparent !important;
+
+	* {
+		color: white !important;
+	}
+}
+
 .dropShadow {
 	filter: drop-shadow(0 0.25rem 2rem rgba(black, 0.1));
 }
