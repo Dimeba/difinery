@@ -41,6 +41,12 @@ const ProductOptionAccordion = ({
 		(product.handle || '').toLowerCase().includes('single') ||
 		(product.title || '').toLowerCase().includes('single')
 	const isSideDiamond = !!product?.tags?.includes('SideDiamond')
+	
+	// Check if this is a Size option for Rings/Necklaces/Bracelets
+	const isSizeCategory = product?.category?.name && 
+		['Rings', 'Necklaces', 'Bracelets'].includes(product.category.name)
+	const isSizeOption = option?.name && option.name.toLowerCase().includes('size')
+	const shouldKeepSizeOpen = isSizeCategory && isSizeOption
 
 	const collectionHandleFromUrl = useMemo(() => {
 		if (typeof window === 'undefined') return null
@@ -692,17 +698,23 @@ const ProductOptionAccordion = ({
 				isGiftCard ||
 				product.tags.includes('CustomShape') ||
 				product.tags.includes('Stackable Rings') ||
+				shouldKeepSizeOpen ||
 				(isCustomShape ? true : index === openOption)
 			}
-			setOpenOption={() =>
-				setOpenOption(
-					isCustomShape ||
-						product.tags.includes('CustomShape') ||
-						product.tags.includes('Stackable Rings')
-						? 0
-						: index
-				)
-			}
+			setOpenOption={() => {
+				if (shouldKeepSizeOpen) {
+					// Keep Size accordion open at its index
+					setOpenOption(index)
+				} else {
+					setOpenOption(
+						isCustomShape ||
+							product.tags.includes('CustomShape') ||
+							product.tags.includes('Stackable Rings')
+							? 0
+							: index
+					)
+				}
+			}}
 			product
 			display
 			showHelp={

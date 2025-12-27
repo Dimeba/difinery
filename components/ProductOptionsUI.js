@@ -11,7 +11,7 @@ import CustomBox from './CustomBox'
 import ProductOptionAccordion from './ProductOptionAccordion'
 
 // hooks
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
 
 // helpers
@@ -41,11 +41,40 @@ const ProductOptionsUI = ({
 	handleAddToCart
 }) => {
 	const isMobile = useMediaQuery('(max-width: 1024px)')
-	const [openOption, setOpenOption] = useState(selectedColor ? 1 : 0)
+	
+	// Check if product is Rings, Necklaces, or Bracelets
+	const isSizeCategory = product?.category?.name && 
+		['Rings', 'Necklaces', 'Bracelets'].includes(product.category.name)
+	
+	// Find Size option (case-insensitive check)
+	const sizeOption = product?.options?.find(
+		o => (o?.name || '').toLowerCase().includes('size')
+	)
+	
+	const [openOption, setOpenOption] = useState(() => {
+		// If Size option exists for Rings/Necklaces/Bracelets, open that accordion
+		if (isSizeCategory && sizeOption) {
+			const metalOption = product?.options?.find(
+				o => (o?.name || '').toLowerCase() === 'metal'
+			)
+			// Size option index: 0 if no Metal, 1 if Metal exists
+			return metalOption ? 1 : 0
+		}
+		return selectedColor ? 1 : 0
+	})
+	
+	// Separate state for Engraving and Custom Box accordions (always closed by default)
+	const [isEngravingOpen, setIsEngravingOpen] = useState(false)
+	const [isCustomBoxOpen, setIsCustomBoxOpen] = useState(false)
+	
 	const [selectedOptions, setSelectedOptions] = useState(() => {
 		const initialOptions = {}
 		if (selectedColor) {
 			initialOptions['Metal'] = selectedColor
+		}
+		// Auto-select first Size option value for Rings/Necklaces/Bracelets
+		if (isSizeCategory && sizeOption && sizeOption.optionValues?.length > 0) {
+			initialOptions[sizeOption.name] = sizeOption.optionValues[0].name
 		}
 		return initialOptions
 	})
@@ -163,6 +192,31 @@ const ProductOptionsUI = ({
 		}
 	}, [getMatchingVariant, selectedColor, selectedOptions])
 
+	// Track if Size option has been auto-selected
+	const sizeAutoSelectedRef = useRef(false)
+	
+	// Auto-select first Size option for Rings/Necklaces/Bracelets on mount
+	useEffect(() => {
+		if (sizeAutoSelectedRef.current) return
+		
+		if (isSizeCategory && sizeOption && sizeOption.optionValues?.length > 0) {
+			const sizeOptionName = sizeOption.name
+			const firstSizeValue = sizeOption.optionValues[0].name
+			
+			// Only auto-select if not already selected
+			if (selectedOptions[sizeOptionName] !== firstSizeValue) {
+				const newSelected = { ...selectedOptions, [sizeOptionName]: firstSizeValue }
+				setSelectedOptions(newSelected)
+				// Try to match variant with the new selection
+				getMatchingVariant(newSelected)
+			} else {
+				// If already selected (from initial state), ensure variant is matched
+				getMatchingVariant(selectedOptions)
+			}
+			sizeAutoSelectedRef.current = true
+		}
+	}, [isSizeCategory, sizeOption, selectedOptions, getMatchingVariant])
+
 	const metalOption = product?.options?.find(
 		o => (o?.name || '').toLowerCase() === 'metal'
 	)
@@ -246,9 +300,10 @@ const ProductOptionsUI = ({
 					/* Engraving */
 					<Accordion
 						// small
-						title='Engraving'
+						title='Complimentary Engraving'
 						extraTitleText={engraving ? `"${engraving}"` : null}
-						state={openOption === product.options.length}
+						state={isEngravingOpen}
+						setOpenOption={() => setIsEngravingOpen(!isEngravingOpen)}
 						product
 						display
 					>
@@ -267,7 +322,8 @@ const ProductOptionsUI = ({
 						// small
 						title='Customize Your Canvas Box'
 						extraTitleText={boxText ? `"${boxText}"` : null}
-						state={openOption === product.options.length}
+						state={isCustomBoxOpen}
+						setOpenOption={() => setIsCustomBoxOpen(!isCustomBoxOpen)}
 						product
 						display
 					>
@@ -291,7 +347,7 @@ const ProductOptionsUI = ({
 					style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
 				>
 					<button className={styles.cartButton} disabled={!allOptionsSelected}>
-						REVIEW YOUR ORDER
+					Review & Add to Cart
 					</button>
 				</a>
 			) : (
