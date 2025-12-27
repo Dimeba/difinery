@@ -123,43 +123,46 @@ const Header = ({ content, collectionsContent }) => {
 						justifyContent='space-between'
 						padding='2rem 0'
 						position='relative'
+						suppressHydrationWarning
 					>
-						{effectiveIntersecting && isScreenWide ? (
-							<Link
-								href={
-									'/' +
-									content.supportPage.fields.title
-										.replace(/ /g, '-')
-										.toLowerCase()
-								}
-								aria-label={`Link to Customer Service page.`}
-							>
-								<Typography
-									variant='p'
-									sx={{
-										fontSize: '0.7rem',
-										textTransform: 'uppercase',
-										letterSpacing: '0.2em'
-									}}
+						<Box suppressHydrationWarning>
+							{effectiveIntersecting && isScreenWide ? (
+								<Link
+									href={
+										'/' +
+										content.supportPage.fields.title
+											.replace(/ /g, '-')
+											.toLowerCase()
+									}
+									aria-label={`Link to Customer Service page.`}
 								>
-									{content.supportPage.fields.title}
-								</Typography>
-							</Link>
-						) : (
-							<Box
-								className={styles.hamburger}
-								onClick={() => setShowSubmenu(false)}
-							>
-								<Box>
-									<Hamburger
-										color={transparentMenu ? 'white' : 'black'}
-										size={20}
-										toggled={openMenu}
-										toggle={setOpenMenu}
-									/>
+									<Typography
+										variant='p'
+										sx={{
+											fontSize: '0.7rem',
+											textTransform: 'uppercase',
+											letterSpacing: '0.2em'
+										}}
+									>
+										{content.supportPage.fields.title}
+									</Typography>
+								</Link>
+							) : (
+								<Box
+									className={styles.hamburger}
+									onClick={() => setShowSubmenu(false)}
+								>
+									<Box>
+										<Hamburger
+											color={transparentMenu ? 'white' : 'black'}
+											size={20}
+											toggled={openMenu}
+											toggle={setOpenMenu}
+										/>
+									</Box>
 								</Box>
-							</Box>
-						)}
+							)}
+						</Box>
 
 						<Link
 							href='/'
@@ -218,7 +221,8 @@ const Header = ({ content, collectionsContent }) => {
 					</Box>
 
 					{/* Main Menu */}
-					{((effectiveIntersecting && isScreenWide) || openMenu) && (
+					<Box suppressHydrationWarning>
+						{((effectiveIntersecting && isScreenWide) || openMenu) && (
 						<nav className={`container ${styles.headerBot}`}>
 							{/* Shop Page */}
 							<Link
@@ -324,7 +328,8 @@ const Header = ({ content, collectionsContent }) => {
 
 							</Link>
 						</nav>
-					)}
+						)}
+					</Box>
 
 					{/* Submenu */}
 					{content.showDropdownMenu && showSubmenu && (
