@@ -4,11 +4,18 @@ import styles from './Cart.module.scss'
 // components
 import Image from 'next/image'
 import { MdDeleteForever } from 'react-icons/md'
+import { FiMinus, FiPlus } from 'react-icons/fi'
 
 // analytics
 import { trackRemoveFromCart } from '@/lib/gaEvents'
 
-const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
+const CartItem = ({
+	node,
+	removeAllrelatedItems,
+	removeFromCart,
+	handleIncrease,
+	handleDecrease
+}) => {
 	// Guard against undefined node or merchandise
 	if (!node) return null
 	const { id: lineId, quantity } = node
@@ -66,21 +73,41 @@ const CartItem = ({ node, removeAllrelatedItems, removeFromCart }) => {
 
 			{imageUrl && title !== 'Engraving' && title !== 'Custom Box' && (
 				<div className={styles.itemImage}>
-					<Image
-						src={imageUrl}
-						alt={imageAlt}
-						fill
-						style={{
-							objectFit: title === 'Difinery Gift Card' ? 'cover' : 'contain'
-						}}
-					/>
-
-					<div className={styles.removeIcon}>
-						<MdDeleteForever
-							size='1rem'
-							onClick={() => handleRemove(lineId, title)}
-							cursor='pointer'
+					<div className={styles.imageWrapper}>
+						<Image
+							src={imageUrl}
+							alt={imageAlt}
+							fill
+							style={{
+								objectFit: title === 'Difinery Gift Card' ? 'cover' : 'contain'
+							}}
 						/>
+
+						<div className={styles.removeIcon}>
+							<MdDeleteForever
+								size='1rem'
+								onClick={() => handleRemove(lineId, title)}
+								cursor='pointer'
+							/>
+						</div>
+					</div>
+
+					<div className={styles.itemQuantity}>
+						<button
+							onClick={() => handleDecrease(lineId, quantity)}
+							className={styles.quantityButton}
+							aria-label='Decrease quantity'
+						>
+							<FiMinus size='1rem' />
+						</button>
+						<span className={styles.quantityValue}>{quantity}</span>
+						<button
+							onClick={() => handleIncrease(lineId, quantity)}
+							className={styles.quantityButton}
+							aria-label='Increase quantity'
+						>
+							<FiPlus size='1rem' />
+						</button>
 					</div>
 				</div>
 			)}

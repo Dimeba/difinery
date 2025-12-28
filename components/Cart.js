@@ -107,6 +107,8 @@ const Cart = () => {
 							key={node.id}
 							removeAllrelatedItems={removeAllrelatedItems}
 							removeFromCart={removeFromCart}
+							handleIncrease={handleIncrease}
+							handleDecrease={handleDecrease}
 						/>
 					))}
 				</div>

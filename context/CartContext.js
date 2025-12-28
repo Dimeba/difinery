@@ -134,11 +134,59 @@ export const CartProvider = ({ children }) => {
 		restoreCartFromStorage()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-	const addToCart = useCallback(
-		async (variantId, quantity, attributes = []) => {
-			if (!cart) await createCart()
+	const updateQuantity = useCallback(
+		async (lineItemId, quantity) => {
+			if (!cart) return
 			const variables = {
 				cartId: cart.id,
+				lines: [{ id: lineItemId, quantity }]
+			}
+			const { data } = await updateProduct({ variables })
+			if (data.cartLinesUpdate.userErrors.length) {
+				throw new Error(
+					data.cartLinesUpdate.userErrors.map(e => e.message).join(', ')
+				)
+			}
+			setCart(data.cartLinesUpdate.cart)
+			return data.cartLinesUpdate.cart
+		},
+		[cart, updateProduct]
+	)
+
+	const addToCart = useCallback(
+		async (variantId, quantity, attributes = []) => {
+			let currentCart = cart
+			if (!currentCart) {
+				currentCart = await createCart()
+			}
+			
+			// Check if item with same variant and attributes already exists
+			const existingLine = currentCart?.lines?.edges?.find(({ node }) => {
+				const sameVariant = node.merchandise?.id === variantId
+				if (!sameVariant) return false
+				
+				// Compare attributes - they must match exactly
+				const nodeAttrs = node.attributes || []
+				if (nodeAttrs.length !== attributes.length) return false
+				
+				const attrsMatch = attributes.every(attr => 
+					nodeAttrs.some(na => na.key === attr.key && na.value === attr.value)
+				) && nodeAttrs.every(na => 
+					attributes.some(attr => attr.key === na.key && attr.value === na.value)
+				)
+				
+				return attrsMatch
+			})
+			
+			// If item exists, update quantity instead of adding new line
+			if (existingLine) {
+				const newQuantity = existingLine.node.quantity + quantity
+				return await updateQuantity(existingLine.node.id, newQuantity)
+			}
+			
+			// Otherwise, add new line item
+			const variables = {
+				cartId: currentCart.id,
 				lines: [{ merchandiseId: variantId, quantity, attributes }]
 			}
 			const { data } = await addProduct({ variables })
@@ -150,7 +198,7 @@ export const CartProvider = ({ children }) => {
 			setCart(data.cartLinesAdd.cart)
 			return data.cartLinesAdd.cart
 		},
-		[cart, createCart, addProduct]
+		[cart, createCart, addProduct, updateQuantity]
 	)
 
 	const removeFromCart = useCallback(
@@ -172,25 +220,6 @@ export const CartProvider = ({ children }) => {
 			return updatedCart
 		},
 		[cart, removeProduct]
-	)
-
-	const updateQuantity = useCallback(
-		async (lineItemId, quantity) => {
-			if (!cart) return
-			const variables = {
-				cartId: cart.id,
-				lines: [{ id: lineItemId, quantity }]
-			}
-			const { data } = await updateProduct({ variables })
-			if (data.cartLinesUpdate.userErrors.length) {
-				throw new Error(
-					data.cartLinesUpdate.userErrors.map(e => e.message).join(', ')
-				)
-			}
-			setCart(data.cartLinesUpdate.cart)
-			return data.cartLinesUpdate.cart
-		},
-		[cart, updateProduct]
 	)
 
 	return (
