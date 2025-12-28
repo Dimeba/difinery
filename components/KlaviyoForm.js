@@ -174,16 +174,16 @@ const KlaviyoForm = ({
 							{submitText}
 						</Button>
 
-						{customButton && customButton.onClick && (
+						{customButton && (customButton.onClick || customButton.link) && (
 							<Button
 								type='button'
-								onClick={customButton.onClick}
+								onClick={customButton.onClick || (customButton.link ? () => window.open(customButton.link, '_blank') : undefined)}
 								disabled={isSubmitting}
 								sx={{
 									width: 'fit-content',
-									backgroundColor: 'transparent',
-									color: textColor,
-									border: `1px solid ${textColor}`,
+									backgroundColor: customButton.black ? '#000000' : 'transparent',
+									color: customButton.black ? '#ffffff' : textColor,
+									border: `1px solid ${customButton.black ? '#000000' : textColor}`,
 									padding: '0.6rem 1rem',
 									fontSize: '12px',
 									fontWeight: 500,
@@ -192,8 +192,8 @@ const KlaviyoForm = ({
 									borderRadius: 0,
 									transition: '0.3s',
 									'&:hover': {
-										backgroundColor: textColor,
-										color: contentColor === '#000000' ? '#ffffff' : '#000000'
+										backgroundColor: customButton.black ? '#000000' : textColor,
+										color: customButton.black ? '#ffffff' : (isWhite ? '#000000' : '#ffffff')
 									}
 								}}
 							>

@@ -94,6 +94,11 @@ const SpecialRequestBanner = () => {
 								columns={2}
 								isWhite={true}
 								listName='special-requests'
+								customButton={{
+									text: 'Book a meeting',
+									link: 'https://cal.com/difinery-admin-ef3jr7/30min?user=difinery-admin-ef3jr7&overlayCalendar=true',
+									black: true
+								}}
 							/>
 						</Box>
 					</Grid>
