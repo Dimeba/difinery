@@ -67,14 +67,51 @@ const ProductOptionsUI = ({
 	const [isEngravingOpen, setIsEngravingOpen] = useState(false)
 	const [isCustomBoxOpen, setIsCustomBoxOpen] = useState(false)
 	
+	// Helper function to find default size based on category
+	const getDefaultSize = useCallback((categoryName, sizeValues) => {
+		if (!sizeValues || sizeValues.length === 0) return null
+		
+		// Define standard sizes for each category
+		const standardSizes = {
+			'Rings': 6,
+			'Bracelets': 7,
+			'Necklaces': 16
+		}
+		
+		const targetSize = standardSizes[categoryName]
+		if (!targetSize) return sizeValues[0].name // Fallback to first if category not found
+		
+		// Try to find exact match first
+		const exactMatch = sizeValues.find(v => {
+			const sizeNum = parseFloat(v.name)
+			return !isNaN(sizeNum) && sizeNum === targetSize
+		})
+		if (exactMatch) return exactMatch.name
+		
+		// Find first closest larger number
+		const sortedSizes = sizeValues
+			.map(v => ({ name: v.name, num: parseFloat(v.name) }))
+			.filter(v => !isNaN(v.num))
+			.sort((a, b) => a.num - b.num)
+		
+		const closestLarger = sortedSizes.find(v => v.num >= targetSize)
+		if (closestLarger) return closestLarger.name
+		
+		// Fallback to largest available size
+		return sortedSizes[sortedSizes.length - 1]?.name || sizeValues[0].name
+	}, [])
+
 	const [selectedOptions, setSelectedOptions] = useState(() => {
 		const initialOptions = {}
 		if (selectedColor) {
 			initialOptions['Metal'] = selectedColor
 		}
-		// Auto-select first Size option value for Rings/Necklaces/Bracelets
+		// Auto-select default Size option value for Rings/Necklaces/Bracelets
 		if (isSizeCategory && sizeOption && sizeOption.optionValues?.length > 0) {
-			initialOptions[sizeOption.name] = sizeOption.optionValues[0].name
+			const defaultSize = getDefaultSize(product.category.name, sizeOption.optionValues)
+			if (defaultSize) {
+				initialOptions[sizeOption.name] = defaultSize
+			}
 		}
 		return initialOptions
 	})
@@ -195,17 +232,17 @@ const ProductOptionsUI = ({
 	// Track if Size option has been auto-selected
 	const sizeAutoSelectedRef = useRef(false)
 	
-	// Auto-select first Size option for Rings/Necklaces/Bracelets on mount
+	// Auto-select default Size option for Rings/Necklaces/Bracelets on mount
 	useEffect(() => {
 		if (sizeAutoSelectedRef.current) return
 		
 		if (isSizeCategory && sizeOption && sizeOption.optionValues?.length > 0) {
 			const sizeOptionName = sizeOption.name
-			const firstSizeValue = sizeOption.optionValues[0].name
+			const defaultSize = getDefaultSize(product.category.name, sizeOption.optionValues)
 			
 			// Only auto-select if not already selected
-			if (selectedOptions[sizeOptionName] !== firstSizeValue) {
-				const newSelected = { ...selectedOptions, [sizeOptionName]: firstSizeValue }
+			if (defaultSize && selectedOptions[sizeOptionName] !== defaultSize) {
+				const newSelected = { ...selectedOptions, [sizeOptionName]: defaultSize }
 				setSelectedOptions(newSelected)
 				// Try to match variant with the new selection
 				getMatchingVariant(newSelected)
@@ -215,7 +252,7 @@ const ProductOptionsUI = ({
 			}
 			sizeAutoSelectedRef.current = true
 		}
-	}, [isSizeCategory, sizeOption, selectedOptions, getMatchingVariant])
+	}, [isSizeCategory, sizeOption, selectedOptions, getMatchingVariant, product.category.name, getDefaultSize])
 
 	const metalOption = product?.options?.find(
 		o => (o?.name || '').toLowerCase() === 'metal'
