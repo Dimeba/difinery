@@ -144,12 +144,13 @@ const Footer = ({ content }) => {
 							{
 								name: 'email',
 								type: 'email',
-								placeholder: 'Enter your email address'
+								placeholder: 'Enter your email address',
+								required: true
 							}
 						]}
 						submitText='Subscribe'
 						columns={1}
-						contentColor='#000000'
+						isWhite={false}
 						listName='subscribers'
 					/>
 				</Accordion>

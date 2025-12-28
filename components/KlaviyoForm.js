@@ -8,7 +8,7 @@ const KlaviyoForm = ({
 	submitText = 'Submit',
 	customButton,
 	columns = 1,
-	contentColor = '#000000',
+	isWhite = false,
 	listName = 'default'
 }) => {
 	const [formData, setFormData] = useState({})
@@ -24,6 +24,18 @@ const KlaviyoForm = ({
 
 	const handleSubmit = async e => {
 		e.preventDefault()
+
+		// Validate required fields
+		const missingRequiredFields = fields.filter((field, index) => {
+			const fieldName = field.name || `field-${index}`
+			return field.required === true && !formData[fieldName]?.trim()
+		})
+
+		if (missingRequiredFields.length > 0) {
+			setSubmitStatus('error')
+			return
+		}
+
 		setIsSubmitting(true)
 		setSubmitStatus(null)
 
@@ -45,7 +57,12 @@ const KlaviyoForm = ({
 				setSubmitStatus('success')
 				setFormData({})
 			} else {
-				setSubmitStatus('error')
+				// Check for specific error types
+				if (result.errorType === 'phone') {
+					setSubmitStatus('phone_error')
+				} else {
+					setSubmitStatus('error')
+				}
 			}
 		} catch (error) {
 			setSubmitStatus('error')
@@ -60,8 +77,14 @@ const KlaviyoForm = ({
 		return { xs: 12 / columns }
 	}
 
-	const borderColor = `${contentColor}42` // Add opacity
-	const textColor = contentColor
+	// Set colors based on isWhite prop
+	const textColor = isWhite ? '#ffffff' : '#000000'
+	const placeholderColor = isWhite
+		? 'rgba(255, 255, 255, 0.8)'
+		: 'rgba(0, 0, 0, 0.5)'
+	const borderColor = isWhite
+		? 'rgba(255, 255, 255, 0.8)'
+		: 'rgba(0, 0, 0, 0.42)'
 
 	return (
 		<form
@@ -85,15 +108,16 @@ const KlaviyoForm = ({
 							onChange={handleChange(field.name || `field-${index}`)}
 							variant='standard'
 							fullWidth
+							required={field.required === true}
 							sx={{
 								'& .MuiInputBase-input': {
 									fontSize: '12px',
-									color: '#000000',
+									color: textColor,
 									padding: '0.5rem 0'
 								},
 								'& .MuiInputBase-input::placeholder': {
 									fontSize: '12px',
-									color: 'rgba(0, 0, 0, 0.5)',
+									color: placeholderColor,
 									opacity: 1
 								},
 								'& .MuiInputLabel-root': {
@@ -139,7 +163,7 @@ const KlaviyoForm = ({
 								transition: '0.3s',
 								'&:hover': {
 									backgroundColor: textColor,
-									color: contentColor === '#000000' ? '#ffffff' : '#000000'
+									color: isWhite ? '#000000' : '#ffffff'
 								},
 								'&:disabled': {
 									opacity: 0.5,
@@ -181,6 +205,13 @@ const KlaviyoForm = ({
 					{submitStatus === 'success' && (
 						<Typography variant='p' sx={{ color: textColor, fontSize: '12px' }}>
 							Thank you! Your submission was successful.
+						</Typography>
+					)}
+
+					{submitStatus === 'phone_error' && (
+						<Typography variant='p' sx={{ color: '#d32f2f', fontSize: '12px' }}>
+							Invalid phone number format. Please use a valid phone number
+							(e.g., +1234567890).
 						</Typography>
 					)}
 

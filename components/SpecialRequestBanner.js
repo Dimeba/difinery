@@ -3,6 +3,7 @@
 // components
 import { Box, Grid, Typography } from '@mui/material'
 import Image from 'next/image'
+import KlaviyoForm from './KlaviyoForm'
 
 // hooks
 import { usePathname } from 'next/navigation'
@@ -63,7 +64,37 @@ const SpecialRequestBanner = () => {
 							</Box>
 
 							{/* <SubscribeForm /> */}
-							<div className='klaviyo-form-STAuUB'></div>
+							<KlaviyoForm
+								fields={[
+									{
+										name: 'firstName',
+										type: 'text',
+										placeholder: 'First Name',
+										required: true
+									},
+									{
+										name: 'lastName',
+										type: 'text',
+										placeholder: 'Last Name',
+										required: true
+									},
+									{
+										name: 'email',
+										type: 'email',
+										placeholder: 'Email Address',
+										required: true
+									},
+									{
+										name: 'phoneNumber',
+										type: 'phone',
+										placeholder: 'Phone Number'
+									}
+								]}
+								submitText='Start Your Custom Request'
+								columns={2}
+								isWhite={true}
+								listName='special-requests'
+							/>
 						</Box>
 					</Grid>
 				</Grid>

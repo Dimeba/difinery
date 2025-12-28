@@ -2,7 +2,7 @@
 
 // components
 import { Box, Grid, Typography } from '@mui/material'
-import SubscribeForm from './SubscribeForm'
+import KlaviyoForm from './KlaviyoForm'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -64,7 +64,36 @@ const SubscribeSection = () => {
 							</Box>
 
 							{/* <SubscribeForm /> */}
-							<div className='klaviyo-form-RmsYWx'></div>
+							<KlaviyoForm
+								fields={[
+									{
+										name: 'fullName',
+										type: 'text',
+										placeholder: 'Full Name',
+										required: true
+									},
+									{
+										name: 'email',
+										type: 'email',
+										placeholder: 'Email Address',
+										required: true
+									},
+									{
+										name: 'dateOfBirth',
+										type: 'text',
+										placeholder: 'Date of Birth'
+									},
+									{
+										name: 'phoneNumber',
+										type: 'phone',
+										placeholder: 'Phone Number'
+									}
+								]}
+								submitText='Subscribe'
+								columns={2}
+								isWhite={true}
+								listName='blank-canvas'
+							/>
 
 							<Link href='/blank-canvas'>
 								<Typography
@@ -78,47 +107,6 @@ const SubscribeSection = () => {
 							</Link>
 						</Box>
 					</Grid>
-
-					{/* Image */}
-					{/* <Grid
-                size={{ xs: 12, lg: 6 }}
-                position='relative'
-                padding={{ xs: '4rem 0', lg: '6rem 0' }}
-				display='flex'
-				justifyContent={{ xs: 'center', lg: 'flex-start' }}
-                alignItems={ 'center' }
-            >
-				<Image
-					src='/subscribe-image.png'
-					alt='Description of image'
-					fill
-                    style={{ zIndex: -1, objectFit: 'cover' }}
-				/>
-
-				<Box height="100%" width="100%" position='absolute' sx={{backgroundColor: 'rgba(0,0,0,0.25)'}}></Box>
-
-                <Box
-					zIndex={2}
-                    maxWidth={1440 / 2}
-					width={{ xs: '90vw', lg: '45vw' }}
-					paddingLeft={{ xs: 0, lg: '4rem' }}
-					display='flex'
-					flexDirection='column'
-					gap='1rem'>
-                    {subscribeBullets.map((bullet, index) => (
-                        <Box key={index} display='flex' gap='0.5rem'>
-                            <Image
-                                src='/custom-bullet.svg'
-                                alt='Bullet point icon'
-                                width={12}
-                                height={12}
-                                style={{ marginTop: '7px' }}
-                            />
-                            <Typography variant='p' fontFamily={'Newsreader'} fontSize={"18px"}  sx={{textWrap: 'balance'}} color='white'>{bullet}</Typography>
-                        </Box>
-                    ))}
-                </Box>
-			</Grid> */}
 				</Grid>
 			</>
 		)
