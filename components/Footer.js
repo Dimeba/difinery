@@ -1,6 +1,6 @@
 // styles
 import styles from './Footer.module.scss'
-import SubscribeForm from './SubscribeForm'
+import KlaviyoForm from './KlaviyoForm'
 
 // components
 import Link from 'next/link'
@@ -139,7 +139,19 @@ const Footer = ({ content }) => {
 						and sustainability insights.
 					</p>
 					{/* <SubscribeForm isFooter /> */}
-					<div className='klaviyo-form-WFTGLX'></div>
+					<KlaviyoForm
+						fields={[
+							{
+								name: 'email',
+								type: 'email',
+								placeholder: 'Enter your email address'
+							}
+						]}
+						submitText='Subscribe'
+						columns={1}
+						contentColor='#000000'
+						listName='subscribers'
+					/>
 				</Accordion>
 			</div>
 
