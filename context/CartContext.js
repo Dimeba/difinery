@@ -22,6 +22,8 @@ const CartContext = createContext({
 	addToCart: async () => {},
 	removeFromCart: async () => {},
 	updateQuantity: async () => {},
+	getCartItemByProductHandle: () => null,
+	updateCartItem: async () => {},
 	showCart: false,
 	setShowCart: () => {}
 })
@@ -222,6 +224,33 @@ export const CartProvider = ({ children }) => {
 		[cart, removeProduct]
 	)
 
+	// Find cart item by product handle (returns first matching item)
+	const getCartItemByProductHandle = useCallback(
+		productHandle => {
+			if (!cart || !productHandle) return null
+			const cartItem = cart.lines?.edges?.find(({ node }) => {
+				const product = node.merchandise?.product
+				return product?.handle === productHandle
+			})
+			return cartItem ? cartItem.node : null
+		},
+		[cart]
+	)
+
+	// Update cart item: remove old and add new with updated variant/options
+	const updateCartItem = useCallback(
+		async (oldLineItemId, newVariantId, quantity, attributes = []) => {
+			if (!cart) return
+			
+			// Remove old item
+			await removeFromCart(oldLineItemId)
+			
+			// Add new item with updated options
+			return await addToCart(newVariantId, quantity, attributes)
+		},
+		[cart, removeFromCart, addToCart]
+	)
+
 	return (
 		<CartContext.Provider
 			value={{
@@ -232,6 +261,8 @@ export const CartProvider = ({ children }) => {
 				addToCart,
 				removeFromCart,
 				updateQuantity,
+				getCartItemByProductHandle,
+				updateCartItem,
 				loading: creating || adding || removing || updating,
 				error: createError || addError || removeError || updateError
 			}}

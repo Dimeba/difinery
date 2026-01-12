@@ -19,7 +19,7 @@ import { useCart } from '@/context/CartContext'
 import { trackViewItem, trackAddToCart } from '@/lib/gaEvents'
 
 const ProductInfo = ({ product, isGiftCard = false }) => {
-	const { cart, addToCart, showCart, setShowCart } = useCart()
+	const { cart, addToCart, showCart, setShowCart, getCartItemByProductHandle, updateCartItem } = useCart()
 
 	// Product can be temporarily undefined during navigation/loading.
 	const allImages = useMemo(() => {
@@ -60,6 +60,30 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const [boxVariant, setBoxVariant] = useState(null)
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 	const [selectedShape, setSelectedShape] = useState(null)
+	const [cartItem, setCartItem] = useState(null)
+
+	// Check if product is in cart
+	useEffect(() => {
+		if (product?.handle && cart) {
+			const item = getCartItemByProductHandle(product.handle)
+			setCartItem(item)
+			
+			if (item) {
+				// Load custom attributes (engraving, box text)
+				if (item.attributes) {
+					const engravingAttr = item.attributes.find(attr => attr.key === 'Engraving Text')
+					if (engravingAttr) {
+						setEngraving(engravingAttr.value)
+					}
+					
+					const boxAttr = item.attributes.find(attr => attr.key === 'Box Text')
+					if (boxAttr) {
+						setBoxText(boxAttr.value)
+					}
+				}
+			}
+		}
+	}, [product, cart, getCartItemByProductHandle])
 
 	// Track view_item event when product loads or variant changes
 	useEffect(() => {
@@ -343,6 +367,8 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 						setBoxVariant={setBoxVariant}
 						setShowOrderSummary={setShowOrderSummary}
 						handleAddToCart={handleAddToCart}
+						cartItem={cartItem}
+						updateCartItem={updateCartItem}
 					/>
 				)}
 			</div>

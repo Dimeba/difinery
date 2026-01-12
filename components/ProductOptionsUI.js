@@ -39,7 +39,9 @@ const ProductOptionsUI = ({
 	boxVariant,
 	setBoxVariant,
 	setShowOrderSummary,
-	handleAddToCart
+	handleAddToCart,
+	cartItem,
+	updateCartItem
 }) => {
 	const isMobile = useMediaQuery('(max-width: 1024px)')
 	const { setShowCart } = useCart()
@@ -117,7 +119,6 @@ const ProductOptionsUI = ({
 		}
 		return initialOptions
 	})
-	
 
 	// Find the Shopify variant node matching the selected options
 	const getMatchingVariant = useCallback(options => {
@@ -138,6 +139,33 @@ const ProductOptionsUI = ({
 			return false
 		}
 	}, [product, setMatchingVariant])
+
+	// Load options from cart item if product is in cart
+	useEffect(() => {
+		if (cartItem && cartItem.merchandise?.selectedOptions) {
+			const cartOptions = {}
+			cartItem.merchandise.selectedOptions.forEach(opt => {
+				cartOptions[opt.name] = opt.value
+			})
+			setSelectedOptions(cartOptions)
+			
+			// Update matching variant
+			getMatchingVariant(cartOptions)
+			
+			// Load custom attributes (engraving, box text)
+			if (cartItem.attributes) {
+				const engravingAttr = cartItem.attributes.find(attr => attr.key === 'Engraving Text')
+				if (engravingAttr) {
+					setEngraving(engravingAttr.value)
+				}
+				
+				const boxAttr = cartItem.attributes.find(attr => attr.key === 'Box Text')
+				if (boxAttr) {
+					setBoxText(boxAttr.value)
+				}
+			}
+		}
+	}, [cartItem, getMatchingVariant, setEngraving, setBoxText])
 
 	// User selects an option value
 	const handleOptionSelection = (optionName, value, index = null) => {
@@ -214,6 +242,42 @@ const ProductOptionsUI = ({
 
 	const allOptionsSelected =
 		Object.keys(selectedOptions).length === product.options.length && matchingVariant !== null
+
+	// Handle update cart
+	const handleUpdateCart = async () => {
+		if (!cartItem || !matchingVariant) return
+		
+		const customFields = []
+		if (engraving)
+			customFields.push({ key: 'Engraving Text', value: engraving })
+		if (boxText) customFields.push({ key: 'Box Text', value: boxText })
+
+		try {
+			// Update box if needed
+			if (boxText !== '') {
+				// Find existing box item
+				const boxLineItem = cartItem.attributes?.find(
+					attr => attr.key === 'product' && attr.value === product.title
+				)
+				// If box exists, we might need to handle it separately
+				// For now, just update the main item
+			}
+
+			await updateCartItem(
+				cartItem.id,
+				matchingVariant.id,
+				cartItem.quantity, // Keep same quantity
+				customFields.length ? customFields : []
+			)
+
+			// Show cart on mobile
+			if (isMobile) {
+				setShowCart(true)
+			}
+		} catch (err) {
+			console.error('Update cart mutation failed', err)
+		}
+	}
 
 	const details = product.descriptionHtml.replace(
 		/<p\s+id=(["'])description\1[^>]*>[\s\S]*?<\/p>/i,
@@ -377,31 +441,55 @@ const ProductOptionsUI = ({
 			</div>
 
 			{!isGiftCard ? (
-				isMobile ? (
-					<button
-						className={styles.cartButton}
-						disabled={!allOptionsSelected}
-						onClick={async () => {
-							await handleAddToCart()
-							setShowCart(true)
-						}}
-					>
-						Add to Cart
-					</button>
-				) : (
-					<a
-						href='#order-review'
-						onClick={() => {
-							setShowOrderSummary(true)
-							handleAddToCart()
-						}}
-						style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
-					>
-						<button className={styles.cartButton} disabled={!allOptionsSelected}>
-							Review & Add to Cart
-						</button>
-					</a>
-				)
+				<div className={styles.cartButtonsContainer}>
+					{isMobile ? (
+						<>
+							{cartItem && (
+								<button
+									className={styles.updateCartButton}
+									disabled={!allOptionsSelected}
+									onClick={handleUpdateCart}
+								>
+									Update Cart
+								</button>
+								)}
+							<button
+								className={styles.cartButton}
+								disabled={!allOptionsSelected}
+								onClick={async () => {
+									await handleAddToCart()
+									setShowCart(true)
+								}}
+							>
+								Add to Cart
+							</button>
+						</>
+					) : (
+						<>
+							{cartItem && (
+								<button
+									className={styles.updateCartButton}
+									disabled={!allOptionsSelected}
+									onClick={handleUpdateCart}
+								>
+									Update Cart
+								</button>
+								)}
+							<a
+								href='#order-review'
+								onClick={() => {
+									setShowOrderSummary(true)
+									handleAddToCart()
+								}}
+								style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
+							>
+								<button className={styles.cartButton} disabled={!allOptionsSelected}>
+									Review & Add to Cart
+								</button>
+							</a>
+						</>
+					)}
+				</div>
 			) : (
 				<>
 					<button

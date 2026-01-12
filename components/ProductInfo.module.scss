@@ -138,6 +138,13 @@
 	text-wrap: balance;
 }
 
+.cartButtonsContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	width: 100%;
+}
+
 .cartButton {
 	@extend .button;
 	background-color: black;
@@ -148,6 +155,7 @@
 	color: white;
 	font-size: 12px;
 	transition: ease-out 0.7s;
+	flex: 1;
 }
 
 .cartButton:hover {
@@ -156,7 +164,27 @@
 	background-position: bottom;
 }
 
-.cartButton:disabled {
+.updateCartButton {
+	@extend .button;
+	background-color: black;
+	background-image: url('/btn-background-white.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 0 -200%;
+	color: white;
+	font-size: 12px;
+	transition: ease-out 0.7s;
+	flex: 1;
+}
+
+.updateCartButton:hover {
+	background-color: transparent;
+	color: black;
+	background-position: bottom;
+}
+
+.cartButton:disabled,
+.updateCartButton:disabled {
 	background-color: transparent;
 	color: base.$gray;
 	border-color: base.$gray;
