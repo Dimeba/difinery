@@ -13,6 +13,7 @@ import ProductOptionAccordion from './ProductOptionAccordion'
 // hooks
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
+import { useCart } from '@/context/CartContext'
 
 // helpers
 import parse from 'html-react-parser'
@@ -41,6 +42,7 @@ const ProductOptionsUI = ({
 	handleAddToCart
 }) => {
 	const isMobile = useMediaQuery('(max-width: 1024px)')
+	const { setShowCart } = useCart()
 	
 	// Check if product is Rings, Necklaces, or Bracelets
 	const isSizeCategory = product?.category?.name && 
@@ -375,18 +377,31 @@ const ProductOptionsUI = ({
 			</div>
 
 			{!isGiftCard ? (
-				<a
-					href='#order-review'
-					onClick={() => {
-						setShowOrderSummary(true)
-						handleAddToCart()
-					}}
-					style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
-				>
-					<button className={styles.cartButton} disabled={!allOptionsSelected}>
-					Review & Add to Cart
+				isMobile ? (
+					<button
+						className={styles.cartButton}
+						disabled={!allOptionsSelected}
+						onClick={async () => {
+							await handleAddToCart()
+							setShowCart(true)
+						}}
+					>
+						Add to Cart
 					</button>
-				</a>
+				) : (
+					<a
+						href='#order-review'
+						onClick={() => {
+							setShowOrderSummary(true)
+							handleAddToCart()
+						}}
+						style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
+					>
+						<button className={styles.cartButton} disabled={!allOptionsSelected}>
+							Review & Add to Cart
+						</button>
+					</a>
+				)
 			) : (
 				<>
 					<button
