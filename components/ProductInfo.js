@@ -18,29 +18,38 @@ import { useCart } from '@/context/CartContext'
 const ProductInfo = ({ product, isGiftCard = false }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
-	const allImages = product.images.edges.map(edge => edge.node)
+	// Product can be temporarily undefined during navigation/loading.
+	const allImages = useMemo(() => {
+		return product?.images?.edges
+			? product.images.edges.map(edge => edge.node)
+			: []
+	}, [product?.images?.edges])
 
 	// Getting the default metal type
 	const searchParams = useSearchParams()
 	const gold = searchParams.get('gold')
 
 	const metalOptions = useMemo(() => {
-		const metal = product.options.find(opt => opt.name === 'Metal')
-		return metal ? metal.optionValues : []
-	}, [product.options])
+		const options = product?.options || []
+		const metal = options.find(opt => opt?.name === 'Metal')
+		return metal?.optionValues || []
+	}, [product?.options])
 
 	const initialColor = useMemo(() => {
 		const normalizedGold = gold ? gold.toLowerCase().replace(/-/g, ' ') : ''
-		return metalOptions.find(opt =>
-			opt.name.toLowerCase().includes(normalizedGold)
+		if (!normalizedGold) return null
+		return (
+			metalOptions.find(opt =>
+				(opt?.name || '').toLowerCase().includes(normalizedGold)
+			) || null
 		)
 	}, [metalOptions, gold])
 
 	const [matchingVariant, setMatchingVariant] = useState(
-		product.variants.edges[0].node
+		product?.variants?.edges?.[0]?.node || null
 	)
 	const [selectedColor, setSelectedColor] = useState(
-		gold ? initialColor.name : null
+		gold ? initialColor?.name || null : null
 	)
 	const [engraving, setEngraving] = useState('')
 	const [engravingVariant, setEngravingVariant] = useState(null)
@@ -48,6 +57,19 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const [boxVariant, setBoxVariant] = useState(null)
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 	const [selectedShape, setSelectedShape] = useState(null)
+
+	// Track view_item event when product loads or variant changes
+	useEffect(() => {
+		if (product && matchingVariant) {
+			trackViewItem(product, matchingVariant)
+		}
+	}, [product, matchingVariant])
+
+	useEffect(() => {
+		if (!matchingVariant && product?.variants?.edges?.[0]?.node) {
+			setMatchingVariant(product.variants.edges[0].node)
+		}
+	}, [product, matchingVariant])
 
 	const images = useMemo(() => {
 		const urlFilter = node => {
@@ -61,21 +83,35 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			let matchesColorOrStackable = true
 			if (selectedColor) {
 				const lc = selectedColor.toLowerCase()
-				const hasWhite = lc.includes('white')
-				const hasYellow = lc.includes('yellow')
 
-				// Determine the metal prefix
-				let metalPrefix = ''
-				if (hasWhite && hasYellow) {
-					metalPrefix = 'mr-' // mixed stackable
-				} else if (hasWhite) {
-					metalPrefix = 'w' // white gold
-				} else if (hasYellow) {
-					metalPrefix = 'y' // yellow gold
-				}
+				// Check if this is a stackable ring with color codes (e.g., "Stackable-YR")
+				if (lc.startsWith('stackable-')) {
+					const colorCodes = lc.replace('stackable-', '').toLowerCase()
 
-				if (metalPrefix) {
-					matchesColorOrStackable = filename.startsWith(metalPrefix)
+					// Match exact color code pattern only
+					const matches = url.includes(`stackable-${colorCodes}`)
+
+					matchesColorOrStackable = matches
+				} else {
+					const hasWhite = lc.includes('white')
+					const hasYellow = lc.includes('yellow')
+					const hasRose = lc.includes('rose')
+
+					// Determine the metal prefix
+					let metalPrefix = ''
+					if (hasWhite && hasYellow) {
+						metalPrefix = 'mr-' // mixed stackable
+					} else if (hasWhite) {
+						metalPrefix = 'w' // white gold
+					} else if (hasYellow) {
+						metalPrefix = 'y' // yellow gold
+					} else if (hasRose) {
+						metalPrefix = 'r' // rose gold
+					}
+
+					if (metalPrefix) {
+						matchesColorOrStackable = filename.startsWith(metalPrefix)
+					}
 				}
 			}
 
@@ -86,8 +122,8 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 				const shapeCode = sc.includes('heart')
 					? '-hr-'
 					: sc.includes('pear')
-					? '-pr-'
-					: ''
+						? '-pr-'
+						: ''
 				if (shapeCode) {
 					matchesShape = url.includes(shapeCode)
 				}
@@ -96,7 +132,48 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			return matchesColorOrStackable && matchesShape
 		}
 
-		return allImages.filter(urlFilter)
+		let filteredImages = allImages.filter(urlFilter)
+
+		// If stackable and no exact matches found, try reversed order
+		if (
+			filteredImages.length === 0 &&
+			selectedColor?.toLowerCase().startsWith('stackable-')
+		) {
+			const colorCodes = selectedColor.toLowerCase().replace('stackable-', '')
+			const reversedCodes = colorCodes.split('').reverse().join('')
+
+			const reversedFilter = node => {
+				const url = node.url.toLowerCase()
+				if (url.includes('-review')) return false
+
+				const matches = url.includes(`stackable-${reversedCodes}`)
+
+				// Shape matching
+				let matchesShape = true
+				if (selectedShape) {
+					const sc = selectedShape.toLowerCase()
+					const shapeCode = sc.includes('heart')
+						? '-hr-'
+						: sc.includes('pear')
+							? '-pr-'
+							: ''
+					if (shapeCode) {
+						matchesShape = url.includes(shapeCode)
+					}
+				}
+
+				return matches && matchesShape
+			}
+
+			filteredImages = allImages.filter(reversedFilter)
+		}
+
+		// Final fallback: never return an empty image list.
+		if (filteredImages.length === 0) {
+			return allImages
+		}
+
+		return filteredImages
 	}, [allImages, selectedColor, selectedShape])
 
 	const reviewImage = useMemo(() => {
@@ -107,6 +184,26 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		const isStackable = lc.includes('stackable')
 		const hasWhite = lc.includes('white')
 		const hasYellow = lc.includes('yellow')
+		const hasRose = lc.includes('rose')
+
+		// Stackable codes: prefer exact Review-Stackable-<codes> match
+		if (lc.startsWith('stackable-')) {
+			const codes = lc.replace('stackable-', '')
+			let img = allImages.find(node => {
+				const u = toLower(node)
+				return u.includes('-review') && u.includes(`review-stackable-${codes}`)
+			})
+			if (!img && codes.length === 2) {
+				const reversed = codes.split('').reverse().join('')
+				img = allImages.find(node => {
+					const u = toLower(node)
+					return (
+						u.includes('-review') && u.includes(`review-stackable-${reversed}`)
+					)
+				})
+			}
+			return img || null
+		}
 
 		// Determine the metal prefix
 		let metalPrefix = ''
@@ -116,14 +213,16 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			metalPrefix = 'wr-' // white gold
 		} else if (hasYellow) {
 			metalPrefix = 'yr-' // yellow gold
+		} else if (hasRose) {
+			metalPrefix = 'rr-' // rose gold
 		}
 
 		const shapeCode = selectedShape
 			? selectedShape.toLowerCase().includes('heart')
 				? '-hr-'
 				: selectedShape.toLowerCase().includes('pear')
-				? '-pr-'
-				: ''
+					? '-pr-'
+					: ''
 			: ''
 
 		return allImages.find(node => {
@@ -219,25 +318,27 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 					})}
 				</div>
 
-				<ProductOptionsUI
-					product={product}
-					isGiftCard={isGiftCard}
-					selectedColor={selectedColor}
-					setSelectedColor={setSelectedColor}
-					selectedShape={selectedShape}
-					setSelectedShape={setSelectedShape}
-					matchingVariant={matchingVariant}
-					setMatchingVariant={setMatchingVariant}
-					engraving={engraving}
-					setEngraving={setEngraving}
-					setEngravingVariant={setEngravingVariant}
-					boxText={boxText}
-					setBoxText={setBoxText}
-					boxVariant={boxVariant}
-					setBoxVariant={setBoxVariant}
-					setShowOrderSummary={setShowOrderSummary}
-					handleAddToCart={handleAddToCart}
-				/>
+				{product && (
+					<ProductOptionsUI
+						product={product}
+						isGiftCard={isGiftCard}
+						selectedColor={selectedColor}
+						setSelectedColor={setSelectedColor}
+						selectedShape={selectedShape}
+						setSelectedShape={setSelectedShape}
+						matchingVariant={matchingVariant}
+						setMatchingVariant={setMatchingVariant}
+						engraving={engraving}
+						setEngraving={setEngraving}
+						setEngravingVariant={setEngravingVariant}
+						boxText={boxText}
+						setBoxText={setBoxText}
+						boxVariant={boxVariant}
+						setBoxVariant={setBoxVariant}
+						setShowOrderSummary={setShowOrderSummary}
+						handleAddToCart={handleAddToCart}
+					/>
+				)}
 			</div>
 
 			{showOrderSummary && (

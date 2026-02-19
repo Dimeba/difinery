@@ -2,31 +2,31 @@
 
 // components
 import { Box, Grid, Typography } from '@mui/material'
-import KlaviyoForm from './KlaviyoForm'
 import Image from 'next/image'
-import Link from 'next/link'
+import KlaviyoForm from './KlaviyoForm'
 
 // hooks
 import { usePathname } from 'next/navigation'
 import { useMediaQuery } from '@mui/material'
 
-const SubscribeSection = () => {
+const SpecialRequestBanner = () => {
 	const pathName = usePathname()
 	const isMobile = useMediaQuery('(max-width: 1024px)')
 
 	return (
-		(pathName === '/' ||
-			pathName === '/our-story' ||
-			pathName === '/education') && (
+		(pathName === '/shop/collections/engagement-rings' ||
+			pathName.includes('engagement-ring')) && (
 			<>
 				<Grid
 					container
 					direction={{ xs: 'column-reverse', lg: 'row' }}
 					position='relative'
-					style={{ backgroundColor: 'rgba(0,0,0,0.25)' }}
+					sx={{ backgroundColor: 'rgba(0,0,0,0.25)' }}
+					minHeight={{ xs: 'auto', lg: '800px' }}
+					alignItems='center'
 				>
 					<Image
-						src='/sub-banner.jpg'
+						src='/sr-banner.jpg'
 						alt='Description of image'
 						fill
 						style={{
@@ -54,12 +54,12 @@ const SubscribeSection = () => {
 						>
 							<Box display='flex' flexDirection='column' gap='0.5rem'>
 								<Typography variant='h2' color='white'>
-									Join Our Blank Canvas Community
+									A Forever Piece Defined by You
 								</Typography>
 								<Typography variant='p' color='white'>
-									Stay in touch and become a part of the creative journey. We
-									respect your inbox. No spam. No discount games. Just timeless
-									jewelry with meaningful updates.
+									Share your details to schedule a personal consultation about
+									your ideal ring. Our design team will be in touch about your
+									custom request.
 								</Typography>
 							</Box>
 
@@ -67,9 +67,15 @@ const SubscribeSection = () => {
 							<KlaviyoForm
 								fields={[
 									{
-										name: 'fullName',
+										name: 'firstName',
 										type: 'text',
-										placeholder: 'Full Name',
+										placeholder: 'First Name',
+										required: true
+									},
+									{
+										name: 'lastName',
+										type: 'text',
+										placeholder: 'Last Name',
 										required: true
 									},
 									{
@@ -79,32 +85,21 @@ const SubscribeSection = () => {
 										required: true
 									},
 									{
-										name: 'dateOfBirth',
-										type: 'text',
-										placeholder: 'Date of Birth'
-									},
-									{
 										name: 'phoneNumber',
 										type: 'phone',
 										placeholder: 'Phone Number'
 									}
 								]}
-								submitText='Subscribe'
+								submitText='Start Your Custom Request'
 								columns={2}
 								isWhite={true}
-								listName='blank-canvas'
+								listName='special-requests'
+								customButton={{
+									text: 'Book a meeting',
+									link: 'https://cal.com/difinery-admin-ef3jr7/30min?user=difinery-admin-ef3jr7&overlayCalendar=true',
+									black: true
+								}}
 							/>
-
-							<Link href='/blank-canvas'>
-								<Typography
-									variant='p'
-									fontSize={10}
-									color='white'
-									style={{ textDecoration: 'underline' }}
-								>
-									Learn more about our Blank Canvas Community
-								</Typography>
-							</Link>
 						</Box>
 					</Grid>
 				</Grid>
@@ -113,4 +108,4 @@ const SubscribeSection = () => {
 	)
 }
 
-export default SubscribeSection
+export default SpecialRequestBanner

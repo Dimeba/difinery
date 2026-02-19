@@ -1,0 +1,73 @@
+# Global headers for all routes
+# X-Frame-Options: DENY
+# X-Content-Type-Options: nosniff
+# X-XSS-Protection: 1; mode=block
+# Referrer-Policy: strict-origin-when-cross-origin
+# Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# Cache static assets aggressively
+/shape-icons/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/_next/image*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache images
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache fonts
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.otf
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.eot
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache CSS and JS
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+  
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# API routes - short cache with stale-while-revalidate
+/api/*
+  Cache-Control: public, max-age=60, stale-while-revalidate=300
+
+# Product pages - cache with revalidation
+/shop/*
+  Cache-Control: public, max-age=300, stale-while-revalidate=600
+
+# Home and main pages - cache with revalidation
+/
+  Cache-Control: public, max-age=300, stale-while-revalidate=600

@@ -3,6 +3,7 @@ import ProductInfo from '@/components/ProductInfo'
 import ProductInfoSkeleton from '@/components/ProductInfoSkeleton'
 import FAQ from '@/components/FAQ'
 import Products from '@/components/Products'
+import SpecialRequestBanner from '@/components/SpecialRequestBanner'
 import { Suspense } from 'react'
 
 const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
@@ -29,6 +30,8 @@ const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
 				productDetails={product.description}
 				content={faqs.fields.rows}
 			/> */}
+
+			<SpecialRequestBanner />
 		</main>
 	)
 }

@@ -1,0 +1,10 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow API routes and admin paths
+Disallow: /api/
+Disallow: /admin/
+
+# Sitemap location
+Sitemap: https://difinery.com/sitemap.xml

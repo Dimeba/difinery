@@ -45,7 +45,8 @@ const Products = ({
 	onLoadMore = null, // Callback to load more products from API
 	canLoadMore = false, // Whether more products can be loaded
 	onSearch = null, // Callback when search is performed
-	isSearching = false // Whether search is currently loading
+	isSearching = false, // Whether search is currently loading
+	collectionHandle = null
 }) => {
 	// Stable base products list (empty singleton when undefined)
 	const productsList = products ?? EMPTY_PRODUCTS
@@ -85,7 +86,7 @@ const Products = ({
 		if (onSearch && searchTerm) {
 			onSearch(searchTerm)
 		}
-	}, [searchTerm])
+	}, [onSearch, searchTerm])
 
 	const loadMore = () => {
 		// If we have a callback to load more from API, use it
@@ -331,6 +332,7 @@ const Products = ({
 								gridColumn={{ xs: 'span 12', lg: 'span 6' }}
 								gridRow={'span 2'}
 								position='relative'
+								overflow='hidden'
 								sx={{
 									cursor: collectionPreview.mediaLink ? 'pointer' : 'default',
 									backgroundColor: '#f7f7f7'
@@ -344,16 +346,13 @@ const Products = ({
 								{collectionPreview.media.fields.file.contentType.includes(
 									'video'
 								) ? (
-									<Box
-										position='relative'
-										height='100%'
-										paddingTop={{ xs: '25%', lg: 0 }}
-									>
+									<Box position='relative' height='100%' width='100%'>
 										<Video
 											style={{
-												objectFit: 'contain !important',
-												minHeight: '100%',
-												minWidth: '100%'
+												objectFit: 'cover',
+												width: '100%',
+												height: '100%',
+												display: 'block'
 											}}
 											video={collectionPreview.media}
 											autoPlay
@@ -415,6 +414,7 @@ const Products = ({
 										selectedMetalType={selectedMetalType}
 										index={index}
 										listName={getListName()}
+										collectionHandle={collectionHandle}
 									/>
 								))}
 
@@ -430,6 +430,7 @@ const Products = ({
 									selectedMetalType={selectedMetalType}
 									index={index}
 									listName='Recommended Products'
+									collectionHandle={collectionHandle}
 									// individual={individual}
 								/>
 							))}

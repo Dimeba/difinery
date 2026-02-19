@@ -24,7 +24,15 @@ import submenus from '@/data/submenus.json' with { type: 'json' }
 
 const Header = ({ content, collectionsContent }) => {
 	// cart
-	const { setShowCart } = useCart()
+	const { setShowCart, cart } = useCart()
+	
+	// Track if component has mounted to prevent hydration mismatch
+	const [isMounted, setIsMounted] = useState(false)
+	
+	// Calculate total number of items in cart
+	const cartItemCount = cart?.lines?.edges?.reduce((total, { node }) => {
+		return total + (node.quantity || 0)
+	}, 0) || 0
 
 	// header
 	const [targetRef, isIntersecting] = useIntersectionObserver()
@@ -34,6 +42,11 @@ const Header = ({ content, collectionsContent }) => {
 	const [activeSubmenu, setActiveSubmenu] = useState(null)
 	const [showCollections, setShowCollections] = useState(false)
 	const pathName = usePathname()
+
+	// Set mounted state after hydration
+	useEffect(() => {
+		setIsMounted(true)
+	}, [])
 
 	// Check if the current path is homepage, about or education
 	const isHomepage = pathName == '/' ? true : false
@@ -45,8 +58,13 @@ const Header = ({ content, collectionsContent }) => {
 
 	const isTransparent = isHomepage || isAbout || isEducation || isBlankCanvas || isRecycledGold || isLabGrown ? true : false
 
+	// Initialize isIntersecting as true for transparent pages to avoid flash
+	// This assumes the page starts at the top, which is usually the case
+	const [initialIntersecting] = useState(isTransparent)
+	const effectiveIntersecting = isMounted ? isIntersecting : initialIntersecting
+
 	const transparentMenu =
-		isTransparent && isIntersecting && !showSubmenu && !openMenu
+		isTransparent && effectiveIntersecting && !showSubmenu && !openMenu
 
 	// Submenu Items
 	const categories = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
@@ -68,8 +86,10 @@ const Header = ({ content, collectionsContent }) => {
 				setShowSubmenu(false)
 			}}
 		>
-			<Box ref={targetRef}>
+			<Box ref={targetRef} suppressHydrationWarning>
 				<Box
+					suppressHydrationWarning
+					className={isTransparent && !isMounted ? styles.initialTransparent : ''}
 					sx={{
 						position: 'fixed',
 						top: 0,
@@ -77,12 +97,14 @@ const Header = ({ content, collectionsContent }) => {
 						width: '100%',
 						backgroundColor: transparentMenu ? 'transparent' : 'white',
 						'& *': {
-							color: transparentMenu ? 'white' : ''
+							color: transparentMenu ? 'white' : '',
+							transition: 'color 0.2s ease'
 						},
 						filter:
-							!isIntersecting || showSubmenu
+							!effectiveIntersecting || showSubmenu
 								? 'drop-shadow(0 0.25rem 2rem rgba(0, 0, 0, 0.1))'
-								: 'none'
+								: 'none',
+						transition: 'background-color 0.2s ease, filter 0.2s ease'
 					}}
 					onMouseLeave={() => setShowSubmenu(false)}
 					onWheel={() => {
@@ -101,43 +123,46 @@ const Header = ({ content, collectionsContent }) => {
 						justifyContent='space-between'
 						padding='2rem 0'
 						position='relative'
+						suppressHydrationWarning
 					>
-						{isIntersecting && isScreenWide ? (
-							<Link
-								href={
-									'/' +
-									content.supportPage.fields.title
-										.replace(/ /g, '-')
-										.toLowerCase()
-								}
-								aria-label={`Link to Customer Service page.`}
-							>
-								<Typography
-									variant='p'
-									sx={{
-										fontSize: '0.7rem',
-										textTransform: 'uppercase',
-										letterSpacing: '0.2em'
-									}}
+						<Box suppressHydrationWarning>
+							{effectiveIntersecting && isScreenWide ? (
+								<Link
+									href={
+										'/' +
+										content.supportPage.fields.title
+											.replace(/ /g, '-')
+											.toLowerCase()
+									}
+									aria-label={`Link to Customer Service page.`}
 								>
-									{content.supportPage.fields.title}
-								</Typography>
-							</Link>
-						) : (
-							<Box
-								className={styles.hamburger}
-								onClick={() => setShowSubmenu(false)}
-							>
-								<Box>
-									<Hamburger
-										color={transparentMenu ? 'white' : 'black'}
-										size={20}
-										toggled={openMenu}
-										toggle={setOpenMenu}
-									/>
+									<Typography
+										variant='p'
+										sx={{
+											fontSize: '0.7rem',
+											textTransform: 'uppercase',
+											letterSpacing: '0.2em'
+										}}
+									>
+										{content.supportPage.fields.title}
+									</Typography>
+								</Link>
+							) : (
+								<Box
+									className={styles.hamburger}
+									onClick={() => setShowSubmenu(false)}
+								>
+									<Box>
+										<Hamburger
+											color={transparentMenu ? 'white' : 'black'}
+											size={20}
+											toggled={openMenu}
+											toggle={setOpenMenu}
+										/>
+									</Box>
 								</Box>
-							</Box>
-						)}
+							)}
+						</Box>
 
 						<Link
 							href='/'
@@ -150,6 +175,7 @@ const Header = ({ content, collectionsContent }) => {
 								width={150}
 								height={150 / 7.5}
 								style={{ objectFit: 'contain', objectPosition: 'center' }}
+								suppressHydrationWarning
 							/>
 						</Link>
 
@@ -161,18 +187,42 @@ const Header = ({ content, collectionsContent }) => {
 							cursor={'pointer'}
 						/> */}
 
-							<FiShoppingBag
-								size={'1.2rem'}
-								stroke={transparentMenu ? 'white' : 'black'}
-								strokeWidth={1}
+							<Box
+								position='relative'
+								sx={{ cursor: 'pointer' }}
 								onClick={() => setShowCart(true)}
-								cursor={'pointer'}
-							/>
+							>
+								<FiShoppingBag
+									size={'1.2rem'}
+									stroke={transparentMenu ? 'white' : 'black'}
+									strokeWidth={1}
+								/>
+								{isMounted && cartItemCount > 0 && (
+									<Box
+										sx={{
+											position: 'absolute',
+											top: '-8px',
+											right: '-8px',
+											backgroundColor: '#dc2626',
+											color: 'white',
+											borderRadius: '50%',
+											width: '18px',
+											height: '18px',
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+										}}
+									>
+										<Typography color='white' sx={{ fontSize: '10px', fontWeight: '600', width: "100%", textAlign: "center" }}>{cartItemCount > 99 ? '99+' : cartItemCount}</Typography>
+									</Box>
+								)}
+							</Box>
 						</Box>
 					</Box>
 
 					{/* Main Menu */}
-					{((isIntersecting && isScreenWide) || openMenu) && (
+					<Box suppressHydrationWarning>
+						{((effectiveIntersecting && isScreenWide) || openMenu) && (
 						<nav className={`container ${styles.headerBot}`}>
 							{/* Shop Page */}
 							<Link
@@ -278,7 +328,8 @@ const Header = ({ content, collectionsContent }) => {
 
 							</Link>
 						</nav>
-					)}
+						)}
+					</Box>
 
 					{/* Submenu */}
 					{content.showDropdownMenu && showSubmenu && (

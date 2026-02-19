@@ -18,6 +18,7 @@ const ProductCard = ({
 	discount,
 	product,
 	individual,
+	collectionHandle,
 	selectedMetalType,
 	index = 0,
 	listName = 'Shop'
@@ -58,6 +59,7 @@ const ProductCard = ({
 
 	const [metalTypes, setMetalTypes] = useState(initialMetalTypes)
 	const [activeMetalType, setActiveMetalType] = useState(initialActiveType)
+
 	const [showCloseup, setShowCloseup] = useState(false)
 
 	const coverImages = useMemo(() => {
@@ -108,6 +110,18 @@ const ProductCard = ({
 		)
 	}, [closeupImages])
 
+	const roseGoldImage = useMemo(() => {
+		return coverImages.find(image =>
+			image.node.url.toLowerCase().includes('/files/r')
+		)
+	}, [coverImages])
+
+	const roseGoldImageCloseup = useMemo(() => {
+		return closeupImages.find(image =>
+			image.node.url.toLowerCase().includes('/files/r')
+		)
+	}, [closeupImages])
+
 	// Function to return the correct URL based on active metal type
 	const returnCorrectURL = () => {
 		// Strip '-collection' and everything after if present in permalink
@@ -139,15 +153,23 @@ const ProductCard = ({
 			return base
 		}
 
+		const query = {
+			gold: activeMetalType.toLocaleLowerCase().includes('yellow')
+				? 'yellow'
+				: activeMetalType.toLocaleLowerCase().includes('multi')
+				? 'yellow-and-white'
+				: activeMetalType.toLocaleLowerCase().includes('rose')
+				? 'rose'
+				: 'white'
+		}
+
+		if (collectionHandle) {
+			query.collection = collectionHandle
+		}
+
 		return {
 			pathname: `/shop/${product.category.name.toLowerCase()}/product/${permalink}`,
-			query: {
-				gold: activeMetalType.toLocaleLowerCase().includes('yellow')
-					? 'yellow'
-					: activeMetalType.toLocaleLowerCase().includes('multi')
-					? 'yellow-and-white'
-					: 'white'
-			}
+			query
 		}
 	}
 
@@ -349,6 +371,49 @@ const ProductCard = ({
 								}}
 								quality={100}
 								sizes='(max-width: 768px) 100vw, 50vw'
+							/>
+						)}
+
+						{/* Rose Gold */}
+						<Image
+							src={roseGoldImage?.node.url || coverImages[0]?.node.url}
+							fill
+							loading='lazy'
+							alt='Category Image.'
+							style={{
+								visibility: activeMetalType.includes('rose')
+									? 'visible'
+									: 'hidden',
+								opacity: !showCloseup || !roseGoldImageCloseup ? 1 : 0,
+								objectFit: 'contain',
+								objectPosition:
+									product.category.name.toLowerCase() === 'necklaces'
+										? 'top'
+										: 'center'
+							}}
+							quality={75}
+							sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
+						/>
+
+						{roseGoldImageCloseup && (
+							<Image
+								src={roseGoldImageCloseup.node.url}
+								fill
+								loading='lazy'
+								alt='Category Image.'
+								style={{
+									visibility: activeMetalType.includes('rose')
+										? 'visible'
+										: 'hidden',
+									opacity: showCloseup ? 1 : 0,
+									objectFit: 'contain',
+									objectPosition:
+										product.category.name.toLowerCase() === 'necklaces'
+											? 'top'
+											: 'center'
+								}}
+								quality={75}
+								sizes='(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
 							/>
 						)}
 

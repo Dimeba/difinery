@@ -8,7 +8,7 @@ import { Box, Grid, Typography } from '@mui/material'
 import Image from 'next/image'
 
 // hooks
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect } from 'react'
 
 // context
 import { useCart } from '@/context/CartContext'
@@ -63,7 +63,7 @@ const OrderReview = ({
 		}
 
 		loadOrClear()
-	}, [customOptions.engraving, customOptions.boxText])
+	}, [client, customOptions.boxText])
 
 	const match = product.descriptionHtml.match(
 		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i

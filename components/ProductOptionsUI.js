@@ -6,18 +6,17 @@ import styles from './ProductInfo.module.scss'
 // components
 import Image from 'next/image'
 import Accordion from './Accordion'
-import NeedHelpInfo from './NeedHelpInfo'
 import Engraving from './Engraving'
 import CustomBox from './CustomBox'
-import GiftCardInput from './GiftCardInput'
+import ProductOptionAccordion from './ProductOptionAccordion'
 
 // hooks
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
+import { useCart } from '@/context/CartContext'
 
 // helpers
 import parse from 'html-react-parser'
-import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
 
 // data
 import materialInfo from '@/data/materialInfo.json' with { type: 'json' }
@@ -29,7 +28,6 @@ const ProductOptionsUI = ({
 	isGiftCard = false,
 	selectedColor,
 	setSelectedColor,
-	selectedShape,
 	setSelectedShape,
 	matchingVariant,
 	setMatchingVariant,
@@ -44,17 +42,85 @@ const ProductOptionsUI = ({
 	handleAddToCart
 }) => {
 	const isMobile = useMediaQuery('(max-width: 1024px)')
-	const [openOption, setOpenOption] = useState(selectedColor ? 1 : 0)
+	const { setShowCart } = useCart()
+	
+	// Check if product is Rings, Necklaces, or Bracelets
+	const isSizeCategory = product?.category?.name && 
+		['Rings', 'Necklaces', 'Bracelets'].includes(product.category.name)
+	
+	// Find Size option (case-insensitive check)
+	const sizeOption = product?.options?.find(
+		o => (o?.name || '').toLowerCase().includes('size')
+	)
+	
+	const [openOption, setOpenOption] = useState(() => {
+		// If Size option exists for Rings/Necklaces/Bracelets, open that accordion
+		if (isSizeCategory && sizeOption) {
+			const metalOption = product?.options?.find(
+				o => (o?.name || '').toLowerCase() === 'metal'
+			)
+			// Size option index: 0 if no Metal, 1 if Metal exists
+			return metalOption ? 1 : 0
+		}
+		return selectedColor ? 1 : 0
+	})
+	
+	// Separate state for Engraving and Custom Box accordions (always closed by default)
+	const [isEngravingOpen, setIsEngravingOpen] = useState(false)
+	const [isCustomBoxOpen, setIsCustomBoxOpen] = useState(false)
+	
+	// Helper function to find default size based on category
+	const getDefaultSize = useCallback((categoryName, sizeValues) => {
+		if (!sizeValues || sizeValues.length === 0) return null
+		
+		// Define standard sizes for each category
+		const standardSizes = {
+			'Rings': 6,
+			'Bracelets': 7,
+			'Necklaces': 16
+		}
+		
+		const targetSize = standardSizes[categoryName]
+		if (!targetSize) return sizeValues[0].name // Fallback to first if category not found
+		
+		// Try to find exact match first
+		const exactMatch = sizeValues.find(v => {
+			const sizeNum = parseFloat(v.name)
+			return !isNaN(sizeNum) && sizeNum === targetSize
+		})
+		if (exactMatch) return exactMatch.name
+		
+		// Find first closest larger number
+		const sortedSizes = sizeValues
+			.map(v => ({ name: v.name, num: parseFloat(v.name) }))
+			.filter(v => !isNaN(v.num))
+			.sort((a, b) => a.num - b.num)
+		
+		const closestLarger = sortedSizes.find(v => v.num >= targetSize)
+		if (closestLarger) return closestLarger.name
+		
+		// Fallback to largest available size
+		return sortedSizes[sortedSizes.length - 1]?.name || sizeValues[0].name
+	}, [])
+
 	const [selectedOptions, setSelectedOptions] = useState(() => {
 		const initialOptions = {}
 		if (selectedColor) {
 			initialOptions['Metal'] = selectedColor
 		}
+		// Auto-select default Size option value for Rings/Necklaces/Bracelets
+		if (isSizeCategory && sizeOption && sizeOption.optionValues?.length > 0) {
+			const defaultSize = getDefaultSize(product.category.name, sizeOption.optionValues)
+			if (defaultSize) {
+				initialOptions[sizeOption.name] = defaultSize
+			}
+		}
 		return initialOptions
 	})
+	
 
 	// Find the Shopify variant node matching the selected options
-	const getMatchingVariant = options => {
+	const getMatchingVariant = useCallback(options => {
 		const selectedEntries = Object.entries(options)
 		const matchingEdge = product.variants.edges.find(({ node }) =>
 			selectedEntries.every(([name, value]) =>
@@ -71,10 +137,10 @@ const ProductOptionsUI = ({
 			}
 			return false
 		}
-	}
+	}, [product, setMatchingVariant])
 
 	// User selects an option value
-	const handleOptionSelection = (optionName, value, index) => {
+	const handleOptionSelection = (optionName, value, index = null) => {
 		// If user clicks the same value again, clear it
 		if (selectedOptions[optionName] === value) {
 			return handleOptionReset(optionName)
@@ -88,10 +154,13 @@ const ProductOptionsUI = ({
 		getMatchingVariant(newSelected)
 
 		// 3) advance to next dropdown
-		setOpenOption(index + 1)
+		index !== null && setOpenOption(index + 1)
 
 		// 4) set selected color/shape if applicable (to drive image filtering)
-		if (optionName === 'Metal') {
+		if (
+			optionName === 'Metal' &&
+			!product.tags.includes('Stackable Rings')
+		) {
 			setSelectedColor(value)
 		} else if (optionName.toLowerCase() === 'diamond shape') {
 			setSelectedShape(value)
@@ -160,7 +229,40 @@ const ProductOptionsUI = ({
 		if (selectedColor) {
 			getMatchingVariant({ ...selectedOptions, Metal: selectedColor })
 		}
-	}, [])	
+	}, [getMatchingVariant, selectedColor, selectedOptions])
+
+	// Track if Size option has been auto-selected
+	const sizeAutoSelectedRef = useRef(false)
+	
+	// Auto-select default Size option for Rings/Necklaces/Bracelets on mount
+	useEffect(() => {
+		if (sizeAutoSelectedRef.current) return
+		
+		if (isSizeCategory && sizeOption && sizeOption.optionValues?.length > 0) {
+			const sizeOptionName = sizeOption.name
+			const defaultSize = getDefaultSize(product.category.name, sizeOption.optionValues)
+			
+			// Only auto-select if not already selected
+			if (defaultSize && selectedOptions[sizeOptionName] !== defaultSize) {
+				const newSelected = { ...selectedOptions, [sizeOptionName]: defaultSize }
+				setSelectedOptions(newSelected)
+				// Try to match variant with the new selection
+				getMatchingVariant(newSelected)
+			} else {
+				// If already selected (from initial state), ensure variant is matched
+				getMatchingVariant(selectedOptions)
+			}
+			sizeAutoSelectedRef.current = true
+		}
+	}, [isSizeCategory, sizeOption, selectedOptions, getMatchingVariant, product.category.name, getDefaultSize])
+
+	const metalOption = product?.options?.find(
+		o => (o?.name || '').toLowerCase() === 'metal'
+	)
+	const nonMetalOptions = (product?.options || []).filter(
+		o => (o?.name || '').toLowerCase() !== 'metal'
+	)
+	const nonMetalStartIndex = metalOption ? 1 : 0
 
 	return (
 		<div className={styles.content}>
@@ -178,143 +280,69 @@ const ProductOptionsUI = ({
 			<div className={styles.description}>{isGiftCard ? parse(product.descriptionHtml) : parse(description)}</div>
 
 			<div className={styles.accordion}>
-				{/* Custom Shapes */}
-				{product.tags.includes("CustomShape") && <Accordion
-						title="Diamond Shape"
+
+				{/* Metal (always first when present) */}
+				{metalOption && (
+					<ProductOptionAccordion
+						key={metalOption.name}
+						option={metalOption}
+						index={0}
+						product={product}
+						selectedOptions={selectedOptions}
+						handleOptionSelection={handleOptionSelection}
+						handleDisplayUpdate={handleDisplayUpdate}
+						openOption={openOption}
+						setOpenOption={setOpenOption}
+						isGiftCard={isGiftCard}
+						isMobile={isMobile}
+						setSelectedColor={setSelectedColor}
+					/>
+				)}
+
+				{/* Custom Shape (always after Metal) */}
+				{product.tags.includes("CustomShape") && (
+					<ProductOptionAccordion
+						product={product}
+						selectedOptions={selectedOptions}
+						openOption={openOption}
+						setOpenOption={setOpenOption}
+						isMobile={isMobile}
+						isCustomShape={true}
+						customShapes={customShapes}
 						extraTitleText={
-							customShapes.find(shape => 
+							customShapes.find(shape =>
 								product.title.toLowerCase().includes(shape.title.toLowerCase())
 							)?.title || null
 						}
-						state={true}
-						setOpenOption={() => setOpenOption(0)}
-						product
-						display
-					>
-						<div
-							className={styles.variantButtonsContainer}
-						>
-						{customShapes.filter(shape => 
-							!(product.title.toLowerCase().includes("promise") && shape.title.toLowerCase() === "heart")
-						).map(shape => (
-								<button
-									key={shape.title}
-									onClick={() => {
-										// Find current shape in product title
-										const currentShape = customShapes.find(s => 
-											product.title.toLowerCase().includes(s.title.toLowerCase())
-										)
-										
-										if (currentShape && typeof window !== 'undefined') {
-											// Get current pathname
-											const currentPath = window.location.pathname
-											
-											// Replace the current shape with the new shape in the URL
-											const newPath = currentPath.replace(
-												new RegExp(currentShape.title.toLowerCase(), 'i'),
-												shape.title.toLowerCase()
-											)
-											
-											// Navigate to the new URL with existing query params
-											window.location.href = newPath + window.location.search
-										}
-									}}
-								>
-									<Image
-										src={shape.path}
-										width={48 * shape.width / shape.height}
-										height={48}
-										alt={`${shape.title} Diamond Shape`}
-										style={{
-											opacity: product.title.toLowerCase().includes(shape.title.toLowerCase()) ? 1 : 0.25
-										}}
-									/>
-									</button>
-								)
-							)}
-						</div>
-					</Accordion>}
+					/>
+				)}
 
-				{/* Options */}
-				{product.options.map((option, index) => (
-					<Accordion
+				{/* Remaining Shopify options */}
+				{nonMetalOptions.map((option, i) => (
+					<ProductOptionAccordion
 						key={option.name}
-						// small
-						title={option.name}
-						extraTitleText={
-							selectedOptions[option.name] 
-								? isGiftCard 
-									? selectedOptions[option.name].replace(/^(\$)(\d)(\d{3})$/, '$1$2,$3')
-									: selectedOptions[option.name]
-								: null
-						}
-						state={isGiftCard || product.tags.includes("CustomShape") ? true : index === openOption}
-						setOpenOption={() => setOpenOption(index)}
-						product
-						display
-						showHelp={
-							option.name.toLowerCase() === 'ring size' ||
-							option.name === 'carat'
-						}
-						// helpContent={<NeedHelpInfo type={option.name.toLowerCase()} />}
-						helpLink={isMobile ? '/Size-Guide-Difinery-Mobile.pdf' : '/Size-Guide-Difinery-Desktop.pdf'}
-					>
-						<div
-							className={styles.variantButtonsContainer}
-						>
-							{isGiftCard ? (
-								<GiftCardInput
-									options={option.optionValues}
-									selectedValue={selectedOptions[option.name] || null}
-									onSelect={(value) => handleOptionSelection(option.name, value, index)}
-									onDisplayUpdate={(value) => handleDisplayUpdate(option.name, value)}
-								/>
-							) : (
-								option.optionValues.map(value => (
-									<button
-										key={value.name}
-										onClick={() =>
-											handleOptionSelection(option.name, value.name, index)
-										}
-										style={{
-											fontWeight:
-												selectedOptions[option.name] === value.name
-													? 'bold'
-													: 'normal'
-										}}
-									>
-										{option.name.toLowerCase() === 'metal' && (
-											<Image
-												src={`/${returnMetalType(value.name)}`}
-												width={32}
-												height={32}
-												alt={`${value.name} ${option.name}`}
-											/>
-										)}
-
-										{option.name.toLowerCase() === 'diamond shape' && (
-											<Image
-												src={`/${returnDiamondShape(value.name)}`}
-												width={32}
-												height={32}
-												alt={`${value.name} ${option.name}`}
-											/>
-										)}
-										{value.name}
-									</button>
-								))
-							)}
-						</div>
-					</Accordion>
+						option={option}
+						index={nonMetalStartIndex + i}
+						product={product}
+						selectedOptions={selectedOptions}
+						handleOptionSelection={handleOptionSelection}
+						handleDisplayUpdate={handleDisplayUpdate}
+						openOption={openOption}
+						setOpenOption={setOpenOption}
+						isGiftCard={isGiftCard}
+						isMobile={isMobile}
+						setSelectedColor={setSelectedColor}
+					/>
 				))}
 
 				{product.category.name !== 'Earrings' && !isGiftCard && (
 					/* Engraving */
 					<Accordion
 						// small
-						title='Engraving'
+						title='Complimentary Engraving'
 						extraTitleText={engraving ? `"${engraving}"` : null}
-						state={openOption === product.options.length}
+						state={isEngravingOpen}
+						setOpenOption={() => setIsEngravingOpen(!isEngravingOpen)}
 						product
 						display
 					>
@@ -333,7 +361,8 @@ const ProductOptionsUI = ({
 						// small
 						title='Customize Your Canvas Box'
 						extraTitleText={boxText ? `"${boxText}"` : null}
-						state={openOption === product.options.length}
+						state={isCustomBoxOpen}
+						setOpenOption={() => setIsCustomBoxOpen(!isCustomBoxOpen)}
 						product
 						display
 					>
@@ -348,18 +377,31 @@ const ProductOptionsUI = ({
 			</div>
 
 			{!isGiftCard ? (
-				<a
-					href='#order-review'
-					onClick={() => {
-						setShowOrderSummary(true)
-						handleAddToCart()
-					}}
-					style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
-				>
-					<button className={styles.cartButton} disabled={!allOptionsSelected}>
-						REVIEW YOUR ORDER
+				isMobile ? (
+					<button
+						className={styles.cartButton}
+						disabled={!allOptionsSelected}
+						onClick={async () => {
+							await handleAddToCart()
+							setShowCart(true)
+						}}
+					>
+						Add to Cart
 					</button>
-				</a>
+				) : (
+					<a
+						href='#order-review'
+						onClick={() => {
+							setShowOrderSummary(true)
+							handleAddToCart()
+						}}
+						style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
+					>
+						<button className={styles.cartButton} disabled={!allOptionsSelected}>
+							Review & Add to Cart
+						</button>
+					</a>
+				)
 			) : (
 				<>
 					<button
@@ -444,7 +486,7 @@ const ProductOptionsUI = ({
 
 					<Accordion title='Handcrafted in USA'>
 						<p>
-							Each one of our pieces are handcrafted in New York's Diamond
+							Each one of our pieces are handcrafted in New York&apos;s Diamond
 							District using only ethical lab-grown diamonds of the highest
 							standards and 100% certified recycled solid gold. We honor
 							timeless design and exceptional craftsmanship, creating

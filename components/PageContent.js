@@ -6,14 +6,18 @@ import Columns from './Columns'
 import FAQ from './FAQ'
 import MasonryColumns from './MasonryColumns'
 import SubscribeSection from './SubscribeSection'
+import SpecialRequestBanner from './SpecialRequestBanner'
 import SplitFeatures from './SplitFeatures'
 import Infographic from './Infographic'
 import Timeline from './Timeline'
+import Articles from './Articles'
 
 const PageContent = ({ content }) => {
 	return (
 		<main>
 			{/* Content */}
+			<SpecialRequestBanner />
+
 			{content.sections.map((section, index) => {
 				switch (section.sys.contentType.sys.id) {
 					case 'features':
@@ -118,6 +122,13 @@ const PageContent = ({ content }) => {
 								row2={section.fields.row2}
 								row3Title={section.fields.row3Title}
 								row3={section.fields.row3}
+							/>
+						)
+					case 'articles':
+						return (
+							<Articles
+								key={section.sys.id}
+								articles={section.fields.articles}
 							/>
 						)
 
