@@ -7,7 +7,13 @@ import styles from './Header.module.scss'
 import { Box, ClickAwayListener, Typography } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
-import { FiShoppingBag, FiUser, FiArrowRight, FiArrowDown, FiArrowUp } from 'react-icons/fi'
+import {
+	FiShoppingBag,
+	FiUser,
+	FiArrowRight,
+	FiArrowDown,
+	FiArrowUp
+} from 'react-icons/fi'
 import { Spin as Hamburger } from 'hamburger-react'
 
 // hooks
@@ -25,14 +31,15 @@ import submenus from '@/data/submenus.json' with { type: 'json' }
 const Header = ({ content, collectionsContent }) => {
 	// cart
 	const { setShowCart, cart } = useCart()
-	
+
 	// Track if component has mounted to prevent hydration mismatch
 	const [isMounted, setIsMounted] = useState(false)
-	
+
 	// Calculate total number of items in cart
-	const cartItemCount = cart?.lines?.edges?.reduce((total, { node }) => {
-		return total + (node.quantity || 0)
-	}, 0) || 0
+	const cartItemCount =
+		cart?.lines?.edges?.reduce((total, { node }) => {
+			return total + (node.quantity || 0)
+		}, 0) || 0
 
 	// header
 	const [targetRef, isIntersecting] = useIntersectionObserver()
@@ -56,7 +63,15 @@ const Header = ({ content, collectionsContent }) => {
 	const isRecycledGold = pathName == '/recycled-gold' ? true : false
 	const isLabGrown = pathName == '/lab-grown-diamonds' ? true : false
 
-	const isTransparent = isHomepage || isAbout || isEducation || isBlankCanvas || isRecycledGold || isLabGrown ? true : false
+	const isTransparent =
+		isHomepage ||
+		isAbout ||
+		isEducation ||
+		isBlankCanvas ||
+		isRecycledGold ||
+		isLabGrown
+			? true
+			: false
 
 	// Initialize isIntersecting as true for transparent pages to avoid flash
 	// This assumes the page starts at the top, which is usually the case
@@ -78,7 +93,7 @@ const Header = ({ content, collectionsContent }) => {
 	// Reseting open menu
 	useEffect(() => {
 		isIntersecting && setOpenMenu(false)
-	}, [isIntersecting])	
+	}, [isIntersecting])
 
 	return (
 		<ClickAwayListener
@@ -89,7 +104,9 @@ const Header = ({ content, collectionsContent }) => {
 			<Box ref={targetRef} suppressHydrationWarning>
 				<Box
 					suppressHydrationWarning
-					className={isTransparent && !isMounted ? styles.initialTransparent : ''}
+					className={
+						isTransparent && !isMounted ? styles.initialTransparent : ''
+					}
 					sx={{
 						position: 'fixed',
 						top: 0,
@@ -210,10 +227,20 @@ const Header = ({ content, collectionsContent }) => {
 											height: '18px',
 											display: 'flex',
 											alignItems: 'center',
-											justifyContent: 'center',
+											justifyContent: 'center'
 										}}
 									>
-										<Typography color='white' sx={{ fontSize: '10px', fontWeight: '600', width: "100%", textAlign: "center" }}>{cartItemCount > 99 ? '99+' : cartItemCount}</Typography>
+										<Typography
+											color='white'
+											sx={{
+												fontSize: '10px',
+												fontWeight: '600',
+												width: '100%',
+												textAlign: 'center'
+											}}
+										>
+											{cartItemCount > 99 ? '99+' : cartItemCount}
+										</Typography>
 									</Box>
 								)}
 							</Box>
@@ -223,111 +250,136 @@ const Header = ({ content, collectionsContent }) => {
 					{/* Main Menu */}
 					<Box suppressHydrationWarning>
 						{((effectiveIntersecting && isScreenWide) || openMenu) && (
-						<nav className={`container ${styles.headerBot}`}>
-							{/* Shop Page */}
-							<Link
-								href='/shop/all/yellow-gold/all'
-								aria-label='Link to Shop page.'
-								className={styles.mainMenuLink}
-								onMouseEnter={() => loadSubmenu(submenus[0].columns)}
-								onClick={() => setOpenMenu(false)}
-							>
-								<p>Shop</p>{' '}
-								<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
-							</Link>
-
-							{/* Categories */}
-							{categories.map((title, index) => (
+							<nav className={`container ${styles.headerBot}`}>
+								{/* Shop Page */}
 								<Link
-									key={index}
-									href={`/shop/${title.toLowerCase()}`}
-									aria-label={`Link to ${title} page.`}
+									href='/shop/all/yellow-gold/all'
+									aria-label='Link to Shop page.'
 									className={styles.mainMenuLink}
-									onMouseEnter={() => loadSubmenu(submenus[index + 1].columns)}
+									onMouseEnter={() => loadSubmenu(submenus[0].columns)}
 									onClick={() => setOpenMenu(false)}
 								>
-									<p>{title}</p>{' '}
+									<p>Shop</p>{' '}
 									<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
 								</Link>
-							))}
 
-							{/* Collections */}
-							{!isScreenWide && (
-								<Box
-									display='flex'
-									flexDirection='column'
-									gap='1rem'
-									className={styles.mainMenuLink}
-									onClick={() => setShowCollections(!showCollections)}
-								>
-								<Box display='flex' alignItems='center' justifyContent='space-between' width='100%'>
-									<p>Collections</p>
-										{showCollections ? (
-											<FiArrowUp className={styles.mobileIcon} strokeWidth={1} />
-										) : (
-											<FiArrowDown className={styles.mobileIcon} strokeWidth={1} />
-										)}
-								</Box>
-
-								{showCollections && 
-									<Box display='flex' flexDirection='column' gap='0.5rem'>
-										{collectionsContent.map(collection => (
-											<Link
-												key={collection.sys.id}
-												href={`/shop/collections/${collection.fields.title
-													.toLowerCase()
-													.replace(/[^a-zA-Z0-9 ]/g, '')
-													.replace(/&/g, '')
-													.replace(/ /g, '-')}`}
-												aria-label={`Link to ${collection.fields.title} collection.`}
-												className={styles.mainMenuUnderLink}
-												onClick={() => setOpenMenu(false)}
-											>
-												<p>{collection.fields.title}</p>
-											</Link>
-										))}
-									</Box>
-								}
-								</Box>
-							)}
-
-							{/* Gift Card */}
-							<Link
-								href='/shop/gift-card'
-								aria-label={`Link to Gift Card page.`}
-								className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
-								onClick={() => setOpenMenu(false)}
-							>
-								<p>Gift Card</p>
-								
-							</Link>
-
-							{/* Contentful */}
-							{content.mainMenu.map(link => (
+								{/* Engagement Rings */}
 								<Link
-									key={link.sys.id}
-									href={
-										'/' + link.fields.title.replace(/ /g, '-').toLowerCase()
-									}
-									aria-label={`Link to ${link.fields.title} page.`}
-									className={styles.mainMenuUnderLink}
+									href='/shop/collections/engagement-rings'
+									aria-label='Link to Engagement Rings collection.'
+									className={styles.mainMenuLink}
+									onMouseEnter={() => loadSubmenu(submenus[0].columns)}
 									onClick={() => setOpenMenu(false)}
 								>
-									<p>{link.fields.title}</p>{' '}
-									
+									<p>Engagement</p>{' '}
+									<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
 								</Link>
-							))}
 
-							<Link
-								href='/customer-service'
-								aria-label={`Link to Customer Service page.`}
-								className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
-								onClick={() => setOpenMenu(false)}
-							>
-								<p>Customer Service</p>
+								{/* Categories */}
+								{categories.map((title, index) => (
+									<Link
+										key={index}
+										href={`/shop/${title.toLowerCase()}`}
+										aria-label={`Link to ${title} page.`}
+										className={styles.mainMenuLink}
+										onMouseEnter={() =>
+											loadSubmenu(submenus[index + 1].columns)
+										}
+										onClick={() => setOpenMenu(false)}
+									>
+										<p>{title}</p>{' '}
+										<FiArrowRight
+											className={styles.mobileIcon}
+											strokeWidth={1}
+										/>
+									</Link>
+								))}
 
-							</Link>
-						</nav>
+								{/* Collections */}
+								{!isScreenWide && (
+									<Box
+										display='flex'
+										flexDirection='column'
+										gap='1rem'
+										className={styles.mainMenuLink}
+										onClick={() => setShowCollections(!showCollections)}
+									>
+										<Box
+											display='flex'
+											alignItems='center'
+											justifyContent='space-between'
+											width='100%'
+										>
+											<p>Collections</p>
+											{showCollections ? (
+												<FiArrowUp
+													className={styles.mobileIcon}
+													strokeWidth={1}
+												/>
+											) : (
+												<FiArrowDown
+													className={styles.mobileIcon}
+													strokeWidth={1}
+												/>
+											)}
+										</Box>
+
+										{showCollections && (
+											<Box display='flex' flexDirection='column' gap='0.5rem'>
+												{collectionsContent.map(collection => (
+													<Link
+														key={collection.sys.id}
+														href={`/shop/collections/${collection.fields.title
+															.toLowerCase()
+															.replace(/[^a-zA-Z0-9 ]/g, '')
+															.replace(/&/g, '')
+															.replace(/ /g, '-')}`}
+														aria-label={`Link to ${collection.fields.title} collection.`}
+														className={styles.mainMenuUnderLink}
+														onClick={() => setOpenMenu(false)}
+													>
+														<p>{collection.fields.title}</p>
+													</Link>
+												))}
+											</Box>
+										)}
+									</Box>
+								)}
+
+								{/* Gift Card */}
+								<Link
+									href='/shop/gift-card'
+									aria-label={`Link to Gift Card page.`}
+									className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
+									onClick={() => setOpenMenu(false)}
+								>
+									<p>Gift Card</p>
+								</Link>
+
+								{/* Contentful */}
+								{content.mainMenu.map(link => (
+									<Link
+										key={link.sys.id}
+										href={
+											'/' + link.fields.title.replace(/ /g, '-').toLowerCase()
+										}
+										aria-label={`Link to ${link.fields.title} page.`}
+										className={styles.mainMenuUnderLink}
+										onClick={() => setOpenMenu(false)}
+									>
+										<p>{link.fields.title}</p>{' '}
+									</Link>
+								))}
+
+								<Link
+									href='/customer-service'
+									aria-label={`Link to Customer Service page.`}
+									className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
+									onClick={() => setOpenMenu(false)}
+								>
+									<p>Customer Service</p>
+								</Link>
+							</nav>
 						)}
 					</Box>
 
@@ -335,26 +387,26 @@ const Header = ({ content, collectionsContent }) => {
 					{content.showDropdownMenu && showSubmenu && (
 						<div className={`container ${styles.subMenu}`}>
 							{activeSubmenu &&
-							activeSubmenu.map(column => {
-								if (column.title === 'none') {
-									return <div className={styles.column2} key={column.title} />
-								}
-								return (
-									<div className={styles.column2} key={column.title}>
-										<p style={{ fontWeight: '600' }}>{column.title}</p>
-										{column.rows.map(row => (
-											<Link
-												key={row.title}
-												href={row.url}
-												aria-label={`Link to ${row.title} page.`}
-												className={styles.subMenuLink}
-											>
-												<p>{row.title}</p>
-											</Link>
-										))}
-									</div>
-								)
-							})}
+								activeSubmenu.map(column => {
+									if (column.title === 'none') {
+										return <div className={styles.column2} key={column.title} />
+									}
+									return (
+										<div className={styles.column2} key={column.title}>
+											<p style={{ fontWeight: '600' }}>{column.title}</p>
+											{column.rows.map(row => (
+												<Link
+													key={row.title}
+													href={row.url}
+													aria-label={`Link to ${row.title} page.`}
+													className={styles.subMenuLink}
+												>
+													<p>{row.title}</p>
+												</Link>
+											))}
+										</div>
+									)
+								})}
 
 							{content.promotions &&
 								content.promotions.map(promo => (
