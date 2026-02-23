@@ -43,16 +43,17 @@ const ProductOptionsUI = ({
 }) => {
 	const isMobile = useMediaQuery('(max-width: 1024px)')
 	const { setShowCart } = useCart()
-	
+
 	// Check if product is Rings, Necklaces, or Bracelets
-	const isSizeCategory = product?.category?.name && 
+	const isSizeCategory =
+		product?.category?.name &&
 		['Rings', 'Necklaces', 'Bracelets'].includes(product.category.name)
-	
+
 	// Find Size option (case-insensitive check)
-	const sizeOption = product?.options?.find(
-		o => (o?.name || '').toLowerCase().includes('size')
+	const sizeOption = product?.options?.find(o =>
+		(o?.name || '').toLowerCase().includes('size')
 	)
-	
+
 	const [openOption, setOpenOption] = useState(() => {
 		// If Size option exists for Rings/Necklaces/Bracelets, open that accordion
 		if (isSizeCategory && sizeOption) {
@@ -64,41 +65,41 @@ const ProductOptionsUI = ({
 		}
 		return selectedColor ? 1 : 0
 	})
-	
+
 	// Separate state for Engraving and Custom Box accordions (always closed by default)
 	const [isEngravingOpen, setIsEngravingOpen] = useState(false)
 	const [isCustomBoxOpen, setIsCustomBoxOpen] = useState(false)
-	
+
 	// Helper function to find default size based on category
 	const getDefaultSize = useCallback((categoryName, sizeValues) => {
 		if (!sizeValues || sizeValues.length === 0) return null
-		
+
 		// Define standard sizes for each category
 		const standardSizes = {
 			'Rings': 6,
 			'Bracelets': 7,
 			'Necklaces': 16
 		}
-		
+
 		const targetSize = standardSizes[categoryName]
 		if (!targetSize) return sizeValues[0].name // Fallback to first if category not found
-		
+
 		// Try to find exact match first
 		const exactMatch = sizeValues.find(v => {
 			const sizeNum = parseFloat(v.name)
 			return !isNaN(sizeNum) && sizeNum === targetSize
 		})
 		if (exactMatch) return exactMatch.name
-		
+
 		// Find first closest larger number
 		const sortedSizes = sizeValues
 			.map(v => ({ name: v.name, num: parseFloat(v.name) }))
 			.filter(v => !isNaN(v.num))
 			.sort((a, b) => a.num - b.num)
-		
+
 		const closestLarger = sortedSizes.find(v => v.num >= targetSize)
 		if (closestLarger) return closestLarger.name
-		
+
 		// Fallback to largest available size
 		return sortedSizes[sortedSizes.length - 1]?.name || sizeValues[0].name
 	}, [])
@@ -110,34 +111,41 @@ const ProductOptionsUI = ({
 		}
 		// Auto-select default Size option value for Rings/Necklaces/Bracelets
 		if (isSizeCategory && sizeOption && sizeOption.optionValues?.length > 0) {
-			const defaultSize = getDefaultSize(product.category.name, sizeOption.optionValues)
+			const defaultSize = getDefaultSize(
+				product.category.name,
+				sizeOption.optionValues
+			)
 			if (defaultSize) {
 				initialOptions[sizeOption.name] = defaultSize
 			}
 		}
 		return initialOptions
 	})
-	
 
 	// Find the Shopify variant node matching the selected options
-	const getMatchingVariant = useCallback(options => {
-		const selectedEntries = Object.entries(options)
-		const matchingEdge = product.variants.edges.find(({ node }) =>
-			selectedEntries.every(([name, value]) =>
-				node.selectedOptions.some(so => so.name === name && so.value === value)
+	const getMatchingVariant = useCallback(
+		options => {
+			const selectedEntries = Object.entries(options)
+			const matchingEdge = product.variants.edges.find(({ node }) =>
+				selectedEntries.every(([name, value]) =>
+					node.selectedOptions.some(
+						so => so.name === name && so.value === value
+					)
+				)
 			)
-		)
-		if (matchingEdge) {
-			setMatchingVariant(matchingEdge.node)
-			return true
-		} else {
-			// Only log error if all required options are selected
-			if (Object.keys(options).length === product.options.length) {
-				console.error('No matching variant found')
+			if (matchingEdge) {
+				setMatchingVariant(matchingEdge.node)
+				return true
+			} else {
+				// Only log error if all required options are selected
+				if (Object.keys(options).length === product.options.length) {
+					console.error('No matching variant found')
+				}
+				return false
 			}
-			return false
-		}
-	}, [product, setMatchingVariant])
+		},
+		[product, setMatchingVariant]
+	)
 
 	// User selects an option value
 	const handleOptionSelection = (optionName, value, index = null) => {
@@ -157,10 +165,7 @@ const ProductOptionsUI = ({
 		index !== null && setOpenOption(index + 1)
 
 		// 4) set selected color/shape if applicable (to drive image filtering)
-		if (
-			optionName === 'Metal' &&
-			!product.tags.includes('Stackable Rings')
-		) {
+		if (optionName === 'Metal' && !product.tags.includes('Stackable Rings')) {
 			setSelectedColor(value)
 		} else if (optionName.toLowerCase() === 'diamond shape') {
 			setSelectedShape(value)
@@ -177,14 +182,16 @@ const ProductOptionsUI = ({
 			// Don't clear matchingVariant - keep the first variant as default
 			return
 		}
-		
+
 		const newSelected = { ...selectedOptions, [optionName]: value }
-		
+
 		// Check if variant exists for this value
 		const variantExists = product.variants.edges.some(({ node }) =>
-			node.selectedOptions.some(so => so.name === optionName && so.value === value)
+			node.selectedOptions.some(
+				so => so.name === optionName && so.value === value
+			)
 		)
-		
+
 		if (variantExists) {
 			setSelectedOptions(newSelected)
 			// Only try to match variant if all required options are present
@@ -206,14 +213,15 @@ const ProductOptionsUI = ({
 		setShowOrderSummary(false)
 
 		if (optionName === 'Metal') {
-				setSelectedColor(null)
-			} else if (optionName.toLowerCase() === 'diamond shape') {
-				setSelectedShape(null)
-			}
+			setSelectedColor(null)
+		} else if (optionName.toLowerCase() === 'diamond shape') {
+			setSelectedShape(null)
+		}
 	}
 
 	const allOptionsSelected =
-		Object.keys(selectedOptions).length === product.options.length && matchingVariant !== null
+		Object.keys(selectedOptions).length === product.options.length &&
+		matchingVariant !== null
 
 	const details = product.descriptionHtml.replace(
 		/<p\s+id=(["'])description\1[^>]*>[\s\S]*?<\/p>/i,
@@ -224,6 +232,27 @@ const ProductOptionsUI = ({
 		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i
 	)
 	const description = match ? match[0] : ''
+	const customData = matchingVariant
+		? customProductData.find(item => item.SKU === matchingVariant.sku)
+		: null
+	const hasTotalWeightPlaceholder = /id=(['"])total-weight\1/i.test(details)
+	const hasDimensionsPlaceholder = /id=(['"])dimensions\1/i.test(details)
+	const hasCustomDetailsPlaceholders =
+		hasTotalWeightPlaceholder || hasDimensionsPlaceholder
+	const detailsWithCustomData =
+		customData && hasCustomDetailsPlaceholders
+			? details
+					.replace(
+						/<span[^>]*id=(['"])total-weight\1[^>]*>[\s\S]*?<\/span>/i,
+						`<span id="total-weight">${
+							customData['Total Weight'] || ''
+						}</span>`
+					)
+					.replace(
+						/<span[^>]*id=(['"])dimensions\1[^>]*>[\s\S]*?<\/span>/i,
+						`<span id="dimensions">${customData.Dimensions || ''}</span>`
+					)
+			: details
 
 	useEffect(() => {
 		if (selectedColor) {
@@ -233,18 +262,24 @@ const ProductOptionsUI = ({
 
 	// Track if Size option has been auto-selected
 	const sizeAutoSelectedRef = useRef(false)
-	
+
 	// Auto-select default Size option for Rings/Necklaces/Bracelets on mount
 	useEffect(() => {
 		if (sizeAutoSelectedRef.current) return
-		
+
 		if (isSizeCategory && sizeOption && sizeOption.optionValues?.length > 0) {
 			const sizeOptionName = sizeOption.name
-			const defaultSize = getDefaultSize(product.category.name, sizeOption.optionValues)
-			
+			const defaultSize = getDefaultSize(
+				product.category.name,
+				sizeOption.optionValues
+			)
+
 			// Only auto-select if not already selected
 			if (defaultSize && selectedOptions[sizeOptionName] !== defaultSize) {
-				const newSelected = { ...selectedOptions, [sizeOptionName]: defaultSize }
+				const newSelected = {
+					...selectedOptions,
+					[sizeOptionName]: defaultSize
+				}
 				setSelectedOptions(newSelected)
 				// Try to match variant with the new selection
 				getMatchingVariant(newSelected)
@@ -254,7 +289,14 @@ const ProductOptionsUI = ({
 			}
 			sizeAutoSelectedRef.current = true
 		}
-	}, [isSizeCategory, sizeOption, selectedOptions, getMatchingVariant, product.category.name, getDefaultSize])
+	}, [
+		isSizeCategory,
+		sizeOption,
+		selectedOptions,
+		getMatchingVariant,
+		product.category.name,
+		getDefaultSize
+	])
 
 	const metalOption = product?.options?.find(
 		o => (o?.name || '').toLowerCase() === 'metal'
@@ -277,10 +319,11 @@ const ProductOptionsUI = ({
 				</p>
 			)}
 
-			<div className={styles.description}>{isGiftCard ? parse(product.descriptionHtml) : parse(description)}</div>
+			<div className={styles.description}>
+				{isGiftCard ? parse(product.descriptionHtml) : parse(description)}
+			</div>
 
 			<div className={styles.accordion}>
-
 				{/* Metal (always first when present) */}
 				{metalOption && (
 					<ProductOptionAccordion
@@ -300,7 +343,7 @@ const ProductOptionsUI = ({
 				)}
 
 				{/* Custom Shape (always after Metal) */}
-				{product.tags.includes("CustomShape") && (
+				{product.tags.includes('CustomShape') && (
 					<ProductOptionAccordion
 						product={product}
 						selectedOptions={selectedOptions}
@@ -397,7 +440,10 @@ const ProductOptionsUI = ({
 						}}
 						style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
 					>
-						<button className={styles.cartButton} disabled={!allOptionsSelected}>
+						<button
+							className={styles.cartButton}
+							disabled={!allOptionsSelected}
+						>
 							Review & Add to Cart
 						</button>
 					</a>
@@ -416,53 +462,51 @@ const ProductOptionsUI = ({
 
 			{!isGiftCard && (
 				<div>
-				<Accordion title='Product Details'>
-					<div className={styles.productDetails}>
-						<p>
-							<span>Product Name: </span>
-							{product.title}
-						</p>
-						{matchingVariant && (
+					<Accordion title='Product Details'>
+						<div className={styles.productDetails}>
 							<p>
-								<span>ID / SKU: </span>
-								{matchingVariant.sku}
+								<span>Product Name: </span>
+								{product.title}
 							</p>
-						)}
-						{selectedColor && (
-							<>
+							{matchingVariant && (
 								<p>
-									<span>Metal: </span>
-									{selectedColor.toLowerCase().includes('yellow') ? (
-										<span>Yellow Gold</span>
-									) : (
-										<span>White Gold</span>
-									)}
+									<span>ID / SKU: </span>
+									{matchingVariant.sku}
 								</p>
+							)}
+							{selectedColor && (
+								<>
+									<p>
+										<span>Metal: </span>
+										{selectedColor.toLowerCase().includes('yellow') ? (
+											<span>Yellow Gold</span>
+										) : (
+											<span>White Gold</span>
+										)}
+									</p>
+								</>
+							)}
+							{parse(detailsWithCustomData)}
+
+							<>
+								{' '}
+								{customData && !hasCustomDetailsPlaceholders && (
+									<>
+										<p>
+											<span>Total Weight: </span>
+											{customData['Total Weight']}
+										</p>
+										<p>
+											<span>Dimensions: </span>
+											{customData.Dimensions}
+										</p>
+									</>
+								)}
 							</>
-						)}
-						{parse(details)}
+						</div>
+					</Accordion>
 
-						<>	{matchingVariant && (() => {
-									const customData = customProductData.find(
-										item => item.SKU === matchingVariant.sku
-									)
-									return customData ? (
-										<>
-											<p>
-												<span>Total Weight: </span>
-												{customData['Total Weight']}
-											</p>
-											<p>
-												<span>Dimensions: </span>
-												{customData.Dimensions}
-											</p>
-										</>
-									) : null
-								})()}</>
-					</div>
-				</Accordion>
-
-				<Accordion title='Material'>
+					<Accordion title='Material'>
 						<div
 							style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
 						>
