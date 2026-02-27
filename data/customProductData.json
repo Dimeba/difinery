@@ -948,5 +948,105 @@
 		"SKU": "WR-RN-0513",
 		"Total Weight": "3.50 ct.",
 		"Dimensions": "9.20 mm X 7.00 mm"
+	},
+	{
+		"SKU": "YR-CH-0514",
+		"Total Weight": "1.00 ct.",
+		"Dimensions": "6.50 mm X 4.80 mm"
+	},
+	{
+		"SKU": "WR-CH-0515",
+		"Total Weight": "1.00 ct.",
+		"Dimensions": "6.50 mm X 4.80 mm"
+	},
+	{
+		"SKU": "YR-CH-0516",
+		"Total Weight": "1.50 ct.",
+		"Dimensions": "7.50 mm X 5.50 mm"
+	},
+	{
+		"SKU": "WR-CH-0517",
+		"Total Weight": "1.50 ct.",
+		"Dimensions": "7.50 mm X 5.50 mm"
+	},
+	{
+		"SKU": "YR-CH-0518",
+		"Total Weight": "2.00 ct.",
+		"Dimensions": "8.25 mm X 6.05 mm"
+	},
+	{
+		"SKU": "WR-CH-0519",
+		"Total Weight": "2.00 ct.",
+		"Dimensions": "8.25 mm X 6.05 mm"
+	},
+	{
+		"SKU": "YR-CH-0520",
+		"Total Weight": "2.50 ct.",
+		"Dimensions": "8.90 mm X 6.60 mm"
+	},
+	{
+		"SKU": "WR-CH-0521",
+		"Total Weight": "2.50 ct.",
+		"Dimensions": "8.90 mm X 6.60 mm"
+	},
+	{
+		"SKU": "YR-CH-0522",
+		"Total Weight": "3.00 ct.",
+		"Dimensions": "9.45 mm X 7.00 mm"
+	},
+	{
+		"SKU": "WR-CH-0523",
+		"Total Weight": "3.00 ct.",
+		"Dimensions": "9.45 mm X 7.00 mm"
+	},
+	{
+		"SKU": "YR-RN-0524",
+		"Total Weight": "1.00 ct.",
+		"Dimensions": "6.50 mm X 6.50 mm"
+	},
+	{
+		"SKU": "WR-RN-0525",
+		"Total Weight": "1.00 ct.",
+		"Dimensions": "6.50 mm X 6.50 mm"
+	},
+	{
+		"SKU": "YR-RN-0526",
+		"Total Weight": "1.50 ct.",
+		"Dimensions": "7.50 mm X 7.50 mm"
+	},
+	{
+		"SKU": "WR-RN-0527",
+		"Total Weight": "1.50 ct.",
+		"Dimensions": "7.50 mm X 7.50 mm"
+	},
+	{
+		"SKU": "YR-RN-0528",
+		"Total Weight": "2.00 ct.",
+		"Dimensions": "8.25 mm X 8.25 mm"
+	},
+	{
+		"SKU": "WR-RN-0529",
+		"Total Weight": "2.00 ct.",
+		"Dimensions": "8.25 mm X 8.25 mm"
+	},
+	{
+		"SKU": "YR-RN-0530",
+		"Total Weight": "2.50 ct.",
+		"Dimensions": "8.90 mm X 8.90 mm"
+	},
+	{
+		"SKU": "WR-RN-0531",
+		"Total Weight": "2.50 ct.",
+		"Dimensions": "8.90 mm X 8.90 mm"
+	},
+	{
+		"SKU": "YR-RN-0532",
+		"Total Weight": "3.00 ct.",
+		"Dimensions": "9.50 mm X 9.50 mm"
+	},
+	{
+		"SKU": "WR-RN-0533",
+		"Total Weight": "3.00 ct.",
+		"Dimensions": "9.50 mm X 9.50 mm"
 	}
 ]
