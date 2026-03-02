@@ -77,7 +77,7 @@ export default async function Page(props) {
 	// Fetch only 20 products initially for collections (no filters)
 	const { data } = await apolloClient.query({
 		query: GET_COLLECTION_BY_HANDLE,
-		variables: { handle: content.handle, first: 20, after: null },
+		variables: { handle: content.handle, first: 60, after: null },
 		context: {
 			fetchOptions: {
 				next: { revalidate: 3600 } // Cache for 1 hour
