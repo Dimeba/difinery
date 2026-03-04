@@ -7,14 +7,20 @@
 	align-items: start;
 }
 
-.images {
+.imagesContainer {
 	grid-column: span 6;
-	display: flex;
-	flex-direction: column;
 	aspect-ratio: 1 / 1;
-	overflow-y: scroll;
 	position: sticky;
 	top: 0;
+	overflow: hidden;
+}
+
+.images {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
 
 	// Hide scrollbar in Firefox
 	scrollbar-width: none;
@@ -37,6 +43,37 @@
 	height: 100%;
 	border: 0;
 	display: block;
+	background-color: rgba(0, 0, 0, 0.03);
+	background: transparent;
+}
+
+.imageFrameOverlay {
+	position: absolute;
+	inset: 0;
+	background-color: rgba(0, 0, 0, 0.03);
+	pointer-events: none;
+}
+
+.viewerModeToggle {
+	position: absolute;
+	left: 0.75rem;
+	top: 0.75rem;
+	z-index: 3;
+	width: 2.7rem;
+	height: 2.7rem;
+	display: grid;
+	place-items: center;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	background-color: rgba(255, 255, 255, 0.92);
+	padding: 0;
+	border-radius: 999px;
+	cursor: pointer;
+
+	svg {
+		width: 1.2rem;
+		height: 1.2rem;
+		fill: #111;
+	}
 }
 
 .imageControls {
@@ -303,9 +340,15 @@
 		align-items: center;
 	}
 
+	.imagesContainer,
 	.images,
 	.content {
 		width: 90vw;
+	}
+
+	.imagesContainer {
+		position: relative;
+		top: auto;
 	}
 
 	.images {

@@ -7,7 +7,6 @@ import styles from './ProductInfo.module.scss'
 import Image from 'next/image'
 import ProductOptionsUI from './ProductOptionsUI'
 import OrderReview from './OrderReview'
-import IJewelViewerEmbed from './IJewelViewerEmbed'
 
 // hooks
 import { useState, useMemo, useEffect } from 'react'
@@ -61,6 +60,9 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const [boxVariant, setBoxVariant] = useState(null)
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 	const [selectedShape, setSelectedShape] = useState(null)
+	const modelId = 'Wa3_O3xnRjGrG389PxvQGg'
+	const has3DModel = Boolean(modelId)
+	const [show3DModel, setShow3DModel] = useState(has3DModel)
 
 	// Track view_item event when product loads or variant changes
 	useEffect(() => {
@@ -293,48 +295,84 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	return (
 		<section className='topSection'>
 			<div className={styles.productInfo}>
-				<div className={styles.images}>
+				<div className={styles.imagesContainer}>
+					{has3DModel && (
+						<button
+							type='button'
+							className={styles.viewerModeToggle}
+							onClick={() => setShow3DModel(prev => !prev)}
+							aria-label={
+								show3DModel ? 'Show product images' : 'Show 3D model viewer'
+							}
+							title={show3DModel ? 'Show images' : 'Show 3D model'}
+						>
+							{show3DModel ? (
+								<svg viewBox='0 0 24 24' aria-hidden='true'>
+									<path d='M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2v10h14V7H5zm2 8 3-4 2 2 3-3 2 5H7z' />
+								</svg>
+							) : (
+								<svg viewBox='0 0 24 24' aria-hidden='true'>
+									<path d='M12 2 3 7v10l9 5 9-5V7l-9-5zm0 2.2 6.6 3.7L12 11.6 5.4 7.9 12 4.2zM5 9.6l6 3.4v6.3l-6-3.3V9.6zm8 9.7V13l6-3.4V16l-6 3.3z' />
+								</svg>
+							)}
+						</button>
+					)}
+
 					<div
-						className={styles.image}
+						className={styles.images}
 						style={{
 							backgroundColor: 'rgba(0, 0, 0, 0.03)'
 						}}
 					>
-						<IJewelViewerEmbed
-							modelId='Wa3_O3xnRjGrG389PxvQGg'
-							className={styles.imageFrame}
-						/>
-					</div>
-
-					{images.map((image, index) => {
-						const steps = images.length > 1 ? images.length - 1 : 1
-						const alpha = 0.03 + (index / steps) * 0.05
-						return (
+						{show3DModel && has3DModel ? (
 							<div
 								className={styles.image}
-								key={index}
 								style={{
-									backgroundColor: `rgba(0, 0, 0, ${alpha.toFixed(2)})`
+									backgroundColor: 'rgba(0, 0, 0, 0.03)'
 								}}
 							>
-								<Image
-									src={image.url}
-									fill
-									alt='Image of the product.'
-									priority={index === 0}
-									loading={index === 0 ? undefined : 'lazy'}
-									quality={75}
-									sizes='(max-width: 768px) 100vw, 50vw'
-									style={{
-										objectFit:
-											isGiftCard || image.url.includes('.jpg')
-												? 'cover'
-												: 'contain'
-									}}
+								<iframe
+									title='YR-CH-0514.glb'
+									frameBorder='0'
+									allowFullScreen
+									allow='camera; autoplay; fullscreen; xr-spatial-tracking; web-share'
+									src={`https://ijewel3d.com/drive/files/${modelId}/embedded?slug=${modelId}&isTitle=false&isRemoveHologram=true&isRemoveLogo=true&isRemoveLogoLink=true&isAutoplay=true&isTransparentBackground=true&isConfigurator=false&isEnabledZoom=false&isFitObject=false&isFullScreen=false`}
+									className={styles.imageFrame}
 								/>
+								<div className={styles.imageFrameOverlay} aria-hidden='true' />
 							</div>
-						)
-					})}
+						) : (
+							images.map((image, index) => {
+								const steps = images.length > 1 ? images.length - 1 : 1
+								const alpha = 0.03 + (index / steps) * 0.05
+								return (
+									<div
+										className={styles.image}
+										key={index}
+										style={{
+											backgroundColor: `rgba(0, 0, 0, ${alpha.toFixed(2)})`
+										}}
+									>
+										<Image
+											src={image.url}
+											fill
+											alt='Image of the product.'
+											priority={index === 0}
+											loading={index === 0 ? undefined : 'lazy'}
+											quality={75}
+											sizes='(max-width: 768px) 100vw, 50vw'
+											style={{
+												objectFit:
+													isGiftCard || image.url.includes('.jpg')
+														? 'cover'
+														: 'contain'
+											}}
+										/>
+									</div>
+								)
+							})
+						)}
+					</div>
 				</div>
 
 				{product && (
