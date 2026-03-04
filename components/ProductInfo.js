@@ -7,6 +7,7 @@ import styles from './ProductInfo.module.scss'
 import Image from 'next/image'
 import ProductOptionsUI from './ProductOptionsUI'
 import OrderReview from './OrderReview'
+import IJewelViewerEmbed from './IJewelViewerEmbed'
 
 // hooks
 import { useState, useMemo, useEffect } from 'react'
@@ -125,8 +126,8 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 				const shapeCode = sc.includes('heart')
 					? '-hr-'
 					: sc.includes('pear')
-					? '-pr-'
-					: ''
+						? '-pr-'
+						: ''
 				if (shapeCode) {
 					matchesShape = url.includes(shapeCode)
 				}
@@ -158,8 +159,8 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 					const shapeCode = sc.includes('heart')
 						? '-hr-'
 						: sc.includes('pear')
-						? '-pr-'
-						: ''
+							? '-pr-'
+							: ''
 					if (shapeCode) {
 						matchesShape = url.includes(shapeCode)
 					}
@@ -224,8 +225,8 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			? selectedShape.toLowerCase().includes('heart')
 				? '-hr-'
 				: selectedShape.toLowerCase().includes('pear')
-				? '-pr-'
-				: ''
+					? '-pr-'
+					: ''
 			: ''
 
 		return allImages.find(node => {
@@ -293,6 +294,18 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		<section className='topSection'>
 			<div className={styles.productInfo}>
 				<div className={styles.images}>
+					<div
+						className={styles.image}
+						style={{
+							backgroundColor: 'rgba(0, 0, 0, 0.03)'
+						}}
+					>
+						<IJewelViewerEmbed
+							modelId='Wa3_O3xnRjGrG389PxvQGg'
+							className={styles.imageFrame}
+						/>
+					</div>
+
 					{images.map((image, index) => {
 						const steps = images.length > 1 ? images.length - 1 : 1
 						const alpha = 0.03 + (index / steps) * 0.05
