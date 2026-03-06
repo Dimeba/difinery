@@ -40,7 +40,7 @@ export async function generateMetadata(props) {
 	const content = matchedPage.fields
 
 	return {
-		title: 'Difinery | ' + content.title,
+		title: content.seoTitle,
 		description: content.description ? content.description : '',
 		keywords: content.keywords ? content.keywords : ''
 	}

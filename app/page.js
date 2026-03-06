@@ -9,7 +9,7 @@ const pages = await getEntries('page')
 const content = pages.items.find(page => page.fields.title == 'Homepage').fields
 
 export const metadata = {
-	title: 'Difinery',
+	title: content.seoTitle ? content.seoTitle : 'Difinery',
 	description: content.description ? content.description : '',
 	keywords: content.keywords ? content.keywords : ''
 }
