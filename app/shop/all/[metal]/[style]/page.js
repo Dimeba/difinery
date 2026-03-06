@@ -8,6 +8,10 @@ import { Suspense } from 'react'
 import { fetchProductsSmart } from '@/lib/smartFetch'
 import { getCachedShopPageContent } from '@/lib/cachedContentful'
 import { notFound } from 'next/navigation'
+import {
+	getShareImageFromProducts,
+	getSocialImageMetadata
+} from '@/lib/shareImage'
 
 const ALLOWED_METALS = ['yellow-gold', 'white-gold', 'rose-gold']
 
@@ -61,10 +65,21 @@ export async function generateMetadata(props) {
 		? `Shop ${styleLabel} in ${metalLabel}. Elegant, ethical lab-grown diamond jewelry by Difinery.`
 		: `Shop ${metalLabel} jewelry. Elegant, ethical lab-grown diamond jewelry by Difinery.`
 
+	const previewFilters = {
+		metal,
+		style: style !== 'all' ? style : null,
+		shape: null,
+		setting: null
+	}
+	const { edges } = await fetchProductsSmart(previewFilters, 'all')
+	const previewProducts = edges.map(edge => edge.node)
+	const shareImage = getShareImageFromProducts(previewProducts)
+
 	return {
 		title: 'Difinery | Shop',
 		description,
-		keywords: `lab-grown diamonds, ${metalLabel.toLowerCase()}, ethical jewelry, difinery`
+		keywords: `lab-grown diamonds, ${metalLabel.toLowerCase()}, ethical jewelry, difinery`,
+		...getSocialImageMetadata(shareImage)
 	}
 }
 

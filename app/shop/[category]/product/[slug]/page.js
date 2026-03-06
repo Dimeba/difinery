@@ -7,6 +7,10 @@ import { Suspense } from 'react'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 import { notFound } from 'next/navigation'
+import {
+	getShareImageFromProduct,
+	getSocialImageMetadata
+} from '@/lib/shareImage'
 
 export const revalidate = 3600 // Revalidate every hour
 
@@ -53,9 +57,12 @@ export async function generateMetadata(props) {
 		return { title: 'Difinery | Product not found' }
 	}
 
+	const shareImage = getShareImageFromProduct(product)
+
 	return {
 		title: 'Difinery | ' + product.title,
-		description: product.description ? product.description : ''
+		description: product.description ? product.description : '',
+		...getSocialImageMetadata(shareImage)
 	}
 }
 

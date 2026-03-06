@@ -13,6 +13,10 @@ import {
 	getCachedShopPageContent
 } from '@/lib/cachedContentful'
 import { notFound } from 'next/navigation'
+import {
+	getShareImageFromProducts,
+	getSocialImageMetadata
+} from '@/lib/shareImage'
 
 export const revalidate = 3600 // Revalidate every hour
 export async function generateStaticParams() {
@@ -47,8 +51,23 @@ export async function generateMetadata(props) {
 	}
 
 	const content = matched.fields
+	const { data } = await apolloClient.query({
+		query: GET_COLLECTION_BY_HANDLE,
+		variables: { handle: content.handle, first: 20, after: null },
+		context: {
+			fetchOptions: {
+				next: { revalidate: 3600 }
+			}
+		}
+	})
+	const previewProducts = (data.collectionByHandle?.products?.edges || []).map(
+		edge => edge.node
+	)
+	const shareImage = getShareImageFromProducts(previewProducts)
+
 	return {
-		title: 'Difinery | ' + content.title
+		title: 'Difinery | ' + content.title,
+		...getSocialImageMetadata(shareImage)
 	}
 }
 
