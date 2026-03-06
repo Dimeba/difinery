@@ -38,11 +38,24 @@ export async function generateMetadata(props) {
 	}
 
 	const content = matchedPage.fields
+	const rawShareImageUrl = content?.shareImage?.fields?.file?.url
+	const shareImageUrl = rawShareImageUrl
+		? rawShareImageUrl.startsWith('//')
+			? `https:${rawShareImageUrl}`
+			: rawShareImageUrl
+		: null
 
 	return {
 		title: content.seoTitle,
 		description: content.description ? content.description : '',
-		keywords: content.keywords ? content.keywords : ''
+		keywords: content.keywords ? content.keywords : '',
+		openGraph: {
+			images: shareImageUrl ? [{ url: shareImageUrl }] : []
+		},
+		twitter: {
+			card: 'summary_large_image',
+			images: shareImageUrl ? [shareImageUrl] : []
+		}
 	}
 }
 
