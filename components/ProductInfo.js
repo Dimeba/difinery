@@ -91,8 +91,9 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const has3DModel = Boolean(modelId)
 
 	useEffect(() => {
-		setShow3DModel(has3DModel)
-	}, [has3DModel])
+		// Always default to image gallery on variant change.
+		setShow3DModel(false)
+	}, [matchingVariant?.sku])
 
 	const images = useMemo(() => {
 		const urlFilter = node => {
