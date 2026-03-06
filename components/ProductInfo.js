@@ -18,6 +18,9 @@ import { useCart } from '@/context/CartContext'
 // analytics
 import { trackViewItem, trackAddToCart } from '@/lib/gaEvents'
 
+// data
+import iJewelData from '@/data/iJewelData.json' with { type: 'json' }
+
 const ProductInfo = ({ product, isGiftCard = false }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
@@ -60,9 +63,17 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const [boxVariant, setBoxVariant] = useState(null)
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 	const [selectedShape, setSelectedShape] = useState(null)
-	const modelId = 'Wa3_O3xnRjGrG389PxvQGg'
+
+	const modelId = useMemo(() => {
+		const sku = (matchingVariant?.sku || '').trim()
+		if (!sku) return ''
+
+		const model = iJewelData.find(item => item.SKU === sku)
+		return (model?.['3Did'] || '').trim()
+	}, [matchingVariant?.sku])
+
 	const has3DModel = Boolean(modelId)
-	const [show3DModel, setShow3DModel] = useState(has3DModel)
+	const [show3DModel, setShow3DModel] = useState(false)
 
 	// Track view_item event when product loads or variant changes
 	useEffect(() => {
@@ -76,6 +87,11 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			setMatchingVariant(product.variants.edges[0].node)
 		}
 	}, [product, matchingVariant])
+
+	useEffect(() => {
+		// Default behavior per current variant: show 3D when ID exists, else images.
+		setShow3DModel(has3DModel)
+	}, [has3DModel])
 
 	const images = useMemo(() => {
 		const urlFilter = node => {
