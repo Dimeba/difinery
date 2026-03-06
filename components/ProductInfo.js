@@ -2,11 +2,13 @@
 
 // styles
 import styles from './ProductInfo.module.scss'
+import mediaStyles from './ProductMediaPanel.module.scss'
 
 // components
-import Image from 'next/image'
 import ProductOptionsUI from './ProductOptionsUI'
 import OrderReview from './OrderReview'
+import ProductImageGallery from './ProductImageGallery'
+import ProductIframeViewer from './ProductIframeViewer'
 
 // hooks
 import { useState, useMemo, useEffect } from 'react'
@@ -63,16 +65,6 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const [boxVariant, setBoxVariant] = useState(null)
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 	const [selectedShape, setSelectedShape] = useState(null)
-
-	const modelId = useMemo(() => {
-		const sku = (matchingVariant?.sku || '').trim()
-		if (!sku) return ''
-
-		const model = iJewelData.find(item => item.SKU === sku)
-		return (model?.['3Did'] || '').trim()
-	}, [matchingVariant?.sku])
-
-	const has3DModel = Boolean(modelId)
 	const [show3DModel, setShow3DModel] = useState(false)
 
 	// Track view_item event when product loads or variant changes
@@ -88,8 +80,17 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		}
 	}, [product, matchingVariant])
 
+	const modelId = useMemo(() => {
+		const sku = (matchingVariant?.sku || '').trim()
+		if (!sku) return ''
+
+		const model = iJewelData.find(item => item.SKU === sku)
+		return (model?.['3Did'] || '').trim()
+	}, [matchingVariant?.sku])
+
+	const has3DModel = Boolean(modelId)
+
 	useEffect(() => {
-		// Default behavior per current variant: show 3D when ID exists, else images.
 		setShow3DModel(has3DModel)
 	}, [has3DModel])
 
@@ -311,11 +312,11 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	return (
 		<section className='topSection'>
 			<div className={styles.productInfo}>
-				<div className={styles.imagesContainer}>
+				<div className={mediaStyles.mediaPanel}>
 					{has3DModel && (
 						<button
 							type='button'
-							className={styles.viewerModeToggle}
+							className={mediaStyles.viewerModeToggle}
 							onClick={() => setShow3DModel(prev => !prev)}
 							aria-label={
 								show3DModel ? 'Show product images' : 'Show 3D model viewer'
@@ -334,61 +335,11 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 						</button>
 					)}
 
-					<div
-						className={styles.images}
-						style={{
-							backgroundColor: 'rgba(0, 0, 0, 0.03)'
-						}}
-					>
-						{show3DModel && has3DModel ? (
-							<div
-								className={styles.image}
-								style={{
-									backgroundColor: 'rgba(0, 0, 0, 0.03)'
-								}}
-							>
-								<iframe
-									title='YR-CH-0514.glb'
-									frameBorder='0'
-									allowFullScreen
-									allow='camera; autoplay; fullscreen; xr-spatial-tracking; web-share'
-									src={`https://ijewel3d.com/drive/files/${modelId}/embedded?slug=${modelId}&isTitle=false&isRemoveHologram=true&isRemoveLogo=true&isRemoveLogoLink=true&isAutoplay=true&isTransparentBackground=true&isConfigurator=false&isEnabledZoom=false&isFitObject=false&isFullScreen=false`}
-									className={styles.imageFrame}
-								/>
-								<div className={styles.imageFrameOverlay} aria-hidden='true' />
-							</div>
-						) : (
-							images.map((image, index) => {
-								const steps = images.length > 1 ? images.length - 1 : 1
-								const alpha = 0.03 + (index / steps) * 0.05
-								return (
-									<div
-										className={styles.image}
-										key={index}
-										style={{
-											backgroundColor: `rgba(0, 0, 0, ${alpha.toFixed(2)})`
-										}}
-									>
-										<Image
-											src={image.url}
-											fill
-											alt='Image of the product.'
-											priority={index === 0}
-											loading={index === 0 ? undefined : 'lazy'}
-											quality={75}
-											sizes='(max-width: 768px) 100vw, 50vw'
-											style={{
-												objectFit:
-													isGiftCard || image.url.includes('.jpg')
-														? 'cover'
-														: 'contain'
-											}}
-										/>
-									</div>
-								)
-							})
-						)}
-					</div>
+					{show3DModel && has3DModel ? (
+						<ProductIframeViewer modelId={modelId} sku={matchingVariant?.sku} />
+					) : (
+						<ProductImageGallery images={images} isGiftCard={isGiftCard} />
+					)}
 				</div>
 
 				{product && (

@@ -7,75 +7,6 @@
 	align-items: start;
 }
 
-.imagesContainer {
-	grid-column: span 6;
-	aspect-ratio: 1 / 1;
-	position: sticky;
-	top: 0;
-	overflow: hidden;
-}
-
-.images {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	height: 100%;
-	overflow-y: scroll;
-
-	// Hide scrollbar in Firefox
-	scrollbar-width: none;
-	-ms-overflow-style: none;
-
-	// Hide scrollbar in WebKit browsers
-	&::-webkit-scrollbar {
-		display: none;
-	}
-}
-
-.image {
-	position: relative;
-	width: 100%;
-	aspect-ratio: 1 / 1;
-}
-
-.imageFrame {
-	width: 100%;
-	height: 100%;
-	border: 0;
-	display: block;
-	background-color: rgba(0, 0, 0, 0.03);
-	background: transparent;
-}
-
-.imageFrameOverlay {
-	position: absolute;
-	inset: 0;
-	background-color: rgba(0, 0, 0, 0.03);
-	pointer-events: none;
-}
-
-.viewerModeToggle {
-	position: absolute;
-	left: 0.75rem;
-	top: 0.75rem;
-	z-index: 3;
-	width: 2.7rem;
-	height: 2.7rem;
-	display: grid;
-	place-items: center;
-	border: 1px solid rgba(0, 0, 0, 0.2);
-	background-color: rgba(255, 255, 255, 0.92);
-	padding: 0;
-	border-radius: 999px;
-	cursor: pointer;
-
-	svg {
-		width: 1.2rem;
-		height: 1.2rem;
-		fill: #111;
-	}
-}
-
 .imageControls {
 	position: absolute;
 	bottom: 0;
@@ -340,26 +271,8 @@
 		align-items: center;
 	}
 
-	.imagesContainer,
-	.images,
 	.content {
 		width: 90vw;
-	}
-
-	.imagesContainer {
-		position: relative;
-		top: auto;
-	}
-
-	.images {
-		flex-direction: row;
-		overflow-x: scroll;
-		position: relative;
-	}
-
-	.image {
-		width: 90vw;
-		flex-shrink: 0;
 	}
 
 	.content {
