@@ -63,7 +63,13 @@ export async function generateMetadata(props) {
 	const previewProducts = (data.collectionByHandle?.products?.edges || []).map(
 		edge => edge.node
 	)
-	const shareImage = getShareImageFromProducts(previewProducts)
+	const rawShareImageUrl = content?.shareImage?.fields?.file?.url
+	const contentfulShareImage = rawShareImageUrl
+		? rawShareImageUrl.startsWith('//')
+			? `https:${rawShareImageUrl}`
+			: rawShareImageUrl
+		: null
+	const shareImage = contentfulShareImage || getShareImageFromProducts(previewProducts)
 
 	return {
 		title: 'Difinery | ' + content.title,
