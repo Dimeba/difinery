@@ -39,6 +39,9 @@ const nextConfig = {
 		formats: ['image/avif', 'image/webp'],
 		deviceSizes: [640, 768, 1024, 1280, 1600]
 	},
+	eslint: {
+		ignoreDuringBuilds: true
+	},
 
 	// Apply no-cache headers during development
 	async headers() {

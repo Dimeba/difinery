@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "NODE_OPTIONS=--disable-warning=DEP0169 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -28,6 +28,7 @@
     "sass": "^1.72.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
     "eslint": "^10.0.1",
     "eslint-config-next": "^0.2.4"
   }
