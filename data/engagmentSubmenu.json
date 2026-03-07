@@ -1,0 +1,86 @@
+{
+	"link": "/shop/collections/engagement-rings",
+	"columns": [
+		{
+			"title": "Start Exploring",
+			"rows": [
+				{
+					"title": "Book a Meeting",
+					"url": "https://cal.com/difinery-admin-ef3jr7/30min?user=difinery-admin-ef3jr7"
+				},
+				{
+					"title": "Ring Size Chart",
+					"url": "/Size-Guide-Difinery-Desktop.pdf"
+				},
+				{
+					"title": "Lab-Grown Diamonds",
+					"url": "/lab-grown-diamonds"
+				},
+				{
+					"title": "Recycled Gold",
+					"url": "/recycled-gold"
+				},
+				{
+					"title": "Blank Canvas",
+					"url": "/blank-canvas"
+				}
+			]
+		},
+		{
+			"title": "Learn",
+			"rows": [
+				{
+					"title": "Ring Size Guide",
+					"url": "/faqs"
+				},
+				{
+					"title": "Diamond Shapes",
+					"url": "/lab-grown-diamonds"
+				},
+				{
+					"title": "Metal Guide",
+					"url": "/recycled-gold"
+				},
+				{
+					"title": "Custom Design",
+					"url": "/blank-canvas"
+				}
+			]
+		},
+		{
+			"title": "Collections",
+			"rows": [
+				{
+					"title": "Ever After",
+					"url": "/shop/collections/ever-after-collection"
+				},
+				{
+					"title": "Infinity",
+					"url": "/shop/collections/infinity-collection"
+				},
+				{
+					"title": "Heart",
+					"url": "/shop/collections/heart-collection"
+				},
+				{
+					"title": "Orbit",
+					"url": "/shop/collections/orbit-collection"
+				}
+			]
+		}
+	],
+	"promotions": [
+		{
+			"id": "engagement-promo-rings",
+			"title": "CLASSIC ENGAGEMENT RINGS",
+			"link": "/shop/collections/engagement-rings",
+			"imageUrl": "/engagement.jpg"
+		},
+		{
+			"id": "engagement-promo-expert",
+			"title": "Speak with a diamond expert",
+			"link": "https://cal.com/difinery-admin-ef3jr7/30min?user=difinery-admin-ef3jr7",
+			"imageUrl": "/expert.jpg"
+		}
+	]
+}

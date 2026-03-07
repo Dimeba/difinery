@@ -7,6 +7,7 @@ import styles from './Header.module.scss'
 import { Box, ClickAwayListener, Typography } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
+import HeaderSubmenu from './HeaderSubmenu'
 import {
 	FiShoppingBag,
 	FiUser,
@@ -27,8 +28,14 @@ import { useCart } from '@/context/CartContext'
 
 // data
 import submenus from '@/data/submenus.json' with { type: 'json' }
+import engagmentSubmenu from '@/data/engagmentSubmenu.json' with { type: 'json' }
 
-const Header = ({ content, collectionsContent }) => {
+const Header = ({
+	content,
+	collectionsContent,
+	engagementSubmenuColumns = engagmentSubmenu.columns || [],
+	engagementPromoOverrides = engagmentSubmenu.promotions || []
+}) => {
 	// cart
 	const { setShowCart, cart } = useCart()
 
@@ -85,8 +92,8 @@ const Header = ({ content, collectionsContent }) => {
 	const categories = ['Rings', 'Earrings', 'Necklaces', 'Bracelets']
 
 	// Show Submenu
-	const loadSubmenu = submenu => {
-		setActiveSubmenu(submenu)
+	const loadSubmenu = submenuConfig => {
+		setActiveSubmenu(submenuConfig)
 		setShowSubmenu(true)
 	}
 
@@ -256,7 +263,9 @@ const Header = ({ content, collectionsContent }) => {
 									href='/shop/all/yellow-gold/all'
 									aria-label='Link to Shop page.'
 									className={styles.mainMenuLink}
-									onMouseEnter={() => loadSubmenu(submenus[0].columns)}
+									onMouseEnter={() =>
+										loadSubmenu({ columns: submenus[0].columns })
+									}
 									onClick={() => setOpenMenu(false)}
 								>
 									<p>Shop</p>{' '}
@@ -265,10 +274,15 @@ const Header = ({ content, collectionsContent }) => {
 
 								{/* Engagement Rings */}
 								<Link
-									href='/shop/collections/engagement-rings'
+									href={engagmentSubmenu.link || '/shop/collections/engagement-rings'}
 									aria-label='Link to Engagement Rings collection.'
 									className={styles.mainMenuLink}
-									onMouseEnter={() => loadSubmenu(submenus[0].columns)}
+									onMouseEnter={() =>
+										loadSubmenu({
+											columns: engagementSubmenuColumns,
+											promoOverrides: engagementPromoOverrides
+										})
+									}
 									onClick={() => setOpenMenu(false)}
 								>
 									<p>Engagement</p>{' '}
@@ -283,7 +297,7 @@ const Header = ({ content, collectionsContent }) => {
 										aria-label={`Link to ${title} page.`}
 										className={styles.mainMenuLink}
 										onMouseEnter={() =>
-											loadSubmenu(submenus[index + 1].columns)
+											loadSubmenu({ columns: submenus[index + 1].columns })
 										}
 										onClick={() => setOpenMenu(false)}
 									>
@@ -385,47 +399,11 @@ const Header = ({ content, collectionsContent }) => {
 
 					{/* Submenu */}
 					{content.showDropdownMenu && showSubmenu && (
-						<div className={`container ${styles.subMenu}`}>
-							{activeSubmenu &&
-								activeSubmenu.map(column => {
-									if (column.title === 'none') {
-										return <div className={styles.column2} key={column.title} />
-									}
-									return (
-										<div className={styles.column2} key={column.title}>
-											<p style={{ fontWeight: '600' }}>{column.title}</p>
-											{column.rows.map(row => (
-												<Link
-													key={row.title}
-													href={row.url}
-													aria-label={`Link to ${row.title} page.`}
-													className={styles.subMenuLink}
-												>
-													<p>{row.title}</p>
-												</Link>
-											))}
-										</div>
-									)
-								})}
-
-							{content.promotions &&
-								content.promotions.map(promo => (
-									<div key={promo.sys.id} className={styles.column3}>
-										<Link href={promo.fields.link} alt='test'>
-											<div className={styles.subMenuImg}>
-												<Image
-													src={'https:' + promo.fields.image.fields.file.url}
-													style={{ objectFit: 'cover' }}
-													alt='test'
-													fill
-												/>
-											</div>
-										</Link>
-
-										<p>{promo.fields.title}</p>
-									</div>
-								))}
-						</div>
+						<HeaderSubmenu
+							columns={activeSubmenu?.columns || []}
+							promotions={content.promotions || []}
+							promoOverrides={activeSubmenu?.promoOverrides || []}
+						/>
 					)}
 				</Box>
 			</Box>
