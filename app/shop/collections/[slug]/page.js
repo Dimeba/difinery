@@ -79,6 +79,7 @@ export async function generateMetadata(props) {
 
 export default async function Page(props) {
 	const params = await props.params
+	const searchParams = await props.searchParams
 	const { slug } = params
 
 	const collections = await getCachedCollections()
@@ -113,6 +114,17 @@ export default async function Page(props) {
 	const initialEdges = data.collectionByHandle?.products.edges
 	const initialItems = initialEdges.map(edge => edge.node)
 	const initialPageInfo = data.collectionByHandle?.products.pageInfo
+	const shapeFilter = searchParams?.shape || null
+	const priceMinFilter = searchParams?.priceMin || null
+	const priceMaxFilter = searchParams?.priceMax || null
+	const collectionFilters =
+		shapeFilter || priceMinFilter || priceMaxFilter
+			? {
+					shapeName: shapeFilter,
+					priceMin: priceMinFilter,
+					priceMax: priceMaxFilter
+				}
+			: null
 
 	return (
 		<main>
@@ -123,6 +135,7 @@ export default async function Page(props) {
 					productType='all'
 					// showFilters
 					collectionHandle={content.handle}
+					filters={collectionFilters}
 					collectionPreview={{
 						title: content.title,
 						description: content.description,

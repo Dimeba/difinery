@@ -27,44 +27,56 @@
 			]
 		},
 		{
-			"title": "Learn",
+			"title": "By Shape",
 			"rows": [
 				{
-					"title": "Ring Size Guide",
-					"url": "/faqs"
+					"title": "Round",
+					"url": "/shop/collections/engagement-rings?shape=round"
 				},
 				{
-					"title": "Diamond Shapes",
-					"url": "/lab-grown-diamonds"
+					"title": "Oval",
+					"url": "/shop/collections/engagement-rings?shape=oval"
 				},
 				{
-					"title": "Metal Guide",
-					"url": "/recycled-gold"
+					"title": "Pear",
+					"url": "/shop/collections/engagement-rings?shape=pear"
 				},
 				{
-					"title": "Custom Design",
-					"url": "/blank-canvas"
+					"title": "Marquise",
+					"url": "/shop/collections/engagement-rings?shape=marquise"
+				},
+				{
+					"title": "Radiant",
+					"url": "/shop/collections/engagement-rings?shape=radiant"
+				},
+				{
+					"title": "All 9 Shapes",
+					"url": "/shop/collections/engagement-rings"
 				}
 			]
 		},
 		{
-			"title": "Collections",
+			"title": "By Prince Range",
 			"rows": [
 				{
-					"title": "Ever After",
-					"url": "/shop/collections/ever-after-collection"
+					"title": "From $1,000",
+					"url": "/shop/collections/engagement-rings?priceMin=1000"
 				},
 				{
-					"title": "Infinity",
-					"url": "/shop/collections/infinity-collection"
+					"title": "$1,000 to $1,500",
+					"url": "/shop/collections/engagement-rings?priceMin=1000&priceMax=1500"
 				},
 				{
-					"title": "Heart",
-					"url": "/shop/collections/heart-collection"
+					"title": "$1,500 to $2,000",
+					"url": "/shop/collections/engagement-rings?priceMin=1500&priceMax=2000"
 				},
 				{
-					"title": "Orbit",
-					"url": "/shop/collections/orbit-collection"
+					"title": "$2,000 to $3,000",
+					"url": "/shop/collections/engagement-rings?priceMin=2000&priceMax=3000"
+				},
+				{
+					"title": "Under $3,500",
+					"url": "/shop/collections/engagement-rings?priceMax=3500"
 				}
 			]
 		}

@@ -22,8 +22,9 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 
 // hooks
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
+import { useSearchParams } from 'next/navigation'
 
 // analytics
 import { trackViewItemList } from '@/lib/gaEvents'
@@ -64,6 +65,25 @@ const Products = ({
 
 	const isMobile = useMediaQuery('(max-width: 1024px)')
 	const anchorRef = useRef(null)
+	const searchParams = useSearchParams()
+
+	const queryShape = searchParams.get('shape')
+	const queryPriceMin = searchParams.get('priceMin')
+	const queryPriceMax = searchParams.get('priceMax')
+
+	const effectiveFilters = useMemo(() => {
+		// Prefer explicit server-provided filters; fallback to URL query filters.
+		if (!queryShape && !queryPriceMin && !queryPriceMax) {
+			return filters
+		}
+
+		return {
+			...(filters || {}),
+			shapeName: filters?.shapeName || queryShape || null,
+			priceMin: filters?.priceMin || queryPriceMin || null,
+			priceMax: filters?.priceMax || queryPriceMax || null
+		}
+	}, [filters, queryShape, queryPriceMin, queryPriceMax])
 
 	// client-side pagination count
 	const [visibleCount, setVisibleCount] = useState(16)
@@ -72,10 +92,12 @@ const Products = ({
 	useEffect(() => {
 		setFilteredItems(productsList)
 		// If products list grew (e.g., from API load more), increase visible count
-		if (productsList.length > visibleCount) {
-			setVisibleCount(productsList.length)
-		}
-	}, [productsList, visibleCount])
+		setVisibleCount(currentVisibleCount =>
+			productsList.length > currentVisibleCount
+				? productsList.length
+				: currentVisibleCount
+		)
+	}, [productsList])
 
 	// Increase visible count when searching to show all results
 	useEffect(() => {
@@ -128,10 +150,10 @@ const Products = ({
 		}
 
 		// Apply filters from query parameters
-		if (filters) {
+		if (effectiveFilters) {
 			// Metal filter
-			if (filters.metal) {
-				const metalWords = filters.metal.split('-')
+			if (effectiveFilters.metal) {
+				const metalWords = effectiveFilters.metal.split('-')
 				const metalTerm = metalWords[0] // e.g., "yellow" from "yellow-gold"
 				updated = updated.filter(p =>
 					p.options?.some(opt =>
@@ -141,26 +163,51 @@ const Products = ({
 			}
 
 			// Shape filter
-			if (filters.shape) {
-				const normalizedShape = normalizeTag(filters.shape)
+			if (effectiveFilters.shape) {
+				const normalizedShape = normalizeTag(effectiveFilters.shape)
 				updated = updated.filter(p => p.tags?.includes(normalizedShape))
 			}
 
 			// Setting filter
-			if (filters.setting) {
-				const normalizedSetting = normalizeTag(filters.setting)
+			if (effectiveFilters.setting) {
+				const normalizedSetting = normalizeTag(effectiveFilters.setting)
 				updated = updated.filter(p => p.tags?.includes(normalizedSetting))
 			}
 
 			// Style filter
-			if (filters.style) {
-				const normalizedStyle = normalizeTag(filters.style)
+			if (effectiveFilters.style) {
+				const normalizedStyle = normalizeTag(effectiveFilters.style)
 				updated = updated.filter(p => p.tags?.includes(normalizedStyle))
+			}
+
+			// Collection-specific shape filter by product title.
+			if (effectiveFilters.shapeName) {
+				const shapeTerm = String(effectiveFilters.shapeName).toLowerCase()
+				updated = updated.filter(p =>
+					(p.title || '').toLowerCase().includes(shapeTerm)
+				)
+			}
+
+			// Collection-specific price range filters.
+			const min = effectiveFilters.priceMin
+				? Number(effectiveFilters.priceMin)
+				: null
+			const max = effectiveFilters.priceMax
+				? Number(effectiveFilters.priceMax)
+				: null
+			if (min !== null || max !== null) {
+				updated = updated.filter(p => {
+					const amount = Number(p.priceRange?.minVariantPrice?.amount)
+					if (Number.isNaN(amount)) return false
+					if (min !== null && amount < min) return false
+					if (max !== null && amount > max) return false
+					return true
+				})
 			}
 		}
 
 		// Legacy support for old props (if still used elsewhere)
-		if (selectedMetalType && !filters) {
+		if (selectedMetalType && !effectiveFilters) {
 			updated = updated.filter(p =>
 				p.options?.some(opt =>
 					opt.values.some(value =>
@@ -172,7 +219,7 @@ const Products = ({
 			)
 		}
 
-		if (selectedTag && !filters) {
+		if (selectedTag && !effectiveFilters) {
 			const normalizedTag = normalizeTag(selectedTag)
 			updated = updated.filter(p => p.tags?.includes(normalizedTag))
 		}
@@ -224,7 +271,7 @@ const Products = ({
 		selectedMetalType,
 		selectedTag,
 		searchTerm,
-		filters,
+		effectiveFilters,
 		isSearching
 	])
 
@@ -233,14 +280,14 @@ const Products = ({
 		if (filteredItems.length > 0) {
 			// Build list name from current filters
 			let listName = 'Shop'
-			if (filters?.category && filters.category !== 'all') {
-				listName = `Category: ${filters.category}`
+			if (effectiveFilters?.category && effectiveFilters.category !== 'all') {
+				listName = `Category: ${effectiveFilters.category}`
 			}
-			if (filters?.metal) {
-				listName += ` - ${filters.metal}`
+			if (effectiveFilters?.metal) {
+				listName += ` - ${effectiveFilters.metal}`
 			}
-			if (filters?.style && filters.style !== 'all') {
-				listName += ` - ${filters.style}`
+			if (effectiveFilters?.style && effectiveFilters.style !== 'all') {
+				listName += ` - ${effectiveFilters.style}`
 			}
 			if (searchTerm) {
 				listName = `Search: ${searchTerm}`
@@ -248,19 +295,19 @@ const Products = ({
 
 			trackViewItemList(filteredItems.slice(0, visibleCount), listName)
 		}
-	}, [filteredItems, visibleCount, filters, searchTerm])
+	}, [filteredItems, visibleCount, effectiveFilters, searchTerm])
 
 	// Build list name for ProductCard
 	const getListName = () => {
 		let listName = 'Shop'
-		if (filters?.category && filters.category !== 'all') {
-			listName = `Category: ${filters.category}`
+		if (effectiveFilters?.category && effectiveFilters.category !== 'all') {
+			listName = `Category: ${effectiveFilters.category}`
 		}
-		if (filters?.metal) {
-			listName += ` - ${filters.metal}`
+		if (effectiveFilters?.metal) {
+			listName += ` - ${effectiveFilters.metal}`
 		}
-		if (filters?.style && filters.style !== 'all') {
-			listName += ` - ${filters.style}`
+		if (effectiveFilters?.style && effectiveFilters.style !== 'all') {
+			listName += ` - ${effectiveFilters.style}`
 		}
 		if (searchTerm) {
 			listName = `Search: ${searchTerm}`
