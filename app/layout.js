@@ -19,8 +19,7 @@ import { CartProvider } from '@/context/CartContext'
 import { ApolloContext } from '@/lib/apolloContext'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import MUIProviders from '@/components/MUIProviders'
-import GTMEvents from '@/components/GTMEvents'
-import KlaviyoRefresh from '@/components/KlaviyoRefresh'
+import LayoutClientEffects from '@/components/LayoutClientEffects'
 
 const header = await getEntries('header')
 const footer = await getEntries('footer')
@@ -118,8 +117,7 @@ export default function RootLayout({ children }) {
 							></iframe>
 						</noscript>
 						<Suspense fallback={null}>
-							<GTMEvents />
-							<KlaviyoRefresh />
+							<LayoutClientEffects />
 						</Suspense>
 						{/* End Google Tag Manager (noscript) */}
 						<AppRouterCacheProvider>

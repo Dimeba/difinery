@@ -2,6 +2,9 @@
 const isDev = process.env.NODE_ENV === 'development'
 
 const nextConfig = {
+	// Keep dev and production build artifacts separate to avoid
+	// .next corruption when `npm run dev` and `npm run build` run concurrently.
+	distDir: isDev ? '.next-dev' : '.next',
 	env: {
 		// Chec & Shopify API keys
 		// space: process.env.NEXT_PUBLIC_CHEC_PUBLIC_API_KEY,

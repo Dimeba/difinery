@@ -22,9 +22,8 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 
 // hooks
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useMediaQuery } from '@mui/material'
-import { useSearchParams } from 'next/navigation'
 
 // analytics
 import { trackViewItemList } from '@/lib/gaEvents'
@@ -65,25 +64,7 @@ const Products = ({
 
 	const isMobile = useMediaQuery('(max-width: 1024px)')
 	const anchorRef = useRef(null)
-	const searchParams = useSearchParams()
-
-	const queryShape = searchParams.get('shape')
-	const queryPriceMin = searchParams.get('priceMin')
-	const queryPriceMax = searchParams.get('priceMax')
-
-	const effectiveFilters = useMemo(() => {
-		// Prefer explicit server-provided filters; fallback to URL query filters.
-		if (!queryShape && !queryPriceMin && !queryPriceMax) {
-			return filters
-		}
-
-		return {
-			...(filters || {}),
-			shapeName: filters?.shapeName || queryShape || null,
-			priceMin: filters?.priceMin || queryPriceMin || null,
-			priceMax: filters?.priceMax || queryPriceMax || null
-		}
-	}, [filters, queryShape, queryPriceMin, queryPriceMax])
+	const effectiveFilters = filters
 
 	// client-side pagination count
 	const [visibleCount, setVisibleCount] = useState(16)
