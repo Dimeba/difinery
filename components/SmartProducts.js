@@ -25,6 +25,15 @@ export default function SmartProducts({
 	const searchTimeoutRef = useRef(null)
 	const pendingSearchRef = useRef(false)
 
+	// Keep local state in sync with server-provided props after route/filter changes.
+	useEffect(() => {
+		setProducts(initialProducts)
+		setPageInfo(initialPageInfo)
+		setHasLoadedFull(
+			initialProducts.length >= 50 || initialPageInfo?.hasNextPage === false
+		)
+	}, [initialProducts, initialPageInfo])
+
 	// Check if filters are active (excluding metal which is in URL)
 	const hasActiveFilters =
 		(filters?.style && filters.style !== 'all') ||
