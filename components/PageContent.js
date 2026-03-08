@@ -16,7 +16,7 @@ const PageContent = ({ content }) => {
 	return (
 		<main>
 			{/* Content */}
-			<SpecialRequestBanner />
+			{/* <SpecialRequestBanner /> */}
 
 			{content.sections.map((section, index) => {
 				switch (section.sys.contentType.sys.id) {

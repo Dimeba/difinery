@@ -69,7 +69,8 @@ export async function generateMetadata(props) {
 			? `https:${rawShareImageUrl}`
 			: rawShareImageUrl
 		: null
-	const shareImage = contentfulShareImage || getShareImageFromProducts(previewProducts)
+	const shareImage =
+		contentfulShareImage || getShareImageFromProducts(previewProducts)
 
 	return {
 		title: 'Difinery | ' + content.title,
@@ -125,6 +126,14 @@ export default async function Page(props) {
 					priceMax: priceMaxFilter
 				}
 			: null
+	const mergedPageContent = {
+		...pageContent,
+		...content,
+		sections: [
+			...(content?.sections || []),
+			...(pageContent?.sections || [])
+		]
+	}
 
 	return (
 		<main>
@@ -144,7 +153,7 @@ export default async function Page(props) {
 					}}
 				/>
 			</Suspense>
-			<PageContent content={pageContent} />
+			<PageContent content={mergedPageContent} />
 		</main>
 	)
 }
