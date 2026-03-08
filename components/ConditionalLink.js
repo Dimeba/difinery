@@ -15,7 +15,9 @@ const ConditionalLink = ({
 	mobileColumns,
 	height = '650px',
 	fixedRatio = false,
-	mediaMobileAlign = 'center'
+	mediaMobileAlign = 'center',
+	mobileFitContent = false,
+	className = ''
 }) => {
 	const dynamicStyles = {
 		backgroundColor: overlay ? 'rgba(0,0,0,0.25)' : '',
@@ -37,7 +39,9 @@ const ConditionalLink = ({
 
 	const sharedClasses = `${styles.column} ${
 		type == 'blank' ? styles.blackText : styles.whiteText
-	} ${mobileColumns == 2 ? styles.columnGrid : ''} ${returnMediaMobileAlign()}`
+	} ${mobileColumns == 2 ? styles.columnGrid : ''} ${returnMediaMobileAlign()} ${
+		mobileFitContent ? styles.mobileFitContent : ''
+	} ${className}`
 
 	if (link) {
 		return (

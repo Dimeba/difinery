@@ -5,8 +5,9 @@ import styles from './Columns.module.scss'
 import { Box, Typography } from '@mui/material'
 import Column from './Column'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import { getEntry } from '@/lib/contentful'
 
-const Columns = ({
+const Columns = async ({
 	fullWidth,
 	fullHeight,
 	gap,
@@ -27,6 +28,24 @@ const Columns = ({
 			marginBottom: marginBottom ? '' : '0'
 		}
 	}
+
+	const columnsMeta = await Promise.all(
+		content.map(async item => {
+			const entry = await getEntry(item.sys.id)
+			const type = entry?.fields?.type || ''
+			const hasMediaType = type === 'image' || type === 'video'
+			const hasMediaAsset = Boolean(entry?.fields?.media)
+			return {
+				item,
+				hasMedia: hasMediaType || hasMediaAsset
+			}
+		})
+	)
+
+	const hasTwoColumns = columnsMeta.length === 2
+	const hasExactlyOneMediaColumn =
+		columnsMeta.filter(column => column.hasMedia).length === 1
+	const shouldReorderForMobile = hasTwoColumns && hasExactlyOneMediaColumn
 
 	return (
 		<section style={dynamicStyles.section}>
@@ -52,6 +71,7 @@ const Columns = ({
 				{subtitle && (
 					<Box
 						marginBottom={'4rem'}
+						padding='0 5vw'
 						sx={{
 							'& *': {
 								textAlign: 'center'
@@ -63,16 +83,25 @@ const Columns = ({
 				)}
 
 				<div
-					className={mobileColumns == 2 ? styles.columnsGrid : styles.columns}
+					className={`${mobileColumns == 2 ? styles.columnsGrid : styles.columns} ${
+						shouldReorderForMobile ? styles.mediaFirstOnMobile : ''
+					}`}
 					style={dynamicStyles.columns}
 				>
-					{content.map((item, index) => (
+					{columnsMeta.map(({ item, hasMedia }, index) => (
 						<Column
 							key={index}
 							fullHeight={fullHeight}
 							id={item.sys.id}
 							columns={content.length}
 							mobileColumns={mobileColumns}
+							className={
+								shouldReorderForMobile
+									? hasMedia
+										? styles.mobileMediaItem
+										: styles.mobileTextOnlyItem
+									: ''
+							}
 						/>
 					))}
 				</div>

@@ -18,7 +18,8 @@ const Column = async ({
 	id,
 	columns,
 	mobileColumns = 1,
-	height = '650px'
+	height = '650px',
+	className = ''
 }) => {
 	const content = await getEntry(id)
 
@@ -95,6 +96,8 @@ const Column = async ({
 	}
 
 	const isPng = content.fields.media?.fields?.file?.contentType === 'image/png'
+	const hasImageOrVideo =
+		content.fields.type === 'image' || content.fields.type === 'video'
 
 	return (
 		<ConditionalLink
@@ -104,6 +107,8 @@ const Column = async ({
 			type={content.fields.type}
 			mobileColumns={mobileColumns}
 			height={content.fields.noPadding ? 'fit-content' : height}
+			mobileFitContent={!hasImageOrVideo}
+			className={className}
 			fixedRatio={content.fields.fixedRatio}
 			mediaMobileAlign={content.fields.mediaMobileAlign || 'center'}
 		>

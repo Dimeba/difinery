@@ -170,6 +170,20 @@
 		flex: auto;
 	}
 
+	.mobileFitContent {
+		height: fit-content !important;
+	}
+
+	.mediaFirstOnMobile {
+		.mobileMediaItem {
+			order: -1;
+		}
+
+		.mobileTextOnlyItem {
+			order: 1;
+		}
+	}
+
 	.mediaMobileAlignLeft {
 		video {
 			object-position: left;
