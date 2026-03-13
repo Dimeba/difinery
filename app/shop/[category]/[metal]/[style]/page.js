@@ -12,6 +12,9 @@ import {
 	getShareImageFromProducts,
 	getSocialImageMetadata
 } from '@/lib/shareImage'
+import { apolloClient } from '@/lib/apolloClient'
+import { GET_PRODUCTS } from '@/lib/queries/getProducts'
+import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
 
 const ALLOWED_CATEGORIES = [
 	'bracelets',
@@ -69,8 +72,8 @@ export async function generateMetadata(props) {
 		metal === 'yellow-gold'
 			? 'Yellow Gold'
 			: metal === 'white-gold'
-			? 'White Gold'
-			: 'Rose Gold'
+				? 'White Gold'
+				: 'Rose Gold'
 	const styleLabel =
 		style !== 'all'
 			? style
@@ -83,15 +86,32 @@ export async function generateMetadata(props) {
 		? `Shop ${styleLabel} ${titleCase} in ${metalLabel}. Elegant, ethical lab-grown diamond jewelry by Difinery.`
 		: `Shop ${metalLabel} ${titleCase}. Elegant, ethical lab-grown diamond jewelry by Difinery.`
 
-	const previewFilters = {
-		metal,
-		style: style !== 'all' ? style : null,
-		shape: null,
-		setting: null
+	// Use a small fetch (first: 3) just for the OG image — avoids full paginated
+	// dataset fetches during static generation which caused build timeouts.
+	let shareImage = null
+	try {
+		const queryOptions =
+			category === 'all'
+				? {
+						query: GET_PRODUCTS,
+						variables: { first: 3, after: null },
+						context: { fetchOptions: { next: { revalidate: 3600 } } }
+					}
+				: {
+						query: GET_COLLECTION_BY_HANDLE,
+						variables: { handle: category, first: 3, after: null },
+						context: { fetchOptions: { next: { revalidate: 3600 } } }
+					}
+		const { data } = await apolloClient.query(queryOptions)
+		const edges =
+			category === 'all'
+				? (data.products?.edges ?? [])
+				: (data.collectionByHandle?.products?.edges ?? [])
+		const previewProducts = edges.map(edge => edge.node)
+		shareImage = getShareImageFromProducts(previewProducts)
+	} catch (_) {
+		// Non-critical: OG image simply won't be set if fetch fails
 	}
-	const { edges } = await fetchProductsSmart(previewFilters, category)
-	const previewProducts = edges.map(edge => edge.node)
-	const shareImage = getShareImageFromProducts(previewProducts)
 
 	return {
 		title: `Difinery | ${titleCase}`,
@@ -132,8 +152,8 @@ export default async function CategoryMetalStylePage(props) {
 		metal === 'yellow-gold'
 			? 'Yellow Gold'
 			: metal === 'white-gold'
-			? 'White Gold'
-			: 'Rose Gold'
+				? 'White Gold'
+				: 'Rose Gold'
 
 	return (
 		<main>
