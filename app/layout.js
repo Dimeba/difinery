@@ -79,7 +79,7 @@ export default function RootLayout({ children }) {
 					t.src=v;s=b.getElementsByTagName(e)[0];
 					s.parentNode.insertBefore(t,s)}(window, document,'script',
 					'https://connect.facebook.net/en_US/fbevents.js');
-					fbq('init', '801044746115457');
+					fbq('init', '2150880189011679');
 					fbq('track', 'PageView');`}
 				</Script>
 				{/* Klaviyo Onsite */}
@@ -97,7 +97,7 @@ export default function RootLayout({ children }) {
 						width='1'
 						alt=''
 						style={{ display: 'none' }}
-						src='https://www.facebook.com/tr?id=801044746115457&ev=PageView&noscript=1'
+						src='https://www.facebook.com/tr?id=2150880189011679&ev=PageView&noscript=1'
 					/>
 				</noscript>
 				{/* End Meta Pixel Code */}
