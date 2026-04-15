@@ -160,10 +160,10 @@ const ProductCard = ({
 			gold: activeMetalType.toLocaleLowerCase().includes('yellow')
 				? 'yellow'
 				: activeMetalType.toLocaleLowerCase().includes('multi')
-				? 'yellow-and-white'
-				: activeMetalType.toLocaleLowerCase().includes('rose')
-				? 'rose'
-				: 'white'
+					? 'yellow-and-white'
+					: activeMetalType.toLocaleLowerCase().includes('rose')
+						? 'rose'
+						: 'white'
 		}
 
 		if (collectionHandle) {

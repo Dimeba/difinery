@@ -46,11 +46,26 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const initialColor = useMemo(() => {
 		const normalizedGold = gold ? gold.toLowerCase().replace(/-/g, ' ') : ''
 		if (!normalizedGold) return null
-		return (
-			metalOptions.find(opt =>
-				(opt?.name || '').toLowerCase().includes(normalizedGold)
-			) || null
+
+		// First: direct inclusion match (works for single colors, e.g. "yellow" → "Yellow Gold")
+		const directMatch = metalOptions.find(opt =>
+			(opt?.name || '').toLowerCase().includes(normalizedGold)
 		)
+		if (directMatch) return directMatch
+
+		// Fallback for combinations like "yellow-and-white" → ["yellow", "white"]:
+		// check that every color word appears in the option name (handles "&" vs "and")
+		const colorWords = normalizedGold.split(/\s+and\s+/).map(s => s.trim()).filter(Boolean)
+		if (colorWords.length > 1) {
+			return (
+				metalOptions.find(opt => {
+					const lower = (opt?.name || '').toLowerCase()
+					return colorWords.every(word => lower.includes(word))
+				}) || null
+			)
+		}
+
+		return null
 	}, [metalOptions, gold])
 
 	const [matchingVariant, setMatchingVariant] = useState(
