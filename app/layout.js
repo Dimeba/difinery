@@ -22,7 +22,6 @@ import MUIProviders from '@/components/MUIProviders'
 import LayoutClientEffects from '@/components/LayoutClientEffects'
 
 const header = await getEntries('header')
-const footer = await getEntries('footer')
 const collections = await getEntries('collection')
 
 export const metadata = {
@@ -47,7 +46,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
 	// Header
 	const headerContent = header.items[0].fields
-	const footerContent = footer.items[0].fields
 	const collectionsContent = collections.items
 
 	const GTM_ID = process.env.gtmId
@@ -136,7 +134,7 @@ export default function RootLayout({ children }) {
 									collectionsContent={collectionsContent}
 								/>
 								{children}
-								<Footer content={footerContent} />
+								<Footer />
 							</MUIProviders>
 						</AppRouterCacheProvider>
 					</body>
