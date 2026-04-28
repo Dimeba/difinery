@@ -12,7 +12,7 @@ export async function generateMetadata() {
 		variables: { first: 20, after: null },
 		context: {
 			fetchOptions: {
-				next: { revalidate: 3600 }
+					next: { revalidate: false }
 			}
 		}
 	})

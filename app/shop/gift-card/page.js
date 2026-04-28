@@ -9,7 +9,7 @@ import {
 	getSocialImageMetadata
 } from '@/lib/shareImage'
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = false
 
 export async function generateMetadata() {
 	const { data } = await apolloClient.query({
@@ -17,7 +17,7 @@ export async function generateMetadata() {
 		variables: { handle: 'difinery-gift-card' },
 		context: {
 			fetchOptions: {
-				next: { revalidate: 3600 }
+				next: { revalidate: false }
 			}
 		}
 	})
@@ -40,7 +40,7 @@ export default async function GiftCard() {
 		variables: { handle: 'difinery-gift-card' },
 		context: {
 			fetchOptions: {
-				next: { revalidate: 3600 } // Cache for 1 hour
+				next: { revalidate: false }
 			}
 		}
 	})

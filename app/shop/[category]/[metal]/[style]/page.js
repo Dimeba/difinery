@@ -46,7 +46,7 @@ const ALLOWED_STYLES = [
 	'multi-pendant-bracelets'
 ]
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = false
 
 export async function generateStaticParams() {
 	// Pre-render combinations of category, metal, and style
@@ -95,12 +95,12 @@ export async function generateMetadata(props) {
 				? {
 						query: GET_PRODUCTS,
 						variables: { first: 3, after: null },
-						context: { fetchOptions: { next: { revalidate: 3600 } } }
+						context: { fetchOptions: { next: { revalidate: false } } }
 					}
 				: {
 						query: GET_COLLECTION_BY_HANDLE,
 						variables: { handle: category, first: 3, after: null },
-						context: { fetchOptions: { next: { revalidate: 3600 } } }
+						context: { fetchOptions: { next: { revalidate: false } } }
 					}
 		const { data } = await apolloClient.query(queryOptions)
 		const edges =
@@ -123,7 +123,6 @@ export async function generateMetadata(props) {
 
 export default async function CategoryMetalStylePage(props) {
 	const params = await props.params
-	const searchParams = await props.searchParams
 	const { category, metal, style } = params
 
 	if (!ALLOWED_CATEGORIES.includes(category)) notFound()
@@ -136,9 +135,7 @@ export default async function CategoryMetalStylePage(props) {
 	// Extract filters from URL path and query parameters
 	const currentFilters = {
 		metal: metal, // Metal comes from URL path
-		style: style !== 'all' ? style : null, // Style from URL path (null if 'all')
-		shape: searchParams?.shape || null,
-		setting: searchParams?.setting || null
+		style: style !== 'all' ? style : null // Style from URL path (null if 'all')
 	}
 
 	// Smart fetch: 20 products if no filters, 250 if filters active

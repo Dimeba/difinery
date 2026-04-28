@@ -3,7 +3,7 @@ import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 
 export const dynamic = 'force-dynamic'
-export const revalidate = 3600 // Cache for 1 hour
+export const revalidate = false
 
 export async function GET(request) {
 	const { searchParams } = new URL(request.url)
@@ -22,7 +22,7 @@ export async function GET(request) {
 			variables: { first: 250, after: null },
 			context: {
 				fetchOptions: {
-					next: { revalidate: 3600 }
+					next: { revalidate: false }
 				}
 			}
 		})

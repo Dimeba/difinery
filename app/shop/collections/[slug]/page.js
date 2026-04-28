@@ -1,5 +1,5 @@
 // components
-import Products from '@/components/Products'
+import SmartProducts from '@/components/SmartProducts'
 import PageContent from '@/components/PageContent'
 import ProductsSkeleton from '@/components/ProductsSkeleton'
 
@@ -18,7 +18,7 @@ import {
 	getSocialImageMetadata
 } from '@/lib/shareImage'
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = false
 export async function generateStaticParams() {
 	const collections = await getCachedCollections()
 	return collections.items
@@ -56,7 +56,7 @@ export async function generateMetadata(props) {
 		variables: { handle: content.handle, first: 20, after: null },
 		context: {
 			fetchOptions: {
-				next: { revalidate: 3600 }
+				next: { revalidate: false }
 			}
 		}
 	})
@@ -80,7 +80,6 @@ export async function generateMetadata(props) {
 
 export default async function Page(props) {
 	const params = await props.params
-	const searchParams = await props.searchParams
 	const { slug } = params
 
 	const collections = await getCachedCollections()
@@ -107,7 +106,7 @@ export default async function Page(props) {
 		variables: { handle: content.handle, first: 60, after: null },
 		context: {
 			fetchOptions: {
-				next: { revalidate: 3600 } // Cache for 1 hour
+				next: { revalidate: false }
 			}
 		}
 	})
@@ -115,17 +114,6 @@ export default async function Page(props) {
 	const initialEdges = data.collectionByHandle?.products.edges
 	const initialItems = initialEdges.map(edge => edge.node)
 	const initialPageInfo = data.collectionByHandle?.products.pageInfo
-	const shapeFilter = searchParams?.shape || null
-	const priceMinFilter = searchParams?.priceMin || null
-	const priceMaxFilter = searchParams?.priceMax || null
-	const collectionFilters =
-		shapeFilter || priceMinFilter || priceMaxFilter
-			? {
-					shapeName: shapeFilter,
-					priceMin: priceMinFilter,
-					priceMax: priceMaxFilter
-				}
-			: null
 	const mergedPageContent = {
 		...pageContent,
 		...content,
@@ -138,13 +126,14 @@ export default async function Page(props) {
 	return (
 		<main>
 			<Suspense fallback={<ProductsSkeleton count={20} />}>
-				<Products
-					products={initialItems}
+				<SmartProducts
+					initialProducts={initialItems}
 					initialPageInfo={initialPageInfo}
 					productType='all'
 					// showFilters
 					collectionHandle={content.handle}
-					filters={collectionFilters}
+					filters={null}
+					category={content.handle}
 					collectionPreview={{
 						title: content.title,
 						description: content.description,

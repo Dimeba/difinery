@@ -11,7 +11,7 @@ import { notFound } from 'next/navigation'
 
 const ALLOWED_METALS = ['yellow-gold', 'white-gold', 'rose-gold']
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = false
 
 export async function generateStaticParams() {
 	return ALLOWED_METALS.map(metal => ({ metal }))

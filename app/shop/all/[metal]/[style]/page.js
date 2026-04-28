@@ -35,7 +35,7 @@ const ALLOWED_STYLES = [
 	'multi-pendant-bracelets'
 ]
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = false
 
 export async function generateStaticParams() {
 	return ALLOWED_METALS.flatMap(metal =>
@@ -85,7 +85,6 @@ export async function generateMetadata(props) {
 
 export default async function ShopAllMetalStylePage(props) {
 	const params = await props.params
-	const searchParams = await props.searchParams
 	const { metal, style } = params
 
 	if (!ALLOWED_METALS.includes(metal)) notFound()
@@ -97,9 +96,7 @@ export default async function ShopAllMetalStylePage(props) {
 	// Extract filters from URL path and query parameters
 	const currentFilters = {
 		metal: metal, // Metal comes from URL path
-		style: style !== 'all' ? style : null, // Style from URL path (null if 'all')
-		shape: searchParams?.shape || null,
-		setting: searchParams?.setting || null
+		style: style !== 'all' ? style : null // Style from URL path (null if 'all')
 	}
 
 	// Smart fetch: 20 products if no filters, 250 if filters active

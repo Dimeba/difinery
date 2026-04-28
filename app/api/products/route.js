@@ -2,7 +2,7 @@ import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { NextResponse } from 'next/server'
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = false
 export const dynamic = 'force-dynamic' // Force dynamic rendering
 
 export async function GET(request) {
@@ -16,7 +16,7 @@ export async function GET(request) {
 			variables: { first, after },
 			context: {
 				fetchOptions: {
-					next: { revalidate: 3600 } // Cache for 1 hour
+					next: { revalidate: false }
 				}
 			}
 		})

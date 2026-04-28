@@ -12,7 +12,7 @@ import {
 	getSocialImageMetadata
 } from '@/lib/shareImage'
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = false
 
 // Generate static params for all products
 export async function generateStaticParams() {
@@ -47,7 +47,7 @@ export async function generateMetadata(props) {
 		variables: { handle: slug },
 		context: {
 			fetchOptions: {
-				next: { revalidate: 3600 } // Cache for 1 hour
+				next: { revalidate: false }
 			}
 		}
 	})
@@ -78,7 +78,7 @@ export default async function Product(props) {
 		variables: { handle: slug },
 		context: {
 			fetchOptions: {
-				next: { revalidate: 3600 } // Cache for 1 hour
+				next: { revalidate: false }
 			}
 		}
 	})
@@ -96,7 +96,7 @@ export default async function Product(props) {
 			variables: { first: 250, after: null },
 			context: {
 				fetchOptions: {
-					next: { revalidate: 3600 }
+					next: { revalidate: false }
 				}
 			}
 		})

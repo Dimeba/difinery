@@ -24,6 +24,7 @@ export default function SmartProducts({
 	const [isSearching, setIsSearching] = useState(false)
 	const searchTimeoutRef = useRef(null)
 	const pendingSearchRef = useRef(false)
+	const [resolvedFilters, setResolvedFilters] = useState(filters)
 
 	// Keep local state in sync with server-provided props after route/filter changes.
 	useEffect(() => {
@@ -34,11 +35,44 @@ export default function SmartProducts({
 		)
 	}, [initialProducts, initialPageInfo])
 
+	// Keep filters in sync with URL query params (static page + client-side filtering).
+	useEffect(() => {
+		setResolvedFilters(filters)
+	}, [filters])
+
+	useEffect(() => {
+		function readFiltersFromUrl() {
+			if (typeof window === 'undefined') return
+			const sp = new URLSearchParams(window.location.search)
+			const nextFilters = {
+				...(filters || {})
+			}
+
+			// Generic shop filters
+			if (sp.has('shape')) nextFilters.shape = sp.get('shape') || null
+			if (sp.has('setting')) nextFilters.setting = sp.get('setting') || null
+
+			// Collection-specific filters
+			if (sp.has('priceMin')) nextFilters.priceMin = sp.get('priceMin') || null
+			if (sp.has('priceMax')) nextFilters.priceMax = sp.get('priceMax') || null
+			if (sp.has('shapeName')) nextFilters.shapeName = sp.get('shapeName') || null
+
+			setResolvedFilters(nextFilters)
+		}
+
+		readFiltersFromUrl()
+		window.addEventListener('popstate', readFiltersFromUrl)
+		return () => window.removeEventListener('popstate', readFiltersFromUrl)
+	}, [filters])
+
 	// Check if filters are active (excluding metal which is in URL)
 	const hasActiveFilters =
-		(filters?.style && filters.style !== 'all') ||
-		filters?.shape ||
-		filters?.setting
+		(resolvedFilters?.style && resolvedFilters.style !== 'all') ||
+		resolvedFilters?.shape ||
+		resolvedFilters?.setting ||
+		resolvedFilters?.priceMin ||
+		resolvedFilters?.priceMax ||
+		resolvedFilters?.shapeName
 
 	// Handle search - load all products when searching (immediate)
 	const handleSearch = useCallback(
@@ -220,7 +254,7 @@ export default function SmartProducts({
 			productType={productType}
 			selectedMetalType={selectedMetalType}
 			showFilters={showFilters}
-			filters={filters}
+			filters={resolvedFilters}
 			onLoadMore={loadMoreProducts}
 			canLoadMore={pageInfo?.hasNextPage && !hasActiveFilters}
 			onSearch={handleSearch}

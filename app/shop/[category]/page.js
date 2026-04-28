@@ -18,7 +18,7 @@ const ALLOWED_CATEGORIES = [
 	'all'
 ]
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = false
 
 export async function generateStaticParams() {
 	return ALLOWED_CATEGORIES.map(category => ({ category }))
