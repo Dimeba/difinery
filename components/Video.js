@@ -21,6 +21,12 @@ const Video = ({
 	placeholder = null,
 	style
 }) => {
+	const resolveMediaSrc = media => {
+		if (!media) return undefined
+		if (typeof media === 'string') return media
+		return 'https:' + media.fields.file.url
+	}
+
 	const options = {
 		root: null,
 		rootMargin: '0%',
@@ -53,16 +59,14 @@ const Video = ({
 			<video
 				ref={targetRef}
 				autoPlay={autoPlay}
-				poster={
-					placeholder ? 'https:' + placeholder.fields.file.url : undefined
-				}
+				poster={resolveMediaSrc(placeholder)}
 				loop
 				muted={mute}
 				playsInline
 				preload='auto'
 				style={{ minWidth: '100%', minHeight: '100%', ...style }}
 			>
-				<source src={'https:' + video.fields.file.url} type='video/mp4' />
+				<source src={resolveMediaSrc(video)} type='video/mp4' />
 			</video>
 
 			{/* Video Controls */}
