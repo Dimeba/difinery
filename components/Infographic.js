@@ -91,6 +91,7 @@ const Infographic = async ({ title, stylizedTitle, features, graphic }) => {
 							src={'https:' + graphic.fields.file.url}
 							alt={graphic.fields.title}
 							fill
+							sizes='(max-width: 1024px) 100vw, 50vw'
 							style={{ objectFit: 'contain' }}
 						/>
 					</Box>

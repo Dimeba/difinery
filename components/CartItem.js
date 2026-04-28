@@ -103,6 +103,7 @@ const CartItem = ({
 									src={imageUrl}
 									alt={imageAlt}
 									fill
+									sizes='(max-width: 768px) 25vw, 120px'
 									style={{
 										objectFit: title === 'Difinery Gift Card' ? 'cover' : 'contain'
 									}}
@@ -113,6 +114,7 @@ const CartItem = ({
 								src={imageUrl}
 								alt={imageAlt}
 								fill
+								sizes='(max-width: 768px) 25vw, 120px'
 								style={{
 									objectFit: title === 'Difinery Gift Card' ? 'cover' : 'contain'
 								}}

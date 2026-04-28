@@ -35,6 +35,7 @@ const Collections = () => {
 										fill
 										style={{ objectFit: 'cover' }}
 										alt='Collection Preview Image'
+										sizes='(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw'
 									/>
 								</div>
 							</Link>

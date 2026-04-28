@@ -53,7 +53,7 @@ export default function RootLayout({ children }) {
 	const GTM_ID = process.env.gtmId
 
 	return (
-		<html lang='en'>
+		<html lang='en' data-scroll-behavior='smooth'>
 			<head>
 				{/* Google Tag Manager */}
 				<Script id='gtm-init' strategy='afterInteractive'>

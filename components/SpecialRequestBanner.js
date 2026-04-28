@@ -29,6 +29,7 @@ const SpecialRequestBanner = () => {
 						src='/sr-banner.jpg'
 						alt='Description of image'
 						fill
+						sizes='100vw'
 						style={{
 							zIndex: -1,
 							objectFit: 'cover',

@@ -174,6 +174,7 @@ const Footer = ({ content }) => {
 										}
 										// fill
 										alt='Certification Logo'
+										style={{ width: 'auto', height: 'auto' }}
 									/>
 								</div>
 							))}

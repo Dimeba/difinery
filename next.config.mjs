@@ -40,10 +40,9 @@ const nextConfig = {
 			}
 		],
 		formats: ['image/avif', 'image/webp'],
+		// Next.js 16 requires explicit qualities when using custom `quality` values (e.g. 100).
+		qualities: [50, 60, 70, 75, 80, 85, 90, 95, 100],
 		deviceSizes: [640, 768, 1024, 1280, 1600]
-	},
-	eslint: {
-		ignoreDuringBuilds: true
 	},
 
 	// Apply no-cache headers during development

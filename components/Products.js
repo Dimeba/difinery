@@ -420,6 +420,7 @@ const Products = ({
 											src={'https:' + collectionPreview.media.fields.file.url}
 											alt={collectionPreview.title}
 											fill
+											sizes='(max-width: 1024px) 100vw, 50vw'
 											style={{ objectFit: 'cover' }}
 										/>
 									</Box>

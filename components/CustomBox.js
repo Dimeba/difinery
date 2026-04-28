@@ -128,6 +128,7 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 							src={boxVariant?.image.url}
 							alt='Box Image'
 							fill
+							sizes='(max-width: 1024px) 100vw, 50vw'
 							style={{ objectFit: 'cover' }}
 						/>
 					</Link>
