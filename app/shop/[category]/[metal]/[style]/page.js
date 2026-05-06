@@ -138,8 +138,11 @@ export default async function CategoryMetalStylePage(props) {
 		style: style !== 'all' ? style : null // Style from URL path (null if 'all')
 	}
 
-	// Smart fetch: 20 products if no filters, 250 if filters active
-	const { edges, pageInfo } = await fetchProductsSmart(currentFilters, category)
+	// At build time, always fetch only 20 products regardless of style filter.
+	// SmartProducts detects active filters on mount and fetches the full dataset
+	// client-side, so pre-fetching 250 products per filtered page during SSG
+	// is redundant and causes Netlify build timeouts (195 heavy API calls).
+	const { edges, pageInfo } = await fetchProductsSmart({ metal }, category)
 
 	const initialItems = edges.map(edge => edge.node)
 	const initialPageInfo = pageInfo

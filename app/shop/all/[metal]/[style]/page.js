@@ -65,13 +65,8 @@ export async function generateMetadata(props) {
 		? `Shop ${styleLabel} in ${metalLabel}. Elegant, ethical lab-grown diamond jewelry by Difinery.`
 		: `Shop ${metalLabel} jewelry. Elegant, ethical lab-grown diamond jewelry by Difinery.`
 
-	const previewFilters = {
-		metal,
-		style: style !== 'all' ? style : null,
-		shape: null,
-		setting: null
-	}
-	const { edges } = await fetchProductsSmart(previewFilters, 'all')
+	// Fetch minimal preview products at build time — avoid full dataset fetch
+	const { edges } = await fetchProductsSmart({ metal }, 'all')
 	const previewProducts = edges.map(edge => edge.node)
 	const shareImage = getShareImageFromProducts(previewProducts)
 
@@ -99,8 +94,9 @@ export default async function ShopAllMetalStylePage(props) {
 		style: style !== 'all' ? style : null // Style from URL path (null if 'all')
 	}
 
-	// Smart fetch: 20 products if no filters, 250 if filters active
-	const { edges, pageInfo } = await fetchProductsSmart(currentFilters, 'all')
+	// Fetch only 20 products at build time; SmartProducts loads the full
+	// filtered dataset client-side when style is active.
+	const { edges, pageInfo } = await fetchProductsSmart({ metal }, 'all')
 
 	const initialItems = edges.map(edge => edge.node)
 	const initialPageInfo = pageInfo
