@@ -255,8 +255,22 @@ const ProductOptionsUI = ({
 			: details
 
 	useEffect(() => {
-		if (selectedColor) {
+		if (!selectedColor) return
+
+		// `selectedColor` is also used for image filtering (e.g. Stackable-YYW),
+		// so only treat it as a Shopify "Metal" option value if it actually exists.
+		const metalOption = product?.options?.find(
+			o => (o?.name || '').toLowerCase() === 'metal'
+		)
+		const metalValueExists = !!metalOption?.optionValues?.some(
+			v => v?.name === selectedColor
+		)
+
+		if (metalValueExists) {
 			getMatchingVariant({ ...selectedOptions, Metal: selectedColor })
+		} else {
+			// For stackables / image-only color codes, don't override selectedOptions
+			getMatchingVariant(selectedOptions)
 		}
 	}, [getMatchingVariant, selectedColor, selectedOptions])
 

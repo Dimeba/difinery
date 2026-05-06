@@ -4,7 +4,6 @@
 import styles from './ProductInfo.module.scss'
 
 // components
-import Image from 'next/image'
 import { Grid, Box, Typography, Button } from '@mui/material'
 import Link from 'next/link'
 
@@ -122,14 +121,23 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 							display={showHover ? 'flex' : 'none'}
 							alignItems='flex-end'
 						>
-							Learn more about artists and the Blank Canvas Community.
+							Learn more about artists and the Blank Canvas community
 						</Typography>
-						<Image
-							src={boxVariant?.image.url}
-							alt='Box Image'
-							fill
-							sizes='(max-width: 1024px) 100vw, 50vw'
-							style={{ objectFit: 'cover' }}
+						<video
+							src='/box-video.mp4'
+							autoPlay
+							muted
+							loop
+							playsInline
+							preload='metadata'
+							style={{
+								position: 'absolute',
+								inset: 0,
+								width: '100%',
+								height: '100%',
+								objectFit: 'cover',
+								pointerEvents: 'none'
+							}}
 						/>
 					</Link>
 				</Grid>
