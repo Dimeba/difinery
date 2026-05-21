@@ -76,6 +76,7 @@ const PageContent = ({ content }) => {
 								stylizedTitle={section.fields.stylizedTitle}
 								content={section.fields.content}
 								thin={section.fields.thin}
+								centerAlignText={section.fields.centerAlignText}
 								index={index}
 							/>
 						)

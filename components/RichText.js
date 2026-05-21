@@ -7,7 +7,11 @@ import { Box, Typography } from '@mui/material'
 // hooks
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
-const RichText = ({ title, content, index, thin }) => {
+const RichText = ({ title, content, index, thin, centerAlignText }) => {
+	const alignSx = centerAlignText
+		? { textAlign: 'center', '& *': { textAlign: 'center' } }
+		: undefined
+
 	return (
 		<section className={`${index == 0 ? 'topSection' : ''}`}>
 			<Box
@@ -15,9 +19,10 @@ const RichText = ({ title, content, index, thin }) => {
 				maxWidth={thin ? '482px' : '1440px'}
 				margin={'0 auto'}
 				height={'100%'}
-				className={styles.content}
+				className={`${styles.content} ${centerAlignText ? styles.centerAlign : ''}`}
+				sx={alignSx}
 			>
-				<Typography variant='h2' sx={{ textWrap: 'balance' }}>
+				<Typography variant='h2' sx={{ textWrap: 'balance', ...alignSx }}>
 					{title}
 				</Typography>
 				{documentToReactComponents(content)}
