@@ -74,5 +74,5 @@ export default async function Page(props) {
 
 	const content = matchedPage.fields
 
-	return <PageContent content={content} />
+	return <PageContent content={content} slug={slug} />
 }

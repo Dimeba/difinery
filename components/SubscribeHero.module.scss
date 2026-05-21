@@ -1,0 +1,44 @@
+@use '@/app/base';
+
+.hero {
+	text-align: center;
+	margin-bottom: 0;
+
+	@media screen and (min-width: 1025px) {
+		margin-top: 12.5rem;
+	}
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}
+
+.heading {
+	text-wrap: balance;
+}
+
+.description {
+	max-width: 520px;
+	text-wrap: balance;
+}
+
+.form {
+	width: 100%;
+	max-width: 400px;
+	margin-top: 0.5rem;
+	text-align: center;
+	border-bottom: 1px solid #e8e8e8;
+
+	form button[type='submit'] {
+		margin-bottom: 6rem;
+	}
+
+	@media screen and (max-width: 768px) {
+		form button[type='submit'] {
+			margin-bottom: 4rem;
+		}
+	}
+}

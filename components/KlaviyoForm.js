@@ -9,6 +9,8 @@ const KlaviyoForm = ({
 	customButton,
 	columns = 1,
 	isWhite = false,
+	solidSubmit = false,
+	centerSubmit = false,
 	listName = 'default'
 }) => {
 	const [formData, setFormData] = useState({})
@@ -145,14 +147,21 @@ const KlaviyoForm = ({
 				))}
 
 				<Grid mt='1rem' size={{ xs: 12 }}>
-					<Box display='flex' gap='1rem' alignItems='center' flexWrap='wrap'>
+					<Box
+						display='flex'
+						gap='1rem'
+						alignItems='center'
+						flexWrap='wrap'
+						justifyContent={centerSubmit ? 'center' : 'flex-start'}
+						flexDirection={centerSubmit ? 'column' : 'row'}
+					>
 						<Button
 							type='submit'
 							disabled={isSubmitting}
 							sx={{
-								width: 'fit-content',
-								backgroundColor: 'transparent',
-								color: textColor,
+								width: solidSubmit ? '100%' : 'fit-content',
+								backgroundColor: solidSubmit ? '#000000' : 'transparent',
+								color: solidSubmit ? '#ffffff' : textColor,
 								border: `1px solid ${textColor}`,
 								padding: '0.6rem 1rem',
 								fontSize: '12px',
@@ -162,8 +171,14 @@ const KlaviyoForm = ({
 								borderRadius: 0,
 								transition: '0.3s',
 								'&:hover': {
-									backgroundColor: textColor,
-									color: isWhite ? '#000000' : '#ffffff'
+									backgroundColor: solidSubmit
+										? 'transparent'
+										: textColor,
+									color: solidSubmit
+										? textColor
+										: isWhite
+											? '#000000'
+											: '#ffffff'
 								},
 								'&:disabled': {
 									opacity: 0.5,
@@ -203,20 +218,44 @@ const KlaviyoForm = ({
 					</Box>
 
 					{submitStatus === 'success' && (
-						<Typography variant='p' sx={{ color: textColor, fontSize: '12px' }}>
+						<Typography
+							variant='p'
+							sx={{
+								color: textColor,
+								fontSize: '12px',
+								textAlign: centerSubmit ? 'center' : 'left',
+								width: '100%'
+							}}
+						>
 							Thank you! Your submission was successful.
 						</Typography>
 					)}
 
 					{submitStatus === 'phone_error' && (
-						<Typography variant='p' sx={{ color: '#d32f2f', fontSize: '12px' }}>
+						<Typography
+							variant='p'
+							sx={{
+								color: '#d32f2f',
+								fontSize: '12px',
+								textAlign: centerSubmit ? 'center' : 'left',
+								width: '100%'
+							}}
+						>
 							Invalid phone number format. Please use a valid phone number
 							(e.g., +1234567890).
 						</Typography>
 					)}
 
 					{submitStatus === 'error' && (
-						<Typography variant='p' sx={{ color: '#d32f2f', fontSize: '12px' }}>
+						<Typography
+							variant='p'
+							sx={{
+								color: '#d32f2f',
+								fontSize: '12px',
+								textAlign: centerSubmit ? 'center' : 'left',
+								width: '100%'
+							}}
+						>
 							Something went wrong. Please try again.
 						</Typography>
 					)}

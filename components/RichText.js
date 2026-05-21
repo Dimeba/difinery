@@ -7,13 +7,13 @@ import { Box, Typography } from '@mui/material'
 // hooks
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
-const RichText = ({ title, content, index, thin, centerAlignText }) => {
+const RichText = ({ title, content, isFirstOnPage, thin, centerAlignText }) => {
 	const alignSx = centerAlignText
 		? { textAlign: 'center', '& *': { textAlign: 'center' } }
 		: undefined
 
 	return (
-		<section className={`${index == 0 ? 'topSection' : ''}`}>
+		<section className={`${isFirstOnPage ? 'topSection' : ''}`}>
 			<Box
 				width={'90vw'}
 				maxWidth={thin ? '482px' : '1440px'}

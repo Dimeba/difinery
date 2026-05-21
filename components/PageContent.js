@@ -6,17 +6,21 @@ import Columns from './Columns'
 import FAQ from './FAQ'
 import MasonryColumns from './MasonryColumns'
 import SubscribeSection from './SubscribeSection'
+import SubscribeHero from './SubscribeHero'
 import SpecialRequestBanner from './SpecialRequestBanner'
 import SplitFeatures from './SplitFeatures'
 import Infographic from './Infographic'
 import Timeline from './Timeline'
 import Articles from './Articles'
 
-const PageContent = ({ content }) => {
+const PageContent = ({ content, slug }) => {
+	const hasPageHero = slug === 'subscribe'
 	return (
 		<main>
 			{/* Content */}
 			{/* <SpecialRequestBanner /> */}
+
+			<SubscribeHero />
 
 			{content.sections.map((section, index) => {
 				switch (section.sys.contentType.sys.id) {
@@ -77,7 +81,7 @@ const PageContent = ({ content }) => {
 								content={section.fields.content}
 								thin={section.fields.thin}
 								centerAlignText={section.fields.centerAlignText}
-								index={index}
+								isFirstOnPage={index === 0 && !hasPageHero}
 							/>
 						)
 					case 'section':
