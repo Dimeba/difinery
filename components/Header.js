@@ -30,12 +30,27 @@ import { useCart } from '@/context/CartContext'
 import submenus from '@/data/submenus.json' with { type: 'json' }
 import engagmentSubmenu from '@/data/engagmentSubmenu.json' with { type: 'json' }
 
+const PHONE_DISPLAY = '+1 (212) 470-3049'
+const PHONE_HREF = 'tel:+12124703049'
+
 const Header = ({
 	content,
 	collectionsContent,
 	engagementSubmenuColumns = engagmentSubmenu.columns || [],
 	engagementPromoOverrides = engagmentSubmenu.promotions || []
 }) => {
+	// Keep in sync with `app/[slug]/page.js` slugify()
+	const formatLink = (str = '') => {
+		const slug = str
+			.toString()
+			.toLowerCase()
+			.replace(/[^a-z0-9 ]/gi, '') // allow alnum + space only
+			.replace(/&/g, '')
+			.trim()
+			.replace(/ +/g, '-')
+		return '/' + slug
+	}
+
 	// cart
 	const { setShowCart, cart } = useCart()
 
@@ -152,13 +167,8 @@ const Header = ({
 						<Box suppressHydrationWarning>
 							{effectiveIntersecting && isScreenWide ? (
 								<Link
-									href={
-										'/' +
-										content.supportPage.fields.title
-											.replace(/ /g, '-')
-											.toLowerCase()
-									}
-									aria-label={`Link to Customer Service page.`}
+									href={formatLink(content?.supportPage?.fields?.title)}
+									aria-label={`Link to ${content?.supportPage?.fields?.title} page.`}
 								>
 									<Typography
 										variant='p'
@@ -168,7 +178,7 @@ const Header = ({
 											letterSpacing: '0.2em'
 										}}
 									>
-										{content.supportPage.fields.title}
+										{content?.supportPage?.fields?.title}
 									</Typography>
 								</Link>
 							) : (
@@ -203,21 +213,21 @@ const Header = ({
 							/>
 						</Link>
 
-						<Box display='flex' alignItems='center' gap='1rem'>
-							{/* <FiUser
-							size={'1.2rem'}
-							stroke={transparentMenu ? 'white' : 'black'}
-							strokeWidth={1}
-							cursor={'pointer'}
-						/> */}
+						<Box className={styles.headerActions}>
+							<Link
+								href={PHONE_HREF}
+								className={styles.phoneLink}
+								aria-label={`Call ${PHONE_DISPLAY}`}
+							>
+								<span className={styles.phoneNumber}>{PHONE_DISPLAY}</span>
+							</Link>
 
 							<Box
-								position='relative'
-								sx={{ cursor: 'pointer' }}
+								className={styles.cartIcon}
 								onClick={() => setShowCart(true)}
 							>
 								<FiShoppingBag
-									size={'1.2rem'}
+									size='1.2rem'
 									stroke={transparentMenu ? 'white' : 'black'}
 									strokeWidth={1}
 								/>
@@ -374,9 +384,7 @@ const Header = ({
 								{content.mainMenu.map(link => (
 									<Link
 										key={link.sys.id}
-										href={
-											'/' + link.fields.title.replace(/ /g, '-').toLowerCase()
-										}
+										href={formatLink(link?.fields?.title)}
 										aria-label={`Link to ${link.fields.title} page.`}
 										className={styles.mainMenuUnderLink}
 										onClick={() => setOpenMenu(false)}
@@ -386,12 +394,21 @@ const Header = ({
 								))}
 
 								<Link
-									href='/customer-service'
-									aria-label={`Link to Customer Service page.`}
+									href={formatLink(content?.supportPage?.fields?.title)}
+									aria-label={`Link to ${content?.supportPage?.fields?.title} page.`}
 									className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
 									onClick={() => setOpenMenu(false)}
 								>
-									<p>Customer Service</p>
+									<p>{content?.supportPage?.fields?.title || 'Customer Service'}</p>
+								</Link>
+
+								<Link
+									href={PHONE_HREF}
+									className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
+									aria-label={`Call ${PHONE_DISPLAY}`}
+									onClick={() => setOpenMenu(false)}
+								>
+									<p className={styles.phoneNumber}>{PHONE_DISPLAY}</p>
 								</Link>
 							</nav>
 						)}

@@ -55,6 +55,48 @@
 	align-items: center;
 }
 
+.headerActions {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.phoneLink {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	text-decoration: none;
+	color: inherit;
+	flex-shrink: 0;
+	line-height: 1;
+}
+
+.phoneNumber {
+	font-family: 'Libre Franklin', sans-serif;
+	font-size: 10px;
+	font-weight: 300;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	white-space: nowrap;
+	line-height: 1;
+}
+
+.cartIcon {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.2rem;
+	height: 1.2rem;
+	flex-shrink: 0;
+	line-height: 0;
+	cursor: pointer;
+
+	svg {
+		display: block;
+	}
+}
+
 .hamburger {
 	width: 20px;
 	height: 20px;
@@ -184,6 +226,10 @@
 }
 
 @media screen and (max-width: 1024px) {
+	.phoneLink {
+		display: none;
+	}
+
 	.headerBot {
 		flex-direction: column;
 		align-items: flex-start;
@@ -221,6 +267,11 @@
 				text-transform: none;
 				letter-spacing: normal;
 			}
+		}
+
+		.phoneNumber {
+			text-decoration: underline;
+			text-underline-offset: 0.2em;
 		}
 	}
 

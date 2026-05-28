@@ -12,6 +12,7 @@ import SplitFeatures from './SplitFeatures'
 import Infographic from './Infographic'
 import Timeline from './Timeline'
 import Articles from './Articles'
+import ContactForm from './ContactForm'
 
 const PageContent = ({ content, slug }) => {
 	const hasPageHero = slug === 'subscribe'
@@ -144,6 +145,9 @@ const PageContent = ({ content, slug }) => {
 
 			{/* Subscribe Section */}
 			<SubscribeSection />
+
+			{/* Help & Contact only */}
+			{slug === 'help-contact' && <ContactForm />}
 		</main>
 	)
 }
