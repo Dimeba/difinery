@@ -5,10 +5,7 @@ import styles from './ContactForm.module.scss'
 import { Box, Grid, TextField, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 
-const encode = data =>
-	Object.keys(data)
-		.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key] ?? '')}`)
-		.join('&')
+const FORM_ACTION = '/__forms.html'
 
 const ContactForm = ({ formName = 'contact' }) => {
 	const [status, setStatus] = useState({ state: 'idle', message: '' })
@@ -44,13 +41,12 @@ const ContactForm = ({ formName = 'contact' }) => {
 
 		const form = e.currentTarget
 		const formData = new FormData(form)
-		const payload = Object.fromEntries(formData.entries())
 
 		try {
-			const res = await fetch('/', {
+			const res = await fetch(FORM_ACTION, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body: encode({ 'form-name': formName, ...payload })
+				body: new URLSearchParams(formData).toString()
 			})
 
 			if (!res.ok) {
@@ -102,8 +98,7 @@ const ContactForm = ({ formName = 'contact' }) => {
 						<form
 							name={formName}
 							method='POST'
-							data-netlify='true'
-							netlify-honeypot='bot-field'
+							action={FORM_ACTION}
 							onSubmit={onSubmit}
 							className={styles.form}
 						>
