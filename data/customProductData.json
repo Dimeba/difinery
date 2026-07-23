@@ -1048,5 +1048,90 @@
 		"SKU": "WR-RN-0533",
 		"Total Weight": "3.00 ct.",
 		"Dimensions": "9.50 mm X 9.50 mm"
+	},
+	{
+		"SKU": "YR-OV-0537",
+		"Total Weight": "4.30 ct.",
+		"Dimensions": "10.00 mm X 8.50 mm"
+	},
+	{
+		"SKU": "WR-OV-0538",
+		"Total Weight": "4.30 ct.",
+		"Dimensions": "10.00 mm X 8.50 mm"
+	},
+	{
+		"SKU": "WR-RD-0542",
+		"Total Weight": "2.15 ct.",
+		"Dimensions": "8.00 mm X 6.00 mm"
+	},
+	{
+		"SKU": "YR-RD-0543",
+		"Total Weight": "2.15 ct.",
+		"Dimensions": "8.00 mm X 6.00 mm"
+	},
+	{
+		"SKU": "RR-RD-0544",
+		"Total Weight": "2.15 ct.",
+		"Dimensions": "8.00 mm X 6.00 mm"
+	},
+	{
+		"SKU": "WR-RD-0554",
+		"Total Weight": "1.15 ct.",
+		"Dimensions": "7.00 mm X 5.00 mm"
+	},
+	{
+		"SKU": "YR-RD-0555",
+		"Total Weight": "1.15 ct.",
+		"Dimensions": "7.00 mm X 5.00 mm"
+	},
+	{
+		"SKU": "RR-RD-0556",
+		"Total Weight": "1.15 ct.",
+		"Dimensions": "7.00 mm X 5.00 mm"
+	},
+	{
+		"SKU": "WR-RD-0557",
+		"Total Weight": "1.65 ct.",
+		"Dimensions": "7.50 mm X 5.80 mm"
+	},
+	{
+		"SKU": "YR-RD-0558",
+		"Total Weight": "1.65 ct.",
+		"Dimensions": "7.50 mm X 5.80 mm"
+	},
+	{
+		"SKU": "RR-RD-0559",
+		"Total Weight": "1.65 ct.",
+		"Dimensions": "7.50 mm X 5.80 mm"
+	},
+	{
+		"SKU": "WR-RD-0560",
+		"Total Weight": "2.65 ct.",
+		"Dimensions": "9.00 mm X 7.00 mm"
+	},
+	{
+		"SKU": "YR-RD-0561",
+		"Total Weight": "2.65 ct.",
+		"Dimensions": "9.00 mm X 7.00 mm"
+	},
+	{
+		"SKU": "RR-RD-0562",
+		"Total Weight": "2.65 ct.",
+		"Dimensions": "9.00 mm X 7.00 mm"
+	},
+	{
+		"SKU": "WR-RD-0563",
+		"Total Weight": "3.15 ct.",
+		"Dimensions": "9.50 mm X 7.50 mm"
+	},
+	{
+		"SKU": "YR-RD-0564",
+		"Total Weight": "3.15 ct.",
+		"Dimensions": "9.50 mm X 7.50 mm"
+	},
+	{
+		"SKU": "RR-RD-0565",
+		"Total Weight": "3.15 ct.",
+		"Dimensions": "9.50 mm X 7.50 mm"
 	}
 ]
