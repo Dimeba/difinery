@@ -45,7 +45,7 @@ export async function generateMetadata(props) {
 		: null
 
 	return {
-		title: content.seoTitle,
+		title: `Difinery | Blank Canvas Community / ${content.artistName}`,
 		description: content.description ? content.description : '',
 		keywords: content.keywords ? content.keywords : '',
 		openGraph: {
