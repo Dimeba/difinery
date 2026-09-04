@@ -911,6 +911,12 @@ const ProductOptionAccordion = ({
 					*All images are represented in 2.00 carat weight.
 				</Typography>
 			)}
+
+			{!isCustomShape && option?.name?.toLowerCase() === 'ring size' && (
+				<Typography variant='p' fontStyle='italic' fontSize='10px' mt={'1rem'}>
+					*All images are shown in ring size 6.
+				</Typography>
+			)}
 		</Accordion>
 	)
 }
