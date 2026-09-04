@@ -20,7 +20,7 @@ const richTextOptions = {
 						src={src}
 						alt={title || file.fileName || ''}
 						fill
-						sizes='(max-width: 1440px) 90vw, 1440px'
+						sizes='(max-width: 960px) 90vw, 960px'
 						className={styles.image}
 					/>
 				</div>
@@ -76,7 +76,7 @@ const ArticleContent = ({ content }) => {
 
 	return (
 		<section>
-			<div className={`container ${styles.content}`}>
+			<div className={styles.content}>
 				{groups.map((group, index) => {
 					if (group.type === 'qa') {
 						return (

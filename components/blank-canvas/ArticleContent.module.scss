@@ -1,6 +1,9 @@
 @use '@/app/base';
 
 .content {
+	width: 90vw;
+	max-width: 960px;
+	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
 	gap: 3rem;
@@ -19,7 +22,7 @@
 
 	blockquote {
 		font-family: 'Newsreader', serif;
-		font-size: 2.25rem; // same as h2
+		font-size: 2rem; // same as h3
 		font-weight: 500; // medium
 		line-height: 1.2;
 
