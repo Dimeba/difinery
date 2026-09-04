@@ -672,7 +672,16 @@ const ProductOptionAccordion = ({
 		)
 	}, [relatedShapes])
 
-
+	const customCaratMessage = useMemo(() => {
+		const html = product?.descriptionHtml
+		if (!html) return null
+		const match = html.match(
+			/<p\s+id=(['"])custom-carat-message\1[^>]*>([\s\S]*?)<\/p>/i
+		)
+		if (!match) return null
+		const text = match[2].replace(/<[^>]+>/g, '').trim()
+		return text || null
+	}, [product?.descriptionHtml])
 
 	return (
 		<Accordion
@@ -917,6 +926,20 @@ const ProductOptionAccordion = ({
 					*All images are shown in ring size 6.
 				</Typography>
 			)}
+
+			{!isCustomShape &&
+				customCaratMessage &&
+				(option?.name?.toLowerCase() === 'stone size' ||
+					option?.name?.toLowerCase() === 'carat size') && (
+					<Typography
+						variant='p'
+						fontStyle='italic'
+						fontSize='10px'
+						mt={'1rem'}
+					>
+						{customCaratMessage}
+					</Typography>
+				)}
 		</Accordion>
 	)
 }

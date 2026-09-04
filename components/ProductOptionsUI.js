@@ -223,10 +223,12 @@ const ProductOptionsUI = ({
 		Object.keys(selectedOptions).length === product.options.length &&
 		matchingVariant !== null
 
-	const details = product.descriptionHtml.replace(
-		/<p\s+id=(["'])description\1[^>]*>[\s\S]*?<\/p>/i,
-		''
-	)
+	const details = product.descriptionHtml
+		.replace(/<p\s+id=(["'])description\1[^>]*>[\s\S]*?<\/p>/i, '')
+		.replace(
+			/<p\s+id=(["'])custom-carat-message\1[^>]*>[\s\S]*?<\/p>/i,
+			''
+		)
 
 	const match = product.descriptionHtml.match(
 		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i
