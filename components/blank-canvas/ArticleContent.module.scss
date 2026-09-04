@@ -1,0 +1,75 @@
+@use '@/app/base';
+
+.content {
+	display: flex;
+	flex-direction: column;
+	gap: 3rem;
+
+	h4 {
+		font-size: 15px;
+		font-weight: 700;
+		text-transform: none;
+		letter-spacing: normal;
+		text-wrap: balance;
+	}
+
+	p {
+		text-wrap: wrap;
+	}
+
+	blockquote {
+		font-family: 'Newsreader', serif;
+		font-size: 2.25rem; // same as h2
+		font-weight: 500; // medium
+		line-height: 1.2;
+
+		p {
+			font-family: inherit;
+			font-size: inherit;
+			font-weight: inherit;
+			line-height: inherit;
+		}
+	}
+}
+
+.qaRow {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1.5rem; // same vertical rhythm as Columns .content gap
+	align-items: start;
+	width: 100%;
+}
+
+.qaHeading,
+.qaBody {
+	min-width: 0;
+}
+
+.qaBody {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.block {
+	width: 100%;
+}
+
+.imageWrap {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 10;
+	overflow: hidden;
+}
+
+.image {
+	object-fit: cover;
+	object-position: center;
+}
+
+@media screen and (max-width: 1024px) {
+	.qaRow {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+}
