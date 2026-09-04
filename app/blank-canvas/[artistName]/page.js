@@ -2,6 +2,7 @@
 import ArticleHeader from '@/components/blank-canvas/ArticleHeader'
 import ArticleCoverImage from '@/components/blank-canvas/ArticleCoverImage'
 import ArticleContent from '@/components/blank-canvas/ArticleContent'
+import ArticleFooter from '@/components/blank-canvas/ArticleFooter'
 import { notFound } from 'next/navigation'
 
 // lib
@@ -85,6 +86,10 @@ export default async function BlankCanvasArtistPage(props) {
 				articleTitle={content.title}
 			/>
 			<ArticleContent content={content.content} />
+			<ArticleFooter
+				artistName={content.artistName}
+				socialMedia={content.socialMedia}
+			/>
 		</main>
 	)
 }
