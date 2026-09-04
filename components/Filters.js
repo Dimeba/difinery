@@ -33,7 +33,8 @@ const Filters = ({
 		'Heart',
 		'Radiant',
 		'Oval',
-		'Emerald'
+		'Emerald',
+		'Baguette Straight'
 	]
 	const setting =
 		productType === 'earrings'
@@ -47,7 +48,8 @@ const Filters = ({
 					'Statement Rings',
 					'Stackable Rings',
 					'Open Rings',
-					'Everyday Diamond Rings'
+					'Everyday Diamond Rings',
+					'Wedding Bands'
 			  ]
 			: productType === 'earrings'
 			? ['Studs', 'Hoops']

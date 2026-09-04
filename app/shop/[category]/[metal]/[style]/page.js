@@ -35,6 +35,7 @@ const ALLOWED_STYLES = [
 	'stackable-rings',
 	'open-rings',
 	'everyday-diamond-rings',
+	'wedding-bands',
 	// Earrings
 	'studs',
 	'hoops',
