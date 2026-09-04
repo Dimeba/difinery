@@ -29,6 +29,12 @@
 	}
 }
 
+.withCustomBackground {
+	.column {
+		z-index: 0; // keep z-index:-1 media above section background
+	}
+}
+
 .fullHeight {
 	height: 100vh;
 }

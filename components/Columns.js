@@ -18,14 +18,22 @@ const Columns = async ({
 	subtitle,
 	marginTop,
 	marginBottom,
-	mobileColumns = 1
+	mobileColumns = 1,
+	customBackgroundColor
 }) => {
+	const backgroundColor = customBackgroundColor
+		? customBackgroundColor.startsWith('#')
+			? customBackgroundColor
+			: `#${customBackgroundColor}`
+		: undefined
+
 	// dynamic styles
 	const dynamicStyles = {
 		columns: { gap: gap ? '0.3rem' : '' },
 		section: {
 			marginTop: marginTop ? '' : '0',
-			marginBottom: marginBottom ? '' : '0'
+			marginBottom: marginBottom ? '' : '0',
+			...(backgroundColor ? { backgroundColor } : {})
 		}
 	}
 
@@ -48,7 +56,10 @@ const Columns = async ({
 	const shouldReorderForMobile = hasTwoColumns && hasExactlyOneMediaColumn
 
 	return (
-		<section style={dynamicStyles.section}>
+		<section
+			className={backgroundColor ? styles.withCustomBackground : undefined}
+			style={dynamicStyles.section}
+		>
 			<div className={`${fullWidth ? '' : 'container'}`}>
 				{showTitle && (
 					<>

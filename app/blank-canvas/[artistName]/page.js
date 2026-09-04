@@ -3,6 +3,7 @@ import ArticleHeader from '@/components/blank-canvas/ArticleHeader'
 import ArticleCoverImage from '@/components/blank-canvas/ArticleCoverImage'
 import ArticleContent from '@/components/blank-canvas/ArticleContent'
 import ArticleFooter from '@/components/blank-canvas/ArticleFooter'
+import Columns from '@/components/Columns'
 import { notFound } from 'next/navigation'
 
 // lib
@@ -73,6 +74,7 @@ export default async function BlankCanvasArtistPage(props) {
 	}
 
 	const content = matchedArticle.fields
+	const promo = content.promo
 
 	return (
 		<main>
@@ -90,6 +92,22 @@ export default async function BlankCanvasArtistPage(props) {
 				artistName={content.artistName}
 				socialMedia={content.socialMedia}
 			/>
+			{promo && (
+				<Columns
+					title={promo.fields.title}
+					showTitle={promo.fields.showTitle}
+					stylizedTitle={promo.fields.stylizedTitle}
+					subtitle={promo.fields.subtitle}
+					gap={promo.fields.gap}
+					content={promo.fields.columns}
+					fullHeight={promo.fields.fullHeight}
+					fullWidth={promo.fields.fullWidth}
+					marginTop={promo.fields.marginTop}
+					marginBottom={promo.fields.marginBottom}
+					mobileColumns={promo.fields.mobileColumns}
+					customBackgroundColor={promo.fields.customBackgroundColor}
+				/>
+			)}
 		</main>
 	)
 }
