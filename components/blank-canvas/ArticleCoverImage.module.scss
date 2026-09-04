@@ -1,0 +1,14 @@
+@use '@/app/base';
+
+.cover {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 10;
+	overflow: hidden;
+	margin: 0;
+}
+
+.image {
+	object-fit: cover;
+	object-position: center;
+}
