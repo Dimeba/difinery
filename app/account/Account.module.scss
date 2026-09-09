@@ -1,10 +1,14 @@
 @use '@/app/base';
 
+// The header is position: fixed, so this owns its own top clearance rather
+// than relying on the global .topSection — the header grows by a row when the
+// main nav is shown, so there is deliberate slack here.
 .shell {
 	display: grid;
 	grid-template-columns: 220px 1fr;
 	gap: 4rem;
 	align-items: start;
+	padding-top: 13rem;
 	margin-bottom: 8rem;
 }
 
@@ -13,7 +17,7 @@
 	flex-direction: column;
 	gap: 0.25rem;
 	position: sticky;
-	top: 10rem;
+	top: 9rem;
 }
 
 .navGreeting {
@@ -215,31 +219,46 @@
 	}
 }
 
-.buttonSubtle {
-	border-color: transparent;
+// Self-contained on purpose — these are used on their own, without .button,
+// so they have to reset the native button chrome themselves or the browser's
+// grey background shows through.
+.linkButton {
+	display: inline-block;
 	padding: 0.5rem 0;
+	margin: 0;
+	background: none;
+	border: 0;
+	border-radius: 0;
+	appearance: none;
+	font-family: 'Libre Franklin', sans-serif;
+	font-size: 11px;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	line-height: 1.5;
+	cursor: pointer;
 	text-decoration: underline;
 	text-underline-offset: 4px;
+	opacity: 0.7;
+	transition: opacity 0.2s ease;
 
 	&:hover {
-		background-color: transparent;
-		color: base.$black;
-		opacity: 0.6;
+		opacity: 1;
+	}
+
+	&:disabled {
+		opacity: 0.35;
+		cursor: default;
 	}
 }
 
-.buttonDanger {
-	border-color: transparent;
-	padding: 0.5rem 0;
-	color: base.$red;
-	text-decoration: underline;
-	text-underline-offset: 4px;
+.buttonSubtle {
+	@extend .linkButton;
+	color: base.$black;
+}
 
-	&:hover {
-		background-color: transparent;
-		color: base.$red;
-		opacity: 0.7;
-	}
+.buttonDanger {
+	@extend .linkButton;
+	color: base.$red;
 }
 
 .formActions {
@@ -383,6 +402,7 @@
 	.shell {
 		grid-template-columns: 1fr;
 		gap: 2.5rem;
+		padding-top: 10rem;
 	}
 
 	.nav {
@@ -408,6 +428,10 @@
 }
 
 @media screen and (max-width: 640px) {
+	.shell {
+		padding-top: 8.5rem;
+	}
+
 	.formGrid {
 		grid-template-columns: 1fr;
 	}

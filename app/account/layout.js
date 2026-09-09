@@ -34,7 +34,7 @@ export default async function AccountLayout({ children }) {
 		: 'Your account'
 
 	return (
-		<main className={`container topSection ${styles.shell}`}>
+		<main className={`container ${styles.shell}`}>
 			<AccountNav greeting={greeting} />
 			<div className={styles.content}>{children}</div>
 		</main>
