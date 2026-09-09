@@ -13,6 +13,7 @@ import { CREATE_CART } from '@/lib/mutations/createCart'
 import { ADD_PRODUCT } from '@/lib/mutations/addProduct'
 import { REMOVE_PRODUCT } from '@/lib/mutations/removeProduct'
 import { UPDATE_PRODUCT } from '@/lib/mutations/updateProduct'
+import { useAuth } from './AuthContext'
 
 const CART_STORAGE_KEY = 'difinery_cart_items'
 
@@ -27,9 +28,11 @@ const CartContext = createContext({
 })
 
 export const CartProvider = ({ children }) => {
+	const { isLoggedIn } = useAuth()
 	const [cart, setCart] = useState(null)
 	const [showCart, setShowCart] = useState(false)
 	const hasRestoredRef = useRef(false)
+	const linkedCartRef = useRef(null)
 
 	// Cart creation
 	const [cartCreate, { loading: creating, error: createError }] = useMutation(
@@ -133,6 +136,30 @@ export const CartProvider = ({ children }) => {
 	useEffect(() => {
 		restoreCartFromStorage()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Attach the signed-in customer to the cart so checkout is prefilled and the
+	// order lands on their account. The access token is httpOnly, so the server
+	// route does the Storefront call — we only hand it the cart id.
+	//
+	// restoreCartFromStorage() mints a brand new cart on every mount, so this
+	// has to run again for each new cart id, not just once per session.
+	useEffect(() => {
+		const cartId = cart?.id
+		if (!isLoggedIn || !cartId) return
+		if (linkedCartRef.current === cartId) return
+
+		linkedCartRef.current = cartId
+
+		fetch('/api/account/link-cart', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			credentials: 'include',
+			body: JSON.stringify({ cartId })
+		}).catch(error => {
+			linkedCartRef.current = null
+			console.error('Error linking cart to customer:', error)
+		})
+	}, [isLoggedIn, cart?.id])
 
 	const updateQuantity = useCallback(
 		async (lineItemId, quantity) => {

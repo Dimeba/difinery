@@ -9,6 +9,7 @@ import Accordion from './Accordion'
 import Engraving from './Engraving'
 import CustomBox from './CustomBox'
 import ProductOptionAccordion from './ProductOptionAccordion'
+import WishlistButton from './WishlistButton'
 
 // hooks
 import { useState, useEffect, useCallback, useRef } from 'react'
@@ -325,7 +326,10 @@ const ProductOptionsUI = ({
 	return (
 		<div className={styles.content}>
 			<div className={styles.versionInfo}>
-				<h3>{product.title}</h3>
+				<div className={styles.titleRow}>
+					<h3>{product.title}</h3>
+					<WishlistButton productId={product.id} />
+				</div>
 			</div>
 
 			{matchingVariant && (

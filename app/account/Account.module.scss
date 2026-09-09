@@ -1,0 +1,420 @@
+@use '@/app/base';
+
+.shell {
+	display: grid;
+	grid-template-columns: 220px 1fr;
+	gap: 4rem;
+	align-items: start;
+	margin-bottom: 8rem;
+}
+
+.nav {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	position: sticky;
+	top: 10rem;
+}
+
+.navGreeting {
+	font-family: 'Newsreader', serif;
+	font-size: 1.5rem;
+	font-weight: 300;
+	line-height: 1.2;
+	margin-bottom: 1.5rem;
+}
+
+.navLink {
+	display: block;
+	padding: 0.6rem 0;
+	font-size: 12px;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	color: base.$black;
+	border-bottom: 1px solid transparent;
+	transition: border-color 0.2s ease;
+
+	&:hover {
+		border-bottom-color: base.$black;
+	}
+}
+
+.navLinkActive {
+	border-bottom-color: base.$black;
+	font-weight: 500;
+}
+
+.signOut {
+	margin-top: 2rem;
+	padding: 0;
+	background: none;
+	border: 0;
+	font-family: 'Libre Franklin', sans-serif;
+	font-size: 12px;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	color: base.$black;
+	opacity: 0.6;
+	cursor: pointer;
+	text-align: left;
+
+	&:hover {
+		opacity: 1;
+	}
+}
+
+.content {
+	min-width: 0;
+}
+
+.pageTitle {
+	font-family: 'Newsreader', serif;
+	font-size: 2rem;
+	font-weight: 300;
+	line-height: 1.2;
+	margin-bottom: 0.5rem;
+}
+
+.pageIntro {
+	margin-bottom: 2.5rem;
+	opacity: 0.7;
+}
+
+.cardGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 1.5rem;
+}
+
+.card {
+	border: 1px solid base.$gray;
+	padding: 1.5rem;
+}
+
+.cardLabel {
+	font-size: 10px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	opacity: 0.6;
+	margin-bottom: 0.75rem;
+}
+
+.cardValue {
+	font-family: 'Newsreader', serif;
+	font-size: 1.5rem;
+	font-weight: 300;
+	line-height: 1.3;
+}
+
+.sectionTitle {
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	margin: 3rem 0 1rem;
+}
+
+.list {
+	border-top: 1px solid base.$gray;
+}
+
+.listRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1.5rem;
+	padding: 1.25rem 0;
+	border-bottom: 1px solid base.$gray;
+}
+
+.listRowMain {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	min-width: 0;
+}
+
+.thumbStack {
+	display: flex;
+	flex-shrink: 0;
+}
+
+.thumb {
+	width: 48px;
+	height: 48px;
+	object-fit: cover;
+	background-color: #f5f5f5;
+	border: 1px solid white;
+	margin-left: -12px;
+
+	&:first-child {
+		margin-left: 0;
+	}
+}
+
+.orderName {
+	font-weight: 500;
+	letter-spacing: 0.05em;
+}
+
+.muted {
+	opacity: 0.6;
+	font-size: 12px;
+}
+
+.statusPill {
+	display: inline-block;
+	padding: 0.25rem 0.6rem;
+	border: 1px solid base.$gray;
+	font-size: 10px;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.empty {
+	border: 1px solid base.$gray;
+	padding: 3rem 2rem;
+	text-align: center;
+}
+
+.button {
+	display: inline-block;
+	padding: 1rem 2rem;
+	width: auto;
+	border-radius: 0;
+	border: 1px solid base.$black;
+	background-color: transparent;
+	color: base.$black;
+	font-family: 'Libre Franklin', sans-serif;
+	font-size: 12px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	cursor: pointer;
+	line-height: 1.5;
+	transition: background-color 0.3s ease, color 0.3s ease;
+
+	&:hover {
+		background-color: base.$black;
+		color: white;
+	}
+
+	&:disabled {
+		opacity: 0.4;
+		cursor: default;
+	}
+}
+
+.buttonPrimary {
+	background-color: base.$black;
+	color: white;
+
+	&:hover {
+		background-color: transparent;
+		color: base.$black;
+	}
+}
+
+.buttonSubtle {
+	border-color: transparent;
+	padding: 0.5rem 0;
+	text-decoration: underline;
+	text-underline-offset: 4px;
+
+	&:hover {
+		background-color: transparent;
+		color: base.$black;
+		opacity: 0.6;
+	}
+}
+
+.buttonDanger {
+	border-color: transparent;
+	padding: 0.5rem 0;
+	color: base.$red;
+	text-decoration: underline;
+	text-underline-offset: 4px;
+
+	&:hover {
+		background-color: transparent;
+		color: base.$red;
+		opacity: 0.7;
+	}
+}
+
+.formActions {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+	margin-top: 2rem;
+}
+
+.formGrid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 1.5rem;
+	max-width: 620px;
+}
+
+.formFull {
+	grid-column: 1 / -1;
+}
+
+.checkboxRow {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	font-size: 12px;
+	letter-spacing: 0.05em;
+}
+
+.feedbackSuccess {
+	margin-top: 1.5rem;
+	font-size: 12px;
+	letter-spacing: 0.05em;
+}
+
+.feedbackError {
+	margin-top: 1.5rem;
+	font-size: 12px;
+	letter-spacing: 0.05em;
+	color: base.$red;
+}
+
+.addressGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 1.5rem;
+}
+
+.addressCard {
+	border: 1px solid base.$gray;
+	padding: 1.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.addressCardDefault {
+	border-color: base.$black;
+}
+
+.addressLines {
+	white-space: pre-line;
+	font-size: 13px;
+	line-height: 1.75;
+}
+
+.addressActions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-top: auto;
+}
+
+.productGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 2rem;
+}
+
+.productCard {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.productImage {
+	width: 100%;
+	aspect-ratio: 1;
+	object-fit: cover;
+	background-color: #f5f5f5;
+}
+
+.orderDetailGrid {
+	display: grid;
+	grid-template-columns: 1fr 300px;
+	gap: 4rem;
+	align-items: start;
+}
+
+.totalsRow {
+	display: flex;
+	justify-content: space-between;
+	padding: 0.5rem 0;
+	font-size: 13px;
+}
+
+.totalsRowStrong {
+	border-top: 1px solid base.$gray;
+	margin-top: 0.5rem;
+	padding-top: 1rem;
+	font-weight: 500;
+}
+
+.backLink {
+	display: inline-block;
+	margin-bottom: 1.5rem;
+	font-size: 11px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	opacity: 0.6;
+
+	&:hover {
+		opacity: 1;
+	}
+}
+
+.returnBox {
+	border: 1px solid base.$gray;
+	padding: 1.5rem;
+	margin-top: 3rem;
+}
+
+.returnItem {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.5rem 0;
+	font-size: 13px;
+}
+
+@media screen and (max-width: 1024px) {
+	.shell {
+		grid-template-columns: 1fr;
+		gap: 2.5rem;
+	}
+
+	.nav {
+		position: static;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 1.25rem;
+	}
+
+	.navGreeting {
+		width: 100%;
+		margin-bottom: 0.5rem;
+	}
+
+	.signOut {
+		margin-top: 0;
+	}
+
+	.orderDetailGrid {
+		grid-template-columns: 1fr;
+		gap: 2.5rem;
+	}
+}
+
+@media screen and (max-width: 640px) {
+	.formGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.listRow {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+	}
+}

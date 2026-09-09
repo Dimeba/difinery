@@ -16,6 +16,8 @@ import { getEntries } from '@/lib/contentful'
 
 // context
 import { CartProvider } from '@/context/CartContext'
+import { AuthProvider } from '@/context/AuthContext'
+import { WishlistProvider } from '@/context/WishlistContext'
 import { ApolloContext } from '@/lib/apolloContext'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import MUIProviders from '@/components/MUIProviders'
@@ -109,36 +111,40 @@ export default function RootLayout({ children }) {
 				{/* End Meta Pixel Code */}
 			</head>
 			<ApolloContext>
-				<CartProvider>
-					<body
-						className={`${libreFranklin.className} ${newsreader.className}`}
-					>
-						{/* Google Tag Manager (noscript) */}
-						<noscript>
-							<iframe
-								src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-								height='0'
-								width='0'
-								style={{ display: 'none', visibility: 'hidden' }}
-							></iframe>
-						</noscript>
-						<Suspense fallback={null}>
-							<LayoutClientEffects />
-						</Suspense>
-						{/* End Google Tag Manager (noscript) */}
-						<AppRouterCacheProvider>
-							<MUIProviders>
-								<Cart />
-								<Header
-									content={headerContent}
-									collectionsContent={collectionsContent}
-								/>
-								{children}
-								<Footer />
-							</MUIProviders>
-						</AppRouterCacheProvider>
-					</body>
-				</CartProvider>
+				<AuthProvider>
+					<WishlistProvider>
+						<CartProvider>
+							<body
+								className={`${libreFranklin.className} ${newsreader.className}`}
+							>
+								{/* Google Tag Manager (noscript) */}
+								<noscript>
+									<iframe
+										src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+										height='0'
+										width='0'
+										style={{ display: 'none', visibility: 'hidden' }}
+									></iframe>
+								</noscript>
+								<Suspense fallback={null}>
+									<LayoutClientEffects />
+								</Suspense>
+								{/* End Google Tag Manager (noscript) */}
+								<AppRouterCacheProvider>
+									<MUIProviders>
+										<Cart />
+										<Header
+											content={headerContent}
+											collectionsContent={collectionsContent}
+										/>
+										{children}
+										<Footer />
+									</MUIProviders>
+								</AppRouterCacheProvider>
+							</body>
+						</CartProvider>
+					</WishlistProvider>
+				</AuthProvider>
 			</ApolloContext>
 		</html>
 	)

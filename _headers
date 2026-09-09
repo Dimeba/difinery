@@ -60,6 +60,17 @@
 /*.js
   Cache-Control: public, max-age=31536000, immutable
 
+# Customer account pages are per-visitor and must never touch a shared cache.
+# These are more specific than /api/* and /shop/* below, so they win.
+/account/*
+  Cache-Control: private, no-store, max-age=0
+
+/account
+  Cache-Control: private, no-store, max-age=0
+
+/api/account/*
+  Cache-Control: private, no-store, max-age=0
+
 # API routes - short cache with stale-while-revalidate
 /api/*
   Cache-Control: public, max-age=60, stale-while-revalidate=300

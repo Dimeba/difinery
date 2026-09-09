@@ -3,7 +3,7 @@ export default function robots() {
 		rules: {
 			userAgent: '*',
 			allow: '/',
-			disallow: ['/api/', '/admin/']
+			disallow: ['/api/', '/admin/', '/account', '/sign-in-error']
 		},
 		sitemap: `${
 			process.env.NEXT_PUBLIC_SITE_URL || 'https://difinery.com'

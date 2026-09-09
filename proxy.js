@@ -1,6 +1,8 @@
 // proxy.js
 import { NextResponse } from 'next/server'
 
+import { ensureAccessToken } from '@/lib/customerAccount/session'
+
 const ALLOWED_CATEGORIES = [
 	'bracelets',
 	'earrings',
@@ -11,8 +13,24 @@ const ALLOWED_CATEGORIES = [
 
 const ALLOWED_METALS = ['yellow-gold', 'white-gold', 'rose-gold']
 
-export function proxy(request) {
+export async function proxy(request) {
 	const { pathname } = request.nextUrl
+
+	// Customer account area: refresh the session if needed, otherwise send the
+	// visitor through the Shopify login. This is the only place we can refresh
+	// tokens before rendering, since server components cannot write cookies.
+	if (pathname.startsWith('/account')) {
+		const response = NextResponse.next()
+		response.headers.set('Cache-Control', 'private, no-store, max-age=0')
+
+		const accessToken = await ensureAccessToken(request, response)
+		if (accessToken) return response
+
+		const login = request.nextUrl.clone()
+		login.pathname = '/api/account/login'
+		login.search = `?returnTo=${encodeURIComponent(pathname + request.nextUrl.search)}`
+		return NextResponse.redirect(login)
+	}
 
 	// Handle /shop -> /shop/all/yellow-gold/all redirect
 	if (pathname === '/shop') {

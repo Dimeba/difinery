@@ -65,6 +65,18 @@
 	}
 }
 
+.titleRow {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 1rem;
+
+	h3 {
+		text-align: left;
+		flex: 1;
+	}
+}
+
 .resetButton {
 	cursor: pointer;
 	font-size: 0.8rem;

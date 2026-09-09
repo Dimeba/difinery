@@ -8,6 +8,7 @@ import { Box, ClickAwayListener, Typography } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
 import HeaderSubmenu from './HeaderSubmenu'
+import AccountIcon from './AccountIcon'
 import {
 	FiShoppingBag,
 	FiUser,
@@ -221,6 +222,8 @@ const Header = ({
 							>
 								<span className={styles.phoneNumber}>{PHONE_DISPLAY}</span>
 							</Link>
+
+							<AccountIcon transparent={transparentMenu} />
 
 							<Box
 								className={styles.cartIcon}
