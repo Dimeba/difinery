@@ -29,7 +29,13 @@ export async function proxy(request) {
 		const login = request.nextUrl.clone()
 		login.pathname = '/api/account/login'
 		login.search = `?returnTo=${encodeURIComponent(pathname + request.nextUrl.search)}`
-		return NextResponse.redirect(login)
+
+		// The redirect must not be cached either: a CDN holding on to
+		// "/account → login" would bounce signed-in customers back to the login
+		// screen forever.
+		const redirect = NextResponse.redirect(login)
+		redirect.headers.set('Cache-Control', 'private, no-store, max-age=0')
+		return redirect
 	}
 
 	// Handle /shop -> /shop/all/yellow-gold/all redirect

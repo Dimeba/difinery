@@ -1,7 +1,10 @@
 import Link from 'next/link'
 
-import { customerFetch } from '@/lib/customerAccount/client'
-import { CUSTOMER_OVERVIEW } from '@/lib/customerAccount/queries'
+import { customerFetch, customerFetchOptional } from '@/lib/customerAccount/client'
+import {
+	CUSTOMER_OVERVIEW,
+	CUSTOMER_STORE_CREDIT
+} from '@/lib/customerAccount/queries'
 import {
 	addressLines,
 	formatDate,
@@ -25,11 +28,17 @@ function wishlistCount(metafieldValue) {
 }
 
 export default async function AccountOverviewPage() {
-	const data = await customerFetch(CUSTOMER_OVERVIEW)
+	// Store credit sits behind an optional scope, so it is fetched on its own
+	// and allowed to come back empty.
+	const [data, creditData] = await Promise.all([
+		customerFetch(CUSTOMER_OVERVIEW),
+		customerFetchOptional(CUSTOMER_STORE_CREDIT)
+	])
+
 	const customer = data?.customer
 
 	const orders = customer?.orders?.nodes || []
-	const credit = totalStoreCredit(customer?.storeCreditAccounts)
+	const credit = totalStoreCredit(creditData?.customer?.storeCreditAccounts)
 	const saved = wishlistCount(customer?.metafield?.value)
 
 	return (
