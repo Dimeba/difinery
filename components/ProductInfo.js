@@ -11,7 +11,7 @@ import ProductImageGallery from './ProductImageGallery'
 import ProductIframeViewer from './ProductIframeViewer'
 
 // hooks
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 // context
@@ -110,6 +110,37 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		setShow3DModel(false)
 	}, [matchingVariant?.sku])
 
+	// Products with a Shopify "Shape" option carry the shape name in the image
+	// filename (e.g. "round"); cropped assets are never used for those.
+	const hasShapeOption = useMemo(
+		() =>
+			(product?.options || []).some(
+				o => (o?.name || '').toLowerCase().trim() === 'shape'
+			),
+		[product?.options]
+	)
+
+	// `url` is expected to be lowercased already
+	const matchesSelectedShape = useCallback(
+		url => {
+			if (hasShapeOption) {
+				if (url.includes('crop')) return false
+				if (!selectedShape) return true
+				return url.includes(selectedShape.toLowerCase())
+			}
+
+			if (!selectedShape) return true
+			const sc = selectedShape.toLowerCase()
+			const shapeCode = sc.includes('heart')
+				? '-hr-'
+				: sc.includes('pear')
+					? '-pr-'
+					: ''
+			return shapeCode ? url.includes(shapeCode) : true
+		},
+		[hasShapeOption, selectedShape]
+	)
+
 	const images = useMemo(() => {
 		const urlFilter = node => {
 			const url = node.url.toLowerCase()
@@ -154,19 +185,8 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 				}
 			}
 
-			// Shape code
-			let matchesShape = true
-			if (selectedShape) {
-				const sc = selectedShape.toLowerCase()
-				const shapeCode = sc.includes('heart')
-					? '-hr-'
-					: sc.includes('pear')
-						? '-pr-'
-						: ''
-				if (shapeCode) {
-					matchesShape = url.includes(shapeCode)
-				}
-			}
+			// Shape (name in the filename, or the legacy -hr-/-pr- codes)
+			const matchesShape = matchesSelectedShape(url)
 
 			return matchesColorOrStackable && matchesShape
 		}
@@ -188,18 +208,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 				const matches = url.includes(`stackable-${reversedCodes}`)
 
 				// Shape matching
-				let matchesShape = true
-				if (selectedShape) {
-					const sc = selectedShape.toLowerCase()
-					const shapeCode = sc.includes('heart')
-						? '-hr-'
-						: sc.includes('pear')
-							? '-pr-'
-							: ''
-					if (shapeCode) {
-						matchesShape = url.includes(shapeCode)
-					}
-				}
+				const matchesShape = matchesSelectedShape(url)
 
 				return matches && matchesShape
 			}
@@ -213,7 +222,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 		}
 
 		return filteredImages
-	}, [allImages, selectedColor, selectedShape])
+	}, [allImages, selectedColor, matchesSelectedShape])
 
 	const reviewImage = useMemo(() => {
 		const toLower = node => node.url.toLowerCase()
@@ -256,23 +265,15 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 			metalPrefix = 'rr-' // rose gold
 		}
 
-		const shapeCode = selectedShape
-			? selectedShape.toLowerCase().includes('heart')
-				? '-hr-'
-				: selectedShape.toLowerCase().includes('pear')
-					? '-pr-'
-					: ''
-			: ''
-
 		return allImages.find(node => {
 			const u = toLower(node)
 			const filename = u.split('/').pop()
 			if (!u.includes('-review')) return false
 			const metalOk = metalPrefix ? filename.startsWith(metalPrefix) : true
-			const shapeOk = shapeCode ? u.includes(shapeCode) : true
+			const shapeOk = matchesSelectedShape(u)
 			return metalOk && shapeOk
 		})
-	}, [allImages, selectedColor, selectedShape])
+	}, [allImages, selectedColor, matchesSelectedShape])
 
 	const handleAddToCart = async () => {
 		const customFields = []
