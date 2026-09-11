@@ -37,6 +37,9 @@ const ProductOptionAccordion = ({
 }) => {
 	const isStackableRings = product?.tags?.includes('Stackable Rings')
 	const isMetalOption = option?.name?.toLowerCase() === 'metal'
+	// Shopify option literally named "Shape" - rendered with the same
+	// icon buttons as the tag based CustomShape selector
+	const isShapeOption = option?.name?.toLowerCase().trim() === 'shape'
 	const isSingleStackable =
 		(product.handle || '').toLowerCase().includes('single') ||
 		(product.title || '').toLowerCase().includes('single')
@@ -672,6 +675,17 @@ const ProductOptionAccordion = ({
 		)
 	}, [relatedShapes])
 
+	// Shopify "Shape" option values paired with their icon (when we have one)
+	const shapeOptionValues = useMemo(() => {
+		if (!isShapeOption) return []
+		return (option?.optionValues || []).map(value => ({
+			value,
+			shape: customShapes.find(s =>
+				value.name.toLowerCase().includes(s.title.toLowerCase())
+			)
+		}))
+	}, [isShapeOption, option?.optionValues])
+
 	const customCaratMessage = useMemo(() => {
 		const html = product?.descriptionHtml
 		if (!html) return null
@@ -779,6 +793,39 @@ const ProductOptionAccordion = ({
 								/>
 							</button>
 						))
+				) : isShapeOption ? (
+					// Shopify Shape option - same icons as the custom shape selector
+					shapeOptionValues.map(({ value, shape }) => {
+						const isSelected = selectedOptions[option.name] === value.name
+						return (
+							<button
+								key={value.name}
+								onClick={() =>
+									handleOptionSelection(option.name, value.name, index)
+								}
+								style={
+									shape
+										? undefined
+										: { fontWeight: isSelected ? 'bold' : 'normal' }
+								}
+							>
+								{shape ? (
+									<Image
+										src={isSelected ? shape.path : shape.pathBase}
+										width={
+											isMobile
+												? (24 * shape.width) / shape.height
+												: (32 * shape.width) / shape.height
+										}
+										height={isMobile ? 24 : 32}
+										alt={`${value.name} ${option.name}`}
+									/>
+								) : (
+									value.name
+								)}
+							</button>
+						)
+					})
 				) : isStackableRings && isMetalOption ? (
 					// Stackable Rings - Select color for each ring in rows
 					<div

@@ -24,6 +24,17 @@ import materialInfo from '@/data/materialInfo.json' with { type: 'json' }
 import customProductData from '@/data/customProductData.json' with { type: 'json' }
 import customShapes from '@/data/shapes.json' with { type: 'json' }
 
+// Shape options that drive the product image filtering
+const isShapeOptionName = name => {
+	const n = (name || '').toLowerCase().trim()
+	return n === 'shape' || n === 'diamond shape'
+}
+
+// The Shopify "Shape" option mirrors the custom shape selector, so it is
+// pulled up right after Metal the same way that one is
+const isIconShapeOptionName = name =>
+	(name || '').toLowerCase().trim() === 'shape'
+
 const ProductOptionsUI = ({
 	product,
 	isGiftCard = false,
@@ -55,14 +66,26 @@ const ProductOptionsUI = ({
 		(o?.name || '').toLowerCase().includes('size')
 	)
 
+	// Options are rendered as: Metal, then Shape, then everything else
+	const metalOption = product?.options?.find(
+		o => (o?.name || '').toLowerCase() === 'metal'
+	)
+	const nonMetalOptions = (product?.options || [])
+		.filter(o => (o?.name || '').toLowerCase() !== 'metal')
+		.sort(
+			(a, b) =>
+				isIconShapeOptionName(b?.name) - isIconShapeOptionName(a?.name)
+		)
+	const nonMetalStartIndex = metalOption ? 1 : 0
+	const orderedOptions = metalOption
+		? [metalOption, ...nonMetalOptions]
+		: nonMetalOptions
+
 	const [openOption, setOpenOption] = useState(() => {
 		// If Size option exists for Rings/Necklaces/Bracelets, open that accordion
 		if (isSizeCategory && sizeOption) {
-			const metalOption = product?.options?.find(
-				o => (o?.name || '').toLowerCase() === 'metal'
-			)
-			// Size option index: 0 if no Metal, 1 if Metal exists
-			return metalOption ? 1 : 0
+			const sizeIndex = orderedOptions.findIndex(o => o === sizeOption)
+			return sizeIndex >= 0 ? sizeIndex : 0
 		}
 		return selectedColor ? 1 : 0
 	})
@@ -168,7 +191,7 @@ const ProductOptionsUI = ({
 		// 4) set selected color/shape if applicable (to drive image filtering)
 		if (optionName === 'Metal' && !product.tags.includes('Stackable Rings')) {
 			setSelectedColor(value)
-		} else if (optionName.toLowerCase() === 'diamond shape') {
+		} else if (isShapeOptionName(optionName)) {
 			setSelectedShape(value)
 		}
 	}
@@ -215,7 +238,7 @@ const ProductOptionsUI = ({
 
 		if (optionName === 'Metal') {
 			setSelectedColor(null)
-		} else if (optionName.toLowerCase() === 'diamond shape') {
+		} else if (isShapeOptionName(optionName)) {
 			setSelectedShape(null)
 		}
 	}
@@ -314,14 +337,6 @@ const ProductOptionsUI = ({
 		product.category.name,
 		getDefaultSize
 	])
-
-	const metalOption = product?.options?.find(
-		o => (o?.name || '').toLowerCase() === 'metal'
-	)
-	const nonMetalOptions = (product?.options || []).filter(
-		o => (o?.name || '').toLowerCase() !== 'metal'
-	)
-	const nonMetalStartIndex = metalOption ? 1 : 0
 
 	return (
 		<div className={styles.content}>
