@@ -1,5 +1,8 @@
 import { apolloClient } from '@/lib/apolloClient'
-import { GET_PRODUCTS } from '@/lib/queries/getProducts'
+import {
+	GET_PRODUCTS,
+	PRODUCTS_LISTING_QUERY
+} from '@/lib/queries/getProducts'
 import { NextResponse } from 'next/server'
 
 export const revalidate = false
@@ -13,7 +16,7 @@ export async function GET(request) {
 
 		const { data } = await apolloClient.query({
 			query: GET_PRODUCTS,
-			variables: { first, after },
+			variables: { first, after, query: PRODUCTS_LISTING_QUERY },
 			context: {
 				fetchOptions: {
 					next: { revalidate: false }
