@@ -66,6 +66,7 @@ export default function UbsPage() {
 					<Button
 						text='Request a Repair'
 						link='mailto:help@difinery.com?subject=UBS'
+						red
 						fullWidth
 					/>
 				</UbsSplit>
@@ -92,6 +93,7 @@ export default function UbsPage() {
 						link={`mailto:help@difinery.com?subject=${encodeURIComponent(
 							'Special Orders & Custom Designs'
 						)}`}
+						red
 						fullWidth
 					/>
 				</UbsSplit>

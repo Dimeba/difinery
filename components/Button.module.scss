@@ -53,6 +53,20 @@
 	}
 }
 
+// Opt-in red hover, used on the UBS page. Kept as a modifier rather than a
+// third color variant so the default (unhovered) look is untouched — only
+// the hover background/text change. Combined selector for higher specificity
+// than .buttonBlack:hover / .buttonWhite:hover above.
+.buttonBlack.buttonRed:hover,
+.buttonWhite.buttonRed:hover {
+	background-color: #e60000;
+	border-color: #e60000;
+
+	p {
+		color: white;
+	}
+}
+
 .fullWidth {
 	width: 100%;
 }

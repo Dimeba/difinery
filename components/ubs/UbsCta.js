@@ -23,7 +23,7 @@ const UbsCta = () => {
 					Explore the full Difinery collection with your UBS staff discount
 					already applied.
 				</p>
-				<Button text='Shop Now' link='/shop' />
+				<Button text='Shop Now' link='/shop' red />
 			</div>
 		</div>
 	)

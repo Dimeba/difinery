@@ -19,6 +19,7 @@ const UbsIntro = () => {
 					<Button
 						text='Shop with Your Discount'
 						link='#activate-benefit'
+						red
 						fullWidth
 					/>
 				</div>

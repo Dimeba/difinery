@@ -75,7 +75,7 @@ const UbsActivate = () => {
 					</p>
 
 					<div className={styles.buttonWide}>
-						<Button text='Shop Now' link='/shop' fullWidth />
+						<Button text='Shop Now' link='/shop' red fullWidth />
 					</div>
 				</div>
 			</section>
@@ -100,7 +100,7 @@ const UbsActivate = () => {
 						method='post'
 						className={styles.buttonWide}
 					>
-						<Button text='Sign Out' type='submit' fullWidth />
+						<Button text='Sign Out' type='submit' red fullWidth />
 					</form>
 				</div>
 			</section>
@@ -152,6 +152,7 @@ const UbsActivate = () => {
 						text={submitting ? 'Confirming…' : 'Confirm Eligibility'}
 						type='submit'
 						disabled={submitting}
+						red
 						fullWidth
 					/>
 				</form>

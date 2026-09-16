@@ -10,6 +10,7 @@ const Button = ({
 	text,
 	link,
 	white,
+	red,
 	disabled,
 	newWindow,
 	fullWidth,
@@ -24,7 +25,9 @@ const Button = ({
 
 	const className = `${styles.button} ${
 		white ? styles.buttonWhite : styles.buttonBlack
-	} ${disabled ? styles.disabled : ''} ${fullWidth ? styles.fullWidth : ''}`
+	} ${red ? styles.buttonRed : ''} ${disabled ? styles.disabled : ''} ${
+		fullWidth ? styles.fullWidth : ''
+	}`
 
 	// No link: render a plain button (e.g. placeholder CTAs or form submits)
 	if (!link) {
