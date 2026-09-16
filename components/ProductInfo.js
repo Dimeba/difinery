@@ -17,6 +17,9 @@ import { useSearchParams } from 'next/navigation'
 // context
 import { useCart } from '@/context/CartContext'
 
+// helpers
+import { findMetalOption } from '@/lib/helpers'
+
 // analytics
 import { trackViewItem, trackAddToCart } from '@/lib/gaEvents'
 
@@ -38,8 +41,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const gold = searchParams.get('gold')
 
 	const metalOptions = useMemo(() => {
-		const options = product?.options || []
-		const metal = options.find(opt => opt?.name === 'Metal')
+		const metal = findMetalOption(product?.options)
 		return metal?.optionValues || []
 	}, [product?.options])
 

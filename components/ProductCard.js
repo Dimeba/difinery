@@ -11,7 +11,7 @@ import Link from 'next/link'
 import { useState, useEffect, useMemo } from 'react'
 
 // helpers
-import { returnMetalType } from '@/lib/helpers'
+import { returnMetalType, isMetalOptionName } from '@/lib/helpers'
 
 // analytics
 import { trackSelectItem } from '@/lib/gaEvents'
@@ -30,7 +30,7 @@ const ProductCard = ({
 	const initialMetalTypes = useMemo(() => {
 		const types = new Set()
 		product.options?.forEach(option => {
-			if (option.name === 'Metal') {
+			if (isMetalOptionName(option.name)) {
 				option.values.forEach(value => {
 					const image = returnMetalType(value.toLowerCase())
 					if (image) {
@@ -180,7 +180,7 @@ const ProductCard = ({
 	useEffect(() => {
 		const types = new Set()
 		product.options?.forEach(option => {
-			if (option.name === 'Metal') {
+			if (isMetalOptionName(option.name)) {
 				option.values.forEach(value => {
 					const image = returnMetalType(value.toLowerCase())
 					if (image) {

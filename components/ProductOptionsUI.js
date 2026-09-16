@@ -18,6 +18,7 @@ import { useCart } from '@/context/CartContext'
 
 // helpers
 import parse from 'html-react-parser'
+import { isMetalOptionName, findMetalOption } from '@/lib/helpers'
 
 // data
 import materialInfo from '@/data/materialInfo.json' with { type: 'json' }
@@ -66,12 +67,10 @@ const ProductOptionsUI = ({
 		(o?.name || '').toLowerCase().includes('size')
 	)
 
-	// Options are rendered as: Metal, then Shape, then everything else
-	const metalOption = product?.options?.find(
-		o => (o?.name || '').toLowerCase() === 'metal'
-	)
+	// Options are rendered as: Metal / Gold Color, then Shape, then everything else
+	const metalOption = findMetalOption(product?.options)
 	const nonMetalOptions = (product?.options || [])
-		.filter(o => (o?.name || '').toLowerCase() !== 'metal')
+		.filter(o => !isMetalOptionName(o?.name))
 		.sort(
 			(a, b) =>
 				isIconShapeOptionName(b?.name) - isIconShapeOptionName(a?.name)
@@ -130,8 +129,8 @@ const ProductOptionsUI = ({
 
 	const [selectedOptions, setSelectedOptions] = useState(() => {
 		const initialOptions = {}
-		if (selectedColor) {
-			initialOptions['Metal'] = selectedColor
+		if (selectedColor && metalOption?.name) {
+			initialOptions[metalOption.name] = selectedColor
 		}
 		// Auto-select default Size option value for Rings/Necklaces/Bracelets
 		if (isSizeCategory && sizeOption && sizeOption.optionValues?.length > 0) {
@@ -189,7 +188,7 @@ const ProductOptionsUI = ({
 		index !== null && setOpenOption(index + 1)
 
 		// 4) set selected color/shape if applicable (to drive image filtering)
-		if (optionName === 'Metal' && !product.tags.includes('Stackable Rings')) {
+		if (isMetalOptionName(optionName) && !product.tags.includes('Stackable Rings')) {
 			setSelectedColor(value)
 		} else if (isShapeOptionName(optionName)) {
 			setSelectedShape(value)
@@ -236,7 +235,7 @@ const ProductOptionsUI = ({
 		getMatchingVariant(newSelected)
 		setShowOrderSummary(false)
 
-		if (optionName === 'Metal') {
+		if (isMetalOptionName(optionName)) {
 			setSelectedColor(null)
 		} else if (isShapeOptionName(optionName)) {
 			setSelectedShape(null)
@@ -284,16 +283,17 @@ const ProductOptionsUI = ({
 		if (!selectedColor) return
 
 		// `selectedColor` is also used for image filtering (e.g. Stackable-YYW),
-		// so only treat it as a Shopify "Metal" option value if it actually exists.
-		const metalOption = product?.options?.find(
-			o => (o?.name || '').toLowerCase() === 'metal'
-		)
-		const metalValueExists = !!metalOption?.optionValues?.some(
+		// so only treat it as a Shopify metal option value if it actually exists.
+		const colorOption = findMetalOption(product?.options)
+		const metalValueExists = !!colorOption?.optionValues?.some(
 			v => v?.name === selectedColor
 		)
 
-		if (metalValueExists) {
-			getMatchingVariant({ ...selectedOptions, Metal: selectedColor })
+		if (metalValueExists && colorOption?.name) {
+			getMatchingVariant({
+				...selectedOptions,
+				[colorOption.name]: selectedColor
+			})
 		} else {
 			// For stackables / image-only color codes, don't override selectedOptions
 			getMatchingVariant(selectedOptions)

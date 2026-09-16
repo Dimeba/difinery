@@ -28,6 +28,9 @@ import { useMediaQuery } from '@mui/material'
 // analytics
 import { trackViewItemList } from '@/lib/gaEvents'
 
+// helpers
+import { isMetalOptionName } from '@/lib/helpers'
+
 const EMPTY_PRODUCTS = []
 
 const Products = ({
@@ -211,7 +214,7 @@ const Products = ({
 			updated = updated.filter(p => {
 				const titleMatch = p.title.toLowerCase().includes(term)
 				const categoryMatch = p.category?.name.toLowerCase().includes(term)
-				const metalOpt = p.options?.find(o => o.name === 'Metal')
+				const metalOpt = p.options?.find(o => isMetalOptionName(o.name))
 				const metalMatch = metalOpt
 					? metalOpt.values.some(v => v.toLowerCase().includes(term))
 					: false

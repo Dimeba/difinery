@@ -10,7 +10,12 @@ import GiftCardInput from './GiftCardInput'
 import { Typography } from '@mui/material'
 
 // helpers
-import { returnMetalType, returnDiamondShape } from '@/lib/helpers'
+import {
+	returnMetalType,
+	returnDiamondShape,
+	isMetalOptionName,
+	findMetalOption
+} from '@/lib/helpers'
 
 // data
 import customShapes from '@/data/shapes.json' with { type: 'json' }
@@ -36,7 +41,7 @@ const ProductOptionAccordion = ({
 	setSelectedColor = null
 }) => {
 	const isStackableRings = product?.tags?.includes('Stackable Rings')
-	const isMetalOption = option?.name?.toLowerCase() === 'metal'
+	const isMetalOption = isMetalOptionName(option?.name)
 	// Shopify option literally named "Shape" - rendered with the same
 	// icon buttons as the tag based CustomShape selector
 	const isShapeOption = option?.name?.toLowerCase().trim() === 'shape'
@@ -167,9 +172,7 @@ const ProductOptionAccordion = ({
 	const collectionMaxRings = useMemo(() => {
 		let maxRings = currentMaxRings || 1
 		stackableProductsInCollection.forEach(p => {
-			const metal = (p?.options || []).find(
-				o => (o?.name || '').toLowerCase() === 'metal'
-			)
+			const metal = findMetalOption(p?.options)
 			const values = metal?.optionValues || []
 			values.forEach(v => {
 				maxRings = Math.max(maxRings, parseMetalColors(v?.name).length)
@@ -362,7 +365,7 @@ const ProductOptionAccordion = ({
 	])
 
 	const getProductRingCount = p => {
-		const metal = (p?.options || []).find(o => (o?.name || '').toLowerCase() === 'metal')
+		const metal = findMetalOption(p?.options)
 		const values = metal?.optionValues || []
 		let max = 1
 		values.forEach(v => {
@@ -372,7 +375,7 @@ const ProductOptionAccordion = ({
 	}
 
 	const getProductMetalOptionValues = p => {
-		const metal = (p?.options || []).find(o => (o?.name || '').toLowerCase() === 'metal')
+		const metal = findMetalOption(p?.options)
 		return metal?.optionValues || []
 	}
 
@@ -530,8 +533,8 @@ const ProductOptionAccordion = ({
 		if (!hasStored) {
 			const initialMetal =
 				selectedOptions?.[option.name] ||
-				product?.variants?.edges?.[0]?.node?.selectedOptions?.find(
-					so => so?.name === 'Metal'
+				product?.variants?.edges?.[0]?.node?.selectedOptions?.find(so =>
+					isMetalOptionName(so?.name)
 				)?.value ||
 				null
 			const colors = parseMetalColors(initialMetal)
@@ -902,7 +905,7 @@ const ProductOptionAccordion = ({
 					/>
 				) : (
 					// Standard Product Options
-					option?.name?.toLowerCase() === 'metal' ? (
+					isMetalOption ? (
 						<div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
 							{option.optionValues.map(value => {
 								const isSelected = selectedOptions[option.name] === value.name
