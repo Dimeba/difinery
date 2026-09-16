@@ -71,9 +71,34 @@ export default function UbsPage() {
 				</UbsSplit>
 
 				<UbsSplit
+					image='/ubs/custom-product-banner.jpg'
+					imageAlt='Difinery necklace styled with a tailored blazer'
+					reverse
+				>
+					<h2>Special Orders & Custom Designs</h2>
+					<p>
+						Whether you&apos;ve discovered a piece in our shop that
+						you&apos;d like to make your own or have an entirely new design
+						in mind, Difinery welcomes special orders and custom jewelry
+						requests. From thoughtful modifications to one-of-a-kind
+						creations, our team can help bring your vision to life with the
+						same attention to detail and craftsmanship found in every
+						Difinery piece.
+					</p>
+					<p>Email us to share your idea, and we&apos;ll be in touch.</p>
+
+					<Button
+						text='Start a Custom Order'
+						link={`mailto:help@difinery.com?subject=${encodeURIComponent(
+							'Special Orders & Custom Designs'
+						)}`}
+						fullWidth
+					/>
+				</UbsSplit>
+
+				<UbsSplit
 					image='/ubs/why-difinery-banner.jpg'
 					imageAlt='Difinery ring handcrafted in recycled gold with lab grown diamonds'
-					reverse
 				>
 					<h2>Fine Jewelry, Made Responsibly in New York</h2>
 					<p>
