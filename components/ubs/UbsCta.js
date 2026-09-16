@@ -2,13 +2,20 @@
 import styles from './Ubs.module.scss'
 
 // components
+import Image from 'next/image'
 import Button from '../Button'
-import Placeholder from './Placeholder'
 
 const UbsCta = () => {
 	return (
 		<div className={styles.cta}>
-			<Placeholder label='Background image' className={styles.ctaBackground} />
+			<Image
+				src='/ubs/bottom-banner.jpg'
+				alt='Difinery design sketch'
+				fill
+				sizes='100vw'
+				className={styles.ctaBackground}
+				style={{ objectFit: 'cover' }}
+			/>
 
 			<div className={`container ${styles.centered} ${styles.ctaContent}`}>
 				<h2>A New Standard in Fine Jewelry, Reserved for You</h2>
@@ -16,7 +23,7 @@ const UbsCta = () => {
 					Explore the full Difinery collection with your UBS staff discount
 					already applied.
 				</p>
-				<Button text='Shop Now' />
+				<Button text='Shop Now' link='/shop' />
 			</div>
 		</div>
 	)

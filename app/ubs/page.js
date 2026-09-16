@@ -28,7 +28,10 @@ export default function UbsPage() {
 			<UbsActivate />
 
 			<section className={styles.splitSection}>
-				<UbsSplit imageLabel='Repair image'>
+				<UbsSplit
+					image='/ubs/repair-banner.jpg'
+					imageAlt='Our New York bench repairing a piece of jewelry'
+				>
 					<h2>Repair Service, Exclusively for UBS</h2>
 					<p>
 						This is the one benefit we extend to no one else. If a piece you own
@@ -58,10 +61,18 @@ export default function UbsPage() {
 						</li>
 					</ul>
 
-					<Button text='Request a Repair' fullWidth />
+					<Button
+						text='Request a Repair'
+						link='mailto:help@difinery.com?subject=UBS'
+						fullWidth
+					/>
 				</UbsSplit>
 
-				<UbsSplit imageLabel='Product image' reverse>
+				<UbsSplit
+					image='/ubs/why-difinery-banner.jpg'
+					imageAlt='Difinery ring handcrafted in recycled gold with lab grown diamonds'
+					reverse
+				>
 					<h2>Fine Jewelry, Made Responsibly in New York</h2>
 					<p>
 						Every Difinery piece is handcrafted in New York City from certified
@@ -76,7 +87,7 @@ export default function UbsPage() {
 						<Link href='/lab-grown-diamonds'>
 							<h4>Lab Grown Diamonds</h4>
 						</Link>
-						<Link href='/recycled-gold'>
+						<Link href='/14k-certified-recycled-solid-gold'>
 							<h4>14K Certified Recycled Gold</h4>
 						</Link>
 						<Link href='/our-story'>

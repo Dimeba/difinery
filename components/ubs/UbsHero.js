@@ -8,7 +8,15 @@ import Placeholder from './Placeholder'
 const UbsHero = () => {
 	return (
 		<div className={styles.hero}>
-			<Placeholder label='' dark className={styles.heroBackground} />
+			<Image
+				src='/ubs/hero-banner.jpg'
+				alt='Difinery jewelry'
+				fill
+				priority
+				sizes='100vw'
+				className={styles.heroBackground}
+				style={{ objectFit: 'cover' }}
+			/>
 
 			<div className={styles.heroLogos}>
 				<Image
