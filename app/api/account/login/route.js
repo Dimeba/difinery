@@ -39,6 +39,10 @@ export async function GET(request) {
 	authorize.searchParams.set('code_challenge', challenge)
 	authorize.searchParams.set('code_challenge_method', 'S256')
 
+	// Prefills the email on Shopify's sign-in page (used by the UBS form).
+	const loginHint = request.nextUrl.searchParams.get('login_hint')
+	if (loginHint) authorize.searchParams.set('login_hint', loginHint)
+
 	const response = NextResponse.redirect(authorize.toString())
 	setTransactionCookies(response, { state, nonce, verifier, returnTo })
 	response.headers.set('Cache-Control', 'private, no-store, max-age=0')

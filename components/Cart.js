@@ -40,6 +40,24 @@ const Cart = () => {
 	const subtotalRaw = cart?.cost?.totalAmount?.amount
 	const subtotal = subtotalRaw ? parseFloat(subtotalRaw).toFixed(2) : '0.00'
 
+	// UBS staff discount (applied server side by /api/account/link-cart).
+	// Shopify's total is already discounted, so the saving is the list price
+	// of the lines minus that total.
+	const hasDiscount = cart?.discountCodes?.some(code => code.applicable)
+	const listTotal = (cart?.lines?.edges || []).reduce(
+		(sum, { node }) =>
+			sum + Number(node.merchandise?.priceV2?.amount || 0) * node.quantity,
+		0
+	)
+	const discountAmount = hasDiscount
+		? Math.max(listTotal - Number(subtotal), 0)
+		: 0
+	const formatPrice = value =>
+		Number(value).toLocaleString('en-US', {
+			minimumFractionDigits: Number.isInteger(Number(value)) ? 0 : 2,
+			maximumFractionDigits: 2
+		})
+
 	// Handlers expect a CartLine ID, not Variant ID
 	const handleDecrease = (lineId, qty) => {
 		if (qty > 1) {
@@ -135,9 +153,36 @@ const Cart = () => {
 									</p>
 
 									<p className={styles.totalAmount} style={{ fontWeight: '700' }}>
-										${Number(subtotal.slice(0, -3)).toLocaleString()}
+										{discountAmount > 0
+											? `$${formatPrice(listTotal)}`
+											: `$${Number(subtotal.slice(0, -3)).toLocaleString()}`}
 									</p>
 								</div>
+
+								{/* UBS staff discount */}
+								{discountAmount > 0 && (
+									<>
+										<div className={styles.subtotal}>
+											<p className={styles.totalAmount} style={{ color: '#6d6b6b' }}>
+												UBS Staff Discount
+											</p>
+
+											<p className={styles.totalAmount} style={{ fontWeight: '700' }}>
+												-${formatPrice(discountAmount)}
+											</p>
+										</div>
+
+										<div className={styles.subtotal}>
+											<p className={styles.totalAmount} style={{ color: '#6d6b6b' }}>
+												Total
+											</p>
+
+											<p className={styles.totalAmount} style={{ fontWeight: '700' }}>
+												${formatPrice(subtotal)}
+											</p>
+										</div>
+									</>
+								)}
 
 								{/* Taxes */}
 								<div className={styles.subtotal}>

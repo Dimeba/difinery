@@ -32,6 +32,7 @@ export const CartProvider = ({ children }) => {
 	const [cart, setCart] = useState(null)
 	const [showCart, setShowCart] = useState(false)
 	const hasRestoredRef = useRef(false)
+	const restorePromiseRef = useRef(null)
 	const linkedCartRef = useRef(null)
 
 	// Cart creation
@@ -134,7 +135,7 @@ export const CartProvider = ({ children }) => {
 
 	// Restore cart from localStorage on mount (before creating empty cart)
 	useEffect(() => {
-		restoreCartFromStorage()
+		restorePromiseRef.current = restoreCartFromStorage()
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 	// Attach the signed-in customer to the cart so checkout is prefilled and the
@@ -143,6 +144,10 @@ export const CartProvider = ({ children }) => {
 	//
 	// restoreCartFromStorage() mints a brand new cart on every mount, so this
 	// has to run again for each new cart id, not just once per session.
+	//
+	// The route also applies the UBS staff discount and then returns the whole
+	// cart. It waits for the restore to finish so that cart already holds every
+	// saved line; otherwise it could overwrite lines added in the meantime.
 	useEffect(() => {
 		const cartId = cart?.id
 		if (!isLoggedIn || !cartId) return
@@ -150,15 +155,24 @@ export const CartProvider = ({ children }) => {
 
 		linkedCartRef.current = cartId
 
-		fetch('/api/account/link-cart', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			credentials: 'include',
-			body: JSON.stringify({ cartId })
-		}).catch(error => {
-			linkedCartRef.current = null
-			console.error('Error linking cart to customer:', error)
-		})
+		Promise.resolve(restorePromiseRef.current)
+			.then(() =>
+				fetch('/api/account/link-cart', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					credentials: 'include',
+					body: JSON.stringify({ cartId })
+				})
+			)
+			.then(res => res.json())
+			.then(data => {
+				if (!data?.cart) return
+				setCart(prev => (prev?.id === data.cart.id ? data.cart : prev))
+			})
+			.catch(error => {
+				linkedCartRef.current = null
+				console.error('Error linking cart to customer:', error)
+			})
 	}, [isLoggedIn, cart?.id])
 
 	const updateQuantity = useCallback(

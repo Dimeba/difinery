@@ -22,7 +22,7 @@ const UbsHero = () => {
 					src='/logo-white.svg'
 					alt='Difinery'
 					width={220}
-					height={30}
+					height={31}
 					className={styles.heroLogo}
 					priority
 				/>

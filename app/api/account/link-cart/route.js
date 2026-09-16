@@ -1,15 +1,53 @@
 import { NextResponse } from 'next/server'
 
+import { customerFetchWithToken } from '@/lib/customerAccount/client'
 import { isConfigured } from '@/lib/customerAccount/config'
+import { CUSTOMER_ME } from '@/lib/customerAccount/queries'
 import { ensureAccessToken } from '@/lib/customerAccount/session'
 import {
 	CART_BUYER_IDENTITY_UPDATE,
+	CART_DISCOUNT_CODES_UPDATE,
 	storefrontFetch
 } from '@/lib/storefrontServer'
+import { getUbsDiscountCode, isUbsEligibleEmail } from '@/lib/ubs'
 
 export const dynamic = 'force-dynamic'
 
 const NO_STORE = { 'Cache-Control': 'private, no-store, max-age=0' }
+
+/**
+ * UBS staff program: applies the staff discount code when the signed-in
+ * customer's verified email is on an eligible domain.
+ *
+ * Returns the updated cart, or null when nothing was applied. Never throws —
+ * a failed discount must not undo the cart link that already succeeded.
+ */
+async function applyUbsDiscount(accessToken, cartId) {
+	const code = getUbsDiscountCode()
+	if (!code) return null
+
+	try {
+		const data = await customerFetchWithToken(accessToken, CUSTOMER_ME)
+		const email = data?.customer?.emailAddress?.emailAddress
+		if (!isUbsEligibleEmail(email)) return null
+
+		const result = await storefrontFetch(CART_DISCOUNT_CODES_UPDATE, {
+			cartId,
+			discountCodes: [code]
+		})
+
+		const errors = result?.cartDiscountCodesUpdate?.userErrors || []
+		if (errors.length) {
+			console.error('cartDiscountCodesUpdate:', errors.map(e => e.message).join(', '))
+			return null
+		}
+
+		return result.cartDiscountCodesUpdate.cart || null
+	} catch (error) {
+		console.error('UBS discount failed:', error.message)
+		return null
+	}
+}
 
 /**
  * Attaches the signed-in customer to a Storefront cart so checkout is
@@ -56,8 +94,14 @@ export async function POST(request) {
 			return response
 		}
 
+		const discountedCart = await applyUbsDiscount(accessToken, cartId)
+
 		const ok = NextResponse.json(
-			{ linked: true, checkoutUrl: data.cartBuyerIdentityUpdate.cart?.checkoutUrl },
+			{
+				linked: true,
+				checkoutUrl: data.cartBuyerIdentityUpdate.cart?.checkoutUrl,
+				cart: discountedCart
+			},
 			{ headers: NO_STORE }
 		)
 		for (const cookie of response.cookies.getAll()) ok.cookies.set(cookie)

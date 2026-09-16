@@ -5,6 +5,7 @@ import { isConfigured } from '@/lib/customerAccount/config'
 import { CUSTOMER_ME } from '@/lib/customerAccount/queries'
 import { ensureAccessToken } from '@/lib/customerAccount/session'
 import { clearSessionCookies } from '@/lib/customerAccount/tokens'
+import { isUbsEligibleEmail } from '@/lib/ubs'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,6 +34,8 @@ export async function GET(request) {
 			return response
 		}
 
+		const email = customer.emailAddress?.emailAddress || null
+
 		const payload = {
 			loggedIn: true,
 			customer: {
@@ -40,7 +43,8 @@ export async function GET(request) {
 				firstName: customer.firstName,
 				lastName: customer.lastName,
 				displayName: customer.displayName,
-				email: customer.emailAddress?.emailAddress || null
+				email,
+				ubsEligible: isUbsEligibleEmail(email)
 			}
 		}
 
