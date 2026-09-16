@@ -72,7 +72,7 @@ export default function UbsPage() {
 
 				<UbsSplit
 					image='/ubs/custom-product-banner.jpg'
-					imageAlt='Difinery necklace styled with a tailored blazer'
+					imageAlt='Difinery ring handcrafted in recycled gold with lab grown diamonds'
 					reverse
 				>
 					<h2>Special Orders & Custom Designs</h2>
@@ -98,7 +98,7 @@ export default function UbsPage() {
 
 				<UbsSplit
 					image='/ubs/why-difinery-banner.jpg'
-					imageAlt='Difinery ring handcrafted in recycled gold with lab grown diamonds'
+					imageAlt='Difinery necklace styled with a tailored blazer'
 				>
 					<h2>Fine Jewelry, Made Responsibly in New York</h2>
 					<p>
