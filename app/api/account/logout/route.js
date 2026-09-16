@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { CA, COOKIES } from '@/lib/customerAccount/config'
+import { CA, COOKIES, siteUrl } from '@/lib/customerAccount/config'
 import { clearSessionCookies } from '@/lib/customerAccount/tokens'
 
 export const dynamic = 'force-dynamic'
@@ -10,7 +10,7 @@ async function handleLogout(request) {
 
 	// Without an id_token Shopify cannot end its own session, so fall back to
 	// just dropping our cookies.
-	let destination = new URL('/', request.url).toString()
+	let destination = siteUrl('/').toString()
 
 	if (idToken && CA.logoutUrl) {
 		const logout = new URL(CA.logoutUrl)

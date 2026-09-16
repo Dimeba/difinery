@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server'
 
-import { COOKIES, isConfigured, safeReturnTo } from '@/lib/customerAccount/config'
+import {
+	COOKIES,
+	isConfigured,
+	safeReturnTo,
+	siteUrl
+} from '@/lib/customerAccount/config'
 import {
 	clearTransactionCookies,
 	exchangeCode,
@@ -12,7 +17,7 @@ export const dynamic = 'force-dynamic'
 function failure(request, reason) {
 	// Deliberately outside /account — that layout requires a session, so an
 	// error page under it would bounce straight back into the login flow.
-	const url = new URL('/sign-in-error', request.url)
+	const url = siteUrl('/sign-in-error')
 	url.searchParams.set('reason', reason)
 	const response = NextResponse.redirect(url)
 	clearTransactionCookies(response)
@@ -51,7 +56,7 @@ export async function GET(request) {
 
 	// The wishlist a guest built up lives in localStorage, so the merge has to
 	// happen in the browser. /account picks up this flag and posts the merge.
-	const destination = new URL(returnTo, request.url)
+	const destination = siteUrl(returnTo)
 	destination.searchParams.set('justSignedIn', '1')
 
 	const response = NextResponse.redirect(destination)
