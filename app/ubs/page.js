@@ -45,9 +45,11 @@ export default function UbsPage() {
 						<li>
 							<p>
 								Email{' '}
-								<a href='mailto:help@difinery.com'>help@difinery.com</a> from
-								your UBS email address with &ldquo;UBS&rdquo; in the subject
-								line.
+								<a href='mailto:help@difinery.com' className={styles.inlineLink}>
+									help@difinery.com
+								</a>{' '}
+								from your UBS email address with &ldquo;UBS&rdquo; in the
+								subject line.
 							</p>
 						</li>
 						<li>

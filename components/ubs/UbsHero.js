@@ -3,7 +3,6 @@ import styles from './Ubs.module.scss'
 
 // components
 import Image from 'next/image'
-import Placeholder from './Placeholder'
 
 const UbsHero = () => {
 	return (
@@ -28,7 +27,13 @@ const UbsHero = () => {
 					priority
 				/>
 				<span className={styles.heroDivider} />
-				<Placeholder label='UBS logo' className={styles.heroPartnerLogo} />
+				<Image
+					src='/ubs/ubs-logo.png'
+					alt='UBS'
+					width={140}
+					height={48}
+					className={styles.heroPartnerLogo}
+				/>
 			</div>
 		</div>
 	)
