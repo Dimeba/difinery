@@ -12,7 +12,7 @@ import { inputSx } from '@/app/account/inputSx'
 
 const UbsActivate = () => {
 	return (
-		<section>
+		<section id='activate-benefit'>
 			<div className={`container ${styles.centered}`}>
 				<h2>Activate Your Benefit</h2>
 				<p className={styles.lead}>

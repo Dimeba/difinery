@@ -16,7 +16,11 @@ const UbsIntro = () => {
 				</p>
 
 				<div className={styles.buttonWide}>
-					<Button text='Shop with Your Discount' fullWidth />
+					<Button
+						text='Shop with Your Discount'
+						link='#activate-benefit'
+						fullWidth
+					/>
 				</div>
 
 				<p className={styles.note}>
