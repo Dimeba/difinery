@@ -16,6 +16,9 @@ const UbsHero = () => {
 				className={styles.heroBackground}
 				style={{ objectFit: 'cover' }}
 			/>
+			<h1 className={styles.heroTitle}>
+				The Difinery Program for UBS Staff
+			</h1>
 		</div>
 	)
 }

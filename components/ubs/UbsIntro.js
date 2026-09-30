@@ -8,7 +8,6 @@ const UbsIntro = () => {
 	return (
 		<section>
 			<div className={`container ${styles.centered}`}>
-				<h1>The Difinery Program for UBS Staff</h1>
 				<p className={styles.lead}>
 					A private benefit extended exclusively to UBS staff: ten percent off
 					every piece in our collection, plus a fine jewelry repair service we
