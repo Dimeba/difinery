@@ -16,25 +16,6 @@ const UbsHero = () => {
 				className={styles.heroBackground}
 				style={{ objectFit: 'cover' }}
 			/>
-
-			<div className={styles.heroLogos}>
-				<Image
-					src='/logo-white.svg'
-					alt='Difinery'
-					width={220}
-					height={31}
-					className={styles.heroLogo}
-					priority
-				/>
-				<span className={styles.heroDivider} />
-				<Image
-					src='/ubs/ubs-logo.png'
-					alt='UBS'
-					width={140}
-					height={48}
-					className={styles.heroPartnerLogo}
-				/>
-			</div>
 		</div>
 	)
 }

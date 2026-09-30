@@ -41,29 +41,6 @@ $light: #f7f7f5;
 	z-index: -1;
 }
 
-.heroLogos {
-	display: flex;
-	align-items: center;
-	gap: 2rem;
-}
-
-.heroLogo {
-	width: 220px;
-	height: auto;
-}
-
-.heroDivider {
-	width: 1px;
-	height: 56px;
-	background-color: white;
-}
-
-.heroPartnerLogo {
-	width: 140px;
-	height: 48px;
-	object-fit: contain;
-}
-
 // Shared centered block
 .centered {
 	display: flex;
@@ -277,23 +254,6 @@ $light: #f7f7f5;
 		margin-top: var(--ubs-header-height-mobile, 88px);
 	}
 
-	.heroLogos {
-		gap: 1.25rem;
-	}
-
-	.heroLogo {
-		width: 150px;
-	}
-
-	.heroDivider {
-		height: 40px;
-	}
-
-	.heroPartnerLogo {
-		width: 100px;
-		height: 36px;
-	}
-
 	.benefits {
 		grid-template-columns: 1fr;
 		gap: 3rem;
@@ -325,19 +285,6 @@ $light: #f7f7f5;
 
 	.hero {
 		height: 260px;
-	}
-
-	.heroLogo {
-		width: 120px;
-	}
-
-	.heroDivider {
-		height: 32px;
-	}
-
-	.heroPartnerLogo {
-		width: 80px;
-		height: 30px;
 	}
 
 	.splitSection {
