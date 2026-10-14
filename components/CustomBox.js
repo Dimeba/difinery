@@ -4,14 +4,14 @@
 import styles from './ProductInfo.module.scss'
 
 // components
-import { Grid, Box, Typography, Button } from '@mui/material'
+import { Grid, Box, Typography, Button } from '@/lib/mui'
 import Link from 'next/link'
 
 // hooks
 import { useEffect, useState } from 'react'
 
 // lib
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 
 const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {

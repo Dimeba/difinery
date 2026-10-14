@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Box } from '@mui/material'
+import { Box } from '@/lib/mui'
 import { FiUser } from 'react-icons/fi'
 
 import { useAuth } from '@/context/AuthContext'

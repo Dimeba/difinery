@@ -1,13 +1,13 @@
 'use client'
 
 // components
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@/lib/mui'
 import Image from 'next/image'
 import KlaviyoForm from './KlaviyoForm'
 
 // hooks
 import { usePathname } from 'next/navigation'
-import { useMediaQuery } from '@mui/material'
+import { useMediaQuery } from '@/lib/mui'
 
 const SpecialRequestBanner = () => {
 	const pathName = usePathname()

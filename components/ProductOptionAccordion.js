@@ -7,7 +7,7 @@ import styles from './ProductInfo.module.scss'
 import Image from 'next/image'
 import Accordion from './Accordion'
 import GiftCardInput from './GiftCardInput'
-import { Typography } from '@mui/material'
+import { Typography } from '@/lib/mui'
 
 // helpers
 import {

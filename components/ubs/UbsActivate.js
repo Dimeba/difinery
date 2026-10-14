@@ -4,7 +4,7 @@
 import styles from './Ubs.module.scss'
 
 // components
-import { TextField } from '@mui/material'
+import { TextField } from '@/lib/mui'
 import Button from '../Button'
 
 // hooks

@@ -1,14 +1,14 @@
 'use client'
 
 // components
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@/lib/mui'
 import KlaviyoForm from './KlaviyoForm'
 import Image from 'next/image'
 import Link from 'next/link'
 
 // hooks
 import { usePathname } from 'next/navigation'
-import { useMediaQuery } from '@mui/material'
+import { useMediaQuery } from '@/lib/mui'
 
 const SubscribeSection = () => {
 	const pathName = usePathname()

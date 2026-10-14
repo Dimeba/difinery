@@ -1,4 +1,4 @@
-import { Skeleton, Box } from '@mui/material'
+import { Skeleton, Box } from '@/lib/mui'
 import styles from './ProductInfo.module.scss'
 
 const ProductInfoSkeleton = () => {

@@ -8,7 +8,7 @@ import React, {
 	useCallback,
 	useRef
 } from 'react'
-import { useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client/react'
 import { CREATE_CART } from '@/lib/mutations/createCart'
 import { ADD_PRODUCT } from '@/lib/mutations/addProduct'
 import { REMOVE_PRODUCT } from '@/lib/mutations/removeProduct'

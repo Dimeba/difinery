@@ -1,6 +1,6 @@
 // components
 import Column from './Column'
-import { Grid, Stack, Box, Typography } from '@mui/material'
+import { Grid, Stack, Box, Typography } from '@/lib/mui'
 import Image from 'next/image'
 
 const MasonryColumns = ({ content }) => {

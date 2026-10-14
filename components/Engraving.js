@@ -7,7 +7,7 @@ import styles from './ProductInfo.module.scss'
 import { useEffect, useState } from 'react'
 
 // lib
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 
 const Engraving = ({

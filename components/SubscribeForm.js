@@ -4,7 +4,7 @@
 import styles from './SubscribeForm.module.scss'
 
 // components
-import { Grid, TextField } from '@mui/material'
+import { Grid, TextField } from '@/lib/mui'
 
 // formspree
 import { useForm, ValidationError } from '@formspree/react'

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Typography, Box } from '@mui/material'
+import { Typography, Box } from '@/lib/mui'
 
 export default function NotFound() {
 	const router = useRouter()

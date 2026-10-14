@@ -8,8 +8,8 @@ import productStyles from './ProductInfo.module.scss'
 import CartItem from './CartItem'
 import { FiX, FiMinus, FiPlus } from 'react-icons/fi'
 import Link from 'next/link'
-import { ClickAwayListener } from '@mui/material'
-import { useMediaQuery } from '@mui/material'
+import { ClickAwayListener } from '@/lib/mui'
+import { useMediaQuery } from '@/lib/mui'
 
 // hooks
 import { useCart } from '@/context/CartContext'

@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
-import { TextField } from '@mui/material'
+import { TextField } from '@/lib/mui'
 
 import { updateProfile } from '../actions'
 import { inputSx } from '../inputSx'

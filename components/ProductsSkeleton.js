@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Skeleton } from '@mui/material'
+import { Box, Skeleton } from '@/lib/mui'
 import styles from './Products.module.scss'
 
 export default function ProductsSkeleton({ count = 20 }) {

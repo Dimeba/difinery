@@ -4,7 +4,7 @@
 import styles from './SubscribeHero.module.scss'
 
 // components
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@/lib/mui'
 import KlaviyoForm from './KlaviyoForm'
 
 // hooks

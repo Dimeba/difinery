@@ -1,5 +1,5 @@
 // components
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@/lib/mui'
 import Image from 'next/image'
 import Button from './Button'
 

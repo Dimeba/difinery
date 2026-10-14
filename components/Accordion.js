@@ -10,7 +10,7 @@ import InfoIcon from '@mui/icons-material/Info'
 
 // hooks
 import { useState, useEffect } from 'react'
-import { useMediaQuery } from '@mui/material'
+import { useMediaQuery } from '@/lib/mui'
 
 const Accordion = ({
 	state,

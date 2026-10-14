@@ -18,12 +18,12 @@ import {
 	InputAdornment,
 	Typography,
 	Popper
-} from '@mui/material'
+} from '@/lib/mui'
 import SearchIcon from '@mui/icons-material/Search'
 
 // hooks
 import { useState, useEffect, useRef } from 'react'
-import { useMediaQuery } from '@mui/material'
+import { useMediaQuery } from '@/lib/mui'
 
 // analytics
 import { trackViewItemList } from '@/lib/gaEvents'

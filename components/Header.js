@@ -4,7 +4,7 @@
 import styles from './Header.module.scss'
 
 // components
-import { Box, ClickAwayListener, Typography } from '@mui/material'
+import { Box, ClickAwayListener, Typography } from '@/lib/mui'
 import Link from 'next/link'
 import Image from 'next/image'
 import HeaderSubmenu from './HeaderSubmenu'

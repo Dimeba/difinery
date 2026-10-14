@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Grid, TextField, Button, Box, Typography } from '@mui/material'
+import { Grid, TextField, Button, Box, Typography } from '@/lib/mui'
 
 const KlaviyoForm = ({
 	fields = [],

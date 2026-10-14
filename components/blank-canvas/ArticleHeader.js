@@ -2,7 +2,7 @@
 import styles from './ArticleHeader.module.scss'
 
 // components
-import { Typography } from '@mui/material'
+import { Typography } from '@/lib/mui'
 
 const ArticleHeader = ({ title, artistName, artistTitle }) => {
 	return (

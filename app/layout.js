@@ -19,7 +19,7 @@ import { CartProvider } from '@/context/CartContext'
 import { AuthProvider } from '@/context/AuthContext'
 import { WishlistProvider } from '@/context/WishlistContext'
 import { ApolloContext } from '@/lib/apolloContext'
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter'
 import MUIProviders from '@/components/MUIProviders'
 import LayoutClientEffects from '@/components/LayoutClientEffects'
 

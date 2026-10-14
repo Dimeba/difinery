@@ -8,7 +8,7 @@ import Video from './Video'
 import ConditionalLink from './ConditionalLink'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'
-import { Box } from '@mui/material'
+import { Box } from '@/lib/mui'
 
 // lib
 import { getEntry } from '@/lib/contentful'

@@ -2,7 +2,7 @@
 
 import styles from './ContactForm.module.scss'
 
-import { Box, Grid, TextField, Typography } from '@mui/material'
+import { Box, Grid, TextField, Typography } from '@/lib/mui'
 import { useMemo, useState } from 'react'
 
 const FORM_ACTION = '/__forms.html'
@@ -88,7 +88,7 @@ const ContactForm = ({ formName = 'contact' }) => {
 						</Typography>
 						<Box marginTop='1.5rem'>
 							<p>
-								We’ll get back to you as soon as possible. We're committed to
+								We’ll get back to you as soon as possible. We’re committed to
 								making your experience smooth, clear, and meaningful.
 							</p>
 						</Box>

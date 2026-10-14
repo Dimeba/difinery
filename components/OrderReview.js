@@ -4,7 +4,7 @@
 import styles from './ProductInfo.module.scss'
 
 // components
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@/lib/mui'
 import Image from 'next/image'
 
 // hooks
@@ -17,7 +17,7 @@ import { useCart } from '@/context/CartContext'
 import parse from 'html-react-parser'
 
 // lib
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 
 // data

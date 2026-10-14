@@ -13,7 +13,7 @@ import WishlistButton from './WishlistButton'
 
 // hooks
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { useMediaQuery } from '@mui/material'
+import { useMediaQuery } from '@/lib/mui'
 import { useCart } from '@/context/CartContext'
 
 // helpers

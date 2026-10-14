@@ -1,5 +1,5 @@
 // components
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@/lib/mui'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
 // lib

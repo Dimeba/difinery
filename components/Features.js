@@ -2,7 +2,7 @@
 import styles from './Features.module.scss'
 
 // components
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@/lib/mui'
 import Image from 'next/image'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 

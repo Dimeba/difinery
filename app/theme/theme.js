@@ -1,6 +1,6 @@
 'use client'
 
-import { createTheme } from '@mui/material'
+import { createTheme } from '@/lib/mui'
 
 const theme = createTheme({
 	palette: {

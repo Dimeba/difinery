@@ -1,5 +1,5 @@
 // components
-import { Typography } from '@mui/material'
+import { Typography } from '@/lib/mui'
 
 const SplitFeatures = ({
 	title,

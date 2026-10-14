@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Products from './Products'
-import { Box, Skeleton, Typography } from '@mui/material'
+import { Box, Skeleton, Typography } from '@/lib/mui'
 
 /**
  * Smart Products Wrapper - Fetches more data when filters are applied or when load more is clicked

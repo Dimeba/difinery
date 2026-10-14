@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Box, Skeleton } from '@mui/material'
+import { Box, Skeleton } from '@/lib/mui'
 
 const ProductsPlaceholder = () => {
 	const router = useRouter()

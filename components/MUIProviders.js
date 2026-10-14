@@ -1,5 +1,5 @@
 'use client'
-import { ThemeProvider, CssBaseline } from '@mui/material'
+import { ThemeProvider, CssBaseline } from '@/lib/mui'
 import theme from '@/app/theme/theme'
 
 export default function MUIProviders({ children }) {

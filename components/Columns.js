@@ -2,7 +2,7 @@
 import styles from './Columns.module.scss'
 
 // components
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@/lib/mui'
 import Column from './Column'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { getEntry } from '@/lib/contentful'
