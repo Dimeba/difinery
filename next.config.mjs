@@ -49,12 +49,12 @@ const nextConfig = {
 		return [
 			{
 				source: '/bridal',
-				destination: '/bridal/promise-rings',
+				destination: '/bridal/engagement-rings',
 				permanent: false
 			},
 			{
 				source: '/shop/collections/bridal',
-				destination: '/bridal/promise-rings',
+				destination: '/bridal/engagement-rings',
 				permanent: true
 			},
 			{

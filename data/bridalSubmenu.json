@@ -1,5 +1,5 @@
 {
-	"link": "/bridal/promise-rings",
+	"link": "/bridal/engagement-rings",
 	"columns": [
 		{
 			"title": "",
@@ -26,27 +26,27 @@
 			"rows": [
 				{
 					"title": "Round",
-					"url": "/bridal/promise-rings?shape=round"
+					"url": "/bridal/engagement-rings?shapeName=round"
 				},
 				{
 					"title": "Oval",
-					"url": "/bridal/promise-rings?shape=oval"
+					"url": "/bridal/engagement-rings?shapeName=oval"
 				},
 				{
 					"title": "Pear",
-					"url": "/bridal/promise-rings?shape=pear"
+					"url": "/bridal/engagement-rings?shapeName=pear"
 				},
 				{
 					"title": "Marquise",
-					"url": "/bridal/promise-rings?shape=marquise"
+					"url": "/bridal/engagement-rings?shapeName=marquise"
 				},
 				{
 					"title": "Radiant",
-					"url": "/bridal/promise-rings?shape=radiant"
+					"url": "/bridal/engagement-rings?shapeName=radiant"
 				},
 				{
 					"title": "All 9 Shapes",
-					"url": "/bridal/promise-rings"
+					"url": "/bridal/engagement-rings"
 				}
 			]
 		},
@@ -55,23 +55,23 @@
 			"rows": [
 				{
 					"title": "From $1,000",
-					"url": "/bridal/promise-rings?priceMin=1000"
+					"url": "/bridal/engagement-rings?priceMin=1000"
 				},
 				{
 					"title": "$1,000 to $1,500",
-					"url": "/bridal/promise-rings?priceMin=1000&priceMax=1500"
+					"url": "/bridal/engagement-rings?priceMin=1000&priceMax=1500"
 				},
 				{
 					"title": "$1,500 to $2,000",
-					"url": "/bridal/promise-rings?priceMin=1500&priceMax=2000"
+					"url": "/bridal/engagement-rings?priceMin=1500&priceMax=2000"
 				},
 				{
 					"title": "$2,000 to $3,000",
-					"url": "/bridal/promise-rings?priceMin=2000&priceMax=3000"
+					"url": "/bridal/engagement-rings?priceMin=2000&priceMax=3000"
 				},
 				{
 					"title": "Under $3,500",
-					"url": "/bridal/promise-rings?priceMax=3500"
+					"url": "/bridal/engagement-rings?priceMax=3500"
 				}
 			]
 		}

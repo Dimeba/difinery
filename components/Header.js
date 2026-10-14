@@ -288,7 +288,7 @@ const Header = ({
 
 								{/* Bridal */}
 								<Link
-									href={bridalSubmenu.link || '/bridal/promise-rings'}
+									href={bridalSubmenu.link || '/bridal/engagement-rings'}
 									aria-label='Link to Bridal.'
 									className={`${styles.mainMenuLink} ${
 										pathName.startsWith('/bridal') ? styles.activeLink : ''

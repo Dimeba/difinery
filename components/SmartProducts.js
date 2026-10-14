@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Products from './Products'
 import { Box, Skeleton, Typography } from '@/lib/mui'
 
@@ -24,6 +25,8 @@ export default function SmartProducts({
 	const [isSearching, setIsSearching] = useState(false)
 	const searchTimeoutRef = useRef(null)
 	const pendingSearchRef = useRef(false)
+	const searchParams = useSearchParams()
+	const searchKey = searchParams.toString()
 	const [resolvedFilters, setResolvedFilters] = useState(filters)
 
 	// Keep local state in sync with server-provided props after route/filter changes.
@@ -35,35 +38,20 @@ export default function SmartProducts({
 		)
 	}, [initialProducts, initialPageInfo])
 
-	// Keep filters in sync with URL query params (static page + client-side filtering).
+	// Shape and price in the URL are shortcuts onto this page. They replace each
+	// other: a shape link does not keep a previous price, and the reverse.
 	useEffect(() => {
-		setResolvedFilters(filters)
-	}, [filters])
+		const nextFilters = { ...(filters || {}) }
+		const urlKeys = ['shape', 'setting', 'priceMin', 'priceMax', 'shapeName']
 
-	useEffect(() => {
-		function readFiltersFromUrl() {
-			if (typeof window === 'undefined') return
-			const sp = new URLSearchParams(window.location.search)
-			const nextFilters = {
-				...(filters || {})
+		for (const key of urlKeys) {
+			if (searchParams.has(key)) {
+				nextFilters[key] = searchParams.get(key) || null
 			}
-
-			// Generic shop filters
-			if (sp.has('shape')) nextFilters.shape = sp.get('shape') || null
-			if (sp.has('setting')) nextFilters.setting = sp.get('setting') || null
-
-			// Collection-specific filters
-			if (sp.has('priceMin')) nextFilters.priceMin = sp.get('priceMin') || null
-			if (sp.has('priceMax')) nextFilters.priceMax = sp.get('priceMax') || null
-			if (sp.has('shapeName')) nextFilters.shapeName = sp.get('shapeName') || null
-
-			setResolvedFilters(nextFilters)
 		}
 
-		readFiltersFromUrl()
-		window.addEventListener('popstate', readFiltersFromUrl)
-		return () => window.removeEventListener('popstate', readFiltersFromUrl)
-	}, [filters])
+		setResolvedFilters(nextFilters)
+	}, [filters, searchKey, searchParams])
 
 	// Check if filters are active (excluding metal which is in URL)
 	const hasActiveFilters =
