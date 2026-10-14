@@ -18,6 +18,14 @@
 					"title": "Wedding Bands",
 					"url": "/bridal/wedding-bands",
 					"heading": true
+				},
+				{
+					"title": "Book a Meeting",
+					"url": "https://cal.com/difinery-admin-ef3jr7/30min?user=difinery-admin-ef3jr7"
+				},
+				{
+					"title": "Email us with any\npicture or idea",
+					"url": "mailto:help@difinery.com"
 				}
 			]
 		},

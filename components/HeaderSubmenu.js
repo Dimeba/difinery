@@ -42,8 +42,20 @@ const HeaderSubmenu = ({ columns = [], promotions = [], promoOverrides = [] }) =
 								aria-label={`Link to ${row.title} page.`}
 								className={styles.subMenuLink}
 							>
-								<p style={row.heading ? { fontWeight: '600' } : undefined}>
-									{row.title}
+								<p
+									style={{
+										...(row.heading ? { fontWeight: '600' } : {}),
+										...(row.title.includes('\n')
+											? { lineHeight: 'normal' }
+											: {})
+									}}
+								>
+									{row.title.split('\n').map((line, lineIndex) => (
+										<span key={line}>
+											{lineIndex > 0 && <br />}
+											{line}
+										</span>
+									))}
 								</p>
 							</Link>
 						))}
