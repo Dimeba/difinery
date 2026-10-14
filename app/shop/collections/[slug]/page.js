@@ -17,6 +17,7 @@ import {
 	getShareImageFromProducts,
 	getSocialImageMetadata
 } from '@/lib/shareImage'
+import { collectionSlug } from '@/lib/collectionSlug'
 
 export const revalidate = false
 export async function generateStaticParams() {
@@ -24,11 +25,7 @@ export async function generateStaticParams() {
 	return collections.items
 		.filter(c => c.fields.dontRender !== true)
 		.map(collection => ({
-			slug: collection.fields.title
-				.toLowerCase()
-				.replace(/[^a-zA-Z0-9 ]/g, '')
-				.replace(/&/g, '')
-				.replace(/ /g, '-')
+			slug: collectionSlug(collection.fields.title)
 		}))
 }
 
@@ -38,12 +35,7 @@ export async function generateMetadata(props) {
 
 	const collections = await getCachedCollections()
 	const matched = collections.items.find(
-		collection =>
-			collection.fields.title
-				.toLowerCase()
-				.replace(/[^a-zA-Z0-9 ]/g, '')
-				.replace(/&/g, '')
-				.replace(/ /g, '-') === slug
+		collection => collectionSlug(collection.fields.title) === slug
 	)
 
 	if (!matched) {
@@ -86,12 +78,7 @@ export default async function Page(props) {
 	const pageContent = await getCachedShopPageContent()
 
 	const matched = collections.items.find(
-		collection =>
-			collection.fields.title
-				.toLowerCase()
-				.replace(/[^a-zA-Z0-9 ]/g, '')
-				.replace(/&/g, '')
-				.replace(/ /g, '-') === slug
+		collection => collectionSlug(collection.fields.title) === slug
 	)
 
 	if (!matched) {
@@ -117,6 +104,7 @@ export default async function Page(props) {
 	const mergedPageContent = {
 		...pageContent,
 		...content,
+		title: content.title,
 		sections: [
 			...(content?.sections || []),
 			...(pageContent?.sections || [])

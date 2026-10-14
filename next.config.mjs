@@ -45,6 +45,26 @@ const nextConfig = {
 		deviceSizes: [640, 768, 1024, 1280, 1600]
 	},
 
+	async redirects() {
+		return [
+			{
+				source: '/bridal',
+				destination: '/bridal/promise-rings',
+				permanent: false
+			},
+			{
+				source: '/shop/collections/bridal',
+				destination: '/bridal/promise-rings',
+				permanent: true
+			},
+			{
+				source: '/shop/collections/engagement-rings',
+				destination: '/bridal/engagement-rings',
+				permanent: true
+			}
+		]
+	},
+
 	// Apply no-cache headers during development
 	async headers() {
 		if (!isDev) return []

@@ -126,8 +126,16 @@
 						"url": "/shop/collections/heart-collection"
 					},
 					{
+						"title": "Promise Rings",
+						"url": "/bridal/promise-rings"
+					},
+					{
 						"title": "Engagement Rings",
-						"url": "/shop/collections/engagement-rings"
+						"url": "/bridal/engagement-rings"
+					},
+					{
+						"title": "Wedding Bands",
+						"url": "/bridal/wedding-bands"
 					},
 					{
 						"title": "Ever After Collection",

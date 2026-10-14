@@ -14,8 +14,7 @@ const SpecialRequestBanner = () => {
 	const isMobile = useMediaQuery('(max-width: 1024px)')
 
 	return (
-		(pathName === '/shop/collections/engagement-rings' ||
-			pathName.includes('engagement-ring')) && (
+		pathName.includes('engagement-ring') && (
 			<>
 				<Grid
 					container

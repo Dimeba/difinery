@@ -29,7 +29,8 @@ import { useCart } from '@/context/CartContext'
 
 // data
 import submenus from '@/data/submenus.json' with { type: 'json' }
-import engagmentSubmenu from '@/data/engagmentSubmenu.json' with { type: 'json' }
+import bridalSubmenu from '@/data/bridalSubmenu.json' with { type: 'json' }
+import { collectionLabel, collectionSlug } from '@/lib/collectionSlug'
 
 const PHONE_DISPLAY = '+1 (212) 470-3049'
 const PHONE_HREF = 'tel:+12124703049'
@@ -37,8 +38,8 @@ const PHONE_HREF = 'tel:+12124703049'
 const Header = ({
 	content,
 	collectionsContent,
-	engagementSubmenuColumns = engagmentSubmenu.columns || [],
-	engagementPromoOverrides = engagmentSubmenu.promotions || []
+	bridalSubmenuColumns = bridalSubmenu.columns || [],
+	bridalPromoOverrides = bridalSubmenu.promotions || []
 }) => {
 	// Keep in sync with `app/[slug]/page.js` slugify()
 	const formatLink = (str = '') => {
@@ -285,20 +286,22 @@ const Header = ({
 									<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
 								</Link>
 
-								{/* Engagement Rings */}
+								{/* Bridal */}
 								<Link
-									href={engagmentSubmenu.link || '/shop/collections/engagement-rings'}
-									aria-label='Link to Engagement Rings collection.'
-									className={styles.mainMenuLink}
+									href={bridalSubmenu.link || '/bridal/promise-rings'}
+									aria-label='Link to Bridal.'
+									className={`${styles.mainMenuLink} ${
+										pathName.startsWith('/bridal') ? styles.activeLink : ''
+									}`}
 									onMouseEnter={() =>
 										loadSubmenu({
-											columns: engagementSubmenuColumns,
-											promoOverrides: engagementPromoOverrides
+											columns: bridalSubmenuColumns,
+											promoOverrides: bridalPromoOverrides
 										})
 									}
 									onClick={() => setOpenMenu(false)}
 								>
-									<p>Engagement</p>{' '}
+									<p>Bridal</p>{' '}
 									<FiArrowRight className={styles.mobileIcon} strokeWidth={1} />
 								</Link>
 
@@ -356,16 +359,12 @@ const Header = ({
 												{collectionsContent.map(collection => (
 													<Link
 														key={collection.sys.id}
-														href={`/shop/collections/${collection.fields.title
-															.toLowerCase()
-															.replace(/[^a-zA-Z0-9 ]/g, '')
-															.replace(/&/g, '')
-															.replace(/ /g, '-')}`}
-														aria-label={`Link to ${collection.fields.title} collection.`}
+														href={`/shop/collections/${collectionSlug(collection.fields.title)}`}
+														aria-label={`Link to ${collectionLabel(collection.fields.title)} collection.`}
 														className={styles.mainMenuUnderLink}
 														onClick={() => setOpenMenu(false)}
 													>
-														<p>{collection.fields.title}</p>
+														<p>{collectionLabel(collection.fields.title)}</p>
 													</Link>
 												))}
 											</Box>

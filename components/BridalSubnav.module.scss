@@ -1,0 +1,57 @@
+@use '@/app/base';
+
+.wrap {
+	margin-bottom: 0;
+}
+
+.nav {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	align-items: center;
+	border-top: 1px solid base.$gray;
+	border-bottom: 1px solid base.$gray;
+	padding: 1.22rem 0 1.13rem;
+}
+
+.link,
+.active {
+	font-family: 'Libre Franklin', sans-serif;
+	font-size: 11px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	text-decoration: none;
+	text-underline-offset: 1px;
+	text-decoration-thickness: 1px;
+	font-weight: 400;
+	line-height: 1;
+	width: fit-content;
+	color: inherit;
+}
+
+.link:nth-child(1),
+.active:nth-child(1) {
+	justify-self: start;
+}
+
+.link:nth-child(2),
+.active:nth-child(2) {
+	justify-self: center;
+}
+
+.link:nth-child(3),
+.active:nth-child(3) {
+	justify-self: end;
+}
+
+.active {
+	font-weight: 700;
+	text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+	.link,
+	.active {
+		font-size: 9px;
+		letter-spacing: 0.08em;
+	}
+}

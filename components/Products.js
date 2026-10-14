@@ -52,7 +52,8 @@ const Products = ({
 	canLoadMore = false, // Whether more products can be loaded
 	onSearch = null, // Callback when search is performed
 	isSearching = false, // Whether search is currently loading
-	collectionHandle = null
+	collectionHandle = null,
+	flushTop = false
 }) => {
 	// Stable base products list (empty singleton when undefined)
 	const productsList = products ?? EMPTY_PRODUCTS
@@ -301,7 +302,7 @@ const Products = ({
 
 	return (
 		<section
-			className='topSection'
+			className={flushTop ? styles.flushTop : 'topSection'}
 			style={{ marginBottom: individual ? '0' : '' }}
 		>
 			<div className={`${!individual ? 'container' : ''} ${styles.content}`}>

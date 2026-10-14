@@ -3,9 +3,9 @@
 import { Box, Skeleton } from '@/lib/mui'
 import styles from './Products.module.scss'
 
-export default function ProductsSkeleton({ count = 20 }) {
+export default function ProductsSkeleton({ count = 20, flushTop = false }) {
 	return (
-		<section className='topSection'>
+		<section className={flushTop ? styles.flushTop : 'topSection'}>
 			<div className='container'>
 				{/* Search and Filter skeleton */}
 				<Box

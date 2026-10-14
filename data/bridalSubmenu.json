@@ -1,5 +1,5 @@
 {
-	"link": "/shop/collections/engagement-rings",
+	"link": "/bridal/promise-rings",
 	"columns": [
 		{
 			"title": "Start Exploring",
@@ -31,27 +31,27 @@
 			"rows": [
 				{
 					"title": "Round",
-					"url": "/shop/collections/engagement-rings?shape=round"
+					"url": "/bridal/promise-rings?shape=round"
 				},
 				{
 					"title": "Oval",
-					"url": "/shop/collections/engagement-rings?shape=oval"
+					"url": "/bridal/promise-rings?shape=oval"
 				},
 				{
 					"title": "Pear",
-					"url": "/shop/collections/engagement-rings?shape=pear"
+					"url": "/bridal/promise-rings?shape=pear"
 				},
 				{
 					"title": "Marquise",
-					"url": "/shop/collections/engagement-rings?shape=marquise"
+					"url": "/bridal/promise-rings?shape=marquise"
 				},
 				{
 					"title": "Radiant",
-					"url": "/shop/collections/engagement-rings?shape=radiant"
+					"url": "/bridal/promise-rings?shape=radiant"
 				},
 				{
 					"title": "All 9 Shapes",
-					"url": "/shop/collections/engagement-rings"
+					"url": "/bridal/promise-rings"
 				}
 			]
 		},
@@ -60,36 +60,36 @@
 			"rows": [
 				{
 					"title": "From $1,000",
-					"url": "/shop/collections/engagement-rings?priceMin=1000"
+					"url": "/bridal/promise-rings?priceMin=1000"
 				},
 				{
 					"title": "$1,000 to $1,500",
-					"url": "/shop/collections/engagement-rings?priceMin=1000&priceMax=1500"
+					"url": "/bridal/promise-rings?priceMin=1000&priceMax=1500"
 				},
 				{
 					"title": "$1,500 to $2,000",
-					"url": "/shop/collections/engagement-rings?priceMin=1500&priceMax=2000"
+					"url": "/bridal/promise-rings?priceMin=1500&priceMax=2000"
 				},
 				{
 					"title": "$2,000 to $3,000",
-					"url": "/shop/collections/engagement-rings?priceMin=2000&priceMax=3000"
+					"url": "/bridal/promise-rings?priceMin=2000&priceMax=3000"
 				},
 				{
 					"title": "Under $3,500",
-					"url": "/shop/collections/engagement-rings?priceMax=3500"
+					"url": "/bridal/promise-rings?priceMax=3500"
 				}
 			]
 		}
 	],
 	"promotions": [
 		{
-			"id": "engagement-promo-rings",
-			"title": "CLASSIC ENGAGEMENT RINGS",
-			"link": "/shop/collections/engagement-rings",
-			"imageUrl": "/engagement.jpg"
+			"id": "bridal-promo-rings",
+			"title": "PROMISE RINGS",
+			"link": "/bridal/promise-rings",
+			"imageUrl": "/bridal.jpg"
 		},
 		{
-			"id": "engagement-promo-expert",
+			"id": "bridal-promo-expert",
 			"title": "Speak with a diamond expert",
 			"link": "https://cal.com/difinery-admin-ef3jr7/30min?user=difinery-admin-ef3jr7",
 			"imageUrl": "/expert.jpg"

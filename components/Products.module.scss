@@ -1,5 +1,9 @@
 @use '@/app/base';
 
+.flushTop {
+	margin-top: 2rem;
+}
+
 .content {
 	display: flex;
 	flex-direction: column;

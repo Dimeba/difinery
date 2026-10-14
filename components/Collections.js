@@ -12,7 +12,7 @@ const Collections = () => {
 			image: '/sample-image.jpg'
 		},
 		{
-			title: 'Engagement',
+			title: 'Bridal',
 			image: '/sample-image1.jpg'
 		},
 		{

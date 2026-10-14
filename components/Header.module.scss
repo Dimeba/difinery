@@ -159,6 +159,15 @@
 		width: 100%;
 		left: 0;
 	}
+
+	.activeLink p {
+		font-weight: 600;
+	}
+
+	.activeLink p:after {
+		width: 100%;
+		left: 0;
+	}
 }
 
 .mobileIcon,

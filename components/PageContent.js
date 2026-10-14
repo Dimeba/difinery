@@ -13,6 +13,7 @@ import Infographic from './Infographic'
 import Timeline from './Timeline'
 import Articles from './Articles'
 import ContactForm from './ContactForm'
+import { collectionLabel } from '@/lib/collectionSlug'
 
 const PageContent = ({ content, slug }) => {
 	const hasPageHero = slug === 'subscribe'
@@ -31,7 +32,7 @@ const PageContent = ({ content, slug }) => {
 								<Features
 									key={index}
 									features={section.fields.features}
-									title={section.fields.title}
+									title={collectionLabel(section.fields.title)}
 									stylizedTitle={section.fields.stylizedTitle}
 									h4text={section.fields.h4text}
 									description={section.fields.description}
@@ -44,7 +45,7 @@ const PageContent = ({ content, slug }) => {
 								<Infographic
 									key={index}
 									features={section.fields.features}
-									title={section.fields.title}
+									title={collectionLabel(section.fields.title)}
 									stylizedTitle={section.fields.stylizedTitle}
 									graphic={section.fields.graphic}
 								/>
@@ -55,7 +56,7 @@ const PageContent = ({ content, slug }) => {
 								<Timeline
 									key={index}
 									features={section.fields.features}
-									title={section.fields.title}
+									title={collectionLabel(section.fields.title)}
 									stylizedTitle={section.fields.stylizedTitle}
 								/>
 							)
@@ -64,7 +65,7 @@ const PageContent = ({ content, slug }) => {
 						return (
 							<Products
 								key={section.sys.id}
-								title={section.fields.title}
+								title={collectionLabel(section.fields.title)}
 								stylizedTitle={section.fields.stylizedTitle}
 								showTitle={section.fields.showTitle}
 								collections={section.fields.collections}
@@ -77,7 +78,7 @@ const PageContent = ({ content, slug }) => {
 						return (
 							<RichText
 								key={section.sys.id}
-								title={section.fields.title}
+								title={collectionLabel(section.fields.title)}
 								stylizedTitle={section.fields.stylizedTitle}
 								content={section.fields.content}
 								thin={section.fields.thin}
@@ -89,7 +90,7 @@ const PageContent = ({ content, slug }) => {
 						return (
 							<Columns
 								key={section.sys.id}
-								title={section.fields.title}
+								title={collectionLabel(section.fields.title)}
 								showTitle={section.fields.showTitle}
 								stylizedTitle={section.fields.stylizedTitle}
 								subtitle={section.fields.subtitle}
@@ -106,7 +107,7 @@ const PageContent = ({ content, slug }) => {
 						return (
 							<FAQ
 								key={section.sys.id}
-								title={section.fields.title}
+								title={collectionLabel(section.fields.title)}
 								content={section.fields.rows}
 							/>
 						)
@@ -121,7 +122,7 @@ const PageContent = ({ content, slug }) => {
 						return (
 							<SplitFeatures
 								key={section.sys.id}
-								title={section.fields.title}
+								title={collectionLabel(section.fields.title)}
 								row1title={section.fields.row1title}
 								row1={section.fields.row1}
 								row2Title={section.fields.row2Title}
