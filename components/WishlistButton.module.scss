@@ -7,16 +7,12 @@
 	width: 2.25rem;
 	height: 2.25rem;
 	padding: 0;
-	border: 1px solid base.$gray;
+	border: 0;
 	border-radius: 0;
 	background-color: transparent;
 	color: base.$black;
 	cursor: pointer;
-	transition: border-color 0.2s ease, color 0.2s ease;
-
-	&:hover {
-		border-color: base.$black;
-	}
+	transition: color 0.2s ease;
 
 	&:disabled {
 		opacity: 0.5;
@@ -26,7 +22,6 @@
 
 .saved {
 	color: base.$red;
-	border-color: base.$red;
 }
 
 .textButton {
