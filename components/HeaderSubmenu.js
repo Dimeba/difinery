@@ -32,7 +32,9 @@ const HeaderSubmenu = ({ columns = [], promotions = [], promoOverrides = [] }) =
 
 				return (
 					<div className={styles.column2} key={`${column.title}-${index}`}>
-						<p style={{ fontWeight: '600' }}>{column.title}</p>
+						{column.title ? (
+							<p style={{ fontWeight: '600' }}>{column.title}</p>
+						) : null}
 						{(column.rows || []).map(row => (
 							<Link
 								key={`${row.title}-${row.url}`}
@@ -40,7 +42,9 @@ const HeaderSubmenu = ({ columns = [], promotions = [], promoOverrides = [] }) =
 								aria-label={`Link to ${row.title} page.`}
 								className={styles.subMenuLink}
 							>
-								<p>{row.title}</p>
+								<p style={row.heading ? { fontWeight: '600' } : undefined}>
+									{row.title}
+								</p>
 							</Link>
 						))}
 					</div>

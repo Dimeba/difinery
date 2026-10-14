@@ -2,27 +2,22 @@
 	"link": "/bridal/promise-rings",
 	"columns": [
 		{
-			"title": "Start Exploring",
+			"title": "",
 			"rows": [
 				{
-					"title": "Book a Meeting",
-					"url": "https://cal.com/difinery-admin-ef3jr7/30min?user=difinery-admin-ef3jr7"
+					"title": "Promise Rings",
+					"url": "/bridal/promise-rings",
+					"heading": true
 				},
 				{
-					"title": "Ring Size Chart",
-					"url": "/Size-Guide-Difinery-Desktop.pdf"
+					"title": "Engagement Rings",
+					"url": "/bridal/engagement-rings",
+					"heading": true
 				},
 				{
-					"title": "Lab-Grown Diamonds",
-					"url": "/lab-grown-diamonds"
-				},
-				{
-					"title": "Recycled Gold",
-					"url": "/recycled-gold"
-				},
-				{
-					"title": "Blank Canvas",
-					"url": "/blank-canvas"
+					"title": "Wedding Bands",
+					"url": "/bridal/wedding-bands",
+					"heading": true
 				}
 			]
 		},
@@ -84,8 +79,8 @@
 	"promotions": [
 		{
 			"id": "bridal-promo-rings",
-			"title": "PROMISE RINGS",
-			"link": "/bridal/promise-rings",
+			"title": "Classic Engagement Rings",
+			"link": "/bridal/engagement-rings",
 			"imageUrl": "/bridal.jpg"
 		},
 		{
