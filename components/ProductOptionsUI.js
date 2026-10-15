@@ -8,6 +8,7 @@ import Image from 'next/image'
 import Accordion from './Accordion'
 import Engraving from './Engraving'
 import CustomBox from './CustomBox'
+import BezelCharms from './BezelCharms'
 import ProductOptionAccordion from './ProductOptionAccordion'
 import WishlistButton from './WishlistButton'
 
@@ -92,6 +93,12 @@ const ProductOptionsUI = ({
 	// Separate state for Engraving and Custom Box accordions (always closed by default)
 	const [isEngravingOpen, setIsEngravingOpen] = useState(false)
 	const [isCustomBoxOpen, setIsCustomBoxOpen] = useState(false)
+	const [isBezelCharmsOpen, setIsBezelCharmsOpen] = useState(false)
+
+	const isBezelPendant =
+		(product?.category?.name || '').toLowerCase().includes('pendant') &&
+		(Array.isArray(product?.tags) ? product.tags : []).includes('CustomShape') &&
+		(product?.title || '').toLowerCase().includes('bezel pendant')
 
 	// Helper function to find default size based on category
 	const getDefaultSize = useCallback((categoryName, sizeValues) => {
@@ -412,6 +419,18 @@ const ProductOptionsUI = ({
 						setSelectedColor={setSelectedColor}
 					/>
 				))}
+
+				{isBezelPendant && (
+					<Accordion
+						title='Style Your Bezel Charms for Charming Seasons'
+						state={isBezelCharmsOpen}
+						setOpenOption={() => setIsBezelCharmsOpen(!isBezelCharmsOpen)}
+						product
+						display
+					>
+						<BezelCharms />
+					</Accordion>
+				)}
 
 				{product.category.name !== 'Earrings' && !isGiftCard && (
 					/* Engraving */
