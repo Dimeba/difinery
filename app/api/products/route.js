@@ -4,6 +4,7 @@ import {
 	PRODUCTS_LISTING_QUERY
 } from '@/lib/queries/getProducts'
 import { NextResponse } from 'next/server'
+import { isCharmCopyProduct } from '@/lib/charmNecklace'
 
 export const revalidate = false
 export const dynamic = 'force-dynamic' // Force dynamic rendering
@@ -25,7 +26,9 @@ export async function GET(request) {
 		})
 
 		return NextResponse.json({
-			edges: data.products.edges,
+			edges: data.products.edges.filter(
+				edge => !isCharmCopyProduct(edge?.node)
+			),
 			pageInfo: data.products.pageInfo
 		})
 	} catch (error) {

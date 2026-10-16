@@ -1,6 +1,7 @@
 import { getEntries } from '@/lib/contentful'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
+import { isCharmCopyProduct } from '@/lib/charmNecklace'
 
 export default async function sitemap() {
 	const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://difinery.com'
@@ -70,7 +71,7 @@ export default async function sitemap() {
 		const products = data.products.edges.map(edge => edge.node)
 
 		const productPages = products
-			.filter(product => product.handle)
+			.filter(product => product.handle && !isCharmCopyProduct(product))
 			.map(product => {
 				const categoryName = product.category?.name?.toLowerCase() || 'all'
 				const matchedCategory = categories.find(cat =>

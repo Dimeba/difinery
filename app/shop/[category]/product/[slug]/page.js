@@ -11,6 +11,7 @@ import {
 	getShareImageFromProduct,
 	getSocialImageMetadata
 } from '@/lib/shareImage'
+import { isCharmCopyProduct } from '@/lib/charmNecklace'
 
 export const revalidate = false
 
@@ -21,7 +22,9 @@ export async function generateStaticParams() {
 		variables: { first: 250, after: null }
 	})
 
-	const products = data.products.edges.map(edge => edge.node)
+	const products = data.products.edges
+		.map(edge => edge.node)
+		.filter(product => !isCharmCopyProduct(product))
 	const categories = ['bracelets', 'earrings', 'rings', 'necklaces']
 
 	// Generate params for each product in each category
@@ -53,7 +56,7 @@ export async function generateMetadata(props) {
 	})
 	const product = data.productByHandle
 
-	if (!product) {
+	if (!product || isCharmCopyProduct(product)) {
 		return { title: 'Difinery | Product not found' }
 	}
 
@@ -83,7 +86,7 @@ export default async function Product(props) {
 		}
 	})
 	const product = data.productByHandle
-	if (!product) {
+	if (!product || isCharmCopyProduct(product)) {
 		notFound()
 	}
 
@@ -101,8 +104,9 @@ export default async function Product(props) {
 			}
 		})
 		const allProducts = allProductsData.products.edges.map(edge => edge.node)
-		recommendedProducts = allProducts.filter(item =>
-			recommendedProductIds.includes(item.id)
+		recommendedProducts = allProducts.filter(
+			item =>
+				recommendedProductIds.includes(item.id) && !isCharmCopyProduct(item)
 		)
 	}
 

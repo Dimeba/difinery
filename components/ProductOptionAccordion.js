@@ -109,7 +109,9 @@ const ProductOptionAccordion = ({
 
 	const relatedColectionProducts = useMemo(() => {
 		const edges = productCollection?.products?.edges || []
-		return edges.map(edge => edge.node)
+		return edges
+			.map(edge => edge.node)
+			.filter(item => item?.handle !== 'charm-bezel-pendant')
 	}, [productCollection?.products?.edges])
 
 	// State for stackable ring color selections

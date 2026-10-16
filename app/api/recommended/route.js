@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
+import { isCharmCopyProduct } from '@/lib/charmNecklace'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = false
@@ -28,8 +29,8 @@ export async function GET(request) {
 		})
 
 		const allProducts = data.products.edges.map(edge => edge.node)
-		const recommendedProducts = allProducts.filter(product =>
-			productIds.includes(product.id)
+		const recommendedProducts = allProducts.filter(
+			product => productIds.includes(product.id) && !isCharmCopyProduct(product)
 		)
 
 		return NextResponse.json(

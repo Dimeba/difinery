@@ -20,6 +20,7 @@ import { useCart } from '@/context/CartContext'
 // helpers
 import parse from 'html-react-parser'
 import { isMetalOptionName, findMetalOption } from '@/lib/helpers'
+import { visibleProductCopy } from '@/lib/charmNecklace'
 
 // data
 import materialInfo from '@/data/materialInfo.json' with { type: 'json' }
@@ -255,17 +256,7 @@ const ProductOptionsUI = ({
 		Object.keys(selectedOptions).length === product.options.length &&
 		matchingVariant !== null
 
-	const details = product.descriptionHtml
-		.replace(/<p\s+id=(["'])description\1[^>]*>[\s\S]*?<\/p>/i, '')
-		.replace(
-			/<p\s+id=(["'])custom-carat-message\1[^>]*>[\s\S]*?<\/p>/i,
-			''
-		)
-
-	const match = product.descriptionHtml.match(
-		/<p\s+id=(['"])description\1[^>]*>[\s\S]*?<\/p>/i
-	)
-	const description = match ? match[0] : ''
+	const { description, details } = visibleProductCopy(product.descriptionHtml)
 	const customData = matchingVariant
 		? customProductData.find(item => item.SKU === matchingVariant.sku)
 		: null

@@ -2,10 +2,9 @@
 
 import Image from 'next/image'
 import { useApolloClient } from '@apollo/client/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import Accordion from './Accordion'
-import Button from './Button'
 import styles from './ProductInfo.module.scss'
 import mediaStyles from './ProductMediaPanel.module.scss'
 import charmStyles from './CharmNecklace.module.scss'
@@ -18,6 +17,7 @@ import {
 	CHAIN_HANDLE,
 	MAX_CHARMS,
 	bezelPendantHandles,
+	caratOption,
 	chainImageUrl,
 	displayDollars,
 	findVariant,
@@ -32,6 +32,18 @@ import {
 // Center-to-center shift, as a percent of the shared 1600px canvas.
 // The widest pendant is about 12.5% of that canvas, so 16% leaves a gap.
 const CHARM_SHIFT = 16
+
+const ShapeIcon = ({ shape, filled, size = 40, alt = '' }) => (
+	<Image
+		src={filled ? shape.path : shape.pathBase}
+		alt={alt}
+		width={Math.round((size * 3 * shape.width) / shape.height)}
+		height={size * 3}
+		quality={95}
+		sizes={`${size * 2}px`}
+		style={{ width: 'auto', height: size }}
+	/>
+)
 
 const nextKey = () =>
 	typeof crypto !== 'undefined' && crypto.randomUUID
@@ -56,13 +68,15 @@ const CharmNecklace = ({ product, initialGold }) => {
 
 	const [chainGold, setChainGold] = useState(null)
 	const [chainLength, setChainLength] = useState(null)
+	const firstKey = useRef(nextKey())
 	const [slots, setSlots] = useState(() => [
 		{
-			key: nextKey(),
+			key: firstKey.current,
 			handle: product.handle,
 			gold: initialGold || null
 		}
 	])
+	const [activeKey, setActiveKey] = useState(firstKey.current)
 
 	useEffect(() => {
 		let cancelled = false
@@ -181,31 +195,34 @@ const CharmNecklace = ({ product, initialGold }) => {
 	}
 
 	const removeSlot = key => {
-		setSlots(current =>
-			current.length < 2 ? current : current.filter(slot => slot.key !== key)
-		)
+		setSlots(current => {
+			if (current.length < 2) return current
+			const index = current.findIndex(slot => slot.key === key)
+			const next = current.filter(slot => slot.key !== key)
+			if (activeKey === key) {
+				setActiveKey(next[Math.max(0, index - 1)]?.key)
+			}
+			return next
+		})
 	}
 
 	const addSlot = () => {
+		const key = nextKey()
+		const metal = metalOptionName(product)
+		let added = false
 		setSlots(current => {
 			if (current.length >= MAX_CHARMS) return current
-			const used = new Set(
-				current.map(slot => shapeOfProduct(productByHandle(slot.handle), customShapes)?.title)
-			)
-			const shape =
-				availableShapes.find(item => !used.has(item.title)) || availableShapes[0]
-			const nextProduct = shape ? productForShape(catalog, shape.title) : product
-			if (!nextProduct) return current
-			const metal = metalOptionName(nextProduct)
+			added = true
 			return [
 				...current,
 				{
-					key: nextKey(),
-					handle: nextProduct.handle,
-					gold: optionValueOrFirst(nextProduct, metal, chainGold)
+					key,
+					handle: product.handle,
+					gold: optionValueOrFirst(product, metal, initialGold || chainGold)
 				}
 			]
 		})
+		if (added) setActiveKey(key)
 	}
 
 	const chainVariant = useMemo(() => {
@@ -305,7 +322,11 @@ const CharmNecklace = ({ product, initialGold }) => {
 									className={charmStyles.charm}
 									style={{
 										objectFit: 'contain',
-										transform: `translateX(${shift}%)`
+										transform: `translateX(${shift}%)`,
+										filter:
+											selection.slot.key === activeKey
+												? 'drop-shadow(0 12px 14px rgba(26, 27, 24, 0.45))'
+												: 'none'
 									}}
 								/>
 							)
@@ -322,10 +343,6 @@ const CharmNecklace = ({ product, initialGold }) => {
 				</div>
 
 				{ready && <p>${total.toLocaleString()}</p>}
-
-				<p>
-					A chain and up to five pendants. Each pendant is set in 0.20 carat.
-				</p>
 
 				{loading ? (
 					<p>Loading chain and pendants…</p>
@@ -398,129 +415,251 @@ const CharmNecklace = ({ product, initialGold }) => {
 							</Accordion>
 						)}
 
-						{slotSelections.map((selection, index) => {
-							const metal = metalOptionName(selection.item)
-							const metalOption = (selection.item?.options || []).find(
-								option => option.name === metal
-							)
-							return (
-								<Accordion
-									key={selection.slot.key}
-									title={`Pendant ${index + 1}`}
-									extraTitleText={selection.shape?.title || null}
-									state={open === selection.slot.key}
-									setOpenOption={() => toggle(selection.slot.key)}
-									product
-									display
-								>
-									<div className={styles.variantButtonsContainer}>
-										{availableShapes.map(shape => {
-											const selected =
-												selection.shape?.title === shape.title
-											return (
-												<button
-													key={shape.title}
-													type='button'
-													onClick={() => {
-														const next = productForShape(
-															catalog,
-															shape.title
-														)
-														if (!next) return
-														const nextMetal = metalOptionName(next)
-														updateSlot(selection.slot.key, {
-															handle: next.handle,
-															gold: optionValueOrFirst(
-																next,
-																nextMetal,
-																selection.slot.gold
-															)
-														})
-													}}
-												>
-													<Image
-														src={
-															selected ? shape.path : shape.pathBase
-														}
-														width={(32 * shape.width) / shape.height}
-														height={32}
-														alt={`${shape.title} pendant`}
-													/>
-												</button>
-											)
-										})}
+						<Accordion
+							title='Pendants'
+							extraTitleText={
+								slotSelections.find(item => item.slot.key === activeKey)?.shape
+									?.title || `${slots.length}`
+							}
+							state={open === 'pendants'}
+							setOpenOption={() => toggle('pendants')}
+							product
+							display
+						>
+							<div className={charmStyles.pendantPicker}>
+								{slotSelections.map((selection, index) => {
+									const active = selection.slot.key === activeKey
+									return (
+										<button
+											key={selection.slot.key}
+											type='button'
+											className={`${charmStyles.pendantTab} ${
+												active ? charmStyles.pendantTabActive : ''
+											}`}
+											onClick={() => setActiveKey(selection.slot.key)}
+										>
+											{selection.shape && (
+												<ShapeIcon
+													shape={selection.shape}
+													filled={active}
+													size={36}
+												/>
+											)}
+											<span>{index + 1}</span>
+										</button>
+									)
+								})}
+								{slots.length < MAX_CHARMS && (
+									<div className={charmStyles.pendantAddSlot}>
+										<button
+											type='button'
+											className={charmStyles.pendantAdd}
+											onClick={addSlot}
+											aria-label='Add a pendant'
+										>
+											+
+										</button>
+										<span>{slots.length + 1}</span>
 									</div>
+								)}
+							</div>
 
-									{metalOption && (
+							{(() => {
+								const index = slotSelections.findIndex(
+									item => item.slot.key === activeKey
+								)
+								const selection = slotSelections[index]
+								if (!selection) return null
+								const metal = metalOptionName(selection.item)
+								const metalOption = (selection.item?.options || []).find(
+									option => option.name === metal
+								)
+								return (
+									<div className={charmStyles.editor}>
+										<div className={charmStyles.field}>
+										<p className={charmStyles.optionLabel}>Diamond shape</p>
 										<div
-											className={styles.variantButtonsContainer}
-											style={{ marginTop: '1rem' }}
+											className={`${styles.variantButtonsContainer} ${charmStyles.shapeRow}`}
 										>
-											{metalOption.optionValues.map(value => (
-												<button
-													key={value.name}
-													type='button'
-													onClick={() =>
-														updateSlot(selection.slot.key, {
-															gold: value.name
-														})
-													}
-													style={{
-														borderRadius: '50%',
-														border:
-															selection.slot.gold === value.name
-																? '1px solid #9b9b9b'
-																: '',
-														padding: '2px',
-														opacity:
-															selection.slot.gold === value.name
-																? 1
-																: 0.6
-													}}
-												>
-													<Image
-														src={`/${returnMetalType(value.name)}`}
-														width={20}
-														height={20}
-														alt={value.name}
-													/>
-												</button>
-											))}
+											{availableShapes.map(shape => {
+												const selected =
+													selection.shape?.title === shape.title
+												return (
+													<button
+														key={shape.title}
+														type='button'
+														onClick={() => {
+															const next = productForShape(
+																catalog,
+																shape.title
+															)
+															if (!next) return
+															const nextMetal = metalOptionName(next)
+															updateSlot(selection.slot.key, {
+																handle: next.handle,
+																gold: optionValueOrFirst(
+																	next,
+																	nextMetal,
+																	selection.slot.gold
+																)
+															})
+														}}
+													>
+														<ShapeIcon
+															shape={shape}
+															filled={selected}
+															size={44}
+															alt={`${shape.title} pendant`}
+														/>
+													</button>
+												)
+											})}
 										</div>
-									)}
+										</div>
 
-									<div className={charmStyles.slotActions}>
-										<button
-											type='button'
-											onClick={() => moveSlot(index, -1)}
-											disabled={index === 0}
-										>
-											Move left
-										</button>
-										<button
-											type='button'
-											onClick={() => moveSlot(index, 1)}
-											disabled={index === slots.length - 1}
-										>
-											Move right
-										</button>
-										<button
-											type='button'
-											onClick={() => removeSlot(selection.slot.key)}
-											disabled={slots.length < 2}
-										>
-											Remove
-										</button>
+										{caratOption(selection.item) && (
+											<div className={charmStyles.field}>
+												<p className={charmStyles.optionLabel}>
+													Carat size
+												</p>
+												<div
+													className={`${styles.variantButtonsContainer} ${charmStyles.shapeRow}`}
+												>
+													{caratOption(selection.item).optionValues.map(
+														value => {
+															const locked = Number(value.name) !== 0.2
+															return (
+																<button
+																	key={value.name}
+																	type='button'
+																	disabled={locked}
+																	className={
+																		locked
+																			? charmStyles.caratLocked
+																			: undefined
+																	}
+																	style={{
+																		fontWeight: locked
+																			? 'normal'
+																			: 'bold'
+																	}}
+																>
+																	{value.name}
+																</button>
+															)
+														}
+													)}
+												</div>
+											</div>
+										)}
+
+										{metalOption && (
+											<div className={charmStyles.field}>
+												<p className={charmStyles.optionLabel}>
+													Gold color
+												</p>
+												<div
+													className={`${styles.variantButtonsContainer} ${charmStyles.shapeRow}`}
+												>
+													{metalOption.optionValues.map(value => (
+														<button
+															key={value.name}
+															type='button'
+															onClick={() =>
+																updateSlot(selection.slot.key, {
+																	gold: value.name
+																})
+															}
+															style={{
+																borderRadius: '50%',
+																border:
+																	selection.slot.gold ===
+																	value.name
+																		? '1px solid #9b9b9b'
+																		: '',
+																padding: '2px',
+																opacity:
+																	selection.slot.gold ===
+																	value.name
+																		? 1
+																		: 0.6
+															}}
+														>
+															<Image
+																src={`/${returnMetalType(value.name)}`}
+																width={48}
+																height={48}
+																quality={95}
+																alt={value.name}
+																style={{
+																	width: 22,
+																	height: 22
+																}}
+															/>
+														</button>
+													))}
+												</div>
+											</div>
+										)}
+
+										<div className={charmStyles.slotActions}>
+											<button
+												type='button'
+												onClick={() => moveSlot(index, -1)}
+												disabled={index === 0}
+											>
+												<svg
+													width='10'
+													height='10'
+													viewBox='0 0 10 10'
+													aria-hidden='true'
+												>
+													<path
+														d='M6.8 1.2 3 5l3.8 3.8'
+														fill='none'
+														stroke='currentColor'
+														strokeWidth='1.2'
+														strokeLinecap='round'
+														strokeLinejoin='round'
+													/>
+												</svg>
+												Move left
+											</button>
+											<button
+												type='button'
+												onClick={() => moveSlot(index, 1)}
+												disabled={index === slots.length - 1}
+											>
+												Move right
+												<svg
+													width='10'
+													height='10'
+													viewBox='0 0 10 10'
+													aria-hidden='true'
+												>
+													<path
+														d='M3.2 1.2 7 5 3.2 8.8'
+														fill='none'
+														stroke='currentColor'
+														strokeWidth='1.2'
+														strokeLinecap='round'
+														strokeLinejoin='round'
+													/>
+												</svg>
+											</button>
+											<button
+												type='button'
+												className={charmStyles.remove}
+												onClick={() => removeSlot(selection.slot.key)}
+												disabled={slots.length < 2}
+											>
+												Remove
+											</button>
+										</div>
 									</div>
-								</Accordion>
-							)
-						})}
-					</div>
-				)}
-
-				{slots.length < MAX_CHARMS && !loading && (
-					<div className={charmStyles.addPendant}>
-						<Button text='Add a pendant' fullWidth onClick={addSlot} />
+								)
+							})()}
+						</Accordion>
 					</div>
 				)}
 

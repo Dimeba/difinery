@@ -22,7 +22,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 
 // hooks
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useMediaQuery } from '@/lib/mui'
 
 // analytics
@@ -30,6 +30,7 @@ import { trackViewItemList } from '@/lib/gaEvents'
 
 // helpers
 import { isMetalOptionName } from '@/lib/helpers'
+import { isCharmCopyProduct } from '@/lib/charmNecklace'
 
 const EMPTY_PRODUCTS = []
 
@@ -56,7 +57,13 @@ const Products = ({
 	flushTop = false
 }) => {
 	// Stable base products list (empty singleton when undefined)
-	const productsList = products ?? EMPTY_PRODUCTS
+	const productsList = useMemo(
+		() =>
+			(products ?? EMPTY_PRODUCTS).filter(
+				product => !isCharmCopyProduct(product)
+			),
+		[products]
+	)
 
 	// All products are already fetched; maintain only filtered + visible slices
 	const [filteredItems, setFilteredItems] = useState(productsList)
@@ -478,7 +485,9 @@ const Products = ({
 
 						{recommendedProducts &&
 							recommendedProducts.length > 0 &&
-							recommendedProducts.map((product, index) => (
+							recommendedProducts
+								.filter(product => !isCharmCopyProduct(product))
+								.map((product, index) => (
 								<ProductCard
 									key={product.id}
 									id={product.id}

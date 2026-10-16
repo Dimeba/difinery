@@ -1,6 +1,7 @@
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 import { NextResponse } from 'next/server'
+import { isCharmCopyProduct } from '@/lib/charmNecklace'
 
 export const revalidate = false
 export const dynamic = 'force-dynamic' // Force dynamic rendering
@@ -19,7 +20,7 @@ export async function GET(request, { params }) {
 			}
 		})
 
-		if (!data.productByHandle) {
+		if (!data.productByHandle || isCharmCopyProduct(data.productByHandle)) {
 			return NextResponse.json({ error: 'Product not found' }, { status: 404 })
 		}
 
