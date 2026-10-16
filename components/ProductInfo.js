@@ -31,9 +31,14 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 
 	// Product can be temporarily undefined during navigation/loading.
 	const allImages = useMemo(() => {
-		return product?.images?.edges
-			? product.images.edges.map(edge => edge.node)
-			: []
+		if (!product?.images?.edges) return []
+
+		return product.images.edges
+			.map(edge => edge.node)
+			.filter(node => {
+				const name = (node?.url || '').toLowerCase()
+				return !name.includes('asset') && !name.includes('crop')
+			})
 	}, [product?.images?.edges])
 
 	// Getting the default metal type
