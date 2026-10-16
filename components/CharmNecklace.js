@@ -12,9 +12,12 @@ import { useCart } from '@/context/CartContext'
 import { returnMetalType } from '@/lib/helpers'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
 import { trackAddToCart } from '@/lib/gaEvents'
+import parse from 'html-react-parser'
 import customShapes from '@/data/shapes.json' with { type: 'json' }
+import materialInfo from '@/data/materialInfo.json' with { type: 'json' }
 import {
 	CHAIN_HANDLE,
+	CHARM_COPY_HANDLE,
 	MAX_CHARMS,
 	bezelPendantHandles,
 	caratOption,
@@ -26,7 +29,8 @@ import {
 	optionValueOrFirst,
 	pendantAssetUrl,
 	productForShape,
-	shapeOfProduct
+	shapeOfProduct,
+	visibleProductCopy
 } from '@/lib/charmNecklace'
 
 // Center-to-center shift, as a percent of the shared 1600px canvas.
@@ -54,6 +58,7 @@ const CharmNecklace = ({ product, initialGold }) => {
 	const client = useApolloClient()
 	const { addLinesToCart, setShowCart } = useCart()
 	const [chain, setChain] = useState(null)
+	const [copyProduct, setCopyProduct] = useState(null)
 	const [catalog, setCatalog] = useState(() =>
 		product?.handle ? [product] : []
 	)
@@ -87,10 +92,15 @@ const CharmNecklace = ({ product, initialGold }) => {
 			)
 
 			try {
-				const [chainResult, ...pendantResults] = await Promise.all([
+				const [chainResult, copyResult, ...pendantResults] = await Promise.all([
 					client.query({
 						query: GET_PRODUCT_BY_HANDLE,
 						variables: { handle: CHAIN_HANDLE }
+					}),
+					client.query({
+						query: GET_PRODUCT_BY_HANDLE,
+						variables: { handle: CHARM_COPY_HANDLE },
+						fetchPolicy: 'network-only'
 					}),
 					...handles.map(handle =>
 						client.query({
@@ -108,6 +118,7 @@ const CharmNecklace = ({ product, initialGold }) => {
 					.filter(Boolean)
 
 				setChain(chainProduct)
+				setCopyProduct(copyResult?.data?.productByHandle || null)
 				setCatalog([product, ...pendants])
 
 				const metalName = metalOptionName(chainProduct)
@@ -259,6 +270,18 @@ const CharmNecklace = ({ product, initialGold }) => {
 		return amounts.reduce((sum, amount) => sum + displayDollars(amount), 0)
 	}, [chainVariant, slotSelections])
 
+	const copy = useMemo(
+		() => visibleProductCopy(copyProduct?.descriptionHtml),
+		[copyProduct]
+	)
+	const caratMessage = useMemo(() => {
+		const html = copyProduct?.descriptionHtml || ''
+		const match = html.match(
+			/<p\s+id=(['"])custom-carat-message\1[^>]*>([\s\S]*?)<\/p>/i
+		)
+		return match?.[2]?.replace(/<[^>]+>/g, '').trim() || ''
+	}, [copyProduct])
+
 	const ready =
 		!loading &&
 		chainVariant &&
@@ -338,11 +361,15 @@ const CharmNecklace = ({ product, initialGold }) => {
 			<div className={styles.content}>
 				<div className={styles.versionInfo}>
 					<div className={styles.titleRow}>
-						<h3>Bezel Charm Necklace</h3>
+						<h3>{copyProduct?.title || 'Charm Bezel Pendant'}</h3>
 					</div>
 				</div>
 
 				{ready && <p>${total.toLocaleString()}</p>}
+
+				{copy.description && (
+					<div className={styles.description}>{parse(copy.description)}</div>
+				)}
 
 				{loading ? (
 					<p>Loading chain and pendants…</p>
@@ -550,6 +577,11 @@ const CharmNecklace = ({ product, initialGold }) => {
 														}
 													)}
 												</div>
+												{caratMessage && (
+													<p className={charmStyles.caratNote}>
+														{caratMessage}
+													</p>
+												)}
 											</div>
 										)}
 
@@ -671,6 +703,71 @@ const CharmNecklace = ({ product, initialGold }) => {
 				>
 					Add to Cart
 				</button>
+
+				<div>
+					<Accordion title='Product Details'>
+						<div className={styles.productDetails}>
+							<p>
+								<span>Product Name: </span>
+								{copyProduct?.title || 'Charm Bezel Pendant'}
+							</p>
+							{chainGold && (
+								<p>
+									<span>Metal: </span>
+									{chainGold.toLowerCase().includes('yellow') ? (
+										<span>Yellow Gold</span>
+									) : chainGold.toLowerCase().includes('rose') ? (
+										<span>Rose Gold</span>
+									) : (
+										<span>White Gold</span>
+									)}
+								</p>
+							)}
+							{copy.details && parse(copy.details)}
+						</div>
+					</Accordion>
+
+					<Accordion title='Material'>
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								gap: '1rem'
+							}}
+						>
+							{materialInfo.map((info, index) => (
+								<div key={index} className={styles.materialInfo}>
+									<Image
+										src={info.icon}
+										width={32}
+										height={32}
+										alt='Icon'
+									/>
+									<div
+										style={{
+											display: 'flex',
+											flexDirection: 'column',
+											gap: '0.25rem'
+										}}
+									>
+										<p style={{ fontWeight: '700' }}>{info.title}</p>
+										<p>{info.text}</p>
+									</div>
+								</div>
+							))}
+						</div>
+					</Accordion>
+
+					<Accordion title='Handcrafted in USA'>
+						<p>
+							Each one of our pieces are handcrafted in New York&apos;s Diamond
+							District using only ethical lab-grown diamonds of the highest
+							standards and 100% certified recycled solid gold. We honor
+							timeless design and exceptional craftsmanship, creating
+							heirloom-quality fine jewelry made to last for generations.
+						</p>
+					</Accordion>
+				</div>
 			</div>
 		</>
 	)
