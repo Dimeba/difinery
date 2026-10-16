@@ -25,22 +25,20 @@ const BezelCharms = ({ onStyle }) => {
 			>
 				<Box display='flex' flexDirection='column' gap='0.75rem'>
 					<Typography variant='p' fontWeight={700}>
-						The Pendant Collection
+						Style Your Charm Necklace
 					</Typography>
 
 					<Typography variant='p'>
-						One Chain, Endless Meaning
-						<br />
-						Layer them, switch them, collect them over time.
-						<br />
-						Our new diamond pendants move between necklaces and bracelets,
-						so every piece can grow with its story.
-						<br />
-						This season, give the first chapter.
+						Start with a chain in yellow or white gold and add up to five
+						diamond charms. Choose each lab grown diamond by shape, from round
+						and pear to heart and emerald. Each charm holds a 0.20 ct diamond
+						in a bezel setting and moves between necklaces and bracelets. Wear
+						one every day, or add more for birthdays, anniversaries and the
+						moments you want to keep close. One chain, endless meaning.
 					</Typography>
 				</Box>
 
-				<Button text='Style Your Bezel Charms' fullWidth onClick={onStyle} />
+				<Button text='Build Your Charm Necklace' fullWidth onClick={onStyle} />
 			</Grid>
 
 			<Grid

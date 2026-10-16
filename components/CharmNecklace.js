@@ -64,7 +64,7 @@ const CharmNecklace = ({ product, initialGold }) => {
 	)
 	const [loading, setLoading] = useState(true)
 	const [adding, setAdding] = useState(false)
-	const [open, setOpen] = useState('chain-gold')
+	const [open, setOpen] = useState('pendants')
 
 	const chainMetalName = metalOptionName(chain)
 	const chainLengthOption = (chain?.options || []).find(option =>

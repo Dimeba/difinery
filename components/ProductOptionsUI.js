@@ -95,7 +95,6 @@ const ProductOptionsUI = ({
 	// Separate state for Engraving and Custom Box accordions (always closed by default)
 	const [isEngravingOpen, setIsEngravingOpen] = useState(false)
 	const [isCustomBoxOpen, setIsCustomBoxOpen] = useState(false)
-	const [isBezelCharmsOpen, setIsBezelCharmsOpen] = useState(false)
 
 	const categoryName = (product?.category?.name || '').toLowerCase()
 	const isBezelPendant =
@@ -414,15 +413,9 @@ const ProductOptionsUI = ({
 				))}
 
 				{isBezelPendant && (
-					<Accordion
-						title='Style Your Bezel Charms for Charming Seasons'
-						state={isBezelCharmsOpen}
-						setOpenOption={() => setIsBezelCharmsOpen(!isBezelCharmsOpen)}
-						product
-						display
-					>
+					<div className={styles.bezelBanner}>
 						<BezelCharms onStyle={onStyleCharms} />
-					</Accordion>
+					</div>
 				)}
 
 				{product.category.name !== 'Earrings' && !isGiftCard && (

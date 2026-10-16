@@ -1,16 +1,13 @@
-@use '@/app/base';
-
 .wrap {
 	margin-bottom: 0;
 }
 
 .nav {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	display: flex;
+	justify-content: center;
 	align-items: center;
-	border-top: 1px solid base.$gray;
-	border-bottom: 1px solid base.$gray;
-	padding: 1.22rem 0 1.13rem;
+	gap: 3rem;
+	padding: 0.5rem 0 1rem;
 }
 
 .link,
@@ -28,27 +25,16 @@
 	color: inherit;
 }
 
-.link:nth-child(1),
-.active:nth-child(1) {
-	justify-self: start;
-}
-
-.link:nth-child(2),
-.active:nth-child(2) {
-	justify-self: center;
-}
-
-.link:nth-child(3),
-.active:nth-child(3) {
-	justify-self: end;
-}
-
 .active {
 	font-weight: 700;
 	text-decoration: underline;
 }
 
 @media screen and (max-width: 768px) {
+	.nav {
+		gap: 1.25rem;
+	}
+
 	.link,
 	.active {
 		font-size: 9px;
