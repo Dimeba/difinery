@@ -6,6 +6,7 @@ import mediaStyles from './ProductMediaPanel.module.scss'
 
 // components
 import ProductOptionsUI from './ProductOptionsUI'
+import CharmNecklace from './CharmNecklace'
 import OrderReview from './OrderReview'
 import ProductImageGallery from './ProductImageGallery'
 import ProductIframeViewer from './ProductIframeViewer'
@@ -88,6 +89,7 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 	const [selectedShape, setSelectedShape] = useState(null)
 	const [show3DModel, setShow3DModel] = useState(false)
+	const [charmMode, setCharmMode] = useState(false)
 
 	// Track view_item event when product loads or variant changes
 	useEffect(() => {
@@ -336,6 +338,10 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 	return (
 		<section className='topSection'>
 			<div className={styles.productInfo}>
+				{charmMode ? (
+					<CharmNecklace product={product} initialGold={selectedColor} />
+				) : (
+				<>
 				<div className={mediaStyles.mediaPanel}>
 					{has3DModel && (
 						<button
@@ -385,11 +391,14 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 						setBoxVariant={setBoxVariant}
 						setShowOrderSummary={setShowOrderSummary}
 						handleAddToCart={handleAddToCart}
+						onStyleCharms={() => setCharmMode(true)}
 					/>
+				)}
+				</>
 				)}
 			</div>
 
-			{showOrderSummary && (
+			{showOrderSummary && !charmMode && (
 				<OrderReview
 					image={reviewImage ? reviewImage : images[0]}
 					handleAddToCart={handleAddToCart}

@@ -7,7 +7,7 @@ import { Box, Grid, Typography } from '@/lib/mui'
 import Image from 'next/image'
 import Button from './Button'
 
-const BezelCharms = () => {
+const BezelCharms = ({ onStyle }) => {
 	return (
 		<Grid
 			container
@@ -40,7 +40,7 @@ const BezelCharms = () => {
 					</Typography>
 				</Box>
 
-				<Button text='Style Your Bezel Charms' fullWidth />
+				<Button text='Style Your Bezel Charms' fullWidth onClick={onStyle} />
 			</Grid>
 
 			<Grid

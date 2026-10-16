@@ -1,0 +1,42 @@
+.stage {
+	position: absolute;
+	inset: 0;
+}
+
+.charms {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
+}
+
+.charm {
+	object-fit: contain;
+	transition: transform 0.45s ease;
+}
+
+.slotActions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-top: 1rem;
+
+	button {
+		padding: 0;
+		border: 0;
+		background: none;
+		font-size: 12px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		cursor: pointer;
+
+		&:disabled {
+			opacity: 0.35;
+			cursor: default;
+		}
+	}
+}
+
+.addPendant {
+	margin-top: 0.5rem;
+}

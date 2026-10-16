@@ -14,6 +14,7 @@ const Button = ({
 	disabled,
 	newWindow,
 	fullWidth,
+	onClick,
 	type = 'button'
 }) => {
 	const handleClick = e => {
@@ -21,6 +22,7 @@ const Button = ({
 			e.preventDefault()
 			return
 		}
+		onClick?.(e)
 	}
 
 	const className = `${styles.button} ${
@@ -32,7 +34,7 @@ const Button = ({
 	// No link: render a plain button (e.g. placeholder CTAs or form submits)
 	if (!link) {
 		return (
-			<button type={type} className={className} disabled={disabled}>
+			<button type={type} className={className} disabled={disabled} onClick={handleClick}>
 				<p>{text}</p>
 			</button>
 		)

@@ -53,7 +53,8 @@ const ProductOptionsUI = ({
 	boxVariant,
 	setBoxVariant,
 	setShowOrderSummary,
-	handleAddToCart
+	handleAddToCart,
+	onStyleCharms
 }) => {
 	const isMobile = useMediaQuery('(max-width: 1024px)')
 	const { setShowCart } = useCart()
@@ -95,8 +96,9 @@ const ProductOptionsUI = ({
 	const [isCustomBoxOpen, setIsCustomBoxOpen] = useState(false)
 	const [isBezelCharmsOpen, setIsBezelCharmsOpen] = useState(false)
 
+	const categoryName = (product?.category?.name || '').toLowerCase()
 	const isBezelPendant =
-		(product?.category?.name || '').toLowerCase().includes('pendant') &&
+		(categoryName.includes('pendant') || categoryName.includes('necklace')) &&
 		(Array.isArray(product?.tags) ? product.tags : []).includes('CustomShape') &&
 		(product?.title || '').toLowerCase().includes('bezel pendant')
 
@@ -428,7 +430,7 @@ const ProductOptionsUI = ({
 						product
 						display
 					>
-						<BezelCharms />
+						<BezelCharms onStyle={onStyleCharms} />
 					</Accordion>
 				)}
 

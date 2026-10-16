@@ -242,6 +242,27 @@ export const CartProvider = ({ children }) => {
 		[cart, createCart, addProduct, updateQuantity]
 	)
 
+	const addLinesToCart = useCallback(
+		async lines => {
+			let currentCart = cart
+			if (!currentCart) {
+				currentCart = await createCart()
+			}
+
+			const { data } = await addProduct({
+				variables: { cartId: currentCart.id, lines }
+			})
+			if (data.cartLinesAdd.userErrors.length) {
+				throw new Error(
+					data.cartLinesAdd.userErrors.map(e => e.message).join(', ')
+				)
+			}
+			setCart(data.cartLinesAdd.cart)
+			return data.cartLinesAdd.cart
+		},
+		[cart, createCart, addProduct]
+	)
+
 	const removeFromCart = useCallback(
 		async lineItemId => {
 			if (!cart) return
@@ -271,6 +292,7 @@ export const CartProvider = ({ children }) => {
 				setShowCart,
 				createCart,
 				addToCart,
+				addLinesToCart,
 				removeFromCart,
 				updateQuantity,
 				loading: creating || adding || removing || updating,
