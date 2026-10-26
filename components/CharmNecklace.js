@@ -361,7 +361,9 @@ const CharmNecklace = ({ product, initialGold }) => {
 			<div className={styles.content}>
 				<div className={styles.versionInfo}>
 					<div className={styles.titleRow}>
-						<h3>{copyProduct?.title || 'Charm Bezel Pendant'}</h3>
+						<h1 className={styles.productTitle}>
+							{copyProduct?.title || 'Charm Bezel Pendant'}
+						</h1>
 					</div>
 				</div>
 

@@ -87,19 +87,26 @@ const Features = async ({
 								}
 							}}
 						>
-							{item.fields.topText && <h4>{item.fields.topText}</h4>}
+							{/* Eyebrow labels styled as h4, not headings in the outline */}
+							{item.fields.topText && (
+								<h4 role='none'>{item.fields.topText}</h4>
+							)}
 
 							{item.fields.image && (
 								<Image
 									src={'https:' + item.fields.image.fields.file.url}
-									alt='Icon'
+									alt=''
 									width={54}
 									height={54}
 									style={{ objectFit: 'contain', objectPosition: 'center' }}
 								/>
 							)}
 							{item.fields.number && <h2>{item.fields.number}</h2>}
-							{h4text ? <h4>{item.fields.text}</h4> : <p>{item.fields.text}</p>}
+							{h4text ? (
+								<h4 role='none'>{item.fields.text}</h4>
+							) : (
+								<p>{item.fields.text}</p>
+							)}
 						</Box>
 					))}
 				</Box>

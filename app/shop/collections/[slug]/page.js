@@ -1,9 +1,7 @@
 // components
 import SmartProducts from '@/components/SmartProducts'
 import PageContent from '@/components/PageContent'
-import ProductsSkeleton from '@/components/ProductsSkeleton'
 
-import { Suspense } from 'react'
 
 // lib
 import { apolloClient } from '@/lib/apolloClient'
@@ -66,7 +64,9 @@ export async function generateMetadata(props) {
 
 	return {
 		title: 'Difinery | ' + content.title,
-		...getSocialImageMetadata(shareImage)
+		...getSocialImageMetadata(shareImage, {
+			path: `/shop/collections/${slug}`
+		})
 	}
 }
 
@@ -113,24 +113,23 @@ export default async function Page(props) {
 
 	return (
 		<main>
-			<Suspense fallback={<ProductsSkeleton count={20} />}>
-				<SmartProducts
-					initialProducts={initialItems}
-					initialPageInfo={initialPageInfo}
-					productType='all'
-					// showFilters
-					collectionHandle={content.handle}
-					filters={null}
-					category={content.handle}
-					collectionPreview={{
-						title: content.title,
-						description: content.description,
-						media: content.media,
-						mediaLink: content.mediaLink
-					}}
-				/>
-			</Suspense>
-			<PageContent content={mergedPageContent} />
+			<h1 className='visually-hidden'>{content.title}</h1>
+			<SmartProducts
+				initialProducts={initialItems}
+				initialPageInfo={initialPageInfo}
+				productType='all'
+				// showFilters
+				collectionHandle={content.handle}
+				filters={null}
+				category={content.handle}
+				collectionPreview={{
+					title: content.title,
+					description: content.description,
+					media: content.media,
+					mediaLink: content.mediaLink
+				}}
+			/>
+			<PageContent content={mergedPageContent} nested />
 		</main>
 	)
 }

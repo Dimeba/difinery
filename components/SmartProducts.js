@@ -1,9 +1,33 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Products from './Products'
 import { Box, Skeleton, Typography } from '@/lib/mui'
+
+// Shape and price in the URL are shortcuts onto this page. They replace each
+// other: a shape link does not keep a previous price, and the reverse.
+// This lives in its own component, under its own <Suspense>, because reading
+// search params would otherwise stop the whole product grid from prerendering.
+function UrlFilterSync({ filters, onChange }) {
+	const searchParams = useSearchParams()
+	const searchKey = searchParams.toString()
+
+	useEffect(() => {
+		const nextFilters = { ...(filters || {}) }
+		const urlKeys = ['shape', 'setting', 'priceMin', 'priceMax', 'shapeName']
+
+		for (const key of urlKeys) {
+			if (searchParams.has(key)) {
+				nextFilters[key] = searchParams.get(key) || null
+			}
+		}
+
+		onChange(nextFilters)
+	}, [filters, searchKey, searchParams, onChange])
+
+	return null
+}
 
 /**
  * Smart Products Wrapper - Fetches more data when filters are applied or when load more is clicked
@@ -25,8 +49,6 @@ export default function SmartProducts({
 	const [isSearching, setIsSearching] = useState(false)
 	const searchTimeoutRef = useRef(null)
 	const pendingSearchRef = useRef(false)
-	const searchParams = useSearchParams()
-	const searchKey = searchParams.toString()
 	const [resolvedFilters, setResolvedFilters] = useState(filters)
 
 	// Keep local state in sync with server-provided props after route/filter changes.
@@ -37,21 +59,6 @@ export default function SmartProducts({
 			initialProducts.length >= 50 || initialPageInfo?.hasNextPage === false
 		)
 	}, [initialProducts, initialPageInfo])
-
-	// Shape and price in the URL are shortcuts onto this page. They replace each
-	// other: a shape link does not keep a previous price, and the reverse.
-	useEffect(() => {
-		const nextFilters = { ...(filters || {}) }
-		const urlKeys = ['shape', 'setting', 'priceMin', 'priceMax', 'shapeName']
-
-		for (const key of urlKeys) {
-			if (searchParams.has(key)) {
-				nextFilters[key] = searchParams.get(key) || null
-			}
-		}
-
-		setResolvedFilters(nextFilters)
-	}, [filters, searchKey, searchParams])
 
 	// Check if filters are active (excluding metal which is in URL)
 	const hasActiveFilters =
@@ -236,18 +243,23 @@ export default function SmartProducts({
 	])
 
 	return (
-		<Products
-			products={products}
-			initialPageInfo={pageInfo}
-			productType={productType}
-			selectedMetalType={selectedMetalType}
-			showFilters={showFilters}
-			filters={resolvedFilters}
-			onLoadMore={loadMoreProducts}
-			canLoadMore={pageInfo?.hasNextPage && !hasActiveFilters}
-			onSearch={handleSearch}
-			isSearching={isSearching}
-			{...otherProps}
-		/>
+		<>
+			<Suspense fallback={null}>
+				<UrlFilterSync filters={filters} onChange={setResolvedFilters} />
+			</Suspense>
+			<Products
+				products={products}
+				initialPageInfo={pageInfo}
+				productType={productType}
+				selectedMetalType={selectedMetalType}
+				showFilters={showFilters}
+				filters={resolvedFilters}
+				onLoadMore={loadMoreProducts}
+				canLoadMore={pageInfo?.hasNextPage && !hasActiveFilters}
+				onSearch={handleSearch}
+				isSearching={isSearching}
+				{...otherProps}
+			/>
+		</>
 	)
 }

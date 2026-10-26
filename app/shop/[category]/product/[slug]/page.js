@@ -1,4 +1,5 @@
 import ProductPageLayout from '@/components/ProductPageLayout'
+import JsonLd from '@/components/JsonLd'
 
 // lib
 import { getCachedProductFAQs } from '@/lib/cachedContentful'
@@ -6,12 +7,14 @@ import { apolloClient } from '@/lib/apolloClient'
 import { Suspense } from 'react'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { GET_PRODUCT_BY_HANDLE } from '@/lib/queries/getProductByHandle'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import {
 	getShareImageFromProduct,
 	getSocialImageMetadata
 } from '@/lib/shareImage'
 import { isCharmCopyProduct } from '@/lib/charmNecklace'
+import { productCategorySlug, productPath } from '@/lib/productUrl'
+import { productJsonLd, breadcrumbJsonLd } from '@/lib/structuredData'
 
 export const revalidate = false
 
@@ -53,19 +56,12 @@ export async function generateStaticParams() {
 	const products = (data?.products?.edges || [])
 		.map(edge => edge.node)
 		.filter(product => !isCharmCopyProduct(product))
-	const categories = ['bracelets', 'earrings', 'rings', 'necklaces']
 
-	// Generate params for each product in each category
+	// Only each product's canonical URL is prebuilt; any other category
+	// segment redirects there (see below).
 	return products.flatMap(product => {
-		const categoryName = product.category?.name?.toLowerCase() || 'all'
-		const matchedCategory = categories.find(cat =>
-			categoryName.includes(cat.slice(0, -1))
-		)
-
-		if (matchedCategory) {
-			return [{ category: matchedCategory, slug: product.handle }]
-		}
-		return []
+		const category = productCategorySlug(product)
+		return category ? [{ category, slug: product.handle }] : []
 	})
 }
 
@@ -84,13 +80,13 @@ export async function generateMetadata(props) {
 	return {
 		title: 'Difinery | ' + product.title,
 		description: product.description ? product.description : '',
-		...getSocialImageMetadata(shareImage)
+		...getSocialImageMetadata(shareImage, { path: productPath(product) })
 	}
 }
 
 export default async function Product(props) {
 	const params = await props.params
-	const { slug } = params
+	const { category, slug } = params
 
 	// FAQs with caching
 	const faqs = await getCachedProductFAQs()
@@ -99,6 +95,14 @@ export default async function Product(props) {
 	if (!product || isCharmCopyProduct(product)) {
 		notFound()
 	}
+
+	// The route answers under any category segment; send everything else to
+	// the one canonical URL so search engines see a single page per product.
+	const canonicalPath = productPath(product)
+	if (canonicalPath !== `/shop/${category}/product/${slug}`) {
+		permanentRedirect(canonicalPath)
+	}
+	const canonicalCategory = productCategorySlug(product)
 
 	// Fetch recommended products if they exist
 	let recommendedProducts = []
@@ -123,10 +127,29 @@ export default async function Product(props) {
 	}
 
 	return (
-		<ProductPageLayout
-			product={product}
-			recommendedProducts={recommendedProducts}
-			faqs={faqs}
-		/>
+		<>
+			<JsonLd data={productJsonLd(product)} />
+			<JsonLd
+				data={breadcrumbJsonLd([
+					{ name: 'Home', path: '/' },
+					...(canonicalCategory
+						? [
+								{
+									name:
+										canonicalCategory.charAt(0).toUpperCase() +
+										canonicalCategory.slice(1),
+									path: `/shop/${canonicalCategory}/yellow-gold/all`
+								}
+							]
+						: []),
+					{ name: product.title, path: canonicalPath }
+				])}
+			/>
+			<ProductPageLayout
+				product={product}
+				recommendedProducts={recommendedProducts}
+				faqs={faqs}
+			/>
+		</>
 	)
 }

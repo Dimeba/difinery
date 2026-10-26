@@ -9,7 +9,7 @@ import Link from 'next/link'
 import InfoIcon from '@mui/icons-material/Info'
 
 // hooks
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useId } from 'react'
 import { useMediaQuery } from '@/lib/mui'
 
 const Accordion = ({
@@ -29,6 +29,7 @@ const Accordion = ({
 }) => {
 	const [rowOpen, setRowOpen] = useState(state ? state : false)
 	const isMobile = useMediaQuery('(max-width: 1024px)')
+	const contentId = useId()
 	// const [showHelpDropdown, setShowHelpDropdown] = useState(false)
 
 	useEffect(() => {
@@ -41,10 +42,19 @@ const Accordion = ({
 		}
 	}, [state, disabled, isMobile])
 
+	const canToggle = !disabled || isMobile
+
 	const toggleRow = () => {
-		if (!disabled || isMobile) {
+		if (canToggle) {
 			rowOpen ? setRowOpen(false) : setRowOpen(true)
 			setOpenOption && setOpenOption()
+		}
+	}
+
+	const handleTitleKeyDown = e => {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault()
+			toggleRow()
 		}
 	}
 
@@ -58,14 +68,24 @@ const Accordion = ({
 			}
 		>
 			<div className={`${styles.titleRow} ${rowOpen ? styles.open : ''}`}>
-				<div className={styles.title} onClick={toggleRow}>
+				{/* The title row is the toggle. Its h4 is only for the look: these are
+				    UI labels, not part of the page's heading outline. */}
+				<div
+					className={styles.title}
+					onClick={toggleRow}
+					role={canToggle ? 'button' : undefined}
+					tabIndex={canToggle ? 0 : undefined}
+					aria-expanded={canToggle ? rowOpen : undefined}
+					aria-controls={canToggle ? contentId : undefined}
+					onKeyDown={canToggle ? handleTitleKeyDown : undefined}
+				>
 					{small ? (
 						<p>{title}</p>
 					) : (
-						<h4>
+						<h4 role='none'>
 							{title}
 							{extraTitleText && (
-								<span style={{ fontWeight: '400', color: '#9b9b9b' }}>
+								<span style={{ fontWeight: '400', color: '#767676' }}>
 									{' '}
 									/ {extraTitleText}
 								</span>
@@ -75,7 +95,7 @@ const Accordion = ({
 
 					<Image
 						src='/arrow.svg'
-						alt='Arrow Button'
+						alt=''
 						width={12}
 						height={12}
 						style={{
@@ -88,7 +108,7 @@ const Accordion = ({
 				</div>
 
 				{showHelp && (
-					<Link href={helpLink} target='_blank' aria-label='Help Document'>
+					<Link href={helpLink} target='_blank' rel='noopener noreferrer'>
 						<div
 							className={styles.needHelpButton}
 							// onClick={() => setShowHelpDropdown(!showHelpDropdown)}
@@ -103,6 +123,7 @@ const Accordion = ({
 			</div>
 			<div className={styles.contentContainer}>
 				<div
+					id={contentId}
 					className={styles.content}
 					style={{ display: rowOpen ? 'flex' : 'none' }}
 					// onClick={() => setShowHelpDropdown(false)}

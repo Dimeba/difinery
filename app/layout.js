@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
 		<html lang='en' data-scroll-behavior='smooth'>
 			<head>
 				{/* Google Tag Manager */}
-				<Script id='gtm-init' strategy='afterInteractive'>
+				<Script id='gtm-init' strategy='lazyOnload'>
 					{`// Pre-initialize dataLayer and optional default consent (adjust as needed)
 					window.dataLayer = window.dataLayer || [];
 					function gtag(){dataLayer.push(arguments);}
@@ -70,7 +70,7 @@ export default function RootLayout({ children }) {
 				</Script>
 				{/* End Google Tag Manager */}
 				{/* Meta Pixel Code */}
-				<Script id='meta-pixel' strategy='afterInteractive'>
+				<Script id='meta-pixel' strategy='lazyOnload'>
 					{`!function(f,b,e,v,n,t,s)
 					{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 					n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -90,7 +90,7 @@ export default function RootLayout({ children }) {
 					async
 				/>
 				{/* Microsoft Clarity */}
-				<Script id='microsoft-clarity' strategy='afterInteractive'>
+				<Script id='microsoft-clarity' strategy='lazyOnload'>
 					{`(function(c,l,a,r,i,t,y){
 						c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
 						t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;

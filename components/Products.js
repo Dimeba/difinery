@@ -325,29 +325,37 @@ const Products = ({
 					<Box
 						width='100%'
 						display='flex'
-						justifyContent={isMobile ? 'center' : 'space-between'}
 						alignItems='center'
 						mb={4}
+						// Switched in CSS rather than on isMobile, which is only known
+						// after hydration and made the grid jump on phones.
+						sx={{
+							justifyContent: 'space-between',
+							'@media (max-width: 1024px)': { justifyContent: 'center' }
+						}}
 					>
-						{!isMobile && (
-							<TextField
-								id='standard-basic'
-								variant='standard'
-								placeholder='Search'
-								value={searchTerm}
-								onChange={e => setSearchTerm(e.target.value)}
-								sx={{ fontStyle: 'italic', fontSize: '12px' }}
-								slotProps={{
-									input: {
-										startAdornment: (
-											<InputAdornment position='start'>
-												<SearchIcon fontSize='10px' />
-											</InputAdornment>
-										)
-									}
-								}}
-							/>
-						)}
+						<TextField
+							id='standard-basic'
+							variant='standard'
+							placeholder='Search'
+							value={searchTerm}
+							onChange={e => setSearchTerm(e.target.value)}
+							sx={{
+								fontStyle: 'italic',
+								fontSize: '12px',
+								'@media (max-width: 1024px)': { display: 'none' }
+							}}
+							slotProps={{
+								htmlInput: { 'aria-label': 'Search products' },
+								input: {
+									startAdornment: (
+										<InputAdornment position='start'>
+											<SearchIcon fontSize='10px' />
+										</InputAdornment>
+									)
+								}
+							}}
+						/>
 
 						<Button
 							onClick={() => setShowFiltersMenu(!showFiltersMenu)}
@@ -497,6 +505,7 @@ const Products = ({
 									selectedMetalType={selectedMetalType}
 									index={index}
 									listName='Recommended Products'
+									priority={false}
 									collectionHandle={collectionHandle}
 									// individual={individual}
 								/>

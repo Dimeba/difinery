@@ -13,7 +13,7 @@ import { useMediaQuery } from '@/lib/mui'
 
 // hooks
 import { useCart } from '@/context/CartContext'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 // analytics
 import {
@@ -26,6 +26,24 @@ const Cart = () => {
 	const { showCart, setShowCart, cart, updateQuantity, removeFromCart } =
 		useCart()
 	const isMobile = useMediaQuery('(max-width: 1024px)')
+	const closeButtonRef = useRef(null)
+
+	// Keyboard support: focus moves into the drawer when it opens, Escape
+	// closes it, and focus goes back to whatever opened it.
+	useEffect(() => {
+		if (!showCart || !cart) return
+		const opener = document.activeElement
+		closeButtonRef.current?.focus()
+
+		const onKeyDown = e => {
+			if (e.key === 'Escape') setShowCart(false)
+		}
+		document.addEventListener('keydown', onKeyDown)
+		return () => {
+			document.removeEventListener('keydown', onKeyDown)
+			if (opener instanceof HTMLElement) opener.focus()
+		}
+	}, [showCart, cart, setShowCart])
 
 	// Track view_cart event when cart is opened
 	useEffect(() => {
@@ -113,16 +131,25 @@ const Cart = () => {
 		<>
 			{isMobile && <div className={styles.backdrop} onClick={() => setShowCart(false)} />}
 			<ClickAwayListener onClickAway={handleClickAway}>
-				<div className={styles.cart}>
+				<div
+					className={styles.cart}
+					role='dialog'
+					aria-modal='true'
+					aria-label='Shopping cart'
+				>
 					<div className={styles.cartContent}>
 						{/* Header */}
 						<div className={styles.cartHeading}>
 							<h3>Cart</h3>
-							<FiX
-								size='1.5rem'
+							<button
+								type='button'
+								ref={closeButtonRef}
+								className={styles.closeButton}
 								onClick={() => setShowCart(false)}
-								cursor='pointer'
-							/>
+								aria-label='Close cart'
+							>
+								<FiX size='1.5rem' aria-hidden='true' />
+							</button>
 						</div>
 
 						{/* Items */}

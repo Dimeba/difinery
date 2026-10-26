@@ -767,6 +767,10 @@ const ProductOptionAccordion = ({
 						.map(shape => (
 							<button
 								key={shape.title}
+								type='button'
+								aria-pressed={product.title
+									.toLowerCase()
+									.includes(shape.title.toLowerCase())}
 								onClick={() => {
 									// Find current shape in product title
 									const currentShape = customShapes.find(s =>
@@ -805,6 +809,8 @@ const ProductOptionAccordion = ({
 						return (
 							<button
 								key={value.name}
+								type='button'
+								aria-pressed={isSelected}
 								onClick={() =>
 									handleOptionSelection(option.name, value.name, index)
 								}
@@ -852,7 +858,7 @@ const ProductOptionAccordion = ({
 										fontWeight='500'
 										fontSize='12px'
 										style={{ minWidth: '90px' }}
-										color='#9b9b9b'
+										color='#767676'
 									>
 										{ringIndex + 1 === 1
 											? 'First Ring'
@@ -868,6 +874,8 @@ const ProductOptionAccordion = ({
 										{getStackableColorOptions.map(color => (
 											<button
 												key={color}
+												type='button'
+												aria-pressed={selectedColor === color}
 												onClick={() =>
 													handleStackableColorChange(ringIndex, color)
 												}
@@ -886,7 +894,7 @@ const ProductOptionAccordion = ({
 													src={`/${returnMetalType(color)}`}
 													width={20}
 													height={20}
-													alt={`${color} Gold`}
+													alt={`${color} Gold, ring ${ringIndex + 1}`}
 												/>
 											</button>
 										))}
@@ -894,7 +902,7 @@ const ProductOptionAccordion = ({
 								</div>
 							))
 						) : (
-							<p style={{color: "#9b9b9b", fontSize: "12px" }}>Loading...</p>
+							<p style={{ color: '#767676', fontSize: '12px' }}>Loading...</p>
 						)}
 					</div>
 				) : isGiftCard ? (
@@ -914,6 +922,8 @@ const ProductOptionAccordion = ({
 								return (
 									<button
 										key={value.name}
+										type='button'
+										aria-pressed={isSelected}
 										onClick={() =>
 											handleOptionSelection(option.name, value.name, index)
 										}
@@ -942,6 +952,8 @@ const ProductOptionAccordion = ({
 						option.optionValues.map(value => (
 							<button
 								key={value.name}
+								type='button'
+								aria-pressed={selectedOptions[option.name] === value.name}
 								onClick={() =>
 									handleOptionSelection(option.name, value.name, index)
 								}
@@ -957,7 +969,7 @@ const ProductOptionAccordion = ({
 										src={`/${returnDiamondShape(value.name)}`}
 										width={32}
 										height={32}
-										alt={`${value.name} ${option.name}`}
+										alt=''
 									/>
 								)}
 								{value.name}

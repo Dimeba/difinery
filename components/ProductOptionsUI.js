@@ -341,7 +341,7 @@ const ProductOptionsUI = ({
 		<div className={styles.content}>
 			<div className={styles.versionInfo}>
 				<div className={styles.titleRow}>
-					<h3>{product.title}</h3>
+					<h1 className={styles.productTitle}>{product.title}</h1>
 					<WishlistButton productId={product.id} />
 				</div>
 			</div>
@@ -472,21 +472,25 @@ const ProductOptionsUI = ({
 						Add to Cart
 					</button>
 				) : (
-					<a
-						href='#order-review'
+					// One real button: a link wrapping a button let keyboard users
+					// (and agents) add to cart before all options were chosen.
+					<button
+						type='button'
+						className={styles.cartButton}
+						disabled={!allOptionsSelected}
 						onClick={() => {
 							setShowOrderSummary(true)
 							handleAddToCart()
+							// The review panel mounts on this render; scroll once it exists.
+							requestAnimationFrame(() =>
+								document
+									.getElementById('order-review')
+									?.scrollIntoView({ behavior: 'smooth' })
+							)
 						}}
-						style={{ pointerEvents: allOptionsSelected ? 'auto' : 'none' }}
 					>
-						<button
-							className={styles.cartButton}
-							disabled={!allOptionsSelected}
-						>
-							Review & Add to Cart
-						</button>
-					</a>
+						Review & Add to Cart
+					</button>
 				)
 			) : (
 				<>

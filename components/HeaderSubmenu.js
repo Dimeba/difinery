@@ -39,7 +39,6 @@ const HeaderSubmenu = ({ columns = [], promotions = [], promoOverrides = [] }) =
 							<Link
 								key={`${row.title}-${row.url}`}
 								href={row.url}
-								aria-label={`Link to ${row.title} page.`}
 								className={styles.subMenuLink}
 							>
 								<p
@@ -65,7 +64,7 @@ const HeaderSubmenu = ({ columns = [], promotions = [], promoOverrides = [] }) =
 
 			{promoItems.map(item => (
 				<div key={item.id} className={styles.column3}>
-					<Link href={item.link} aria-label={`Link to ${item.title}`}>
+					<Link href={item.link}>
 						<div className={styles.subMenuImg}>
 							{item.imageUrl && (
 								<Image

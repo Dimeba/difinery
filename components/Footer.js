@@ -57,6 +57,16 @@ const FOOTER_CONTENT = {
 const isContentfulLink = link => Boolean(link?.fields?.title)
 const isContentfulAsset = asset => Boolean(asset?.fields?.file?.url)
 
+// "https://www.instagram.com/difinery" → "Difinery on Instagram"
+const socialLabel = url => {
+	try {
+		const host = new URL(url).hostname.replace(/^www\./, '').split('.')[0]
+		return `Difinery on ${host.charAt(0).toUpperCase()}${host.slice(1)}`
+	} catch {
+		return 'Difinery on social media'
+	}
+}
+
 const Footer = ({ content = FOOTER_CONTENT }) => {
 	const returnCorrecticon = (url, size) => {
 		if (url.includes('instagram')) {
@@ -127,7 +137,6 @@ const Footer = ({ content = FOOTER_CONTENT }) => {
 							<Link
 								key={link.key}
 								href={link.href}
-								aria-label={`Link to ${link.title} page.`}
 							>
 								<p>{link.title}</p>
 							</Link>
@@ -147,7 +156,6 @@ const Footer = ({ content = FOOTER_CONTENT }) => {
 							<Link
 								key={index}
 								href={`/shop/${title.toLowerCase()}`}
-								aria-label={`Link to ${title} page.`}
 							>
 								<p>{title}</p>
 							</Link>
@@ -167,7 +175,6 @@ const Footer = ({ content = FOOTER_CONTENT }) => {
 							<Link
 								key={link.key}
 								href={link.href}
-								aria-label={`Link to ${link.title} page.`}
 							>
 								<p>{link.title}</p>
 							</Link>
@@ -187,7 +194,6 @@ const Footer = ({ content = FOOTER_CONTENT }) => {
 							<Link
 								key={link.key}
 								href={link.href}
-								aria-label={`Link to ${link.title} page.`}
 							>
 								<p>{link.title}</p>
 							</Link>
@@ -291,8 +297,9 @@ const Footer = ({ content = FOOTER_CONTENT }) => {
 								<Link
 									key={index}
 									href={link}
-									aria-label='Link to social media profile'
+									aria-label={socialLabel(link)}
 									target='_blank'
+									rel='noopener noreferrer'
 								>
 									{returnCorrecticon(link, 20)}
 								</Link>
@@ -310,7 +317,6 @@ const Footer = ({ content = FOOTER_CONTENT }) => {
 						<Link
 							key={link.sys.id}
 							href={formatLink(link.fields.title)}
-							aria-label={`Link to ${link.fields.title} page.`}
 						>
 							<p>{link.fields.title}</p>
 						</Link>

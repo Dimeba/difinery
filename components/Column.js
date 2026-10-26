@@ -19,7 +19,8 @@ const Column = async ({
 	columns,
 	mobileColumns = 1,
 	height = '650px',
-	className = ''
+	className = '',
+	priority = false
 }) => {
 	const content = await getEntry(id)
 
@@ -120,19 +121,25 @@ const Column = async ({
 					showControls={content.fields.showVideoControls || false}
 					autoPlay={content.fields.autoPlay || false}
 					mute={content.fields.mute}
+					eager={priority}
 				/>
 			)}
 
 			{content.fields.type == 'image' && (
 				<Image
 					src={'https:' + content.fields.media.fields.file.url}
-					alt='image'
+					alt={
+						content.fields.media.fields.description ||
+						content.fields.media.fields.title ||
+						''
+					}
 					fill
+					priority={priority}
+					quality={85}
 					style={{
 						objectFit: content.fields.fitImage ? 'contain' : 'cover',
 						backgroundColor: isPng ? '#F5F5F5' : ''
 					}}
-					quality={100}
 					sizes={
 						columns == 1
 							? '(max-width: 1920px) 100vw, 75vw'

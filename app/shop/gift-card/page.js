@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import ProductInfo from '@/components/ProductInfo'
+import ProductInfoWithParams from '@/components/ProductInfoWithParams'
 
 // lib
 import { apolloClient } from '@/lib/apolloClient'
@@ -30,7 +31,7 @@ export async function generateMetadata() {
 		description:
 			'A one of a kind gift. Elegant, ethical, and entirely their choice. Redeemable toward any Difinery piece online.',
 		keywords: 'Difinery, Gift Card, Jewelry',
-		...getSocialImageMetadata(shareImage)
+		...getSocialImageMetadata(shareImage, { path: '/shop/gift-card' })
 	}
 }
 
@@ -49,8 +50,8 @@ export default async function GiftCard() {
 
 	return (
 		<main>
-			<Suspense fallback={<div>Loading…</div>}>
-				<ProductInfo product={product} isGiftCard={true} />
+			<Suspense fallback={<ProductInfo product={product} isGiftCard={true} />}>
+				<ProductInfoWithParams product={product} isGiftCard={true} />
 			</Suspense>
 		</main>
 	)

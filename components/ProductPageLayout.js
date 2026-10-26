@@ -1,6 +1,6 @@
 // components
 import ProductInfo from '@/components/ProductInfo'
-import ProductInfoSkeleton from '@/components/ProductInfoSkeleton'
+import ProductInfoWithParams from '@/components/ProductInfoWithParams'
 import FAQ from '@/components/FAQ'
 import Products from '@/components/Products'
 import SpecialRequestBanner from '@/components/SpecialRequestBanner'
@@ -9,8 +9,10 @@ import { Suspense } from 'react'
 const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
 	return (
 		<main>
-			<Suspense fallback={<ProductInfoSkeleton />}>
-				<ProductInfo product={product} />
+			{/* The fallback is what gets prerendered: the full product without the
+			    ?gold= preselection, which is applied once the client takes over. */}
+			<Suspense fallback={<ProductInfo product={product} />}>
+				<ProductInfoWithParams product={product} />
 			</Suspense>
 
 			{recommendedProducts && recommendedProducts.length > 0 && (

@@ -13,7 +13,6 @@ import ProductIframeViewer from './ProductIframeViewer'
 
 // hooks
 import { useState, useMemo, useEffect, useCallback } from 'react'
-import { useSearchParams } from 'next/navigation'
 
 // context
 import { useCart } from '@/context/CartContext'
@@ -27,7 +26,10 @@ import { trackViewItem, trackAddToCart } from '@/lib/gaEvents'
 // data
 import iJewelData from '@/data/iJewelData.json' with { type: 'json' }
 
-const ProductInfo = ({ product, isGiftCard = false }) => {
+// `gold` is the ?gold= query value. It is passed in rather than read with
+// useSearchParams so the page can prerender this component without it (see
+// ProductInfoWithParams).
+const ProductInfo = ({ product, isGiftCard = false, gold = null }) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
 	// Product can be temporarily undefined during navigation/loading.
@@ -41,10 +43,6 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 				return !name.includes('asset') && !name.includes('crop')
 			})
 	}, [product?.images?.edges])
-
-	// Getting the default metal type
-	const searchParams = useSearchParams()
-	const gold = searchParams.get('gold')
 
 	const metalOptions = useMemo(() => {
 		const metal = findMetalOption(product?.options)
@@ -368,7 +366,11 @@ const ProductInfo = ({ product, isGiftCard = false }) => {
 					{show3DModel && has3DModel ? (
 						<ProductIframeViewer modelId={modelId} sku={matchingVariant?.sku} />
 					) : (
-						<ProductImageGallery images={images} isGiftCard={isGiftCard} />
+						<ProductImageGallery
+								images={images}
+								isGiftCard={isGiftCard}
+								title={product?.title}
+							/>
 					)}
 				</div>
 

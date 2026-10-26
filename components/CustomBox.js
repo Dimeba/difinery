@@ -6,6 +6,7 @@ import styles from './ProductInfo.module.scss'
 // components
 import { Grid, Box, Typography, Button } from '@/lib/mui'
 import Link from 'next/link'
+import Video from '@/components/Video'
 
 // hooks
 import { useEffect, useState } from 'react'
@@ -70,6 +71,8 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 									boxVariant?.id === option.node.id ? '1px solid black' : 'none'
 							}}
 							onClick={() => setBoxVariant(option.node)}
+							aria-label={`${boxColors[index].boxColor} message color`}
+							aria-pressed={boxVariant?.id === option.node.id}
 						/>
 					))}
 				</Box>
@@ -81,6 +84,7 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 					value={boxText}
 					onChange={e => setBoxText(e.target.value)}
 					placeholder='Up to 25 characters'
+					aria-label='Your message, up to 25 characters'
 					maxLength={25}
 				/>
 
@@ -123,13 +127,9 @@ const CustomBox = ({ boxText, setBoxText, boxVariant, setBoxVariant }) => {
 						>
 							Learn more about artists and the Blank Canvas community
 						</Typography>
-						<video
-							src='/box-video.mp4'
+						<Video
+							video='/box-video.mp4'
 							autoPlay
-							muted
-							loop
-							playsInline
-							preload='metadata'
 							style={{
 								position: 'absolute',
 								inset: 0,

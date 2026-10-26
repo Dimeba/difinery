@@ -12,6 +12,7 @@ import { useState, useEffect, useMemo } from 'react'
 
 // helpers
 import { returnMetalType, isMetalOptionName } from '@/lib/helpers'
+import { productPath } from '@/lib/productUrl'
 
 // analytics
 import { trackSelectItem } from '@/lib/gaEvents'
@@ -24,6 +25,9 @@ const ProductCard = ({
 	collectionHandle,
 	selectedMetalType,
 	index = 0,
+	// Only the first row of a listing is worth preloading; callers lower on the
+	// page (e.g. recommendations) pass false.
+	priority = index < 4,
 	listName = 'Shop'
 }) => {
 	// Initialize metal types and active type immediately
@@ -134,7 +138,7 @@ const ProductCard = ({
 
 		if (!activeMetalType) {
 			const base = {
-				pathname: `/shop/${product.category.name.toLowerCase()}/product/${permalink}`
+				pathname: productPath({ ...product, handle: permalink })
 			}
 
 			// Only add query if permalink references a collection variant
@@ -171,7 +175,7 @@ const ProductCard = ({
 		}
 
 		return {
-			pathname: `/shop/${product.category.name.toLowerCase()}/product/${permalink}`,
+			pathname: productPath({ ...product, handle: permalink }),
 			query
 		}
 	}
@@ -227,7 +231,7 @@ const ProductCard = ({
 		<div className={`${!individual ? styles.product : styles.productNoGap}`}>
 			<Link
 				href={returnCorrectURL()}
-				aria-label={`Link to ${product.title} page.`}
+				aria-label={product.title}
 				onClick={handleProductClick}
 			>
 				{coverImages.length > 0 && (
@@ -254,8 +258,8 @@ const ProductCard = ({
 						<Image
 							src={yellowGoldImage?.node.url || coverImages[0]?.node.url}
 							fill
-							priority={index < 4}
-							alt='Category Image.'
+							priority={priority}
+							alt={`${product.title} in yellow gold`}
 							style={{
 								visibility: activeMetalType.includes('yellow')
 									? 'visible'
@@ -276,7 +280,7 @@ const ProductCard = ({
 								src={yellowGoldImageCloseup.node.url}
 								fill
 								loading='lazy'
-								alt='Category Image.'
+								alt={`${product.title} in yellow gold, close-up`}
 								style={{
 									visibility: activeMetalType.includes('yellow')
 										? 'visible'
@@ -298,7 +302,7 @@ const ProductCard = ({
 							src={whiteGoldImage?.node.url || coverImages[0]?.node.url}
 							fill
 							loading='lazy'
-							alt='Category Image.'
+							alt={`${product.title} in white gold`}
 							style={{
 								visibility:
 									!activeMetalType.includes('yellow') &&
@@ -321,7 +325,7 @@ const ProductCard = ({
 								src={whiteGoldImageCloseup.node.url}
 								fill
 								loading='lazy'
-								alt='Category Image.'
+								alt={`${product.title} in white gold, close-up`}
 								style={{
 									visibility:
 										!activeMetalType.includes('yellow') &&
@@ -345,7 +349,7 @@ const ProductCard = ({
 							src={multiGoldImage?.node.url || coverImages[0]?.node.url}
 							fill
 							loading='lazy'
-							alt='Category Image.'
+							alt={`${product.title} in yellow and white gold`}
 							style={{
 								visibility: activeMetalType.includes('multi')
 									? 'visible'
@@ -366,7 +370,7 @@ const ProductCard = ({
 								src={multiGoldImageCloseup.node.url}
 								fill
 								loading='lazy'
-								alt='Category Image.'
+								alt={`${product.title} in yellow and white gold, close-up`}
 								style={{
 									visibility: activeMetalType.includes('multi')
 										? 'visible'
@@ -388,7 +392,7 @@ const ProductCard = ({
 							src={roseGoldImage?.node.url || coverImages[0]?.node.url}
 							fill
 							loading='lazy'
-							alt='Category Image.'
+							alt={`${product.title} in rose gold`}
 							style={{
 								visibility: activeMetalType.includes('rose')
 									? 'visible'
@@ -409,7 +413,7 @@ const ProductCard = ({
 								src={roseGoldImageCloseup.node.url}
 								fill
 								loading='lazy'
-								alt='Category Image.'
+								alt={`${product.title} in rose gold, close-up`}
 								style={{
 									visibility: activeMetalType.includes('rose')
 										? 'visible'
@@ -448,7 +452,7 @@ const ProductCard = ({
 							<span
 								style={{
 									textDecoration: discount ? 'line-through' : '',
-									color: discount ? '#AEAEAD' : '#1a1b18'
+									color: discount ? '#767676' : '#1a1b18'
 								}}
 							>
 								From $
@@ -463,22 +467,23 @@ const ProductCard = ({
 					{metalTypes.length > 0 && (
 						<div className={styles.typeIcons}>
 							{metalTypes.map(option => (
-								<div
+								<button
 									key={option}
+									type='button'
 									className={styles.typeIcon}
 									onClick={() => setActiveMetalType(option)}
+									aria-pressed={activeMetalType === option}
+									aria-label={`Show ${product.title} in ${option
+										.replace('.png', '')
+										.replace('multi', 'yellow and white')
+										.replace(/-/g, ' ')}`}
 								>
-									<Image
-										src={`/${option}`}
-										fill
-										alt={`${option} material icon.`}
-										sizes='30px'
-									/>
+									<Image src={`/${option}`} fill alt='' sizes='30px' />
 
 									{activeMetalType === option && (
 										<div className={styles.typeCircle}></div>
 									)}
-								</div>
+								</button>
 							))}
 						</div>
 					)}

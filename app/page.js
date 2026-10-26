@@ -1,8 +1,11 @@
 // components
 import PageContent from '@/components/PageContent'
+import JsonLd from '@/components/JsonLd'
 
 // lib
 import { getEntries } from '@/lib/contentful'
+import { getSocialImageMetadata } from '@/lib/shareImage'
+import { organizationJsonLd, websiteJsonLd } from '@/lib/structuredData'
 
 // Contentful
 const pages = await getEntries('page')
@@ -18,15 +21,15 @@ export const metadata = {
 	title: content.seoTitle ? content.seoTitle : 'Difinery',
 	description: content.description ? content.description : '',
 	keywords: content.keywords ? content.keywords : '',
-	openGraph: {
-		images: shareImageUrl ? [{ url: shareImageUrl }] : []
-	},
-	twitter: {
-		card: 'summary_large_image',
-		images: shareImageUrl ? [shareImageUrl] : []
-	}
+	...getSocialImageMetadata(shareImageUrl, { path: '/' })
 }
 
 export default async function Home() {
-	return <PageContent content={content} />
+	return (
+		<>
+			<JsonLd data={organizationJsonLd()} />
+			<JsonLd data={websiteJsonLd()} />
+			<PageContent content={content} />
+		</>
+	)
 }

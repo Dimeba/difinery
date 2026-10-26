@@ -1,8 +1,6 @@
 // components
 import SmartProducts from '@/components/SmartProducts'
 import PageContent from '@/components/PageContent'
-import ProductsSkeleton from '@/components/ProductsSkeleton'
-import { Suspense } from 'react'
 
 // lib
 import { fetchProductsSmart } from '@/lib/smartFetch'
@@ -115,10 +113,12 @@ export async function generateMetadata(props) {
 	}
 
 	return {
-		title: `Difinery | ${titleCase}`,
+		title: `Difinery | ${metalLabel} ${styleLabel || titleCase}`,
 		description,
 		keywords: `lab-grown diamonds, ${titleCase.toLowerCase()}, ${metalLabel.toLowerCase()}, ethical jewelry`,
-		...getSocialImageMetadata(shareImage)
+		...getSocialImageMetadata(shareImage, {
+			path: `/shop/${category}/${metal}/${style}`
+		})
 	}
 }
 
@@ -156,20 +156,30 @@ export default async function CategoryMetalStylePage(props) {
 				? 'White Gold'
 				: 'Rose Gold'
 
+	const titleCase = category.charAt(0).toUpperCase() + category.slice(1)
+	const styleLabel =
+		style !== 'all'
+			? style
+					.split('-')
+					.map(w => w.charAt(0).toUpperCase() + w.slice(1))
+					.join(' ')
+			: ''
+
 	return (
 		<main>
-			<Suspense fallback={<ProductsSkeleton count={20} />}>
-				<SmartProducts
-					initialProducts={initialItems}
-					initialPageInfo={initialPageInfo}
-					productType={category}
-					selectedMetalType={metalLabel}
-					showFilters
-					filters={currentFilters}
-					category={category}
-				/>
-			</Suspense>
-			<PageContent content={content} />
+			<h1 className='visually-hidden'>
+				{metalLabel} {styleLabel || titleCase}
+			</h1>
+			<SmartProducts
+				initialProducts={initialItems}
+				initialPageInfo={initialPageInfo}
+				productType={category}
+				selectedMetalType={metalLabel}
+				showFilters
+				filters={currentFilters}
+				category={category}
+			/>
+			<PageContent content={content} nested />
 		</main>
 	)
 }

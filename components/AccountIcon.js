@@ -31,6 +31,9 @@ const AccountIcon = ({ transparent = false, onNavigate }) => {
 	return (
 		<Link
 			href={href}
+			// The signed-out target bounces through Shopify OAuth; prefetching it
+			// trips a CORS error on every page.
+			prefetch={false}
 			className={styles.accountIcon}
 			aria-label={signedIn ? 'Your account' : 'Sign in to your account'}
 			onClick={onNavigate}

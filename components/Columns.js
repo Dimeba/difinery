@@ -19,7 +19,8 @@ const Columns = async ({
 	marginTop,
 	marginBottom,
 	mobileColumns = 1,
-	customBackgroundColor
+	customBackgroundColor,
+	isFirstOnPage = false
 }) => {
 	const backgroundColor = customBackgroundColor
 		? customBackgroundColor.startsWith('#')
@@ -106,6 +107,7 @@ const Columns = async ({
 							id={item.sys.id}
 							columns={content.length}
 							mobileColumns={mobileColumns}
+							priority={isFirstOnPage}
 							className={
 								shouldReorderForMobile
 									? hasMedia

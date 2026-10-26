@@ -87,6 +87,8 @@ const GiftCardInput = ({
 					onChange={handleInputChange}
 					placeholder={`${minValue.toLocaleString()}`}
 					className={styles.engravingInput}
+					inputMode='numeric'
+					aria-label='Gift card amount in US dollars'
 				/>
 			</div>
 

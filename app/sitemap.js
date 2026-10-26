@@ -2,63 +2,50 @@ import { getEntries } from '@/lib/contentful'
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { isCharmCopyProduct } from '@/lib/charmNecklace'
+import { productCategorySlug, productPath, SHOP_CATEGORIES } from '@/lib/productUrl'
+import { collectionSlug } from '@/lib/collectionSlug'
+import { BRIDAL_PAGES } from '@/lib/bridal'
+
+// Every URL listed here must answer 200 directly. /shop, /shop/all and
+// /shop/<category> only redirect (see proxy.js), so the listings below use
+// their final /<metal>/all form.
+
+// Collections that redirect to the bridal section (next.config.mjs).
+const REDIRECTED_COLLECTIONS = ['bridal', 'engagement-rings']
+
+// CMS pages that exist only to feed other routes.
+const NON_PAGE_TITLES = ['Homepage', 'Shop']
 
 export default async function sitemap() {
 	const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://difinery.com'
+	const metals = ['yellow-gold', 'white-gold', 'rose-gold']
 
 	// Static pages
 	const staticPages = [
 		{
 			url: baseUrl,
-			lastModified: new Date(),
 			changeFrequency: 'daily',
 			priority: 1
 		},
 		{
-			url: `${baseUrl}/shop`,
-			lastModified: new Date(),
-			changeFrequency: 'daily',
-			priority: 0.9
-		},
-		{
-			url: `${baseUrl}/shop/all`,
-			lastModified: new Date(),
-			changeFrequency: 'daily',
-			priority: 0.8
-		},
-		{
 			url: `${baseUrl}/shop/gift-card`,
-			lastModified: new Date(),
 			changeFrequency: 'monthly',
 			priority: 0.7
 		}
 	]
 
-	// Category pages
-	const categories = ['bracelets', 'earrings', 'rings', 'necklaces']
-	const metals = ['yellow-gold', 'white-gold', 'rose-gold']
-
-	const categoryPages = categories.flatMap(category => [
-		{
-			url: `${baseUrl}/shop/${category}`,
-			lastModified: new Date(),
-			changeFrequency: 'daily',
-			priority: 0.8
-		},
-		...metals.map(metal => ({
+	const listingPages = ['all', ...SHOP_CATEGORIES].flatMap(category =>
+		metals.map(metal => ({
 			url: `${baseUrl}/shop/${category}/${metal}/all`,
-			lastModified: new Date(),
 			changeFrequency: 'daily',
-			priority: 0.75
+			priority: metal === 'yellow-gold' ? 0.8 : 0.75
 		}))
-	])
+	)
 
-	// Shop all pages with metals
-	const shopAllPages = metals.map(metal => ({
-		url: `${baseUrl}/shop/all/${metal}/all`,
-		lastModified: new Date(),
-		changeFrequency: 'daily',
-		priority: 0.75
+	const bridalPages = BRIDAL_PAGES.map(page => ({
+		url: `${baseUrl}/bridal/${page.slug}`,
+		changeFrequency: 'weekly',
+		priority: 0.8
 	}))
 
 	try {
@@ -70,89 +57,80 @@ export default async function sitemap() {
 
 		const products = data.products.edges.map(edge => edge.node)
 
+		// Only standalone jewelry: gift cards, engraving and packaging have no
+		// product page of their own.
 		const productPages = products
-			.filter(product => product.handle && !isCharmCopyProduct(product))
-			.map(product => {
-				const categoryName = product.category?.name?.toLowerCase() || 'all'
-				const matchedCategory = categories.find(cat =>
-					categoryName.includes(cat.slice(0, -1))
-				)
-				const category = matchedCategory || 'all'
+			.filter(
+				product =>
+					product.handle &&
+					!isCharmCopyProduct(product) &&
+					productCategorySlug(product)
+			)
+			.map(product => ({
+				url: `${baseUrl}${productPath(product)}`,
+				...(product.updatedAt && {
+					lastModified: new Date(product.updatedAt)
+				}),
+				changeFrequency: 'weekly',
+				priority: 0.7
+			}))
 
-				return {
-					url: `${baseUrl}/shop/${category}/product/${product.handle}`,
-					lastModified: new Date(),
-					changeFrequency: 'weekly',
-					priority: 0.7
-				}
-			})
+		const [collectionsResponse, pagesResponse, articlesResponse] =
+			await Promise.all([
+				getEntries('collection'),
+				getEntries('page'),
+				getEntries('blankCanvasArticle').catch(() => ({ items: [] }))
+			])
 
-		// Fetch collections from Contentful
-		const collectionsResponse = await getEntries('collection')
-		const collections = collectionsResponse.items || []
-
-		const collectionPages = collections
-			.filter(collection => collection.fields?.slug)
+		// Slugs follow the same rule the routes use to resolve them.
+		const collectionPages = (collectionsResponse.items || [])
+			.filter(collection => collection.fields?.title)
+			.filter(collection => collection.fields.dontRender !== true)
 			.map(collection => ({
-				url: `${baseUrl}/shop/collections/${collection.fields.slug}`,
-				lastModified: new Date(collection.sys.updatedAt),
+				slug: collectionSlug(collection.fields.title),
+				updatedAt: collection.sys.updatedAt
+			}))
+			.filter(({ slug }) => !REDIRECTED_COLLECTIONS.includes(slug))
+			.map(({ slug, updatedAt }) => ({
+				url: `${baseUrl}/shop/collections/${slug}`,
+				lastModified: new Date(updatedAt),
 				changeFrequency: 'weekly',
 				priority: 0.6
 			}))
 
-		// Fetch all Contentful page types
-		const [pagesResponse, blogPostsResponse, policiesResponse] =
-			await Promise.all([
-				getEntries('page'),
-				getEntries('blogPost').catch(() => ({ items: [] })),
-				getEntries('policy').catch(() => ({ items: [] }))
-			])
-
-		const pages = pagesResponse.items || []
-		const blogPosts = blogPostsResponse.items || []
-		const policies = policiesResponse.items || []
-
-		const dynamicPages = pages
-			.filter(page => page.fields?.slug)
+		const dynamicPages = (pagesResponse.items || [])
+			.filter(page => page.fields?.title)
+			.filter(page => page.fields.dontRender !== true)
+			.filter(page => !NON_PAGE_TITLES.includes(page.fields.title))
 			.map(page => ({
-				url: `${baseUrl}/${page.fields.slug}`,
+				url: `${baseUrl}/${collectionSlug(page.fields.title)}`,
 				lastModified: new Date(page.sys.updatedAt),
 				changeFrequency: 'monthly',
 				priority: 0.5
 			}))
 
-		const blogPages = blogPosts
-			.filter(post => post.fields?.slug)
-			.map(post => ({
-				url: `${baseUrl}/blog/${post.fields.slug}`,
-				lastModified: new Date(post.sys.updatedAt),
+		const articlePages = (articlesResponse.items || [])
+			.filter(article => article.fields?.artistName)
+			.map(article => ({
+				url: `${baseUrl}/blank-canvas/${collectionSlug(article.fields.artistName)}`,
+				lastModified: new Date(article.sys.updatedAt),
 				changeFrequency: 'monthly',
-				priority: 0.6
-			}))
-
-		const policyPages = policies
-			.filter(policy => policy.fields?.slug)
-			.map(policy => ({
-				url: `${baseUrl}/${policy.fields.slug}`,
-				lastModified: new Date(policy.sys.updatedAt),
-				changeFrequency: 'yearly',
-				priority: 0.4
+				priority: 0.5
 			}))
 
 		// Combine all URLs
 		return [
 			...staticPages,
-			...categoryPages,
-			...shopAllPages,
+			...listingPages,
+			...bridalPages,
 			...productPages,
 			...collectionPages,
 			...dynamicPages,
-			...blogPages,
-			...policyPages
+			...articlePages
 		]
 	} catch (error) {
 		console.error('Error generating sitemap:', error)
 		// Return at least static pages if dynamic fetching fails
-		return staticPages
+		return [...staticPages, ...listingPages, ...bridalPages]
 	}
 }

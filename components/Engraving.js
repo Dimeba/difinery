@@ -50,6 +50,7 @@ const Engraving = ({
 					value={engraving}
 					onChange={e => setEngraving(e.target.value)}
 					className={styles.engravingInput}
+					aria-label='Engraving text'
 					maxLength={product.category.name === 'Rings' ? 15 : 10}
 				/>
 				{/* )} */}

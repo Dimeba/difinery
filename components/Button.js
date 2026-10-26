@@ -43,8 +43,8 @@ const Button = ({
 	return (
 		<Link
 			href={link}
-			aria-label={text + ' link'}
 			target={newWindow ? '_blank' : '_self'}
+			rel={newWindow ? 'noopener noreferrer' : undefined}
 		>
 			<div className={className} onClick={handleClick}>
 				<p>{text}</p>

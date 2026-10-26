@@ -1,0 +1,38 @@
+# Difinery
+
+> Difinery is a fine jewelry brand. Every piece is handcrafted in NYC with lab-grown diamonds and 100% recycled 14k gold, in yellow, white and rose gold. Prices are in US dollars.
+
+## Shop
+
+- [All jewelry](https://difinery.com/shop/all/yellow-gold/all): every piece, in yellow gold. Swap the metal segment for `white-gold` or `rose-gold`.
+- [Rings](https://difinery.com/shop/rings/yellow-gold/all)
+- [Necklaces and pendants](https://difinery.com/shop/necklaces/yellow-gold/all)
+- [Earrings](https://difinery.com/shop/earrings/yellow-gold/all)
+- [Bracelets](https://difinery.com/shop/bracelets/yellow-gold/all)
+- [Engagement rings](https://difinery.com/bridal/engagement-rings)
+- [Wedding bands](https://difinery.com/bridal/wedding-bands)
+- [Promise rings](https://difinery.com/bridal/promise-rings)
+- [Gift card](https://difinery.com/shop/gift-card)
+
+## How buying works
+
+- Listing URLs follow `/shop/<category>/<metal>/<style>`. Product pages live at `/shop/<category>/product/<handle>`. Add `?gold=yellow`, `?gold=white` or `?gold=rose` to open a product in that metal.
+- Each product page includes its name, price, options (metal, size, carat weight, shape), and Product / Offer structured data (JSON-LD).
+- Choose every option, then press "Add to Cart" (mobile) or "Review & Add to Cart" (desktop). On the gift card page the button reads "Go to Cart"; it adds the card and opens the cart. The cart opens from the bag icon in the header. Checkout runs on Shopify.
+- Engraving and a hand-lettered gift box are optional add-ons on the product page.
+- Orders are fulfilled within 7 business days. Special requests can add 2–3 business days.
+
+## Help
+
+- [Help & contact](https://difinery.com/help-contact): phone +1 (212) 470-3049, email help@difinery.com
+- [FAQs](https://difinery.com/faqs)
+- [Shipping](https://difinery.com/shipping)
+- [Return & refund policy](https://difinery.com/return-refund-policy)
+- [Warranty & care policy](https://difinery.com/warranty-care-policy)
+
+## About
+
+- [Our story](https://difinery.com/our-story)
+- [Education](https://difinery.com/education)
+- [Recycled gold](https://difinery.com/recycled-gold)
+- [Blank Canvas artist community](https://difinery.com/blank-canvas)

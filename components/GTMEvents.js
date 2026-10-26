@@ -20,7 +20,8 @@ export default function GTMEvents() {
 		if (typeof window === 'undefined') return
 		const url =
 			pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '')
-		if (!window.dataLayer) return
+		// GTM loads lazily; queue the event so it picks it up once it boots.
+		window.dataLayer = window.dataLayer || []
 		window.dataLayer.push({
 			event: 'page_view',
 			page_path: pathname,

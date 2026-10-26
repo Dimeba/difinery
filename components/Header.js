@@ -170,7 +170,6 @@ const Header = ({
 							{effectiveIntersecting && isScreenWide ? (
 								<Link
 									href={formatLink(content?.supportPage?.fields?.title)}
-									aria-label={`Link to ${content?.supportPage?.fields?.title} page.`}
 								>
 									<Typography
 										variant='p'
@@ -194,6 +193,7 @@ const Header = ({
 											size={20}
 											toggled={openMenu}
 											toggle={setOpenMenu}
+											label={openMenu ? 'Close menu' : 'Open menu'}
 										/>
 									</Box>
 								</Box>
@@ -202,12 +202,12 @@ const Header = ({
 
 						<Link
 							href='/'
-							aria-label='Link to homepage.'
+							aria-label='Difinery home'
 							className={styles.logo}
 						>
 							<Image
 								src={transparentMenu ? '/logo-white.svg' : '/logo-black.svg'}
-								alt='Logo'
+								alt='Difinery'
 								width={150}
 								height={150 / 7.5}
 								style={{ objectFit: 'contain', objectPosition: 'center' }}
@@ -227,8 +227,15 @@ const Header = ({
 							<AccountIcon transparent={transparentMenu} />
 
 							<Box
+								component='button'
+								type='button'
 								className={styles.cartIcon}
 								onClick={() => setShowCart(true)}
+								aria-label={
+									isMounted && cartItemCount > 0
+										? `Open cart, ${cartItemCount} ${cartItemCount === 1 ? 'item' : 'items'}`
+										: 'Open cart'
+								}
 							>
 								<FiShoppingBag
 									size='1.2rem'
@@ -275,7 +282,6 @@ const Header = ({
 								{/* Shop Page */}
 								<Link
 									href='/shop/all/yellow-gold/all'
-									aria-label='Link to Shop page.'
 									className={styles.mainMenuLink}
 									onMouseEnter={() =>
 										loadSubmenu({ columns: submenus[0].columns })
@@ -289,7 +295,6 @@ const Header = ({
 								{/* Bridal */}
 								<Link
 									href={bridalSubmenu.link || '/bridal/engagement-rings'}
-									aria-label='Link to Bridal.'
 									className={`${styles.mainMenuLink} ${
 										pathName.startsWith('/bridal') ? styles.activeLink : ''
 									}`}
@@ -310,7 +315,6 @@ const Header = ({
 									<Link
 										key={index}
 										href={`/shop/${title.toLowerCase()}`}
-										aria-label={`Link to ${title} page.`}
 										className={styles.mainMenuLink}
 										onMouseEnter={() =>
 											loadSubmenu({ columns: submenus[index + 1].columns })
@@ -360,7 +364,6 @@ const Header = ({
 													<Link
 														key={collection.sys.id}
 														href={`/shop/collections/${collectionSlug(collection.fields.title)}`}
-														aria-label={`Link to ${collectionLabel(collection.fields.title)} collection.`}
 														className={styles.mainMenuUnderLink}
 														onClick={() => setOpenMenu(false)}
 													>
@@ -375,7 +378,6 @@ const Header = ({
 								{/* Gift Card */}
 								<Link
 									href='/shop/gift-card'
-									aria-label={`Link to Gift Card page.`}
 									className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
 									onClick={() => setOpenMenu(false)}
 								>
@@ -387,7 +389,6 @@ const Header = ({
 									<Link
 										key={link.sys.id}
 										href={formatLink(link?.fields?.title)}
-										aria-label={`Link to ${link.fields.title} page.`}
 										className={styles.mainMenuUnderLink}
 										onClick={() => setOpenMenu(false)}
 									>
@@ -397,7 +398,6 @@ const Header = ({
 
 								<Link
 									href={formatLink(content?.supportPage?.fields?.title)}
-									aria-label={`Link to ${content?.supportPage?.fields?.title} page.`}
 									className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
 									onClick={() => setOpenMenu(false)}
 								>

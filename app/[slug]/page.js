@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 
 // lib
 import { getEntries } from '@/lib/contentful'
+import { getSocialImageMetadata } from '@/lib/shareImage'
 
 // Fetch pages at build time
 const pages = await getEntries('page')
@@ -49,13 +50,10 @@ export async function generateMetadata(props) {
 		title: content.seoTitle,
 		description: content.description ? content.description : '',
 		keywords: content.keywords ? content.keywords : '',
-		openGraph: {
-			images: shareImageUrl ? [{ url: shareImageUrl }] : []
-		},
-		twitter: {
-			card: 'summary_large_image',
-			images: shareImageUrl ? [shareImageUrl] : []
-		}
+		// The CMS homepage entry also resolves at /homepage; it is the same page as /.
+		...getSocialImageMetadata(shareImageUrl, {
+			path: slug === 'homepage' ? '/' : `/${slug}`
+		})
 	}
 }
 

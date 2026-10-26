@@ -1,9 +1,7 @@
 import SmartProducts from '@/components/SmartProducts'
 import PageContent from '@/components/PageContent'
-import ProductsSkeleton from '@/components/ProductsSkeleton'
 import BridalSubnav from '@/components/BridalSubnav'
 
-import { Suspense } from 'react'
 
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
@@ -65,7 +63,7 @@ export async function generateMetadata(props) {
 
 	return {
 		title: 'Difinery | ' + page.title,
-		...getSocialImageMetadata(shareImage)
+		...getSocialImageMetadata(shareImage, { path: `/bridal/${slug}` })
 	}
 }
 
@@ -109,29 +107,28 @@ export default async function Page(props) {
 
 	return (
 		<main>
+			<h1 className='visually-hidden'>{page.title}</h1>
 			<BridalSubnav activeSlug={page.slug} />
-			<Suspense fallback={<ProductsSkeleton count={20} flushTop />}>
-				<SmartProducts
-					initialProducts={initialItems}
-					initialPageInfo={initialPageInfo}
-					productType='all'
-					collectionHandle={page.handle}
-					filters={null}
-					category={page.handle}
-					flushTop
-					collectionPreview={
-						page.showHero && engagement?.media
-							? {
-									title: engagement.title,
-									description: engagement.description,
-									media: engagement.media,
-									mediaLink: engagement.mediaLink
-								}
-							: null
-					}
-				/>
-			</Suspense>
-			<PageContent content={mergedPageContent} />
+			<SmartProducts
+				initialProducts={initialItems}
+				initialPageInfo={initialPageInfo}
+				productType='all'
+				collectionHandle={page.handle}
+				filters={null}
+				category={page.handle}
+				flushTop
+				collectionPreview={
+					page.showHero && engagement?.media
+						? {
+								title: engagement.title,
+								description: engagement.description,
+								media: engagement.media,
+								mediaLink: engagement.mediaLink
+							}
+						: null
+				}
+			/>
+			<PageContent content={mergedPageContent} nested />
 		</main>
 	)
 }

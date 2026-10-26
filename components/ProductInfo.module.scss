@@ -77,6 +77,22 @@
 	}
 }
 
+// The product name is the page's h1 but keeps the look of the section h3s.
+.productTitle {
+	font-family: 'Newsreader', serif;
+	font-weight: 300;
+	letter-spacing: -0.5px;
+	font-size: 2rem;
+	line-height: 1.2;
+	text-wrap: balance;
+	text-align: left;
+	flex: 1;
+
+	@media screen and (max-width: 768px) {
+		font-size: 1.5rem;
+	}
+}
+
 .resetButton {
 	cursor: pointer;
 	font-size: 0.8rem;
@@ -320,7 +336,7 @@
 .dollarSign {
 	font-size: 0.8rem;
 	font-weight: 500;
-	color: base.$gray;
+	color: #767676;
 }
 
 .quickSelectButtons {

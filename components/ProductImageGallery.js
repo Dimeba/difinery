@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import styles from './ProductMediaPanel.module.scss'
 
-const ProductImageGallery = ({ images = [], isGiftCard = false }) => {
+const ProductImageGallery = ({ images = [], isGiftCard = false, title = '' }) => {
 	return (
 		<div
 			className={styles.images}
@@ -25,7 +25,10 @@ const ProductImageGallery = ({ images = [], isGiftCard = false }) => {
 						<Image
 							src={image.url}
 							fill
-							alt='Image of the product.'
+							alt={
+								image.altText ||
+								(title ? `${title}, image ${index + 1}` : 'Product image')
+							}
 							priority={index === 0}
 							loading={index === 0 ? undefined : 'lazy'}
 							quality={75}

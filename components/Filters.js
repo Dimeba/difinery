@@ -153,6 +153,7 @@ const Filters = ({
 						<button
 							key={sortOption}
 							onClick={() => handleSort(sortOption)}
+							aria-pressed={selectedSort === sortOption}
 							className={`${selectedSort === sortOption ? styles.active : ''} ${
 								styles.optionButton
 							}`}
@@ -183,6 +184,7 @@ const Filters = ({
 										`/shop/${type.toLowerCase()}/${currentMetalFromPath}/all`
 									)
 								}
+								aria-pressed={selectedCategory === type.toLowerCase()}
 								className={`${
 									selectedCategory === type.toLowerCase() ? styles.active : ''
 								} ${styles.optionButton}`}
@@ -203,6 +205,7 @@ const Filters = ({
 							<button
 								key={type}
 								onClick={() => updateMetal(metalSlug)}
+								aria-pressed={currentMetalFromPath === metalSlug}
 								className={`${
 									currentMetalFromPath === metalSlug ? styles.active : ''
 								} ${styles.optionButton}`}
@@ -211,8 +214,7 @@ const Filters = ({
 									src={`/${type.split(' ')[0].toLowerCase()}-gold.png`}
 									width={16}
 									height={16}
-									alt={`${type} material icon.`}
-									sizes='(max-width: 768px) 100vw, 50vw'
+									alt=''
 								/>
 								<p>{type}</p>
 							</button>
@@ -230,6 +232,10 @@ const Filters = ({
 							onClick={() =>
 								updateFilter('shape', shape.toLowerCase().replace(/\s+/g, '-'))
 							}
+							aria-pressed={isFilterActive(
+								'shape',
+								shape.toLowerCase().replace(/\s+/g, '-')
+							)}
 							className={`${
 								isFilterActive(
 									'shape',
@@ -257,6 +263,10 @@ const Filters = ({
 									settingOption.toLowerCase().replace(/\s+/g, '-')
 								)
 							}
+							aria-pressed={isFilterActive(
+								'setting',
+								settingOption.toLowerCase().replace(/\s+/g, '-')
+							)}
 							className={`${
 								isFilterActive(
 									'setting',
@@ -279,6 +289,7 @@ const Filters = ({
 						{/* Add "All" option */}
 						<button
 							onClick={() => updateStyle('all')}
+							aria-pressed={isStyleActive('all')}
 							className={`${isStyleActive('all') ? styles.active : ''} ${
 								styles.optionButton
 							}`}
@@ -293,6 +304,7 @@ const Filters = ({
 								<button
 									key={styleOption}
 									onClick={() => updateStyle(styleSlug)}
+									aria-pressed={isStyleActive(styleSlug)}
 									className={`${
 										isStyleActive(styleSlug) ? styles.active : ''
 									} ${styles.optionButton}`}

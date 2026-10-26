@@ -111,6 +111,12 @@ const KlaviyoForm = ({
 							variant='standard'
 							fullWidth
 							required={field.required === true}
+							slotProps={{
+								htmlInput: {
+									'aria-label':
+										field.label || field.placeholder || field.name || 'Email'
+								}
+							}}
 							sx={{
 								'& .MuiInputBase-input': {
 									fontSize: '12px',

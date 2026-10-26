@@ -15,10 +15,12 @@ import Articles from './Articles'
 import ContactForm from './ContactForm'
 import { collectionLabel } from '@/lib/collectionSlug'
 
-const PageContent = ({ content, slug }) => {
+// `nested` is for pages that already render their own <main> around this.
+const PageContent = ({ content, slug, nested = false }) => {
 	const hasPageHero = slug === 'subscribe'
+	const Wrapper = nested ? 'div' : 'main'
 	return (
-		<main>
+		<Wrapper>
 			{/* Content */}
 			{/* <SpecialRequestBanner /> */}
 
@@ -101,6 +103,7 @@ const PageContent = ({ content, slug }) => {
 								marginTop={section.fields.marginTop}
 								marginBottom={section.fields.marginBottom}
 								mobileColumns={section.fields.mobileColumns}
+								isFirstOnPage={index === 0}
 							/>
 						)
 					case 'accordion':
@@ -149,7 +152,7 @@ const PageContent = ({ content, slug }) => {
 
 			{/* Help & Contact only */}
 			{slug === 'help-contact' && <ContactForm />}
-		</main>
+		</Wrapper>
 	)
 }
 

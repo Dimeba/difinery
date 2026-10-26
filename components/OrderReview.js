@@ -125,8 +125,8 @@ const OrderReview = ({
 							src={image.url}
 							fill
 							style={{ objectFit: 'contain', objectPosition: 'top' }}
-							quality={100}
-							alt='Image of the product.'
+							quality={85}
+							alt={image.altText || product?.title || 'Product image'}
 							sizes={'(max-width: 768px) 100vw, 50vw'}
 						/>
 					</Box>

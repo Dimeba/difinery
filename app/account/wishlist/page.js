@@ -5,6 +5,7 @@ import { CUSTOMER_WISHLIST } from '@/lib/customerAccount/queries'
 import { formatMoney } from '@/lib/customerAccount/format'
 import { PRODUCTS_BY_IDS, storefrontFetch } from '@/lib/storefrontServer'
 import WishlistButton from '@/components/WishlistButton'
+import { productPath } from '@/lib/productUrl'
 
 import styles from '../Account.module.scss'
 
@@ -18,13 +19,6 @@ function parseIds(value) {
 	} catch {
 		return []
 	}
-}
-
-// Products land in whatever category folder the shop routes use; the PDP path
-// needs one, so fall back to the catch-all "all" segment.
-function productHref(product) {
-	const category = product.category?.name?.toLowerCase().replace(/\s+/g, '-')
-	return `/shop/${category || 'all'}/product/${product.handle}`
 }
 
 export default async function WishlistPage() {
@@ -66,7 +60,7 @@ export default async function WishlistPage() {
 						const image = product.images?.edges?.[0]?.node
 						return (
 							<div key={product.id} className={styles.productCard}>
-								<Link href={productHref(product)}>
+								<Link href={productPath(product)}>
 									{image?.url ? (
 										// eslint-disable-next-line @next/next/no-img-element
 										<img
@@ -80,7 +74,7 @@ export default async function WishlistPage() {
 								</Link>
 
 								<div>
-									<Link href={productHref(product)}>
+									<Link href={productPath(product)}>
 										<p className={styles.orderName}>{product.title}</p>
 									</Link>
 									<p className={styles.muted}>

@@ -9,6 +9,7 @@ import { FiMinus, FiPlus } from 'react-icons/fi'
 
 // analytics
 import { trackRemoveFromCart } from '@/lib/gaEvents'
+import { productPath } from '@/lib/productUrl'
 
 const CartItem = ({
 	node,
@@ -27,19 +28,8 @@ const CartItem = ({
 	const imageUrl = variant.image?.url
 	const imageAlt = variant.image?.altText || title
 	const productHandle = variant.product?.handle
-	const rawCategoryName = variant.product?.category?.name?.toLowerCase() || ''
-
-	// Map category name to URL slug (e.g., "Rings" -> "rings", "Bracelets" -> "bracelets")
-	const categories = ['bracelets', 'earrings', 'rings', 'necklaces']
-	const matchedCategory = categories.find(cat =>
-		rawCategoryName.includes(cat.slice(0, -1))
-	)
-	const categoryName = matchedCategory || 'all'
-
 	// Build product URL
-	const productUrl = productHandle
-		? `/shop/${categoryName}/product/${productHandle}`
-		: null
+	const productUrl = productHandle ? productPath(variant.product) : null
 
 	// Safely parse unit price
 	const unitRaw = variant.priceV2?.amount
@@ -68,11 +58,14 @@ const CartItem = ({
 							{(title === 'Engraving' || title == 'Custom Box') &&
 								`+$${Number(unitPrice.slice(0, -3)).toLocaleString()}`}
 							{(title === 'Engraving' || title == 'Custom Box') && (
-								<MdDeleteForever
-									size='1rem'
+								<button
+									type='button'
+									className={styles.removeButton}
 									onClick={() => handleRemove(lineId, title)}
-									cursor='pointer'
-								/>
+									aria-label={`Remove ${title} from cart`}
+								>
+									<MdDeleteForever size='1rem' aria-hidden='true' />
+								</button>
 							)}
 						</>
 					)}
@@ -122,11 +115,14 @@ const CartItem = ({
 						)}
 
 						<div className={styles.removeIcon}>
-							<MdDeleteForever
-								size='1rem'
+							<button
+								type='button'
+								className={styles.removeButton}
 								onClick={() => handleRemove(lineId, title)}
-								cursor='pointer'
-							/>
+								aria-label={`Remove ${title} from cart`}
+							>
+								<MdDeleteForever size='1rem' aria-hidden='true' />
+							</button>
 						</div>
 					</div>
 
@@ -134,7 +130,7 @@ const CartItem = ({
 						<button
 							onClick={() => handleDecrease(lineId, quantity)}
 							className={styles.quantityButton}
-							aria-label='Decrease quantity'
+							aria-label={`Decrease quantity of ${title}`}
 						>
 							<FiMinus size='1rem' />
 						</button>
@@ -142,7 +138,7 @@ const CartItem = ({
 						<button
 							onClick={() => handleIncrease(lineId, quantity)}
 							className={styles.quantityButton}
-							aria-label='Increase quantity'
+							aria-label={`Increase quantity of ${title}`}
 						>
 							<FiPlus size='1rem' />
 						</button>

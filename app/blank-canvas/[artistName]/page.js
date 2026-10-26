@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation'
 
 // lib
 import { getEntries } from '@/lib/contentful'
+import { getSocialImageMetadata } from '@/lib/shareImage'
 
 const articles = await getEntries('blankCanvasArticle')
 
@@ -51,13 +52,9 @@ export async function generateMetadata(props) {
 		title: `Difinery | Blank Canvas Community / ${content.artistName}`,
 		description: content.description ? content.description : '',
 		keywords: content.keywords ? content.keywords : '',
-		openGraph: {
-			images: shareImageUrl ? [{ url: shareImageUrl }] : []
-		},
-		twitter: {
-			card: 'summary_large_image',
-			images: shareImageUrl ? [shareImageUrl] : []
-		}
+		...getSocialImageMetadata(shareImageUrl, {
+			path: `/blank-canvas/${artistName}`
+		})
 	}
 }
 

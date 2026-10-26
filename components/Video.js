@@ -11,7 +11,21 @@ import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined'
 
 // hooks
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+// Start fetching a little before the video scrolls into view. Kept at module
+// scope so the observer isn't torn down and re-created on every render.
+const OBSERVER_OPTIONS = {
+	root: null,
+	rootMargin: '200px',
+	threshold: 0
+}
+
+export const resolveMediaSrc = media => {
+	if (!media) return undefined
+	if (typeof media === 'string') return media
+	return 'https:' + media.fields.file.url
+}
 
 const Video = ({
 	video,
@@ -19,38 +33,49 @@ const Video = ({
 	autoPlay = false,
 	mute = true,
 	placeholder = null,
-	style
+	style,
+	className,
+	// Above-the-fold videos (e.g. the hero) load straight away.
+	eager = false
 }) => {
-	const resolveMediaSrc = media => {
-		if (!media) return undefined
-		if (typeof media === 'string') return media
-		return 'https:' + media.fields.file.url
-	}
+	const [targetRef, isIntersecting] = useIntersectionObserver(OBSERVER_OPTIONS)
 
-	const options = {
-		root: null,
-		rootMargin: '0%',
-		threshold: 0
-	}
-
-	const [targetRef, isIntersecting] = useIntersectionObserver(options)
-
+	// The file is only requested once the video has come near the viewport.
+	const [hasEnteredView, setHasEnteredView] = useState(eager)
 	const [isPlaying, setIsPlaying] = useState(autoPlay)
 	const [isMuted, setIsMuted] = useState(mute)
+
+	if (isIntersecting && !hasEnteredView) setHasEnteredView(true)
+
+	// Pause off-screen videos and resume them when they come back, unless the
+	// visitor paused them. Only pause after the video has actually been seen, so
+	// an eager video isn't paused before the observer's first report.
+	const hasBeenVisibleRef = useRef(false)
+	useEffect(() => {
+		const el = targetRef.current
+		if (!el || !hasEnteredView) return
+		if (isIntersecting) {
+			hasBeenVisibleRef.current = true
+			if (isPlaying) el.play().catch(() => {})
+		} else if (hasBeenVisibleRef.current) {
+			el.pause()
+		}
+	}, [isIntersecting, hasEnteredView, isPlaying, targetRef])
 
 	const togglePlay = () => {
 		if (isPlaying) {
 			targetRef.current.pause()
 			setIsPlaying(false)
 		} else {
-			targetRef.current.play()
+			targetRef.current.play().catch(() => {})
 			setIsPlaying(true)
 		}
 	}
 
 	const toggleMute = () => {
-		targetRef.current.muted = !targetRef.current.muted
-		setIsMuted(!targetRef.current.muted)
+		const nextMuted = !targetRef.current.muted
+		targetRef.current.muted = nextMuted
+		setIsMuted(nextMuted)
 	}
 
 	return (
@@ -58,35 +83,45 @@ const Video = ({
 			{/* Video */}
 			<video
 				ref={targetRef}
+				src={hasEnteredView ? resolveMediaSrc(video) : undefined}
 				autoPlay={autoPlay}
 				poster={resolveMediaSrc(placeholder)}
 				loop
 				muted={mute}
 				playsInline
-				preload='auto'
+				preload={hasEnteredView ? (autoPlay ? 'auto' : 'metadata') : 'none'}
+				className={className}
 				style={{ minWidth: '100%', minHeight: '100%', ...style }}
-			>
-				<source src={resolveMediaSrc(video)} type='video/mp4' />
-			</video>
+			/>
 
 			{/* Video Controls */}
 			{showControls && (
 				<div className={styles.controls}>
-					<div className={styles.playIcon} onClick={togglePlay}>
+					<button
+						type='button'
+						className={styles.playIcon}
+						onClick={togglePlay}
+						aria-label={isPlaying ? 'Pause video' : 'Play video'}
+					>
 						{isPlaying ? (
 							<PauseCircleOutlineOutlinedIcon color='white' />
 						) : (
 							<PlayArrowOutlinedIcon color='white' />
 						)}
-					</div>
+					</button>
 
-					<div className={styles.muteIcon} onClick={toggleMute}>
+					<button
+						type='button'
+						className={styles.muteIcon}
+						onClick={toggleMute}
+						aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+					>
 						{isMuted ? (
 							<VolumeOffOutlinedIcon color='white' />
 						) : (
 							<VolumeUpOutlinedIcon color='white' />
 						)}
-					</div>
+					</button>
 				</div>
 			)}
 		</>

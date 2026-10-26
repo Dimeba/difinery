@@ -27,7 +27,7 @@ const SubscribeSection = () => {
 				>
 					<Image
 						src='/sub-banner.jpg'
-						alt='Description of image'
+						alt=''
 						fill
 						sizes='100vw'
 						style={{
@@ -35,7 +35,7 @@ const SubscribeSection = () => {
 							objectFit: 'cover',
 							objectPosition: isMobile ? 'left' : 'center'
 						}}
-						quality={100}
+						quality={85}
 					/>
 
 					{/* Form */}
