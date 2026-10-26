@@ -5,7 +5,7 @@ import styles from './Header.module.scss'
 
 // components
 import { Box, ClickAwayListener, Typography } from '@/lib/mui'
-import Link from 'next/link'
+import Link from './IntentLink'
 import Image from 'next/image'
 import HeaderSubmenu from './HeaderSubmenu'
 import AccountIcon from './AccountIcon'
@@ -210,6 +210,7 @@ const Header = ({
 								alt='Difinery'
 								width={150}
 								height={150 / 7.5}
+								priority
 								style={{ objectFit: 'contain', objectPosition: 'center' }}
 								suppressHydrationWarning
 							/>

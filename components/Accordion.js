@@ -5,7 +5,6 @@ import styles from './Accordion.module.scss'
 
 // components
 import Image from 'next/image'
-import Link from 'next/link'
 import InfoIcon from '@mui/icons-material/Info'
 
 // hooks
@@ -107,8 +106,9 @@ const Accordion = ({
 					/>
 				</div>
 
+				{/* A plain <a>: next/link would prefetch the (1 MB) size guide PDF. */}
 				{showHelp && (
-					<Link href={helpLink} target='_blank' rel='noopener noreferrer'>
+					<a href={helpLink} target='_blank' rel='noopener noreferrer'>
 						<div
 							className={styles.needHelpButton}
 							// onClick={() => setShowHelpDropdown(!showHelpDropdown)}
@@ -116,7 +116,7 @@ const Accordion = ({
 							<InfoIcon fontSize='8px' />
 							<p>Need help?</p>
 						</div>
-					</Link>
+					</a>
 				)}
 
 				{/* {showHelpDropdown && helpContent} */}

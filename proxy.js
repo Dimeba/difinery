@@ -96,7 +96,13 @@ export async function proxy(request) {
 	return NextResponse.next()
 }
 
-// Optional: limit to paths like "/api/*" or your CMS pages
+// Only the routes handled above. Running on every request (pages, JS, CSS,
+// images) put an edge function in front of the CDN cache for the whole site.
 export const config = {
-	matcher: ['/', '/(.*)'] // apply to all paths
+	matcher: [
+		'/account/:path*',
+		'/shop',
+		'/shop/:category',
+		'/shop/:category/:metal'
+	]
 }

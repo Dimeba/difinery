@@ -27,6 +27,14 @@ export const resolveMediaSrc = media => {
 	return 'https:' + media.fields.file.url
 }
 
+// Every video in /public has a first-frame "<name>-poster.jpg" next to it. It
+// looks exactly like the video's opening frame and paints long before the
+// video itself has buffered.
+const localPoster = src =>
+	typeof src === 'string' && /^\/[^/]+\.mp4$/.test(src)
+		? src.replace(/\.mp4$/, '-poster.jpg')
+		: undefined
+
 const Video = ({
 	video,
 	showControls,
@@ -35,17 +43,37 @@ const Video = ({
 	placeholder = null,
 	style,
 	className,
-	// Above-the-fold videos (e.g. the hero) load straight away.
+	// Above-the-fold videos (e.g. the hero) don't wait to be scrolled to.
 	eager = false
 }) => {
 	const [targetRef, isIntersecting] = useIntersectionObserver(OBSERVER_OPTIONS)
 
+	const src = resolveMediaSrc(video)
+	const poster = resolveMediaSrc(placeholder) || localPoster(src)
+
 	// The file is only requested once the video has come near the viewport.
-	const [hasEnteredView, setHasEnteredView] = useState(eager)
+	const [hasEnteredView, setHasEnteredView] = useState(false)
 	const [isPlaying, setIsPlaying] = useState(autoPlay)
 	const [isMuted, setIsMuted] = useState(mute)
 
 	if (isIntersecting && !hasEnteredView) setHasEnteredView(true)
+
+	// An eager video with a poster shows that first frame until the page has
+	// loaded, so the video download doesn't compete with the page itself.
+	// Without a poster it starts at once rather than show an empty frame.
+	const [pageLoaded, setPageLoaded] = useState(!(eager && poster))
+	useEffect(() => {
+		if (pageLoaded) return
+		const done = () => setPageLoaded(true)
+		if (document.readyState === 'complete') {
+			const timer = setTimeout(done, 0)
+			return () => clearTimeout(timer)
+		}
+		window.addEventListener('load', done, { once: true })
+		return () => window.removeEventListener('load', done)
+	}, [pageLoaded])
+
+	const shouldLoad = pageLoaded && (eager || hasEnteredView)
 
 	// Pause off-screen videos and resume them when they come back, unless the
 	// visitor paused them. Only pause after the video has actually been seen, so
@@ -53,14 +81,14 @@ const Video = ({
 	const hasBeenVisibleRef = useRef(false)
 	useEffect(() => {
 		const el = targetRef.current
-		if (!el || !hasEnteredView) return
+		if (!el || !shouldLoad) return
 		if (isIntersecting) {
 			hasBeenVisibleRef.current = true
 			if (isPlaying) el.play().catch(() => {})
 		} else if (hasBeenVisibleRef.current) {
 			el.pause()
 		}
-	}, [isIntersecting, hasEnteredView, isPlaying, targetRef])
+	}, [isIntersecting, shouldLoad, isPlaying, targetRef])
 
 	const togglePlay = () => {
 		if (isPlaying) {
@@ -83,13 +111,15 @@ const Video = ({
 			{/* Video */}
 			<video
 				ref={targetRef}
-				src={hasEnteredView ? resolveMediaSrc(video) : undefined}
+				src={shouldLoad ? src : undefined}
 				autoPlay={autoPlay}
-				poster={resolveMediaSrc(placeholder)}
+				// A poster attribute downloads immediately, so off-screen videos only
+				// get theirs when they come near the viewport.
+				poster={eager || hasEnteredView ? poster : undefined}
 				loop
 				muted={mute}
 				playsInline
-				preload={hasEnteredView ? (autoPlay ? 'auto' : 'metadata') : 'none'}
+				preload={shouldLoad ? (autoPlay ? 'auto' : 'metadata') : 'none'}
 				className={className}
 				style={{ minWidth: '100%', minHeight: '100%', ...style }}
 			/>

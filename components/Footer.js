@@ -3,7 +3,7 @@ import styles from './Footer.module.scss'
 import KlaviyoForm from './KlaviyoForm'
 
 // components
-import Link from 'next/link'
+import Link from './IntentLink'
 import Image from 'next/image'
 import Accordion from './Accordion'
 import {

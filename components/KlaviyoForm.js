@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Grid, TextField, Button, Box, Typography } from '@/lib/mui'
+import { Grid, Input, Button, Box, Typography } from '@/lib/mui'
 
 const KlaviyoForm = ({
 	fields = [],
@@ -101,23 +101,24 @@ const KlaviyoForm = ({
 			>
 				{fields.map((field, index) => (
 					<Grid key={index} size={getGridSize()}>
-						<TextField
+						{/* A bare Input rather than TextField: same look, without the
+						    Select/Menu code TextField pulls into every page. */}
+						<Input
 							id={field.name || `field-${index}`}
 							name={field.name || `field-${index}`}
 							type={field.type || 'text'}
 							placeholder={field.placeholder || ''}
 							value={formData[field.name || `field-${index}`] || ''}
 							onChange={handleChange(field.name || `field-${index}`)}
-							variant='standard'
 							fullWidth
 							required={field.required === true}
-							slotProps={{
-								htmlInput: {
-									'aria-label':
-										field.label || field.placeholder || field.name || 'Email'
-								}
+							inputProps={{
+								'aria-label':
+									field.label || field.placeholder || field.name || 'Email'
 							}}
 							sx={{
+								verticalAlign: 'top',
+								borderRadius: 0,
 								'& .MuiInputBase-input': {
 									fontSize: '12px',
 									color: textColor,
@@ -128,24 +129,17 @@ const KlaviyoForm = ({
 									color: placeholderColor,
 									opacity: 1
 								},
-								'& .MuiInputLabel-root': {
-									fontSize: '14px',
-									color: textColor
-								},
-								'& .MuiInput-underline:before': {
+								'&:before': {
 									borderBottomColor: borderColor,
 									borderBottomWidth: '1px'
 								},
-								'& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+								'&:hover:not(.Mui-disabled):before': {
 									borderBottomColor: textColor,
 									borderBottomWidth: '1px'
 								},
-								'& .MuiInput-underline:after': {
+								'&:after': {
 									borderBottomColor: textColor,
 									borderBottomWidth: '2px'
-								},
-								'& .MuiInputBase-root': {
-									borderRadius: 0
 								}
 							}}
 						/>

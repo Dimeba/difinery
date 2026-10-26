@@ -5,7 +5,7 @@ import styles from './Products.module.scss'
 
 // components
 import Image from 'next/image'
-import Link from 'next/link'
+import IntentLink from './IntentLink'
 
 // hooks
 import { useState, useEffect, useMemo } from 'react'
@@ -227,9 +227,10 @@ const ProductCard = ({
 		trackSelectItem(product, listName, index)
 	}
 
+
 	return (
 		<div className={`${!individual ? styles.product : styles.productNoGap}`}>
-			<Link
+			<IntentLink
 				href={returnCorrectURL()}
 				aria-label={product.title}
 				onClick={handleProductClick}
@@ -441,7 +442,7 @@ const ProductCard = ({
 						)}
 					</div>
 				)}
-			</Link>
+			</IntentLink>
 
 			{/* Product Info */}
 			{!individual && (

@@ -4,7 +4,7 @@
 import styles from './Columns.module.scss'
 
 // components
-import Link from 'next/link'
+import Link from './IntentLink'
 
 const ConditionalLink = ({
 	fullHeight,

@@ -8,18 +8,20 @@ import productStyles from './ProductInfo.module.scss'
 import Image from 'next/image'
 import Video from './Video'
 import ProductCard from './ProductCard'
-import Filters from './Filters'
+import dynamic from 'next/dynamic'
 import { LuSettings2 } from 'react-icons/lu'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import {
 	Button,
 	Box,
-	TextField,
+	Input,
 	InputAdornment,
-	Typography,
-	Popper
+	Typography
 } from '@/lib/mui'
 import SearchIcon from '@mui/icons-material/Search'
+
+// Only downloaded when someone opens Sort & Filter.
+const FiltersPopper = dynamic(() => import('./FiltersPopper'), { ssr: false })
 
 // hooks
 import { useState, useEffect, useMemo, useRef } from 'react'
@@ -334,28 +336,32 @@ const Products = ({
 							'@media (max-width: 1024px)': { justifyContent: 'center' }
 						}}
 					>
-						<TextField
-							id='standard-basic'
-							variant='standard'
-							placeholder='Search'
-							value={searchTerm}
-							onChange={e => setSearchTerm(e.target.value)}
+						{/* Wrapped like TextField's FormControl so the italic is
+						    inherited exactly as before, without TextField's code. */}
+						<Box
 							sx={{
+								display: 'inline-flex',
+								flexDirection: 'column',
+								minWidth: 0,
+								verticalAlign: 'top',
 								fontStyle: 'italic',
 								fontSize: '12px',
 								'@media (max-width: 1024px)': { display: 'none' }
 							}}
-							slotProps={{
-								htmlInput: { 'aria-label': 'Search products' },
-								input: {
-									startAdornment: (
-										<InputAdornment position='start'>
-											<SearchIcon fontSize='10px' />
-										</InputAdornment>
-									)
+						>
+							<Input
+								id='standard-basic'
+								placeholder='Search'
+								value={searchTerm}
+								onChange={e => setSearchTerm(e.target.value)}
+								inputProps={{ 'aria-label': 'Search products' }}
+								startAdornment={
+									<InputAdornment position='start'>
+										<SearchIcon fontSize='10px' />
+									</InputAdornment>
 								}
-							}}
-						/>
+							/>
+						</Box>
 
 						<Button
 							onClick={() => setShowFiltersMenu(!showFiltersMenu)}
@@ -527,19 +533,18 @@ const Products = ({
 				</Box>
 			)}
 
-			<Popper
-				open={showFiltersMenu}
-				placement={isMobile ? 'bottom' : 'bottom-end'}
-				anchorEl={anchorRef.current}
-			>
-				<Filters
+			{showFiltersMenu && (
+				<FiltersPopper
+					open={showFiltersMenu}
+					placement={isMobile ? 'bottom' : 'bottom-end'}
+					anchorEl={anchorRef.current}
 					selectedSort={selectedSort}
 					setSelectedSort={setSelectedSort}
 					selectedCategory={selectedCategory}
 					toggleFilters={() => setShowFiltersMenu(!showFiltersMenu)}
 					productType={productType}
 				/>
-			</Popper>
+			)}
 		</section>
 	)
 }
