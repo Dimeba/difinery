@@ -35,6 +35,23 @@ import { collectionLabel, collectionSlug } from '@/lib/collectionSlug'
 const PHONE_DISPLAY = '+1 (212) 470-3049'
 const PHONE_HREF = 'tel:+12124703049'
 
+const PENDANT_COLLECTION_PROMO = {
+	id: 'the-pendant-collection',
+	title: 'The Pendant Collection',
+	link: '/shop/necklaces/product/round-bezel-pendant?gold=yellow&charm=1',
+	imageUrl: '/the-pendant-collection.jpg'
+}
+
+const mapContentfulPromos = (promotions = []) =>
+	promotions.map(promo => ({
+		id: promo?.sys?.id,
+		title: promo?.fields?.title || '',
+		link: promo?.fields?.link || '/',
+		imageUrl: promo?.fields?.image?.fields?.file?.url
+			? `https:${promo.fields.image.fields.file.url}`
+			: ''
+	}))
+
 const Header = ({
 	content,
 	collectionsContent,
@@ -317,9 +334,27 @@ const Header = ({
 										key={index}
 										href={`/shop/${title.toLowerCase()}`}
 										className={styles.mainMenuLink}
-										onMouseEnter={() =>
-											loadSubmenu({ columns: submenus[index + 1].columns })
-										}
+										onMouseEnter={() => {
+											const columns = submenus[index + 1].columns
+											if (title === 'Necklaces') {
+												loadSubmenu({
+													columns,
+													promoOverrides: [
+														PENDANT_COLLECTION_PROMO,
+														...mapContentfulPromos(
+															content.promotions
+														).filter(
+															promo =>
+																!/infinity collection/i.test(
+																	promo.title
+																)
+														)
+													]
+												})
+												return
+											}
+											loadSubmenu({ columns })
+										}}
 										onClick={() => setOpenMenu(false)}
 									>
 										<p>{title}</p>{' '}

@@ -19,6 +19,7 @@ import { useCart } from '@/context/CartContext'
 
 // helpers
 import { findMetalOption } from '@/lib/helpers'
+import { isBezelPendantProduct } from '@/lib/charmNecklace'
 
 // analytics
 import { trackViewItem, trackAddToCart } from '@/lib/gaEvents'
@@ -26,10 +27,16 @@ import { trackViewItem, trackAddToCart } from '@/lib/gaEvents'
 // data
 import iJewelData from '@/data/iJewelData.json' with { type: 'json' }
 
-// `gold` is the ?gold= query value. It is passed in rather than read with
-// useSearchParams so the page can prerender this component without it (see
-// ProductInfoWithParams).
-const ProductInfo = ({ product, isGiftCard = false, gold = null }) => {
+// `gold` and `charm` are query values passed in rather than read with
+// useSearchParams so the page can prerender this component without them
+// (see ProductInfoWithParams). `?charm=1` opens the necklace builder.
+const ProductInfo = ({
+	product,
+	isGiftCard = false,
+	gold = null,
+	charm = false,
+	onOpenCharmMode
+}) => {
 	const { cart, addToCart, showCart, setShowCart } = useCart()
 
 	// Product can be temporarily undefined during navigation/loading.
@@ -87,7 +94,8 @@ const ProductInfo = ({ product, isGiftCard = false, gold = null }) => {
 	const [showOrderSummary, setShowOrderSummary] = useState(false)
 	const [selectedShape, setSelectedShape] = useState(null)
 	const [show3DModel, setShow3DModel] = useState(false)
-	const [charmMode, setCharmMode] = useState(false)
+	const canCharm = isBezelPendantProduct(product)
+	const [charmMode, setCharmMode] = useState(canCharm && charm)
 
 	// Track view_item event when product loads or variant changes
 	useEffect(() => {
@@ -95,6 +103,15 @@ const ProductInfo = ({ product, isGiftCard = false, gold = null }) => {
 			trackViewItem(product, matchingVariant)
 		}
 	}, [product, matchingVariant])
+
+	useEffect(() => {
+		if (canCharm && charm) setCharmMode(true)
+	}, [canCharm, charm])
+
+	useEffect(() => {
+		if (!charmMode) return
+		window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+	}, [charmMode])
 
 	useEffect(() => {
 		if (!matchingVariant && product?.variants?.edges?.[0]?.node) {
@@ -393,7 +410,11 @@ const ProductInfo = ({ product, isGiftCard = false, gold = null }) => {
 						setBoxVariant={setBoxVariant}
 						setShowOrderSummary={setShowOrderSummary}
 						handleAddToCart={handleAddToCart}
-						onStyleCharms={() => setCharmMode(true)}
+						onStyleCharms={() => {
+							if (!canCharm) return
+							setCharmMode(true)
+							onOpenCharmMode?.()
+						}}
 					/>
 				)}
 				</>
