@@ -5,8 +5,14 @@ import FAQ from '@/components/FAQ'
 import Products from '@/components/Products'
 import SpecialRequestBanner from '@/components/SpecialRequestBanner'
 import { Suspense } from 'react'
+import { isBezelPendantProduct } from '@/lib/charmNecklace'
 
 const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
+	const showPairWith =
+		recommendedProducts &&
+		recommendedProducts.length > 0 &&
+		!isBezelPendantProduct(product)
+
 	return (
 		<main>
 			{/* The fallback is what gets prerendered: the full product without the
@@ -15,7 +21,7 @@ const ProductPageLayout = ({ product, recommendedProducts, faqs }) => {
 				<ProductInfoWithParams product={product} />
 			</Suspense>
 
-			{recommendedProducts && recommendedProducts.length > 0 && (
+			{showPairWith && (
 				<Products
 					title='Pair your product with:'
 					recommendedProducts={recommendedProducts.slice(0, 4)}
