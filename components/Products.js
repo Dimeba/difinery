@@ -405,7 +405,7 @@ const Products = ({
 					<div
 						className={`${styles.products} ${!individual ? styles.gap : ''}`}
 					>
-						{collectionPreview?.media && (
+						{(collectionPreview?.media || collectionPreview?.imageUrl) && (
 							<Box
 								gridColumn={{ xs: 'span 12', lg: 'span 6' }}
 								gridRow={'span 2'}
@@ -421,7 +421,7 @@ const Products = ({
 										: null
 								}}
 							>
-								{collectionPreview.media.fields.file.contentType.includes(
+								{collectionPreview.media?.fields?.file?.contentType?.includes(
 									'video'
 								) ? (
 									<Box position='relative' height='100%' width='100%'>
@@ -442,10 +442,15 @@ const Products = ({
 										minHeight={{ xs: '60vh', lg: '100%' }}
 									>
 										<Image
-											src={'https:' + collectionPreview.media.fields.file.url}
+											src={
+												collectionPreview.imageUrl ||
+												'https:' +
+													collectionPreview.media.fields.file.url
+											}
 											alt={collectionPreview.title}
 											fill
-											sizes='(max-width: 1024px) 100vw, 50vw'
+											quality={95}
+											sizes='(max-width: 1024px) 100vw, 1600px'
 											style={{ objectFit: 'cover' }}
 										/>
 									</Box>

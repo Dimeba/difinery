@@ -72,7 +72,8 @@ const HeaderSubmenu = ({ columns = [], promotions = [], promoOverrides = [] }) =
 									style={{ objectFit: 'cover' }}
 									alt={item.title || 'Submenu promotion image'}
 									fill
-									sizes='(max-width: 1024px) 100vw, 25vw'
+									quality={95}
+									sizes='(max-width: 1024px) 100vw, 768px'
 								/>
 							)}
 						</div>

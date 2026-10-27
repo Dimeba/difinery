@@ -13,6 +13,7 @@ import {
 import { apolloClient } from '@/lib/apolloClient'
 import { GET_PRODUCTS } from '@/lib/queries/getProducts'
 import { GET_COLLECTION_BY_HANDLE } from '@/lib/queries/getCollectionByHandle'
+import { PENDANT_COLLECTION } from '@/lib/charmNecklace'
 
 const ALLOWED_CATEGORIES = [
 	'bracelets',
@@ -178,6 +179,16 @@ export default async function CategoryMetalStylePage(props) {
 				showFilters
 				filters={currentFilters}
 				category={category}
+				collectionPreview={
+					category === 'necklaces'
+						? {
+								title: PENDANT_COLLECTION.title,
+								description: PENDANT_COLLECTION.description,
+								imageUrl: PENDANT_COLLECTION.imageUrl,
+								mediaLink: PENDANT_COLLECTION.link
+							}
+						: null
+				}
 			/>
 			<PageContent content={content} nested />
 		</main>

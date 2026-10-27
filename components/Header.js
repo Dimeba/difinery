@@ -31,15 +31,16 @@ import { useCart } from '@/context/CartContext'
 import submenus from '@/data/submenus.json' with { type: 'json' }
 import bridalSubmenu from '@/data/bridalSubmenu.json' with { type: 'json' }
 import { collectionLabel, collectionSlug } from '@/lib/collectionSlug'
+import { PENDANT_COLLECTION } from '@/lib/charmNecklace'
 
 const PHONE_DISPLAY = '+1 (212) 470-3049'
 const PHONE_HREF = 'tel:+12124703049'
 
 const PENDANT_COLLECTION_PROMO = {
 	id: 'the-pendant-collection',
-	title: 'The Pendant Collection',
-	link: '/shop/necklaces/product/round-bezel-pendant?gold=yellow&charm=1',
-	imageUrl: '/the-pendant-collection.jpg'
+	title: PENDANT_COLLECTION.title,
+	link: PENDANT_COLLECTION.link,
+	imageUrl: PENDANT_COLLECTION.imageUrl
 }
 
 const mapContentfulPromos = (promotions = []) =>
