@@ -441,18 +441,32 @@ const Products = ({
 										position='relative'
 										minHeight={{ xs: '60vh', lg: '100%' }}
 									>
-										<Image
-											src={
-												collectionPreview.imageUrl ||
-												'https:' +
+										{collectionPreview.imageUrl ? (
+											<img
+												src={collectionPreview.imageUrl}
+												alt={collectionPreview.title}
+												style={{
+													position: 'absolute',
+													inset: 0,
+													width: '100%',
+													height: '100%',
+													objectFit: 'cover',
+													objectPosition: 'center 28%'
+												}}
+											/>
+										) : (
+											<Image
+												src={
+													'https:' +
 													collectionPreview.media.fields.file.url
-											}
-											alt={collectionPreview.title}
-											fill
-											quality={95}
-											sizes='(max-width: 1024px) 100vw, 1600px'
-											style={{ objectFit: 'cover' }}
-										/>
+												}
+												alt={collectionPreview.title}
+												fill
+												quality={95}
+												sizes='(max-width: 1024px) 100vw, 1600px'
+												style={{ objectFit: 'cover' }}
+											/>
+										)}
 									</Box>
 								)}
 

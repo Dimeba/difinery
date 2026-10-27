@@ -72,7 +72,8 @@ const HeaderSubmenu = ({ columns = [], promotions = [], promoOverrides = [] }) =
 									style={{ objectFit: 'cover' }}
 									alt={item.title || 'Submenu promotion image'}
 									fill
-									quality={95}
+									unoptimized={item.imageUrl.startsWith('/')}
+									quality={item.imageUrl.startsWith('/') ? 100 : 95}
 									sizes='(max-width: 1024px) 100vw, 768px'
 								/>
 							)}
