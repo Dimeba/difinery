@@ -2,56 +2,56 @@
 	{
 		"title": "Round",
 		"path": "/shape-icons/round.png",
-		"pathBase": "/shape-icons/round-base.png",
+		"pathBase": "/shape-icons/round.svg",
 		"width": 48,
 		"height": 48
 	},
 	{
 		"title": "Oval",
 		"path": "/shape-icons/oval.png",
-		"pathBase": "/shape-icons/oval-base.png",
+		"pathBase": "/shape-icons/oval.svg",
 		"width": 28,
 		"height": 40
 	},
 	{
 		"title": "Pear",
 		"path": "/shape-icons/pear.png",
-		"pathBase": "/shape-icons/pear-base.png",
+		"pathBase": "/shape-icons/pear.svg",
 		"width": 28,
 		"height": 40
 	},
 	{
 		"title": "Marquise",
 		"path": "/shape-icons/marquise.png",
-		"pathBase": "/shape-icons/marquise-base.png",
+		"pathBase": "/shape-icons/marquise.svg",
 		"width": 23,
 		"height": 42
 	},
 	{
 		"title": "Radiant",
 		"path": "/shape-icons/radiant.png",
-		"pathBase": "/shape-icons/radiant-base.png",
+		"pathBase": "/shape-icons/radiant.svg",
 		"width": 29,
 		"height": 40
 	},
 	{
 		"title": "Heart",
 		"path": "/shape-icons/heart.png",
-		"pathBase": "/shape-icons/heart-base.png",
+		"pathBase": "/shape-icons/heart.svg",
 		"width": 38,
 		"height": 36
 	},
 	{
 		"title": "Emerald",
 		"path": "/shape-icons/emerald.png",
-		"pathBase": "/shape-icons/emerald-base.png",
+		"pathBase": "/shape-icons/emerald.svg",
 		"width": 26,
 		"height": 40
 	},
 	{
 		"title": "Princess",
 		"path": "/shape-icons/princess.png",
-		"pathBase": "/shape-icons/princess-base.png",
+		"pathBase": "/shape-icons/princess.svg",
 		"width": 48,
 		"height": 48
 	}

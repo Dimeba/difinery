@@ -39,13 +39,18 @@ const CHARM_SHIFT = 16
 
 const ShapeIcon = ({ shape, filled, size = 40, alt = '' }) => (
 	<Image
-		src={filled ? shape.path : shape.pathBase}
+		src={shape.pathBase}
 		alt={alt}
 		width={Math.round((size * 3 * shape.width) / shape.height)}
 		height={size * 3}
 		quality={95}
 		sizes={`${size * 2}px`}
-		style={{ width: 'auto', height: size }}
+		style={{
+			width: 'auto',
+			height: size,
+			display: 'block',
+			opacity: filled ? 1 : 0.4
+		}}
 	/>
 )
 

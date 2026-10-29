@@ -793,12 +793,20 @@ const ProductOptionAccordion = ({
 								}}
 							>
 								<Image
-									src={product.title
-											.toLowerCase()
-											.includes(shape.title.toLowerCase()) ? shape.path : shape.pathBase}
+									src={shape.pathBase}
 									width={isMobile ? (24 * shape.width) / shape.height : (32 * shape.width) / shape.height}
 									height={isMobile ? 24 : 32}
 									alt={`${shape.title} Diamond Shape`}
+									style={{
+										display: 'block',
+										width: 'auto',
+										height: isMobile ? 24 : 32,
+										opacity: product.title
+											.toLowerCase()
+											.includes(shape.title.toLowerCase())
+											? 1
+											: 0.4
+									}}
 								/>
 							</button>
 						))
@@ -822,7 +830,7 @@ const ProductOptionAccordion = ({
 							>
 								{shape ? (
 									<Image
-										src={isSelected ? shape.path : shape.pathBase}
+										src={shape.pathBase}
 										width={
 											isMobile
 												? (24 * shape.width) / shape.height
@@ -830,6 +838,12 @@ const ProductOptionAccordion = ({
 										}
 										height={isMobile ? 24 : 32}
 										alt={`${value.name} ${option.name}`}
+										style={{
+											display: 'block',
+											width: 'auto',
+											height: isMobile ? 24 : 32,
+											opacity: isSelected ? 1 : 0.4
+										}}
 									/>
 								) : (
 									value.name
