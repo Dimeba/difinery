@@ -1,0 +1,334 @@
+@use '@/app/base';
+
+$light: #f9f8f5;
+$serif: 'Newsreader', serif;
+$sans: 'Libre Franklin', sans-serif;
+
+.eyebrow {
+	font-size: 14px;
+	font-weight: 700;
+	letter-spacing: 5px;
+	text-align: center;
+}
+
+// Hero
+.hero {
+	position: relative;
+	isolation: isolate;
+	min-height: 555px;
+	padding: 2.5rem 1.5rem 5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	background-color: base.$black;
+
+	// globals.scss sets a color on every element, so inheritance alone
+	// would not turn the hero copy white
+	* {
+		color: #fff;
+	}
+}
+
+.heroBackground {
+	z-index: -1;
+	object-fit: cover;
+	object-position: center;
+}
+
+.logo {
+	width: 172px;
+	height: auto;
+}
+
+.heroEyebrow {
+	@extend .eyebrow;
+	margin-top: 1.75rem;
+}
+
+.heroTitle {
+	margin-top: 4rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-weight: 300;
+	letter-spacing: 0;
+}
+
+.heroKicker {
+	font-family: $sans;
+	font-size: 28px;
+	font-weight: 300;
+	line-height: 1.2;
+}
+
+.heroAmount {
+	font-family: $serif;
+	font-size: 150px;
+	font-weight: 300;
+	line-height: 0.95;
+	letter-spacing: -2px;
+	margin-top: 0.75rem;
+}
+
+.heroPrize {
+	font-family: $serif;
+	font-size: 46px;
+	font-weight: 400;
+	line-height: 1.1;
+}
+
+.heroText {
+	margin-top: 2.5rem;
+	font-size: 17px;
+	font-weight: 300;
+	letter-spacing: 0;
+}
+
+// Form
+.formWrap {
+	padding: 3rem 1.5rem 6rem;
+	background-color: #fff;
+}
+
+.form {
+	width: 100%;
+	max-width: 770px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 2.5rem;
+}
+
+.consent {
+	display: flex;
+	align-items: flex-start;
+	gap: 1.5rem;
+	margin-top: 1.25rem;
+	padding-left: 0.3rem;
+	cursor: pointer;
+
+	span {
+		font-family: $sans;
+		font-size: 17px;
+		line-height: 1.4;
+	}
+}
+
+.checkbox {
+	appearance: none;
+	flex-shrink: 0;
+	width: 16px;
+	height: 16px;
+	margin-top: 0.25rem;
+	border: 1.5px solid base.$black;
+	border-radius: 0;
+	background: #fff center / 12px no-repeat;
+	cursor: pointer;
+
+	&:checked {
+		background-color: base.$black;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3 3 7-7' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E");
+	}
+
+	&:focus-visible {
+		outline: 2px solid base.$black;
+		outline-offset: 2px;
+	}
+}
+
+.submit,
+.newEntry {
+	width: 100%;
+	min-height: 84px;
+	padding: 1rem;
+	border-radius: 0;
+	font-family: $sans;
+	font-size: 15px;
+	font-weight: 600;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.submit {
+	margin-top: 2.5rem;
+	border: 1px solid #222;
+	background-color: #222;
+	color: #fff;
+
+	&:hover:not(:disabled) {
+		background-color: #e60000;
+		border-color: #e60000;
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+}
+
+.error {
+	margin-top: -1.5rem;
+	text-align: center;
+	color: base.$red;
+}
+
+.disclaimer {
+	margin-top: -0.5rem;
+	font-size: 13px;
+	font-style: italic;
+	font-weight: 300;
+	line-height: 1.4;
+	text-align: center;
+	color: #444;
+}
+
+// Success
+.success {
+	min-height: 100svh;
+	padding: 4rem 1.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	background-color: $light;
+}
+
+.check {
+	width: 200px;
+	height: 200px;
+}
+
+.successTitle {
+	margin-top: 2rem;
+	font-family: $serif;
+	font-size: 84px;
+	font-weight: 400;
+	line-height: 1.1;
+	letter-spacing: -1px;
+}
+
+.success > .eyebrow {
+	margin-top: 5.5rem;
+}
+
+.successText {
+	margin-top: 2rem;
+	max-width: 500px;
+	font-size: 20px;
+	line-height: 1.3;
+	letter-spacing: 0;
+}
+
+.perk {
+	width: 100%;
+	max-width: 765px;
+	margin-top: 4.5rem;
+	padding: 2.5rem 1.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.25rem;
+	background-color: #fff;
+	border: 1px solid #b5b5b5;
+}
+
+.perkTitle {
+	font-family: $serif;
+	font-size: 40px;
+	font-weight: 400;
+	letter-spacing: 0;
+}
+
+.perkText {
+	font-size: 20px;
+	letter-spacing: 0;
+}
+
+.handBack {
+	margin-top: 9rem;
+	font-size: 17px;
+	letter-spacing: 0;
+}
+
+.newEntry {
+	max-width: 765px;
+	margin-top: 2.5rem;
+	border: 1.5px solid base.$black;
+	background-color: transparent;
+	color: base.$black;
+
+	&:hover {
+		background-color: base.$black;
+		color: #fff;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.desktopBreak {
+		display: none;
+	}
+
+	.hero {
+		min-height: 0;
+		padding-bottom: 4rem;
+	}
+
+	.heroTitle {
+		margin-top: 2.5rem;
+	}
+
+	.heroAmount {
+		font-size: 104px;
+	}
+
+	.heroPrize {
+		font-size: 34px;
+	}
+
+	.heroText {
+		font-size: 15px;
+	}
+
+	.formWrap {
+		padding: 3rem 1.5rem 4rem;
+	}
+
+	.consent span {
+		font-size: 15px;
+	}
+
+	.submit,
+	.newEntry {
+		min-height: 64px;
+	}
+
+	.check {
+		width: 140px;
+		height: 140px;
+	}
+
+	.success > .eyebrow {
+		margin-top: 3.5rem;
+	}
+
+	.successTitle {
+		font-size: 52px;
+	}
+
+	.successText,
+	.perkText {
+		font-size: 17px;
+	}
+
+	.perkTitle {
+		font-size: 30px;
+	}
+
+	.handBack {
+		margin-top: 5rem;
+		font-size: 15px;
+	}
+}

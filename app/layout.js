@@ -21,6 +21,7 @@ import { ApolloContext } from '@/lib/apolloContext'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter'
 import MUIProviders from '@/components/MUIProviders'
 import LayoutClientEffects from '@/components/LayoutClientEffects'
+import SiteChrome from '@/components/SiteChrome'
 import DeferredAnalytics from '@/components/DeferredAnalytics'
 
 const header = await getEntries('header')
@@ -98,12 +99,16 @@ export default function RootLayout({ children }) {
 								<AppRouterCacheProvider>
 									<MUIProviders>
 										<Cart />
-										<Header
-											content={headerContent}
-											collectionsContent={collectionsContent}
-										/>
+										<SiteChrome>
+											<Header
+												content={headerContent}
+												collectionsContent={collectionsContent}
+											/>
+										</SiteChrome>
 										{children}
-										<Footer />
+										<SiteChrome>
+											<Footer />
+										</SiteChrome>
 									</MUIProviders>
 								</AppRouterCacheProvider>
 							</body>
