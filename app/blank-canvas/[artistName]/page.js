@@ -9,16 +9,9 @@ import { notFound } from 'next/navigation'
 // lib
 import { getEntries } from '@/lib/contentful'
 import { getSocialImageMetadata } from '@/lib/shareImage'
+import { blankCanvasSlug as slugify } from '@/lib/blankCanvas'
 
 const articles = await getEntries('blankCanvasArticle')
-
-const slugify = artistName =>
-	artistName
-		.toLowerCase()
-		.replace(/[^a-z0-9 ]/gi, '')
-		.replace(/&/g, '')
-		.trim()
-		.replace(/ +/g, '-')
 
 export async function generateStaticParams() {
 	return articles.items
