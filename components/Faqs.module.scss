@@ -1,0 +1,91 @@
+@use '@/app/base';
+
+.faqs {
+	max-width: 800px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4rem;
+
+	h1 {
+		text-align: center;
+	}
+}
+
+.sections {
+	width: 100%;
+	border-top: 1px solid base.$gray;
+	border-bottom: 1px solid base.$gray;
+}
+
+// Nested under .sections so it outranks the Accordion's own padding.
+.sections .section {
+	padding: 2rem 0;
+}
+
+.item {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 1.75rem 0;
+	border-bottom: 1px solid rgba(base.$gray, 0.5);
+
+	&:first-child {
+		padding-top: 1rem;
+	}
+
+	&:last-child {
+		border-bottom: none;
+		padding-bottom: 0.5rem;
+	}
+
+	p {
+		font-size: 14px;
+		text-wrap: pretty;
+	}
+
+	a {
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	strong {
+		font-weight: 600;
+	}
+}
+
+// Overrides the global h2 (large serif) for the question line.
+.question {
+	font-family: 'Libre Franklin', sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.5;
+	letter-spacing: 0.5px;
+	text-wrap: pretty;
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	padding-left: 1.5rem;
+
+	li::marker {
+		font-family: 'Libre Franklin', sans-serif;
+		font-size: 14px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.faqs {
+		gap: 3rem;
+	}
+
+	.sections .section {
+		padding: 1.5rem 0;
+	}
+
+	.item {
+		padding: 1.5rem 0;
+	}
+}

@@ -33,7 +33,8 @@ const Accordion = ({
 
 	useEffect(() => {
 		if (!disabled) {
-			setRowOpen(state)
+			// Boolean(): an omitted `state` must stay false, or aria-expanded drops.
+			setRowOpen(Boolean(state))
 		} else if (disabled && isMobile) {
 			setRowOpen(false)
 		} else {

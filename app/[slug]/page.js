@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 // lib
 import { getEntries } from '@/lib/contentful'
 import { getSocialImageMetadata } from '@/lib/shareImage'
+import { HARDCODED_PAGE_SLUGS } from '@/lib/hardcodedPages'
 
 // Fetch pages at build time
 const pages = await getEntries('page')
@@ -23,6 +24,7 @@ export async function generateStaticParams() {
 	return pages.items
 		.filter(p => p.fields.dontRender !== true)
 		.map(page => ({ slug: slugify(page.fields.title) }))
+		.filter(({ slug }) => !HARDCODED_PAGE_SLUGS.includes(slug))
 }
 
 export async function generateMetadata(props) {
