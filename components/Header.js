@@ -36,6 +36,11 @@ import { PENDANT_COLLECTION } from '@/lib/charmNecklace'
 const PHONE_DISPLAY = '+1 (212) 470-3049'
 const PHONE_HREF = 'tel:+12124703049'
 
+// Header support link. Fixed here rather than taken from the Contentful
+// header's supportPage, so it always reads and points to Customer Service.
+const SUPPORT_LABEL = 'Customer Service'
+const SUPPORT_HREF = '/customer-service'
+
 const PENDANT_COLLECTION_PROMO = {
 	id: 'the-pendant-collection',
 	title: PENDANT_COLLECTION.title,
@@ -187,7 +192,7 @@ const Header = ({
 						<Box suppressHydrationWarning>
 							{effectiveIntersecting && isScreenWide ? (
 								<Link
-									href={formatLink(content?.supportPage?.fields?.title)}
+									href={SUPPORT_HREF}
 								>
 									<Typography
 										variant='p'
@@ -197,7 +202,7 @@ const Header = ({
 											letterSpacing: '0.2em'
 										}}
 									>
-										{content?.supportPage?.fields?.title}
+										{SUPPORT_LABEL}
 									</Typography>
 								</Link>
 							) : (
@@ -434,11 +439,11 @@ const Header = ({
 								))}
 
 								<Link
-									href={formatLink(content?.supportPage?.fields?.title)}
+									href={SUPPORT_HREF}
 									className={`${styles.mainMenuUnderLink} ${styles.mobileLink}`}
 									onClick={() => setOpenMenu(false)}
 								>
-									<p>{content?.supportPage?.fields?.title || 'Customer Service'}</p>
+									<p>{SUPPORT_LABEL}</p>
 								</Link>
 
 								<Link

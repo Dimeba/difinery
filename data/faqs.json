@@ -60,6 +60,7 @@
 				},
 				{
 					"question": "Does Difinery give back?",
+					"hidden": true,
 					"answer": [
 						"Yes. Difinery is a member of 1% for the Planet, so 1% of every sale goes to charity, and you choose where it goes. When you add a piece to your cart, you can pick from several partner organizations, and we direct your share there."
 					]

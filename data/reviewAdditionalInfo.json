@@ -5,11 +5,11 @@
 	},
 	{
 		"icon": "/quality-icon.png",
-		"text": "Excellent quality, handmade in USA"
+		"text": "Handcrafted in New York's Diamond District"
 	},
 	{
 		"icon": "/sustainability-icon.png",
-		"text": "Sustainably created diamonds"
+		"text": "Lab-grown diamonds, every one disclosed and graded"
 	},
 	{
 		"icon": "/return-icon.png",
@@ -17,10 +17,10 @@
 	},
 	{
 		"icon": "/warranty-icon.png",
-		"text": "2 Year manufacturing warranty"
+		"text": "1 year warranty on every piece"
 	},
 	{
 		"icon": "/polish-icon.png",
-		"text": "1 Year of free polish & cleaning if you subscribe."
+		"text": "6 months of free polishing & cleaning, or 12 months when you register"
 	}
 ]

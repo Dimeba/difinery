@@ -41,7 +41,7 @@ const FOOTER_CONTENT = {
 	certifications: [
 		{
 			src: '/footer/usa.png',
-			alt: 'Made in USA',
+			alt: 'Made in NYC from recycled gold, with imported lab-grown diamonds',
 			width: 61,
 			height: 40
 		},
@@ -281,7 +281,7 @@ const Footer = ({ content = FOOTER_CONTENT }) => {
 					</div>
 
 					{/* <div className={styles.column6}>
-						<h4>Handcrafted in USA</h4>
+						<h4>Handcrafted in New York&apos;s Diamond District</h4>
 						<Image
 							src='/m-i-usa.png'
 							height={40}

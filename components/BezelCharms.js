@@ -30,7 +30,7 @@ const BezelCharms = ({ onStyle }) => {
 
 					<Typography variant='p'>
 						Start with a chain in yellow or white gold and add up to five
-						diamond charms. Choose each lab grown diamond by shape, from round
+						diamond charms. Choose each lab-grown diamond by shape, from round
 						and pear to heart and emerald. Each charm holds a 0.20 ct diamond
 						in a bezel setting and moves between necklaces and bracelets. Wear
 						one every day, or add more for birthdays, anniversaries and the

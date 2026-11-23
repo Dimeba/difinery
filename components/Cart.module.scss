@@ -220,3 +220,74 @@
 	line-height: 0;
 	cursor: pointer;
 }
+
+// "Your 1% goes to" picker (CartGiveBack)
+.giveBack {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+
+	legend {
+		padding: 0;
+		margin-bottom: 0.5rem;
+		font-size: 13px;
+		font-weight: 700;
+	}
+}
+
+.giveBackOptions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.375rem;
+}
+
+.giveBackOption {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	min-height: 36px;
+	padding: 0.5rem 0.875rem;
+	border: 1px solid base.$gray;
+	border-radius: 999px;
+	background-color: white;
+	font-size: 13px;
+	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		color 0.2s ease,
+		border-color 0.2s ease;
+
+	input {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: 0;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	&:hover {
+		border-color: base.$black;
+	}
+
+	&:has(input:checked) {
+		background-color: base.$black;
+		border-color: base.$black;
+		color: white;
+	}
+
+	&:has(input:focus-visible) {
+		outline: 2px solid base.$black;
+		outline-offset: 2px;
+	}
+}
+
+.giveBackNote {
+	font-size: 10px;
+	color: #6d6b6b;
+	line-height: normal;
+}

@@ -5,6 +5,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import Accordion from './Accordion'
+import ShapeIcon from './ShapeIcon'
 import styles from './ProductInfo.module.scss'
 import mediaStyles from './ProductMediaPanel.module.scss'
 import charmStyles from './CharmNecklace.module.scss'
@@ -36,23 +37,6 @@ import {
 // Center-to-center shift, as a percent of the shared 1600px canvas.
 // The widest pendant is about 12.5% of that canvas, so 16% leaves a gap.
 const CHARM_SHIFT = 16
-
-const ShapeIcon = ({ shape, filled, size = 40, alt = '' }) => (
-	<Image
-		src={shape.pathBase}
-		alt={alt}
-		width={Math.round((size * 3 * shape.width) / shape.height)}
-		height={size * 3}
-		quality={95}
-		sizes={`${size * 2}px`}
-		style={{
-			width: 'auto',
-			height: size,
-			display: 'block',
-			opacity: filled ? 1 : 0.4
-		}}
-	/>
-)
 
 const nextKey = () =>
 	typeof crypto !== 'undefined' && crypto.randomUUID
@@ -475,7 +459,7 @@ const CharmNecklace = ({ product, initialGold }) => {
 											{selection.shape && (
 												<ShapeIcon
 													shape={selection.shape}
-													filled={active}
+													detailed={active}
 													size={36}
 												/>
 											)}
@@ -522,6 +506,7 @@ const CharmNecklace = ({ product, initialGold }) => {
 													<button
 														key={shape.title}
 														type='button'
+														aria-pressed={selected}
 														onClick={() => {
 															const next = productForShape(
 																catalog,
@@ -541,7 +526,8 @@ const CharmNecklace = ({ product, initialGold }) => {
 													>
 														<ShapeIcon
 															shape={shape}
-															filled={selected}
+															detailed={selected}
+															dimmed={!selected}
 															size={44}
 															alt={`${shape.title} pendant`}
 														/>
@@ -765,7 +751,7 @@ const CharmNecklace = ({ product, initialGold }) => {
 						</div>
 					</Accordion>
 
-					<Accordion title='Handcrafted in USA'>
+					<Accordion title="Handcrafted in New York's Diamond District">
 						<p>
 							Each one of our pieces are handcrafted in New York&apos;s Diamond
 							District using only ethical lab-grown diamonds of the highest

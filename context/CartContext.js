@@ -13,9 +13,12 @@ import { CREATE_CART } from '@/lib/mutations/createCart'
 import { ADD_PRODUCT } from '@/lib/mutations/addProduct'
 import { REMOVE_PRODUCT } from '@/lib/mutations/removeProduct'
 import { UPDATE_PRODUCT } from '@/lib/mutations/updateProduct'
+import { UPDATE_CART_ATTRIBUTES } from '@/lib/mutations/updateCartAttributes'
+import { GIVE_BACK_ATTRIBUTE, GIVE_BACK_CHARITIES } from '@/lib/giveBack'
 import { useAuth } from './AuthContext'
 
 const CART_STORAGE_KEY = 'difinery_cart_items'
+const GIVE_BACK_STORAGE_KEY = 'difinery_give_back'
 
 const CartContext = createContext({
 	cart: null,
@@ -50,6 +53,26 @@ export const CartProvider = ({ children }) => {
 		useMutation(REMOVE_PRODUCT)
 	const [updateProduct, { loading: updating, error: updateError }] =
 		useMutation(UPDATE_PRODUCT)
+	const [updateCartAttributes] = useMutation(UPDATE_CART_ATTRIBUTES)
+
+	// Give back: which 1% for the Planet partner this order supports. Until the
+	// shopper picks one, the first partner is the default. The pick is kept in
+	// localStorage because the cart itself is recreated on every mount (see
+	// restoreCartFromStorage). The cart drawer only renders client side, so
+	// reading storage here cannot cause a hydration mismatch.
+	const [giveBackPick, setGiveBackPick] = useState(() => {
+		if (typeof window === 'undefined') return null
+		try {
+			const saved = localStorage.getItem(GIVE_BACK_STORAGE_KEY)
+			return GIVE_BACK_CHARITIES.includes(saved) ? saved : null
+		} catch {
+			return null
+		}
+	})
+	const appliedGiveBackRef = useRef(null)
+	const giveBack = GIVE_BACK_CHARITIES.length
+		? giveBackPick ?? GIVE_BACK_CHARITIES[0]
+		: null
 
 	const createCart = useCallback(async () => {
 		const { data } = await cartCreate()
@@ -175,6 +198,43 @@ export const CartProvider = ({ children }) => {
 			})
 	}, [isLoggedIn, cart?.id])
 
+	const setGiveBack = useCallback(name => {
+		setGiveBackPick(name)
+		try {
+			localStorage.setItem(GIVE_BACK_STORAGE_KEY, name)
+		} catch {
+			// Storage blocked: the pick still applies to this cart.
+		}
+	}, [])
+
+	// Write the pick onto the cart so it lands on the order. Runs again for
+	// each new cart id and each new pick, and only once the cart has lines,
+	// so an empty cart on every page view costs no extra request.
+	const cartHasLines = Boolean(cart?.lines?.edges?.length)
+	useEffect(() => {
+		const cartId = cart?.id
+		if (!cartId || !cartHasLines || !giveBack) return
+
+		const key = `${cartId}:${giveBack}`
+		if (appliedGiveBackRef.current === key) return
+		appliedGiveBackRef.current = key
+
+		updateCartAttributes({
+			variables: {
+				cartId,
+				attributes: [{ key: GIVE_BACK_ATTRIBUTE, value: giveBack }]
+			}
+		})
+			.then(({ data }) => {
+				const errors = data?.cartAttributesUpdate?.userErrors || []
+				if (errors.length) throw new Error(errors.map(e => e.message).join(', '))
+			})
+			.catch(error => {
+				appliedGiveBackRef.current = null
+				console.error('Error saving give back choice:', error)
+			})
+	}, [cart?.id, cartHasLines, giveBack, updateCartAttributes])
+
 	const updateQuantity = useCallback(
 		async (lineItemId, quantity) => {
 			if (!cart) return
@@ -295,6 +355,8 @@ export const CartProvider = ({ children }) => {
 				addLinesToCart,
 				removeFromCart,
 				updateQuantity,
+				giveBack,
+				setGiveBack,
 				loading: creating || adding || removing || updating,
 				error: createError || addError || removeError || updateError
 			}}

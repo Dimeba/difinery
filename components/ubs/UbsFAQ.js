@@ -4,7 +4,7 @@ import styles from './Ubs.module.scss'
 // components
 import Accordion from '../Accordion'
 
-const email = <a href='mailto:help@difinery.com'>help@difinery.com</a>
+const email = <a href='mailto:support@difinery.com'>support@difinery.com</a>
 
 const faqs = [
 	{

@@ -5,7 +5,11 @@ import { notFound } from 'next/navigation'
 // lib
 import { getEntries } from '@/lib/contentful'
 import { getSocialImageMetadata } from '@/lib/shareImage'
-import { HARDCODED_PAGE_SLUGS } from '@/lib/hardcodedPages'
+import {
+	HARDCODED_PAGE_SLUGS,
+	REDIRECTED_PAGE_SLUGS,
+	publicPageSlug
+} from '@/lib/hardcodedPages'
 
 // Fetch pages at build time
 const pages = await getEntries('page')
@@ -19,21 +23,26 @@ const slugify = title =>
 		.trim()
 		.replace(/ +/g, '-')
 
+// The URL a CMS page is served at (see PAGE_SLUG_ALIASES)
+const pageSlug = page => publicPageSlug(slugify(page.fields.title))
+
 // Function to generate static params for dynamic routing
 export async function generateStaticParams() {
 	return pages.items
 		.filter(p => p.fields.dontRender !== true)
-		.map(page => ({ slug: slugify(page.fields.title) }))
-		.filter(({ slug }) => !HARDCODED_PAGE_SLUGS.includes(slug))
+		.map(page => ({ slug: pageSlug(page) }))
+		.filter(
+			({ slug }) =>
+				!HARDCODED_PAGE_SLUGS.includes(slug) &&
+				!REDIRECTED_PAGE_SLUGS.includes(slug)
+		)
 }
 
 export async function generateMetadata(props) {
 	const params = await props.params
 	const { slug } = params
 
-	const matchedPage = pages.items.find(
-		page => slugify(page.fields.title) === slug
-	)
+	const matchedPage = pages.items.find(page => pageSlug(page) === slug)
 
 	if (!matchedPage) {
 		// let Next render the 404 page metadata
@@ -64,9 +73,7 @@ export default async function Page(props) {
 	const params = await props.params
 	const { slug } = params
 
-	const matchedPage = pages.items.find(
-		page => slugify(page.fields.title) === slug
-	)
+	const matchedPage = pages.items.find(page => pageSlug(page) === slug)
 
 	if (!matchedPage) {
 		notFound()

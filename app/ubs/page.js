@@ -45,8 +45,8 @@ export default function UbsPage() {
 						<li>
 							<p>
 								Email{' '}
-								<a href='mailto:help@difinery.com' className={styles.inlineLink}>
-									help@difinery.com
+								<a href='mailto:support@difinery.com' className={styles.inlineLink}>
+									support@difinery.com
 								</a>{' '}
 								from your UBS email address with &ldquo;UBS&rdquo; in the
 								subject line.
@@ -65,7 +65,7 @@ export default function UbsPage() {
 
 					<Button
 						text='Request a Repair'
-						link='mailto:help@difinery.com?subject=UBS'
+						link='mailto:support@difinery.com?subject=UBS'
 						red
 						fullWidth
 					/>
@@ -73,7 +73,7 @@ export default function UbsPage() {
 
 				<UbsSplit
 					image='/ubs/custom-product-banner.jpg'
-					imageAlt='Difinery ring handcrafted in recycled gold with lab grown diamonds'
+					imageAlt='Difinery ring handcrafted in recycled gold with lab-grown diamonds'
 					reverse
 				>
 					<h2>Special Orders & Custom Designs</h2>
@@ -90,7 +90,7 @@ export default function UbsPage() {
 
 					<Button
 						text='Start a Custom Order'
-						link={`mailto:help@difinery.com?subject=${encodeURIComponent(
+						link={`mailto:support@difinery.com?subject=${encodeURIComponent(
 							'Special Orders & Custom Designs'
 						)}`}
 						red
@@ -105,7 +105,7 @@ export default function UbsPage() {
 					<h2>Fine Jewelry, Made Responsibly in New York</h2>
 					<p>
 						Every Difinery piece is handcrafted in New York City from certified
-						100% recycled 14K solid gold and lab grown diamonds. Each piece is
+						100% recycled 14K solid gold and lab-grown diamonds. Each piece is
 						made to order, so nothing sits in a vault and nothing is produced
 						that has not been asked for. We are a women led company, and our
 						pricing is transparent every day of the year. No inflated list
@@ -114,7 +114,7 @@ export default function UbsPage() {
 
 					<div className={styles.links}>
 						<Link href='/lab-grown-diamonds'>
-							<h4>Lab Grown Diamonds</h4>
+							<h4>Lab-Grown Diamonds</h4>
 						</Link>
 						<Link href='/14k-certified-recycled-solid-gold'>
 							<h4>14K Certified Recycled Gold</h4>

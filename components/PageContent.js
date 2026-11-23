@@ -150,8 +150,8 @@ const PageContent = ({ content, slug, nested = false }) => {
 			{/* Subscribe Section */}
 			<SubscribeSection />
 
-			{/* Help & Contact only */}
-			{slug === 'help-contact' && <ContactForm />}
+			{/* Customer Service only */}
+			{slug === 'customer-service' && <ContactForm />}
 		</Wrapper>
 	)
 }

@@ -5,7 +5,11 @@ import { isCharmCopyProduct } from '@/lib/charmNecklace'
 import { productCategorySlug, productPath, SHOP_CATEGORIES } from '@/lib/productUrl'
 import { collectionSlug } from '@/lib/collectionSlug'
 import { BRIDAL_PAGES } from '@/lib/bridal'
-import { HARDCODED_PAGE_SLUGS } from '@/lib/hardcodedPages'
+import {
+	HARDCODED_PAGE_SLUGS,
+	REDIRECTED_PAGE_SLUGS,
+	publicPageSlug
+} from '@/lib/hardcodedPages'
 
 // Every URL listed here must answer 200 directly. /shop, /shop/all and
 // /shop/<category> only redirect (see proxy.js), so the listings below use
@@ -108,11 +112,15 @@ export default async function sitemap() {
 			.filter(page => page.fields?.title)
 			.filter(page => page.fields.dontRender !== true)
 			.filter(page => !NON_PAGE_TITLES.includes(page.fields.title))
-			.filter(
-				page => !HARDCODED_PAGE_SLUGS.includes(collectionSlug(page.fields.title))
-			)
+			.filter(page => {
+				const slug = collectionSlug(page.fields.title)
+				return (
+					!HARDCODED_PAGE_SLUGS.includes(slug) &&
+					!REDIRECTED_PAGE_SLUGS.includes(slug)
+				)
+			})
 			.map(page => ({
-				url: `${baseUrl}/${collectionSlug(page.fields.title)}`,
+				url: `${baseUrl}/${publicPageSlug(collectionSlug(page.fields.title))}`,
 				lastModified: new Date(page.sys.updatedAt),
 				changeFrequency: 'monthly',
 				priority: 0.5

@@ -61,6 +61,20 @@ const nextConfig = {
 				source: '/shop/collections/engagement-rings',
 				destination: '/bridal/engagement-rings',
 				permanent: true
+			},
+			// Help & Contact is now the Customer Service page. Keep in sync with
+			// PAGE_SLUG_ALIASES in lib/hardcodedPages.js.
+			{
+				source: '/help-contact',
+				destination: '/customer-service',
+				permanent: true
+			},
+			// Old legal page that contradicted the Terms of Service. Keep in sync
+			// with REDIRECTED_PAGE_SLUGS in lib/hardcodedPages.js.
+			{
+				source: '/terms-and-conditions',
+				destination: '/terms-of-service',
+				permanent: true
 			}
 		]
 	},

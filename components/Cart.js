@@ -6,6 +6,7 @@ import productStyles from './ProductInfo.module.scss'
 
 // components
 import CartItem from './CartItem'
+import CartGiveBack from './CartGiveBack'
 import { FiX, FiMinus, FiPlus } from 'react-icons/fi'
 import Link from 'next/link'
 import { ClickAwayListener } from '@/lib/mui'
@@ -22,9 +23,19 @@ import {
 	getStoredGclid
 } from '@/lib/gaEvents'
 
+// Matches the free shipping rule in Shopify (USD, after discounts).
+const FREE_SHIPPING_MIN = 300
+
 const Cart = () => {
-	const { showCart, setShowCart, cart, updateQuantity, removeFromCart } =
-		useCart()
+	const {
+		showCart,
+		setShowCart,
+		cart,
+		updateQuantity,
+		removeFromCart,
+		giveBack,
+		setGiveBack
+	} = useCart()
 	const isMobile = useMediaQuery('(max-width: 1024px)')
 	const closeButtonRef = useRef(null)
 
@@ -70,6 +81,8 @@ const Cart = () => {
 	const discountAmount = hasDiscount
 		? Math.max(listTotal - Number(subtotal), 0)
 		: 0
+	const hasLines = cart?.lines?.edges?.length > 0
+	const freeShipping = hasLines && Number(subtotal) >= FREE_SHIPPING_MIN
 	const formatPrice = value =>
 		Number(value).toLocaleString('en-US', {
 			minimumFractionDigits: Number.isInteger(Number(value)) ? 0 : 2,
@@ -225,24 +238,29 @@ const Cart = () => {
 								{/* Shipping */}
 								<div className={styles.subtotal}>
 									<p className={styles.totalAmount} style={{ color: '#6d6b6b' }}>
-										Shipping*
+										Shipping
 									</p>
 
 									<p className={styles.totalAmount} style={{ fontWeight: '700' }}>
-										Calculated at checkout
+										{freeShipping ? 'Free' : 'Calculated at checkout'}
 									</p>
 								</div>
 							</div>
 
+							{hasLines && (
+								<CartGiveBack value={giveBack} onChange={setGiveBack} />
+							)}
+
 							<div className={styles.note}>
-								<p>*Your order will be fulfilled within 7 business days.</p>
+								<p>
+									Made to order in about 5 business days, then 2 to 3 days by
+									USPS Priority Mail, signature required.
+								</p>
 
 								<p>
-									*Please note that any special request affecting weight or
-									dimensions may impact the final price and extend the standard
-									production timeline by 2-3 business days (in addition to the 7-day
-									shipping window). If this applies, we&apos;ll follow up via email
-									with an updated quote before proceeding with payment.
+									A special request that changes weight or dimensions may change
+									the final price and add 2 to 3 business days. If it does, we
+									will email you an updated quote before taking payment.
 								</p>
 							</div>
 

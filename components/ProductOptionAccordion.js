@@ -6,6 +6,7 @@ import styles from './ProductInfo.module.scss'
 // components
 import Image from 'next/image'
 import Accordion from './Accordion'
+import ShapeIcon from './ShapeIcon'
 import GiftCardInput from './GiftCardInput'
 import { Typography } from '@/lib/mui'
 
@@ -680,6 +681,10 @@ const ProductOptionAccordion = ({
 		)
 	}, [relatedShapes])
 
+	// Custom shape products: the current shape is the one in the product title
+	const isCurrentShape = shape =>
+		product.title.toLowerCase().includes(shape.title.toLowerCase())
+
 	// Shopify "Shape" option values paired with their icon (when we have one)
 	const shapeOptionValues = useMemo(() => {
 		if (!isShapeOption) return []
@@ -768,9 +773,7 @@ const ProductOptionAccordion = ({
 							<button
 								key={shape.title}
 								type='button'
-								aria-pressed={product.title
-									.toLowerCase()
-									.includes(shape.title.toLowerCase())}
+								aria-pressed={isCurrentShape(shape)}
 								onClick={() => {
 									// Find current shape in product title
 									const currentShape = customShapes.find(s =>
@@ -792,21 +795,12 @@ const ProductOptionAccordion = ({
 									}
 								}}
 							>
-								<Image
-									src={shape.pathBase}
-									width={isMobile ? (24 * shape.width) / shape.height : (32 * shape.width) / shape.height}
-									height={isMobile ? 24 : 32}
+								<ShapeIcon
+									shape={shape}
+									size={isMobile ? 24 : 32}
+									detailed={isCurrentShape(shape)}
+									dimmed={!isCurrentShape(shape)}
 									alt={`${shape.title} Diamond Shape`}
-									style={{
-										display: 'block',
-										width: 'auto',
-										height: isMobile ? 24 : 32,
-										opacity: product.title
-											.toLowerCase()
-											.includes(shape.title.toLowerCase())
-											? 1
-											: 0.4
-									}}
 								/>
 							</button>
 						))
@@ -829,21 +823,12 @@ const ProductOptionAccordion = ({
 								}
 							>
 								{shape ? (
-									<Image
-										src={shape.pathBase}
-										width={
-											isMobile
-												? (24 * shape.width) / shape.height
-												: (32 * shape.width) / shape.height
-										}
-										height={isMobile ? 24 : 32}
+									<ShapeIcon
+										shape={shape}
+										size={isMobile ? 24 : 32}
+										detailed={isSelected}
+										dimmed={!isSelected}
 										alt={`${value.name} ${option.name}`}
-										style={{
-											display: 'block',
-											width: 'auto',
-											height: isMobile ? 24 : 32,
-											opacity: isSelected ? 1 : 0.4
-										}}
 									/>
 								) : (
 									value.name

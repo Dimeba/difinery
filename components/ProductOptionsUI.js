@@ -572,7 +572,7 @@ const ProductOptionsUI = ({
 						</div>
 					</Accordion>
 
-					<Accordion title='Handcrafted in USA'>
+					<Accordion title="Handcrafted in New York's Diamond District">
 						<p>
 							Each one of our pieces are handcrafted in New York&apos;s Diamond
 							District using only ethical lab-grown diamonds of the highest
