@@ -1,3 +1,4 @@
+# Deployed branches: master (production), staging.
 [build]
   command = "npm run build"
   publish = ".next"
