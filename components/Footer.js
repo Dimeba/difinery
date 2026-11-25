@@ -18,7 +18,7 @@ const FOOTER_CONTENT = {
 	difinery: [
 		{ title: 'Our Story', href: '/our-story' },
 		{ title: 'Blank Canvas', href: '/blank-canvas' },
-		{ title: 'Lab - Grown Diamonds', href: '/lab-grown-diamonds' },
+		{ title: 'Lab-Grown Diamonds', href: '/lab-grown-diamonds' },
 		{ title: '14K Certified Recycled Solid Gold', href: '/14k-certified-recycled-solid-gold' },
 	],
 	help: [
