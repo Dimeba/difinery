@@ -5,10 +5,11 @@
 		"pathBase": "/shape-icons/round.svg",
 		"width": 48,
 		"height": 48,
-		"outline": "/shape-icons/round-outline.png",
-		"detail": "/shape-icons/round-detail.png",
+		"outline": "/shape-icons/v2/round-outline.png",
+		"detail": "/shape-icons/v2/round-detail.png",
 		"iconWidth": 240,
-		"iconHeight": 240
+		"iconHeight": 240,
+		"iconPadding": 8
 	},
 	{
 		"title": "Oval",
@@ -16,10 +17,11 @@
 		"pathBase": "/shape-icons/oval.svg",
 		"width": 28,
 		"height": 40,
-		"outline": "/shape-icons/oval-outline.png",
-		"detail": "/shape-icons/oval-detail.png",
-		"iconWidth": 171,
-		"iconHeight": 240
+		"outline": "/shape-icons/v2/oval-outline.png",
+		"detail": "/shape-icons/v2/oval-detail.png",
+		"iconWidth": 175,
+		"iconHeight": 240,
+		"iconPadding": 8
 	},
 	{
 		"title": "Pear",
@@ -27,10 +29,11 @@
 		"pathBase": "/shape-icons/pear.svg",
 		"width": 28,
 		"height": 40,
-		"outline": "/shape-icons/pear-outline.png",
-		"detail": "/shape-icons/pear-detail.png",
-		"iconWidth": 170,
-		"iconHeight": 240
+		"outline": "/shape-icons/v2/pear-outline.png",
+		"detail": "/shape-icons/v2/pear-detail.png",
+		"iconWidth": 174,
+		"iconHeight": 240,
+		"iconPadding": 8
 	},
 	{
 		"title": "Marquise",
@@ -38,10 +41,11 @@
 		"pathBase": "/shape-icons/marquise.svg",
 		"width": 23,
 		"height": 42,
-		"outline": "/shape-icons/marquise-outline.png",
-		"detail": "/shape-icons/marquise-detail.png",
-		"iconWidth": 125,
-		"iconHeight": 240
+		"outline": "/shape-icons/v2/marquise-outline.png",
+		"detail": "/shape-icons/v2/marquise-detail.png",
+		"iconWidth": 133,
+		"iconHeight": 240,
+		"iconPadding": 8
 	},
 	{
 		"title": "Radiant",
@@ -49,10 +53,11 @@
 		"pathBase": "/shape-icons/radiant.svg",
 		"width": 29,
 		"height": 40,
-		"outline": "/shape-icons/radiant-outline.png",
-		"detail": "/shape-icons/radiant-detail.png",
-		"iconWidth": 180,
-		"iconHeight": 240
+		"outline": "/shape-icons/v2/radiant-outline.png",
+		"detail": "/shape-icons/v2/radiant-detail.png",
+		"iconWidth": 184,
+		"iconHeight": 240,
+		"iconPadding": 8
 	},
 	{
 		"title": "Heart",
@@ -60,10 +65,11 @@
 		"pathBase": "/shape-icons/heart.svg",
 		"width": 38,
 		"height": 36,
-		"outline": "/shape-icons/heart-outline.png",
-		"detail": "/shape-icons/heart-detail.png",
-		"iconWidth": 250,
-		"iconHeight": 240
+		"outline": "/shape-icons/v2/heart-outline.png",
+		"detail": "/shape-icons/v2/heart-detail.png",
+		"iconWidth": 249,
+		"iconHeight": 240,
+		"iconPadding": 8
 	},
 	{
 		"title": "Emerald",
@@ -71,10 +77,11 @@
 		"pathBase": "/shape-icons/emerald.svg",
 		"width": 26,
 		"height": 40,
-		"outline": "/shape-icons/emerald-outline.png",
-		"detail": "/shape-icons/emerald-detail.png",
-		"iconWidth": 155,
-		"iconHeight": 240
+		"outline": "/shape-icons/v2/emerald-outline.png",
+		"detail": "/shape-icons/v2/emerald-detail.png",
+		"iconWidth": 160,
+		"iconHeight": 240,
+		"iconPadding": 8
 	},
 	{
 		"title": "Princess",
@@ -82,9 +89,10 @@
 		"pathBase": "/shape-icons/princess.svg",
 		"width": 48,
 		"height": 48,
-		"outline": "/shape-icons/princess-outline.png",
-		"detail": "/shape-icons/princess-detail.png",
+		"outline": "/shape-icons/v2/princess-outline.png",
+		"detail": "/shape-icons/v2/princess-detail.png",
 		"iconWidth": 240,
-		"iconHeight": 240
+		"iconHeight": 240,
+		"iconPadding": 8
 	}
 ]
