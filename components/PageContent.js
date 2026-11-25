@@ -1,5 +1,8 @@
+import { Fragment } from 'react'
+
 // components
 import Features from '@/components/Features'
+import ArticleCards from '@/components/blank-canvas/ArticleCards'
 import Products from '@/components/Products'
 import RichText from '@/components/RichText'
 import Columns from './Columns'
@@ -116,10 +119,11 @@ const PageContent = ({ content, slug, nested = false }) => {
 						)
 					case 'masonryColumns':
 						return (
-							<MasonryColumns
-								key={section.sys.id}
-								content={section.fields.columns}
-							/>
+							<Fragment key={section.sys.id}>
+								<MasonryColumns content={section.fields.columns} />
+								{/* Blank Canvas: article cards under the featured artist */}
+								{slug === 'blank-canvas' && <ArticleCards />}
+							</Fragment>
 						)
 					case 'splitFeatures':
 						return (
