@@ -18,7 +18,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useCart } from '@/context/CartContext'
 
 // helpers
-import { findMetalOption } from '@/lib/helpers'
+import { findMetalOption, metalToGoldParam } from '@/lib/helpers'
 import { isBezelPendantProduct } from '@/lib/charmNecklace'
 
 // analytics
@@ -103,6 +103,24 @@ const ProductInfo = ({
 			trackViewItem(product, matchingVariant)
 		}
 	}, [product, matchingVariant])
+
+	// Keep ?gold= in sync with the chosen metal so a shared link opens the
+	// product in that color. replaceState avoids a navigation and a new
+	// history entry for every click.
+	useEffect(() => {
+		if (isGiftCard) return
+		const goldParam = metalToGoldParam(selectedColor)
+		if (!goldParam) return
+
+		const params = new URLSearchParams(window.location.search)
+		if (params.get('gold') === goldParam) return
+		params.set('gold', goldParam)
+		window.history.replaceState(
+			null,
+			'',
+			`${window.location.pathname}?${params.toString()}${window.location.hash}`
+		)
+	}, [selectedColor, isGiftCard])
 
 	useEffect(() => {
 		if (canCharm && charm) setCharmMode(true)
